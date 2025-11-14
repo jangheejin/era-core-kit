@@ -1,6 +1,6 @@
 'use client';
 
-import { homeLayout } from '@/content/home.layout';
+import { homeLayout } from '../src/content/home.layout';
 import { renderBlock } from '@/utils/renderBlock';
 /*
 export default function Home() {

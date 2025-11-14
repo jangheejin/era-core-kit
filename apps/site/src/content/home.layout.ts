@@ -21,8 +21,8 @@ export const homeLayout: LayoutBlock[] = [
   {
     type: "WorkText",
     props: {
-      heading: "Our Work",
-      text: "We work across disciplines and jurisdictions, helping clients navigate agencies, secure funding, and shape policy outcomes.",
+      heading: "Our Mission",
+      text: "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them. We work across disciplines and jurisdictions, helping clients navigate agencies, secure funding, and shape policy outcomes.",
     },
   },
   {

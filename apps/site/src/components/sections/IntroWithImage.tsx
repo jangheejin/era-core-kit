@@ -11,6 +11,7 @@ export function IntroWithImage({ heading, text, imageUrl }: IntroWithImageProps)
         <div>
           <h2 className="type-h2">{heading}</h2>
           <p className="type-body">{text}</p>
+          <p className="type-body">Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.</p>
         </div>
         <div>
           <ResponsiveImage
