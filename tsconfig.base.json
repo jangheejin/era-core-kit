@@ -22,9 +22,6 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
 	  "paths": {
-	    "@kit/schema": ["packages/schema/src"],
-      "@kit/blocks": ["packages/blocks/src"],
-      "@kit-adapters-sanity": ["packages/adapters/sanity/src"],
       "@/*": ["apps/site/src/*"]
 	  }
   },
