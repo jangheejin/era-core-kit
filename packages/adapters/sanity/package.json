@@ -8,6 +8,10 @@
     "build": "tsc -p tsconfig.build.json"
   },
 
+  "dependencies": {
+    "@kit/schema": "workspace:*"
+  },
+
   "exports": {
     ".": {
       "import": "./dist/index.js",
