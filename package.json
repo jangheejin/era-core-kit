@@ -9,8 +9,13 @@
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "format": "prettier --write .",
-    "postinstall": "pnpm --filter @kit/blocks... --filter @kit/schema... --filter @kit/adapters-sanity... --filter @kit/search... build",
-    "clean": "rm -rf apps/*/.next packages/**/dist node_modules/.cache"
+    "postinstall": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... build",
+    "build:site": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search --filter site... run build",
+    "clean": "rimraf --glob \"packages/**/dist\" \"apps/**/dist\"",
+    "bigclean": "pnpm run clean && rimraf .turbo && rimraf --glob \"apps/**/.next\"",
+    "deepclean": "pnpm run bigclean && rimraf node_modules",
+    "nukeclean": "pnpm run bigclean && rimraf pnpm-lock.yaml node_modules",
+    "fullreset": "pnpm run bigclean && rimraf pnpm-lock.yaml node_modules"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
