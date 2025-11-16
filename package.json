@@ -10,7 +10,7 @@
     "test": "pnpm -r run test",
     "format": "prettier --write .",
     "postinstall": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... build",
-    "build:site": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search --filter site... run build",
+    "build:site": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     "clean": "rimraf --glob \"packages/**/dist\" \"apps/**/dist\"",
     "bigclean": "pnpm run clean && rimraf .turbo && rimraf --glob \"apps/**/.next\"",
     "deepclean": "pnpm run bigclean && rimraf node_modules",

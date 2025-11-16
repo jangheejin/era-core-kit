@@ -1,4 +1,3 @@
 {
-  "buildCommand": "pnpm -w run build:site",
-  "outputDirectory": "apps/site/.next"
+  "buildCommand": "pnpm -w run build:site"
 }
