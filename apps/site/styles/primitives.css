@@ -236,3 +236,16 @@ button:hover {
   letter-spacing: 1px;
   text-transform: uppercase;
 }
+
+.hero-image-container{
+/*  display: block;
+  margin-left: auto;
+  margin-right: auto;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-container img{
+  max-width: 250px;
+}

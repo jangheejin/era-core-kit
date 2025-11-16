@@ -7,8 +7,8 @@ export function Hero({ heading, subhead, imageUrl }: HeroProps) {
   return (
     <section className="c-section" id="hero">
       <div className="c-container c-grid" style={{ alignItems: 'center' }}>
-        <div>
-          <img src={imageUrl} alt="ERA logo" style={{ maxWidth: '220px' }} />
+        <div className="hero-image-container">
+          <img src={imageUrl} alt="ERA logo" className="heroimage" />
         </div>
         <div>
           <h1 className="type-hero">{heading}</h1>

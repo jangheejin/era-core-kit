@@ -32,11 +32,12 @@
 }
 
 .case-card__image {
-  aspect-ratio: 4 / 3;
+/*  aspect-ratio: 1 / 1;*/
   overflow: hidden;
 }
 
 .case-card__body {
+  aspect-ratio: 2 / 1;
   padding: var(--space-3);
 }
 

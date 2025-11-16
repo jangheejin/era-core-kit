@@ -1,5 +1,5 @@
 // apps/site/src/content/home.layout.ts
-import type { LayoutBlock } from '@kit/blocks';
+import { LayoutBlock } from '@kit/blocks';
 
 export const homeLayout: LayoutBlock[] = [
   {
@@ -28,6 +28,7 @@ export const homeLayout: LayoutBlock[] = [
   {
     type: "CaseGrid",
     props: {
+      layout: "4col",
       items: [
         { 
           title: "Geospatial Solutions", 
