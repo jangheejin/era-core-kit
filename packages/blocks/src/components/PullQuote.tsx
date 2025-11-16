@@ -1,15 +1,9 @@
+//packages/blocks/src/components/PullQuote.tsx
 import React from 'react';
+import type { PullQuoteProps } from '../types';
 
-export function PullQuote({ children }: { children: React.ReactNode }) {
+export function PullQuote({ content }: PullQuoteProps) {
   return (
-    <blockquote style={{
-      fontSize: '1.5rem',
-      fontStyle: 'italic',
-      margin: '2rem 0',
-      paddingLeft: '1rem',
-      borderLeft: '3px solid #ccc'
-    }}>
-      {children}
-    </blockquote>
+    <div className="pullquote">{content}</div>
   );
 }

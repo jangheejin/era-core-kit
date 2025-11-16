@@ -1,3 +1,26 @@
+/*apps/site/styles/primitives.css*/
+@import './casegrid.css';  
+
+:root {
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
+
+  --fs-hero: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  --fs-h2: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+/*
+  --space-1: clamp(0.5rem, 1vw, 1rem);
+  --space-2: clamp(1rem, 2vw, 2rem);
+  --space-3: clamp(1.5rem, 3vw, 3rem);
+  --space-4: clamp(2rem, 4vw, 4rem);
+*/
+  --space-1: clamp(0.5rem, 0.8vw, 0.75rem);
+  --space-2: clamp(0.75rem, 1.2vw, 1rem);
+  --space-3: clamp(1rem, 1.8vw, 1.5rem);
+  --space-4: clamp(1.5rem, 2.5vw, 2rem);
+}
+
 .pad-2 {
   padding: var(--space-2);
 }
@@ -11,13 +34,17 @@
 }
 
 .c-container {
-  max-width: 1200px;
+  /*max-width: 1200px;*/
+  max-width: 72rem;
   margin: 0 auto;
-  padding-inline: var(--gutter, 1.5rem);
+  /*padding-inline: var(--gutter, 1.5rem);*/
+  padding-inline: var(--space-4)
+
 }
 
 .c-section {
-  padding-block: var(--space-8, 6rem);
+  /*padding-block: var(--space-8, 6rem);*/
+  padding-block: var(--space-4);
   background: var(--bg);
 }
 
@@ -59,9 +86,9 @@
   border-radius: var(--radius, 0.5rem);
 }*/
 .card-media {
-  display:block;
+/*  display:block;*/
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   position: relative;
   overflow: hidden;
   background: #eee;
@@ -72,16 +99,21 @@
   height: 100%;
   object-fit: cover;
   display:block;
-}
-
-:root {
-  --font-body: 'Inter', sans-serif;
-  --font-heading: 'Oswald', sans-serif;
-  --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
+  border-radius: 0;
 }
 
 .card-body {
   padding: var(--space-2);
+}
+
+.card h3 {
+  font-size: var(--fs-h3);
+  margin: 0;
+}
+
+.card p {
+  font-size: var(--fs-body);
+  margin: 0;
 }
 
 /* Typography */

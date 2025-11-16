@@ -1,7 +1,7 @@
 // apps/site/src/components/sections/WorkText.tsx
 'use client';
-import { ResponsiveImage } from '@kit/blocks';
-import type { WorkTextProps } from '@/types/layout';
+import { ImageFigure } from './ImageFigure';
+import type { WorkTextProps } from '../types';
 
 export function WorkText({ heading, text, }: WorkTextProps) {
   return (

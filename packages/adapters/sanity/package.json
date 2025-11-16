@@ -1,5 +1,5 @@
 {
-  "name": "@kit/schema",
+  "name": "@kit-adapters-sanity",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -21,10 +21,5 @@
       "import": "./dist/registry.js",
       "types": "./dist/registry.d.ts"
     }
-  },
-  
-  "dependencies": {
-    "zod": "^4.1.12"
   }
 }
-

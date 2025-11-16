@@ -1,6 +1,6 @@
 // apps/site/src/components/sections/ContactForm.tsx
 'use client';
-import { ResponsiveImage } from '@kit/blocks';
+import { ImageFigure } from './ImageFigure';
 
 export type ContactFormProps = {
   heading?: string;

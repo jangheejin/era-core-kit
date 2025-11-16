@@ -1,8 +1,8 @@
 // apps/site/src/components/sections/TeamStrip.tsx
 'use client';
-import { ResponsiveImage } from '@kit/blocks';
+import { ImageFigure } from './ImageFigure';
 import React from 'react';
-import type { TeamStripProps } from '@/types/layout';
+import type { TeamStripProps } from '../types';
 
 export function TeamStrip({ people }: TeamStripProps) {
   return (

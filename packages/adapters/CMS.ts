@@ -1,3 +1,4 @@
+//packages/adapters/CMS.ts
 import type { CaseStudy, Person, FilterAST } from '@kit/schema';
 
 export interface CMS {

@@ -1,7 +1,7 @@
 // apps/site/src/components/sections/Hero.tsx
 'use client';
-import { ResponsiveImage } from '@kit/blocks';
-import type { HeroProps } from '@/types/layout';
+import { ImageFigure } from './ImageFigure';
+import type { HeroProps } from '../types';
 
 export function Hero({ heading, subhead, imageUrl }: HeroProps) {
   return (

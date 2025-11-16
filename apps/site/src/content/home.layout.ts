@@ -1,5 +1,5 @@
 // apps/site/src/content/home.layout.ts
-import type { LayoutBlock } from '@/types/layout';
+import type { LayoutBlock } from '@kit/blocks';
 
 export const homeLayout: LayoutBlock[] = [
   {

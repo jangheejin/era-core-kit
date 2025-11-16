@@ -1,3 +1,7 @@
+//tsconfig.json
+//(root tsconfig.json)
+//changed "@kit/adapters/*": ["packages/adapters/*/src"], to "@kit/adapters/*": ["packages/adapters/*/src"], to
+//"@kit/adapters/sanity": ["packages/adapters/sanity/src"],
 {
   "compilerOptions": {
     "baseUrl": ".",
@@ -20,7 +24,7 @@
 	  "paths": {
 	    "@kit/schema": ["packages/schema/src"],
       "@kit/blocks": ["packages/blocks/src"],
-      "@kit/adapters/*": ["packages/adapters/*/src"],
+      "@kit-adapters-sanity": ["packages/adapters/sanity/src"],
       "@/*": ["apps/site/src/*"]
 	  }
   },

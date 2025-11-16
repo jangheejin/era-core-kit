@@ -1,10 +1,12 @@
+//packages/blocks/src/components/OutcomeList.tsx
 import React from 'react';
+import type { OutcomeListProps } from '../types';
 
-export function OutcomeList({ outcomes }: { outcomes: string[] }) {
+export function OutcomeList({ outcomes }: OutcomeListProps) {
   return (
-    <ul style={{ paddingLeft: '1.5rem' }}>
+    <ul className="outcomeslist">
       {outcomes.map((outcome, i) => (
-        <li key={i}>{outcome}</li>
+        <li className="outcome" key={i}>{outcome}</li>
       ))}
     </ul>
   );

@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "composite": false,
+  
+      //Strictness, compatibility
+      "strict": true,
+      "noUncheckedIndexedAccess": true,
+      "noImplicitOverride": true,
+      "noFallthroughCasesInSwitch": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      //Module and targeting
+      "module": "ESNext",
+      "target": "ES2020",
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+  
+      "jsx": "react-jsx",
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    },
+    "include": ["src/**/*"]
+  }
+  

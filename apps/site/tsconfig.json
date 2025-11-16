@@ -2,11 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".", // THIS IS LOCAL TO apps/site
+    "paths": {
+      "@/*": ["src/*"],
+      "@kit-adapters-sanity": ["../../packages/adapters/sanity/dist"],
+      "@kit/schema": ["../../packages/schema/dist"],
+      "@kit/blocks": ["../../packages/blocks/dist"]
+    }
   },
   "include": [
     "next-env.d.ts",

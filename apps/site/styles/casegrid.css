@@ -1,0 +1,49 @@
+/* apps/site/styles/casegrid.css */
+
+.casegrid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  margin-top: var(--space-4);
+}
+
+.casegrid.layout-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.casegrid.layout-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.case-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-color: white;
+  transition: box-shadow 0.2s ease;
+}
+
+.case-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.case-card__image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.case-card__body {
+  padding: var(--space-3);
+}
+
+.case-card__body h3 {
+  margin: 0;
+}
+
+.case-card__body p {
+  margin-top: 0.5rem;
+}

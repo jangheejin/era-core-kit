@@ -1,7 +1,7 @@
 // apps/site/src/components/sections/MissionText.tsx
 'use client';
-import { ResponsiveImage } from '@kit/blocks';
-import type { MissionTextProps } from '@/types/layout';
+import { ImageFigure } from './ImageFigure';
+import type { MissionTextProps } from '../types';
 /*
 Renders the string you pass in text (as mission text?)
 Hardcoded heading is "Our Mission" (could be made flexible if needed later)
@@ -17,7 +17,7 @@ export function MissionText({ heading, text, imageUrl }: MissionTextProps & { im
             <p className="type-body">{text}</p>
           </div>
           <div className="card-media">
-            <ResponsiveImage
+            <ImageFigure
               src={imageUrl}
               alt={heading}
               aspect="4/3"

@@ -1,8 +1,8 @@
 // apps/site/src/components/sections/IntroWithImage.tsx
 'use client';
 
-import type { IntroWithImageProps } from '@/types/layout';
-import { ResponsiveImage } from '@kit/blocks';
+import type { IntroWithImageProps } from '../types';
+import { ImageFigure } from './ImageFigure';
 
 export function IntroWithImage({ heading, text, imageUrl }: IntroWithImageProps) {
   return (
@@ -14,7 +14,7 @@ export function IntroWithImage({ heading, text, imageUrl }: IntroWithImageProps)
           <p className="type-body">Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.</p>
         </div>
         <div>
-          <ResponsiveImage
+          <ImageFigure
             src={imageUrl}
             alt={heading}
             aspect="4/3"
