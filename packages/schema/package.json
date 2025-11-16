@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },
-
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -22,9 +21,7 @@
       "types": "./dist/registry.d.ts"
     }
   },
-  
   "dependencies": {
     "zod": "^4.1.12"
   }
 }
-

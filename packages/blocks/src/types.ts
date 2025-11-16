@@ -17,7 +17,6 @@ export type GenericBlock<T extends keyof BlockComponentProps> = {
   _key?: string;
 };
 
-
 // Props for ALL layout block components (not case study ones only)
 
 export type HeroProps = {
@@ -122,10 +121,9 @@ export type BlockComponentProps = {
   ContactForm: ContactFormProps;
 };
 
-
 // All layout blocks (shared + landing)
 export type LayoutBlock = {
-  [K in keyof BlockComponentProps]: GenericBlock<K>
+  [K in keyof BlockComponentProps]: GenericBlock<K>;
 }[keyof BlockComponentProps];
 
-export type BlockType = LayoutBlock['type'];
+export type BlockType = LayoutBlock["type"];

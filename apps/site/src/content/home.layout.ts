@@ -1,5 +1,5 @@
 // apps/site/src/content/home.layout.ts
-import { LayoutBlock } from '@kit/blocks';
+import { LayoutBlock } from "@kit/blocks";
 
 export const homeLayout: LayoutBlock[] = [
   {
@@ -30,29 +30,29 @@ export const homeLayout: LayoutBlock[] = [
     props: {
       layout: "4col",
       items: [
-        { 
-          title: "Geospatial Solutions", 
+        {
+          title: "Geospatial Solutions",
           summary: "Sanborn + AppGeo",
-          imageUrl: '/img/case1.webp',
-          slug: 'sanborn-appgeo',
+          imageUrl: "/img/case1.webp",
+          slug: "sanborn-appgeo",
         },
         {
-          title: "Nonprofit Organizations", 
+          title: "Nonprofit Organizations",
           summary: "NAPSG Foundation",
-          imageUrl: '/img/case2.webp',
-          slug: 'napsg-foundation',
+          imageUrl: "/img/case2.webp",
+          slug: "napsg-foundation",
         },
         {
-          title: "Government Contracting", 
+          title: "Government Contracting",
           summary: "Crucis",
-          imageUrl: '/img/case3.webp',
-          slug: 'crucis',
+          imageUrl: "/img/case3.webp",
+          slug: "crucis",
         },
-        { 
-          title: "Emergency Response", 
+        {
+          title: "Emergency Response",
           summary: "MKR Fabricators",
-          imageUrl: '/img/temp.svg',
-          slug: 'mkr-fabricators',
+          imageUrl: "/img/temp.svg",
+          slug: "mkr-fabricators",
         },
       ],
     },

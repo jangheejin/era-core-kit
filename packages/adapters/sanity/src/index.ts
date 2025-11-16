@@ -6,7 +6,7 @@ export const sanityAdapter = {
       slug,
       blocks: [
         { type: "callout", content: "This is a callout!" },
-        { type: "pullQuote", content: "Big idea goes here" }
+        { type: "pullQuote", content: "Big idea goes here" },
       ],
     };
   },

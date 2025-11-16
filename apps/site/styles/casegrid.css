@@ -1,11 +1,47 @@
 /* apps/site/styles/casegrid.css */
 
+.casegrid-wrapper {
+  display: grid;
+  grid-template-columns: 
+    minmax(var(--edge-padding, 1rem), 1fr) 
+    [content-start] minmax(0, var(--card-max, 32rem)) 
+    minmax(var(--column-gap, 1rem), 2rem)
+    minmax(0, var(--card-max, 32rem)) 
+    [content-end] minmax(var(--edge-padding, 1rem), 1fr);
+  padding-block: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .casegrid-wrapper {
+    grid-template-columns: minmax(var(--edge-padding), 1fr) [content-start] minmax(0, var(--card-max, 32rem)) [content-end] minmax(var(--edge-padding), 1fr);
+  }
+
+  .case-card {
+    grid-column: content-start / content-end;
+  }
+}
+
 .casegrid {
   display: grid;
-  gap: var(--space-3);
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  width: 100%;/*default to a certain size*/
+  max-width: 100%; /*cap that size responsively (don't get bigger than this)*/
+  gap: var(--space-3); /* gutter between columns of cards*/
+  /*grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Always 2 columns */
   margin-top: var(--space-4);
 }
+
+/* Responsive: switch to 1 column */
+/*@media (max-width: 600px) {
+  .casegrid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-card {
+    max-width: 100%;
+    padding-inline: 0 !important;
+  }
+}*/
 
 .casegrid.layout-4 {
   grid-template-columns: repeat(4, 1fr);
@@ -16,6 +52,7 @@
 }
 
 .case-card {
+  max-width: 32rem;
   display: flex;
   flex-direction: column;
   text-decoration: none;
@@ -27,12 +64,21 @@
   transition: box-shadow 0.2s ease;
 }
 
+/* side-specific padding so spacing goes on teh outside of columns, not to go the gutters in between*/
+.case-card:nth-child(odd) {
+  padding-left: var(--space-3);
+}
+
+.case-card:nth-child(even) {
+  padding-right: var(--space-3);
+}
+
 .case-card:hover {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
 
 .case-card__image {
-/*  aspect-ratio: 1 / 1;*/
+  /*  aspect-ratio: 1 / 1;*/
   overflow: hidden;
 }
 

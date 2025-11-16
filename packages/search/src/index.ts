@@ -12,11 +12,11 @@ export interface CaseStudy {
 }
 
 export interface CaseStudySearchFilters {
-  query?: string;          // free-text search
-  tags?: string[];         // filter by tags
-  industries?: string[];   // filter by industry
-  before?: string;         // ISO date
-  after?: string;          // ISO date
+  query?: string; // free-text search
+  tags?: string[]; // filter by tags
+  industries?: string[]; // filter by industry
+  before?: string; // ISO date
+  after?: string; // ISO date
 }
 
 export interface CaseStudySearchResult<T = CaseStudy> {
@@ -33,10 +33,10 @@ export interface CaseStudySearchResult<T = CaseStudy> {
  * - or do in-memory filtering over a static list
  */
 export async function searchCaseStudies(
-  _filters: CaseStudySearchFilters
+  _filters: CaseStudySearchFilters,
 ): Promise<CaseStudySearchResult> {
   return {
     items: [],
-    total: 0
+    total: 0,
   };
 }

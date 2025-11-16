@@ -1,7 +1,7 @@
 //apps/site/app/layout.tsx
-import '../styles/tokens.css';
-import '../styles/primitives.css';
-import { Inter, Oswald } from 'next/font/google';
+import "../styles/tokens.css";
+import "../styles/primitives.css";
+import { Inter, Oswald } from "next/font/google";
 import type { Metadata } from "next";
 
 const site = {
@@ -10,11 +10,15 @@ const site = {
   description:
     "ERA Government Affairs is a premier government affairs, consulting and public affairs firm",
   twitter: "@example", //set real twitter
-  locale: "en_US"
+  locale: "en_US",
 };
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
-const oswald = Oswald({ subsets: ['latin'], weight: ['600'], variable: '--font-heading' });
+const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["600"],
+  variable: "--font-heading",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -50,7 +54,11 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={`${inter.variable} ${oswald.variable}`}>
       <body>{children}</body>

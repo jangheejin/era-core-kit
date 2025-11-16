@@ -1,14 +1,12 @@
 {
   "name": "@kit/blocks",
   "version": "0.1.0",
-  "main": "dist/index.js", 
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },
-
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -23,7 +21,6 @@
       "types": "./dist/registry.d.ts"
     }
   },
-
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

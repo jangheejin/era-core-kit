@@ -21,9 +21,9 @@
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-	  "paths": {
+    "paths": {
       "@/*": ["apps/site/src/*"]
-	  }
+    }
   },
   "include": ["packages", "apps"],
   "exclude": ["node_modules"]
