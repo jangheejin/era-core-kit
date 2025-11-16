@@ -22,9 +22,19 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
 	  "paths": {
+	    "@kit/schema": ["packages/schema/src"],
+      "@kit/blocks": ["packages/blocks/src"],
+      "@kit/adapters/*": ["packages/adapters/*/src"],
+      "@kit-adapters-sanity": ["packages/adapters/sanity/src"],
       "@/*": ["apps/site/src/*"]
 	  }
   },
+  "files": [],
+  "references": [
+    {"path": "packages/schema"},
+    {"path": "packages/blocks"},
+    {"path": "packages/adapters/sanity"}
+  ],
   "include": ["packages", "apps"],
   "exclude": ["node_modules"]
 }

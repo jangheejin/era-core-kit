@@ -9,7 +9,8 @@
   },
 
   "dependencies": {
-    "@kit/schema": "workspace:*"
+    "@kit/schema": "workspace:*",
+    "@kit/cms-contract": "workspace:*"
   },
 
   "exports": {

@@ -1,4 +1,9 @@
 // packages/adapters/sanity/src/index.ts
+
+
+//export type { CMS } from '../../CMS';
+export { createInMemoryCMS } from './inMemoryCMS';
+
 export const sanityAdapter = {
   get: (slug: string) => {
     return {

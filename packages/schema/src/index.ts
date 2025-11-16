@@ -1,3 +1,4 @@
+// packages/schema/src/index.ts
 import { z } from 'zod';
 
 export const Sector = z.enum([
@@ -29,24 +30,66 @@ export const Outcome = z.object({
   evidenceUrl: z.string().url().optional(),
 });
 
+//NEW: structured sections
+export const CaseStudySection = z.object({
+  id: z.string(),              // stable key, e.g. "context", "approach"
+  title: z.string().max(80),   // section title
+  bodyMDX: z.string().optional(), // markdown/MDX for that section
+});
+
+//NEW: attachments (downloads)
+export const CaseStudyAttachment = z.object({
+  label: z.string().max(120),  // "Full report (PDF)"
+  url: z.string().url(),
+  kind: z
+    .enum(['pdf', 'ppt', 'doc', 'sheet', 'zip', 'other'])
+    .default('other'),
+  internalOnly: z.boolean().default(false),
+});
+
+//NEW: extra links
+export const CaseStudyLink = z.object({
+  label: z.string().max(120),  // "Client website", "Legislation text"
+  url: z.string().url(),
+  category: z
+    .enum(['client', 'impact', 'legislation', 'press', 'other'])
+    .default('other'),
+  internalOnly: z.boolean().default(false),
+});
+
 export const CaseStudy = z.object({
   id: z.string(),
   title: z.string().max(120),
   slug: z.string().regex(/^[a-z0-9-]+$/),
   client: z.string().max(80).optional(),
   sector: Sector,
-  tags: z.array(z.string()).max(10).default([]),
-  summaryShort: z.string().max(180),
-  heroImageUrl: z.string().url(),
   year: z.number().int().min(1990).max(2100).optional(),
+
+  tags: z.array(z.string()).max(10).default([]),
+
+  summaryShort: z.string().max(180),
+  brief: z.string().max(280).optional(),
+  heroImageUrl: z.string().url(),
+
   mechanisms: z.array(Mechanism).default([]),
   jurisdictions: z.array(Jurisdiction).default([]),
   outcomes: z.array(Outcome).default([]),
-  evidence: z.array(z.object({
-    label: z.string(),
-    url: z.string().url(),
-  })).default([]),
+
+  evidence: z
+    .array(
+      z.object({
+        label: z.string(),
+        url: z.string().url(),
+      }),
+    )
+    .default([]),
+
   bodyMDX: z.string().optional(),
+  sections: z.array(CaseStudySection).default([]),
+
+  attachments: z.array(CaseStudyAttachment).default([]),
+  links: z.array(CaseStudyLink).default([]),
+
   isFeaturedHome: z.boolean().default(false),
   isPublic: z.boolean().default(true),
 });
@@ -62,9 +105,14 @@ export const Person = z.object({
   sortOrder: z.number().int().default(0),
 });
 
+// Types
 export type CaseStudy = z.infer<typeof CaseStudy>;
 export type Person = z.infer<typeof Person>;
+export type CaseStudySection = z.infer<typeof CaseStudySection>;
+export type CaseStudyAttachment = z.infer<typeof CaseStudyAttachment>;
+export type CaseStudyLink = z.infer<typeof CaseStudyLink>;
 
+// Filter AST (for search / filtering)
 export type FilterAST = {
   sector?: z.infer<typeof Sector>;
   tags?: string[];
@@ -72,3 +120,5 @@ export type FilterAST = {
   yearRange?: { min?: number; max?: number };
   text?: string;
 };
+
+export { CASE_STUDIES_FIXTURE } from './fixtures';

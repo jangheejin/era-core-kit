@@ -2,7 +2,7 @@ packages:
   - "apps/*"
   - "packages/*"
   - "packages/adapters/**"
-
+  
 onlyBuiltDependencies:
   - esbuild
   - sharp
