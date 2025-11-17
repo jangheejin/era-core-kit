@@ -30,3 +30,7 @@ yarn-error.log*
 # Ignore IDE configs
 .vscode/
 .idea/
+
+node_modules/
+.pnpm-store/
+.next/

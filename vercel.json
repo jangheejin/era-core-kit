@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm -w run build:site",
+  "buildCommand": "pnpm install && pnpm run build:all && pnpm --filter site... run build",
   "installCommand": "pnpm install",
   "outputDirectory": "apps/site/.next",
   "framework": "nextjs",
