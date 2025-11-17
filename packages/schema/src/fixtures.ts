@@ -1,3 +1,4 @@
+// packages/schema/src/fixtures.ts
 import type { CaseStudy } from './index';
 
 export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
