@@ -1,7 +1,3 @@
-//tsconfig.base.json
-//(root tsconfig.json)
-//changed "@kit/adapters/*": ["packages/adapters/*/src"], to "@kit/adapters/*": ["packages/adapters/*/src"], to
-//"@kit/adapters/sanity": ["packages/adapters/sanity/src"],
 {
   "compilerOptions": {
     "baseUrl": ".",

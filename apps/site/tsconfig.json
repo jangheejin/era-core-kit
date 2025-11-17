@@ -1,12 +1,24 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "incremental": true
+    "incremental": true,
+    "composite": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "src", "app"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "references": [
+    { "path": "../../packages/blocks" },
+    { "path": "../../packages/cms-contract" },
+    { "path": "../../packages/schema" },
+    { "path": "../../packages/adapters/sanity" }
+  ]
 }
