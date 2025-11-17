@@ -12,5 +12,10 @@
     "moduleResolution": "Node"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "references": [
+    { "path": "../blocks" },  // or other required sibling packages
+    { "path": "../adapters/sanity" },
+    { "path": "../cms-contract" },
+  ]
 }

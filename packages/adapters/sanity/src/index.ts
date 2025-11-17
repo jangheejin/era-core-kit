@@ -9,11 +9,12 @@ import type {
 import type { CMS } from '@kit/cms-contract';//Import the CMS interface for typing 'sanityAdapter'
 //export type { CMS } from '../../CMS';
 //export { createInMemoryCMS } from './inMemoryCMS';
-export * from './inMemoryCMS';//wildcard export to ensure all symbols are visible
+//export * from './inMemoryCMS';//wildcard export to ensure all symbols are visible
 export type { CMS } from '@kit/cms-contract';//re-export the interface itself for consumers that might need it
 /*export { createInMemoryCMS } from './inMemoryCMS';//Export the in-memory function again for safety
 */
 
+export * from './inMemoryCMS';
 /*
 export const sanityAdapter = {
   get: (slug: string) => {

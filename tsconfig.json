@@ -1,11 +1,13 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": ["packages", "apps"],
+  "files": [],
   "references": [
     { "path": "packages/schema" },
     { "path": "packages/cms-contract" },
-    { "path": "packages/adapters/sanity" },
     { "path": "packages/blocks" },
-    { "path": "apps/site" }
-  ]
+    { "path": "packages/adapters/sanity" }
+  ],
+  "compilerOptions": {
+    "composite": false
+  }
 }

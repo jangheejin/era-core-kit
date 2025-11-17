@@ -1,12 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "incremental": true
+    "incremental": true,
+    "composite": true, 
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@kit-adapters-sanity": ["../../packages/adapters/sanity/src"],
+      "@kit/schema": ["../../packages/schema/src"],
+      "@kit/blocks": ["../../packages/blocks/src"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "node_modules/next/types/**/*.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }
