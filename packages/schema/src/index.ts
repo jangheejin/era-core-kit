@@ -1,4 +1,15 @@
 // packages/schema/src/index.ts
+// Export the core data types
+//export * from './CaseStudy'; 
+//export * from './Filter';
+/*
+export type { 
+  // Types needed by adapters/contracts
+  CaseStudy, 
+  CaseStudySort, 
+  FilterAST 
+} from './fixtures'; // Assuming CaseStudySort is defined in CaseStudy.ts
+*/
 import { z } from 'zod';
 
 export const Sector = z.enum([
