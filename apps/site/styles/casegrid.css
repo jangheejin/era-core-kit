@@ -15,6 +15,11 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+.casegrid.layout-2x2 {
+  /* Forces a grid of 2 columns */
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .case-card {
   display: flex;
   flex-direction: column;
