@@ -1,7 +1,12 @@
 // packages/adapters/sanity/src/index.ts
-import type { CaseStudy, Person, FilterAST } from '@kit/schema';
+import type { 
+  CaseStudy, 
+  Person,
+  CaseStudySort, 
+  FilterAST, 
+  // Add any other types/enums needed from the schema
+} from '@kit/schema';
 import type { CMS } from '@kit/cms-contract';//Import the CMS interface for typing 'sanityAdapter'
-import type { CaseStudy, CaseStudySort, FilterAST } from '@kit/schema';
 //export type { CMS } from '../../CMS';
 //export { createInMemoryCMS } from './inMemoryCMS';
 export * from './inMemoryCMS';//wildcard export to ensure all symbols are visible

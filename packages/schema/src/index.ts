@@ -12,6 +12,8 @@ export type {
 */
 import { z } from 'zod';
 
+export type CaseStudySort = 'Newest' | 'ClientName' | 'Sector' | 'Year';
+
 export const Sector = z.enum([
   'Defense',
   'Health',
