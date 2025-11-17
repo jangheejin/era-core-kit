@@ -1,8 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
+//    "rootDir": "src",
+//    "outDir": "dist",
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
@@ -17,6 +17,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "node_modules/next/types/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
