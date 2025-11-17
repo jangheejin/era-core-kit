@@ -1,8 +1,17 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "composite": true,
-    "outDir": "dist"
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [
+    { "path": "../../cms-contract" },
+    { "path": "../../schema" }
+  ]
 }

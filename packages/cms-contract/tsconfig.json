@@ -7,13 +7,13 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "baseUrl": "../../",
-    "paths": {
-      "@kit/schema": ["packages/schema/src"]
-    }
+    "noEmit": false
   },
   "include": ["src"],
   "references": [
-    { "path": "../schema" }
+    {
+      "path": "../schema"
+    }
   ]
 }
+

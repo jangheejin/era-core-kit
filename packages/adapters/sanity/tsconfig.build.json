@@ -1,40 +1,34 @@
 {
-  "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "declaration": true,
-      "emitDeclarationOnly": false,
-      "composite": true,
-  
-      //Strictness, compatibility
-      "strict": true,
-      "noUncheckedIndexedAccess": true,
-      "noImplicitOverride": true,
-      "noFallthroughCasesInSwitch": true,
-      "forceConsistentCasingInFileNames": true,
-  
-      //Module and targeting
-      "module": "ESNext",
-      "target": "ES2020",
-      "moduleResolution": "Node",
-      "esModuleInterop": true,
-      "jsx": "react-jsx",
-      "skipLibCheck": true,
-      "resolveJsonModule": true,
-      "lib": ["DOM", "DOM.Iterable", "ESNext"],
+  "extends": "../../../tsconfig.base.json", 
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "composite": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
 
-      "baseUrl": "../..",
-      "paths": {
-        "@kit/cms-contract": ["../cms-contract/src"],
-        "@kit/schema": ["../schema/src"]
-      }
-    },
-    
-    "include": ["src/**/*"],
-    "references": [
-      { "path": "../cms-contract" },
-      { "path": "../schema" }
-    ] 
-  }
-  
+    "baseUrl": "../../..",
+    "paths": {
+      "@kit/cms-contract": ["packages/cms-contract/src"],
+      "@kit/schema": ["packages/schema/src"]
+    }
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../../cms-contract" },
+    { "path": "../../schema" }
+  ]
+}

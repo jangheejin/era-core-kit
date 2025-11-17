@@ -1,6 +1,7 @@
 // packages/adapters/sanity/src/inMemoryCMS.ts
 //import type { CMS } from '../CMS';
-import type { CMS } from '../../../cms-contract/src/CMS';
+//import type { CMS } from '../../../cms-contract/src/CMS';
+import type { CMS } from '@kit/cms-contract';
 import {
   CASE_STUDIES_FIXTURE,
   type CaseStudy,

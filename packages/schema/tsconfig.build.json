@@ -4,7 +4,8 @@
     "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": false,
-    "composite": false,
+    "noEmit": false,
+    "composite": true,
 
     //Strictness, compatibility
     "strict": true,
@@ -18,10 +19,14 @@
     "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
-
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "paths": {
+      "@kit/blocks": ["../blocks/src"],
+      "@kit/cms-contract": ["../cms-contract/src"],
+      "@kit/schema": ["../schema/src"]
+    },
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
   "include": ["src/**/*"]

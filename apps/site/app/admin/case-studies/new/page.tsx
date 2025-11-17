@@ -1,0 +1,1 @@
+import { CaseStudy, type CaseStudy as CaseStudyType } from '@kit/schema';

@@ -26,3 +26,9 @@ export interface CMS {
 
   getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]>;
 }
+/*
+export type CaseStudy = {
+  title: string;
+  slug: string;
+  blocks: Array<{ type: string; content: string }>;
+};*/

@@ -1,14 +1,16 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "incremental": true,
     "plugins": [{ "name": "next" }],
-    "baseUrl": ".", // THIS IS LOCAL TO apps/site
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@kit-adapters-sanity": ["../../packages/adapters/sanity/dist"],
-      "@kit/schema": ["../../packages/schema/dist"],
-      "@kit/blocks": ["../../packages/blocks/dist"]
+      "@kit-adapters-sanity": ["../../packages/adapters/sanity/src"],
+      "@kit/schema": ["../../packages/schema/src"],
+      "@kit/blocks": ["../../packages/blocks/src"]
     }
   },
   "include": [
