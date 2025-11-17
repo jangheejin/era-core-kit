@@ -1,6 +1,10 @@
 /*apps/site/styles/primitives.css*/
 @import './casegrid.css';  
 
+/* ----------------------------------------------------- */
+/* ROOT VARIABLES & FLUID DESIGN SYSTEM */
+/* ----------------------------------------------------- */
+
 :root {
   --font-body: 'Inter', sans-serif;
   --font-heading: 'Oswald', sans-serif;
@@ -8,19 +12,44 @@
 
   --fs-hero: clamp(2rem, 1.2rem + 3vw, 3.5rem);
   --fs-h2: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  --fs-h3: clamp(1.25rem, 1rem + 0.5vw, 1.5rem);
   --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+  --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
 /*
   --space-1: clamp(0.5rem, 1vw, 1rem);
   --space-2: clamp(1rem, 2vw, 2rem);
   --space-3: clamp(1.5rem, 3vw, 3rem);
   --space-4: clamp(2rem, 4vw, 4rem);
 */
+/* Spacing Scale (fluid, ensures responsiveness) */
   --space-1: clamp(0.5rem, 0.8vw, 0.75rem);
   --space-2: clamp(0.75rem, 1.2vw, 1rem);
   --space-3: clamp(1rem, 1.8vw, 1.5rem);
   --space-4: clamp(1.5rem, 2.5vw, 2rem);
+  --space-6: clamp(2rem, 3.5vw, 3rem);
+  --space-8: clamp(3rem, 5vw, 4rem);
+
+  /* Layout */
+  --container-max: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --radius: 12px;
+
+  /* Colors */
+  --brand: #0b5fff;
+  --ink: #0b0f14;
+  --ink-2: #374151;
+  --bg: #ffffff;
+  --bg-2: #f7f7f9;
+  --color-accent: var(--brand); 
+  --color-heading: var(--ink);
+  --color-text: var(--ink-2);
+  --gray-300: #d1d5db; /* Assuming this value from typical scales */
 }
 
+
+/* ----------------------------------------------------- */
+/* LAYOUT & COMPONENTS */
+/* ----------------------------------------------------- */
 .pad-2 {
   padding: var(--space-2);
 }
@@ -35,16 +64,18 @@
 
 .c-container {
   /*max-width: 1200px;*/
-  max-width: 72rem;
+  max-width: var(--container-max);
+/*  max-width: 72rem;*/
   margin: 0 auto;
   /*padding-inline: var(--gutter, 1.5rem);*/
   padding-inline: var(--space-4)
 
 }
 
+/* This will later become @apply p-4; */
 .c-section {
   /*padding-block: var(--space-8, 6rem);*/
-  padding-block: var(--space-4);
+  padding-block: var(--space-6);
   background: var(--bg);
 }
 
@@ -61,6 +92,55 @@
   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr));
   container-type: inline-size;
 }
+
+/* ----------------------------------------------------- */
+/* FORM ELEMENTS (Using EXPLICIT Class Selectors) */
+/* ----------------------------------------------------- */
+
+/* Base Form Structure */
+form {
+  display: grid;
+  gap: 1rem;
+  max-width: 500px;
+}
+
+/* Input/Textarea Class (Used in JSX: className="input") */
+.input {
+  font-family: var(--font-body); /* Inherited from body, but safe to redefine */
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+/* Textarea Specific Styling (Targets only the textarea element with the .input class) */
+textarea.input {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Button Class (Used in JSX: className="button") */
+.button {
+  font-family: var(--font-body); /* Inherited from body, but safe to redefine */
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.button:hover {
+  background-color: #003f8f;
+}
+
+
+/* ----------------------------------------------------- */
+/* CARDS (Used in CMS Dashboard/Case Studies) */
+/* ----------------------------------------------------- */
 /*  
 .card {
   display: grid;
@@ -116,41 +196,45 @@
   margin: 0;
 }
 
-/* Typography */
-h1, h2, h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-heading);
-  color: var(--color-heading, #1a1a1a);
+.hero-image-container{
+/*  display: block;
+  margin-left: auto;
+  margin-right: auto;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
-  font-size: 2.5rem;
+.hero-image-container img{
+  max-width: 250px;
 }
 
-h2 {
-  font-size: 1.875rem;
-}
+/* ----------------------------------------------------- */
+/* TYPOGRAPHY (Base & Utility Classes) */
+/* ----------------------------------------------------- */
 
-h3 {
-  font-size: 1.25rem;
-}
-
-body, p, li, label, input, textarea, button {
+/* Base Typography for all elements */
+body, p, li, label, pre, code {
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: var(--fs-body);
   line-height: 1.6;
-  color: var(--color-text, #333);
+  color: var(--color-text);
 }
 
 h1, h2, h3 {
   font-family: var(--font-heading);
   font-weight: 600;
   letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-heading);
 }
 
+h1 { font-size: var(--fs-hero); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+/* Anchor Links */
 a {
-  color: var(--color-accent, #0057b8);
+  color: var(--color-accent);
   text-decoration: underline;
 }
 
@@ -158,43 +242,7 @@ a:hover {
   text-decoration: none;
 }
 
-/* Form Elements */
-form {
-  display: grid;
-  gap: 1rem;
-  max-width: 500px;
-}
-
-input, textarea, button {
-  font-family: inherit;
-  font-size: 1rem;
-}
-
-input, textarea {
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.375rem;
-  width: 100%;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-button {
-  padding: 0.75rem 1.25rem;
-  background-color: var(--color-accent, #0057b8);
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-button:hover {
-  background-color: #003f8f;
-}
+/* Type Utility Classes (Used for explicit styling in components) */
 
 .type-h1 {
   font-size: var(--fs-hero);
@@ -237,15 +285,57 @@ button:hover {
   text-transform: uppercase;
 }
 
-.hero-image-container{
-/*  display: block;
-  margin-left: auto;
-  margin-right: auto;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+/* ----------------------------------------------------- */
+/* Typography */
+/* ----------------------------------------------------- */
+/* Base Typography for all elements */
+body, p, li, label, pre, code {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--color-text);
 }
 
-.hero-image-container img{
-  max-width: 250px;
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-heading, #1a1a1a);
 }
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.875rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+body, p, li, label, input, textarea, button {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text, #333);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+a {
+  color: var(--color-accent, #0057b8);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+
