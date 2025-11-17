@@ -13,7 +13,7 @@ const nextConfig = {
     
     config.resolve.alias['@kit/blocks'] = path.resolve(__dirname, '../../packages/blocks/dist');
     config.resolve.alias['@kit/schema'] = path.resolve(__dirname, '../../packages/schema/dist');
-    config.resolve.alias['@kit-adapters-sanity'] = path.resolve(__dirname, '../../packages/adapters/sanity/dist');
+    config.resolve.alias['@kit/adapters-sanity'] = path.resolve(__dirname, '../../packages/adapters/sanity/dist');
 
     return config;
   }

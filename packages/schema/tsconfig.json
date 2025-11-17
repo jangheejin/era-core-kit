@@ -8,7 +8,8 @@
     "rootDir": "src",
     "outDir": "dist",
     "emitDeclarationOnly": false,
-    "noEmit": false
+    "noEmit": false,
+    "moduleResolution": "Node"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

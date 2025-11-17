@@ -1,25 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-//    "rootDir": "src",
-//    "outDir": "dist",
-    "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@kit-adapters-sanity": ["../../packages/adapters/sanity/src"],
-      "@kit/schema": ["../../packages/schema/src"],
-      "@kit/blocks": ["../../packages/blocks/src"]
-    }
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "node_modules/next/types/**/*.ts",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    "**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

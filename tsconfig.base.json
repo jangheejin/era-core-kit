@@ -5,37 +5,25 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    "paths": {
+      "@kit/schema": ["packages/schema/dist"],
+      "@kit/blocks": ["packages/blocks/dist"],
+      "@kit/adapters/*": ["packages/adapters/*/dist"],
+      "@kit/adapters-sanity": ["packages/adapters/sanity/dist"],
+      "@/*": ["apps/site/src/*"]
+    },
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-	  "paths": {
-      "@kit/cms-contract": ["packages/cms-contract/src"],
-	    "@kit/schema": ["packages/schema/src"],
-      "@kit/blocks": ["packages/blocks/src"],
-      "@kit/adapters/*": ["packages/adapters/*/src"],
-      "@kit-adapters-sanity": ["packages/adapters/sanity/src"],
-      "@/*": ["apps/site/src/*"]
-	  }
-  },
-  "files": [],
-  "references": [
-    {"path": "packages/schema"},
-    {"path": "packages/blocks"},
-    {"path": "packages/adapters/sanity"}
-  ],
-  "include": ["packages", "apps"],
-  "exclude": ["node_modules"]
+    "noFallthroughCasesInSwitch": true
+  }
 }

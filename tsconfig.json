@@ -1,9 +1,11 @@
 {
-  "files": [],
+  "extends": "./tsconfig.base.json",
+  "include": ["packages", "apps"],
   "references": [
     { "path": "packages/schema" },
     { "path": "packages/cms-contract" },
-    { "path": "packages/adapters/sanity" }
-  ],
-  "extends": "./tsconfig.base.json"
+    { "path": "packages/adapters/sanity" },
+    { "path": "packages/blocks" },
+    { "path": "apps/site" }
+  ]
 }

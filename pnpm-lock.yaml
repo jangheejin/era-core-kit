@@ -47,7 +47,7 @@ importers:
 
   apps/site:
     dependencies:
-      '@kit-adapters-sanity':
+      '@kit/adapters-sanity':
         specifier: workspace:*
         version: link:../../packages/adapters/sanity
       '@kit/blocks':
