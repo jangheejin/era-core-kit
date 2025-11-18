@@ -1,21 +1,7 @@
-//export type { CMS } from '../../CMS';
 //export { createInMemoryCMS } from './inMemoryCMS';
 export * from './inMemoryCMS'; //wildcard export to ensure all symbols are visible
 /*export { createInMemoryCMS } from './inMemoryCMS';//Export the in-memory function again for safety
 */
-/*
-export const sanityAdapter = {
-  get: (slug: string) => {
-    return {
-      title: "Mock case study",
-      slug,
-      blocks: [
-        { type: "callout", content: "This is a callout!" },
-        { type: "pullQuote", content: "Big idea goes here" }
-      ],
-    };
-  },
-};*/
 export const sanityAdapter = {
     // Implement Sanity fetching logic here
     async getCaseStudies({ filter, limit, cursor, sort }) {

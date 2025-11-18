@@ -3,12 +3,12 @@ import '../styles/tokens.css';
 import '../styles/primitives.css';
 import '../styles/casegrid.css';
 import { type Metadata } from 'next';
+//import { Inter, Oswald } from 'next/font/google';
+//import { Inter, Oswald } from 'next/font/google/index';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css'; 
 import '@fontsource/inter/600.css'; 
 import '@fontsource/oswald/600.css';
-//import { Inter, Oswald } from 'next/font/google';
-//import { Inter, Oswald } from 'next/font/google/index';
 
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})

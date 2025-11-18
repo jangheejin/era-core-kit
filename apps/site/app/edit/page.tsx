@@ -1,15 +1,31 @@
+//apps/site/app/edit/page.tsx
 'use client';
 
 import React, { useState } from 'react';
-import { renderBlock } from '@/utils/renderBlock';
 import type { LayoutBlock } from '@kit/blocks';
+import BlockRenderer from '@/utils/BlockRenderer';
+
+// Define the component props interface (Good practice for types)
+interface InlineEditFormProps {
+    block: LayoutBlock;
+    onUpdate: (newProps: any) => void;
+}
+
+const InlineEditForm = ({ block, onUpdate }: InlineEditFormProps) => {
+  // In a real application, this component would render inputs based on block.type 
+  return (
+    <div className="block-edit-form"> 
+      <strong>Inline Form:</strong> Editing {block.type} Props
+    </div>
+  );
+};
 
 const initialData: LayoutBlock[] = [
   {
     type: 'Hero',
     props: {
       heading: 'Welcome to the site!',
-      subhead: 'This is a subheading',
+      subhead: 'Here is where you can edit pages',
       imageUrl: '/hero.jpg',
     },
     _key: 'hero-1',
@@ -31,10 +47,15 @@ export default function EditPage() {
       <h1>Edit Page Layout</h1>
 
       {blocks.map((block, index) => (
-        <div key={block._key ?? `${block.type}-${index}`} style={{ border: '1px solid #ccc', marginBottom: '1rem', padding: '1rem' }}>
+        <div key={block._key ?? `${block.type}-${index}`} className="block-edit-wrapper">
           <strong>{block.type}</strong>
-          <div>{renderBlock(block, index)}</div>
-          {/* You can add an inline form here to edit each block */}
+          
+          <div>
+            <BlockRenderer block={block} index={index} /> 
+          </div>
+
+          <InlineEditForm block={block} onUpdate={() => {}} />
+
         </div>
       ))}
     </main>

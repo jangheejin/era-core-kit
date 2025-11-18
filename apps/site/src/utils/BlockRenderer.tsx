@@ -2,13 +2,16 @@
 type _DEBUG_BlockTypes = LayoutBlock['type'];
 import React from 'react';
 import { blockRegistry } from '@kit/blocks';
-import { LayoutBlock } from '@kit/blocks';
+//import { LayoutBlock } from '@kit/blocks';
+import { LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps } from '@kit/blocks/types';
 
+// Define the props interface
 interface BlockRendererProps {
   block: LayoutBlock;
   index: number;
 }
 
+// Define the BlockRenderer functional component
 function BlockRenderer({ block, index }: BlockRendererProps) {
   
   // The switch forces TypeScript to correctly correlate 'block.type' with 'block.props'

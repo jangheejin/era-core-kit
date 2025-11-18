@@ -209,6 +209,21 @@ textarea.input {
   max-width: 250px;
 }
 
+/* CMS: Page Editing */
+.block-edit-wrapper {
+  /* Original border style for the block container */
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.block-edit-form {
+  /* Styles for the new inline form placeholder */
+  padding: 0.5rem;
+  border-top: 1px dashed #aaa;
+  margin-top: 0.5rem;
+}
+
 /* ----------------------------------------------------- */
 /* TYPOGRAPHY (Base & Utility Classes) */
 /* ----------------------------------------------------- */

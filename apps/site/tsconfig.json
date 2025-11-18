@@ -1,12 +1,21 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "incremental": true,
     "composite": true,
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "noEmit": false
+    "noEmit": false,
+    "paths": {
+      "@kit/schema": ["../../packages/schema/src", "../../packages/schema/dist"],
+      "@kit/blocks": ["../../packages/blocks/src", "../../packages/blocks/dist"],
+      "@kit/blocks/*": ["../../packages/blocks/src/*", "../../packages/blocks/dist/*"],
+      "@kit/adapters-sanity": ["../../packages/adapters/sanity/src", "../../packages/adapters/sanity/dist"],
+      "@kit/cms-contract": ["../../packages/cms-contract/src", "../../packages/cms-contract/dist"],
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

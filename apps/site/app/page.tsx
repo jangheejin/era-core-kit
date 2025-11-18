@@ -1,7 +1,9 @@
 'use client';
 import React from 'react';
-import { homeLayout } from '../src/content/home.layout';
-import { renderBlock } from '@/utils/renderBlock';
+import { homeLayout } from '@/content/home.layout';
+//import { homeLayout } from '../src/content/home.layout';
+import BlockRenderer from '@/utils/BlockRenderer'; 
+//import { renderBlock } from '@/utils/renderBlock';
 /*
 export default function Home() {
   return (
@@ -21,12 +23,19 @@ export default function Home() {
     ))}
   </main>;
 }*/
-export default function Home() {
-  return <main>
-    {homeLayout.map((block, index) => (
-      <React.Fragment key={block._key ?? `${block.type}-${index}`}>
-        {renderBlock(block, index)}
-      </React.Fragment>
-    ))}
-  </main>
-}
+
+const Home = () => {
+  return (
+    <main>
+      {homeLayout.map((block, index) => (
+        // 1. Pass the unique 'key' prop to satisfy React warnings.
+        // 2. Pass 'block' and 'index' directly to BlockRenderer.
+        <BlockRenderer 
+          key={block._key ?? index}
+          block={block} 
+          index={index} 
+        />
+      ))}
+    </main>
+  );
+};
