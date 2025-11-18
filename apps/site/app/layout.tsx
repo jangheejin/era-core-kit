@@ -1,6 +1,6 @@
 // apps/site/app/layout.tsx
 
-'use client';
+//'use client';
 
 import '../styles/tokens.css';
 import '../styles/primitives.css';
@@ -62,7 +62,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="font-setup">
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }
