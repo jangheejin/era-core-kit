@@ -212,6 +212,14 @@ textarea.input {
 /* ----------------------------------------------------- */
 /* TYPOGRAPHY (Base & Utility Classes) */
 /* ----------------------------------------------------- */
+.font-setup {
+  /* 1. Define the CSS variables */
+  --font-inter: 'Inter', sans-serif;
+  --font-oswald: 'Oswald', sans-serif;
+  
+  /* 2. Apply the default font to the body/app root */
+  font-family: var(--font-inter); 
+}
 
 /* Base Typography for all elements */
 body, p, li, label, pre, code {
@@ -264,11 +272,13 @@ a:hover {
 }
 
 .type-body {
+  font-weight:400;
   font-size: var(--fs-body);
   line-height: 1.55;
 }
 
 .type-small {
+  font-weight:400;
   font-size: var(--fs-small);
   line-height: 1.4;
 }
