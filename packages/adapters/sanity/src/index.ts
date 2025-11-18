@@ -7,26 +7,12 @@ import type {
   // Add any other types/enums needed from the schema
 } from '@kit/schema';
 import type { CMS } from '@kit/cms-contract';//Import the CMS interface for typing 'sanityAdapter'
-//export type { CMS } from '../../CMS';
+
 //export { createInMemoryCMS } from './inMemoryCMS';
 export * from './inMemoryCMS';//wildcard export to ensure all symbols are visible
 export type { CMS } from '@kit/cms-contract';//re-export the interface itself for consumers that might need it
 /*export { createInMemoryCMS } from './inMemoryCMS';//Export the in-memory function again for safety
 */
-
-/*
-export const sanityAdapter = {
-  get: (slug: string) => {
-    return {
-      title: "Mock case study",
-      slug,
-      blocks: [
-        { type: "callout", content: "This is a callout!" },
-        { type: "pullQuote", content: "Big idea goes here" }
-      ],
-    };
-  },
-};*/
 
 export const sanityAdapter: CMS = {
     // Implement Sanity fetching logic here
