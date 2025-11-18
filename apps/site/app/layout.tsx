@@ -1,4 +1,7 @@
-//apps/site/app/layout.tsx
+// apps/site/app/layout.tsx
+
+'use client';
+
 import '../styles/tokens.css';
 import '../styles/primitives.css';
 import '../styles/casegrid.css';
