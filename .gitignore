@@ -31,6 +31,5 @@ yarn-error.log*
 .vscode/
 .idea/
 
-node_modules/
-.pnpm-store/
-.next/
+# Ignore runtime caches
+node-compile-cache/
