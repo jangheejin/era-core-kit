@@ -3,11 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "@kit/schema": ["packages/schema/src", "packages/schema/dist"],
-      "@kit/blocks": ["packages/schema/src", "packages/blocks/dist"],
+      "@kit/blocks": ["packages/blocks/src", "packages/blocks/dist"],
       "@kit/blocks/*": ["packages/blocks/src/*", "packages/blocks/dist/*"],
       "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
-      "@kit/adapters/*": ["packages/schema/src", "packages/adapters/*/dist"],
-      "@kit/adapters-sanity": ["packages/schema/src", "packages/adapters/sanity/dist"],
+      "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
+      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
       "@/*": ["apps/site/src/*"]
     },
     "target": "ES2020",

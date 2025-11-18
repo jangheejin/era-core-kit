@@ -1,10 +1,10 @@
-// WAS: apps/site/app/admin/CMSDashboard.tsx
 // packages/blocks/src/cms/CMSDashboard.tsx
+// WAS: apps/site/app/admin/CMSDashboard.tsx
 'use client';
 
 import { useState } from 'react';
-//import type { CaseStudy } from '@kit/schema';
-import type { CaseStudy } from '../../../schema/src/index';
+import type { CaseStudy } from '@kit/schema';
+//import type { CaseStudy } from '../../../schema/src/index';
 
 /*
 type CaseStudy = {

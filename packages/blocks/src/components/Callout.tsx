@@ -1,4 +1,5 @@
 // packages/blocks/src/components/Callout.tsx
+// REACT COMPONENT FOR CALLOUT
 import React from 'react';
 import type { CalloutProps } from '../types';
 

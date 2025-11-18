@@ -1,4 +1,5 @@
 //packages/blocks/src/components/DocLink.tsx
+//// REACT COMPONENT FOR DOCLINK
 import React from 'react';
 import type { DocLinkProps } from '../types';
 

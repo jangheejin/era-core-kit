@@ -1,8 +1,21 @@
 //apps/site/app/layout.tsx
 import '../styles/tokens.css';
 import '../styles/primitives.css';
-import { Inter, Oswald } from 'next/font/google';
-import type { Metadata } from "next";
+import { type Metadata } from 'next';
+//import { Inter, Oswald } from 'next/font/google';
+//import type { Metadata } from "next";
+const { Inter } = require('next/font/google');
+const { Oswald } = require('next/font/google');
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  variable: '--font-oswald',
+});
 
 const site = {
   name: "ERA Government Affairs",
@@ -13,8 +26,8 @@ const site = {
   locale: "en_US"
 };
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
-const oswald = Oswald({ subsets: ['latin'], weight: ['600'], variable: '--font-heading' });
+//const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
+//const oswald = Oswald({ subsets: ['latin'], weight: ['600'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

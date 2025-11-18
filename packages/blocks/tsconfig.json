@@ -6,9 +6,6 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
-    "paths": {
-      "@kit/schema": ["../schema/src"]
-    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],

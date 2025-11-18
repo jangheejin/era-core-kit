@@ -1,4 +1,5 @@
 //packages/blocks/src/components/OutcomeList.tsx
+// REACT COMPONENT FOR OUTCOMELIST
 import React from 'react';
 import type { OutcomeListProps } from '../types';
 

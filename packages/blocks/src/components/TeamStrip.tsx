@@ -1,4 +1,5 @@
 // apps/site/src/components/sections/TeamStrip.tsx
+// REACT COMPONENT FOR TEAMSTRIP
 'use client';
 import { ImageFigure } from './ImageFigure';
 import React from 'react';

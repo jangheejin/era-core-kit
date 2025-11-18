@@ -14,7 +14,11 @@
     "**/*.tsx",
     "src", "app"
   ],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "exclude": [
+    "node_modules", "dist", "**/*.test.ts",
+    "**/*.js", "**/*.mjs", "*.js", "*.mjs",
+    "next.config.js", "eslint.config.mjs", "next-env.d.ts",
+  ],
   "references": [
     { "path": "../../packages/blocks" },
     { "path": "../../packages/cms-contract" },

@@ -7,5 +7,15 @@
     { "path": "packages/adapters/sanity" },
     { "path": "packages/blocks" },
     { "path": "apps/site" }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/node_modules",
+    "**/dist",
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.config.js",
+    "**/*.config.mjs"
   ]
 }

@@ -1,3 +1,5 @@
+// packages/blocks/src/components/CaseGrid.tsx
+// REACT COMPONENT FOR CASEGRID
 'use client';
 
 import { ImageFigure } from './ImageFigure';

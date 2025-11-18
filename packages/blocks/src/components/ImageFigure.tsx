@@ -1,4 +1,5 @@
 // packages/blocks/src/components/ImageFigure.tsx
+// REACT COMPONENT FOR IMAGEFIGURE
 import React from 'react';
 
 export type ImageFigureProps = {

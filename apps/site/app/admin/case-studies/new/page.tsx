@@ -1,3 +1,4 @@
+//apps/site/app/admin/case-studies/new/page.tsx
 'use client';
 
 import { useState } from 'react';
