@@ -10,9 +10,7 @@
       }
     }
   ],
-  "rootDir": "apps/site",
   "outputDirectory": "apps/site/.next",
-  "framework": "nextjs",
   "build": {
     "env": {
       "NODE_VERSION": "20"
