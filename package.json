@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pnpm -w run build:all",
     "build:packages": "pnpm --filter '@kit/*' build",
-    "build:all": "tsc -b",
+    "build:all": "pnpm build:packages && tsc -b",
     "dev": "pnpm --filter site dev",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
