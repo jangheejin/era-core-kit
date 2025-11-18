@@ -1,14 +1,4 @@
-//packages/cms-contract/src/CMS.ts
-
-//import type { CaseStudy, Person, FilterAST } from '@kit/schema';
-/*import type {
-  CaseStudy,
-  Person,
-  FilterAST,
-} from '../../schema/src';
-
-import type { CMS } from '@kit/adapters/CMS'; */
-import type { CaseStudy, Person, FilterAST } from '@kit/schema';
+import type { CaseStudy, FilterAST, Person } from '@kit/schema';
 
 export interface CMS {
   getCaseStudies(args: {
@@ -26,9 +16,3 @@ export interface CMS {
 
   getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]>;
 }
-/*
-export type CaseStudy = {
-  title: string;
-  slug: string;
-  blocks: Array<{ type: string; content: string }>;
-};*/

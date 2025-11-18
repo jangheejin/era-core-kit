@@ -1,27 +1,5 @@
-//export { createInMemoryCMS } from './inMemoryCMS';
-export * from './inMemoryCMS'; //wildcard export to ensure all symbols are visible
-/*export { createInMemoryCMS } from './inMemoryCMS';//Export the in-memory function again for safety
-*/
-export const sanityAdapter = {
-    // Implement Sanity fetching logic here
-    async getCaseStudies({ filter, limit, cursor, sort }) {
-        return { items: [], nextCursor: undefined };
-    },
-    async getCaseStudyBySlug(slug) {
-        // Implement Sanity fetching logic here
-        return null;
-    },
-    async getPeople() {
-        // Implement Sanity fetching logic here
-        return [];
-    },
-    //getPersonBySlug is optional but including it is safe
-    async getPersonBySlug(slug) {
-        // Implement Sanity fetching logic here
-        return null;
-    },
-    async getHomeFeaturedCaseStudies(limit) {
-        // Implement Sanity fetching logic here
-        return [];
-    },
-};
+import { createInMemoryCMS } from './inMemoryCMS';
+export { createInMemoryCMS };
+// Temporary implementation backed by the in-memory CMS fixture data.
+// Swap this out for a real Sanity client when available.
+export const sanityAdapter = createInMemoryCMS();

@@ -1,4 +1,4 @@
-import type { CaseStudy, Person, FilterAST } from '@kit/schema';
+import type { CaseStudy, FilterAST, Person } from '@kit/schema';
 export interface CMS {
     getCaseStudies(args: {
         filter?: FilterAST;
