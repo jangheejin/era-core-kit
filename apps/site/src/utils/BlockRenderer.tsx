@@ -1,5 +1,5 @@
 // apps/site/src/utils/BlockRenderer.tsx
-//'use client';
+'use client';
 
 import React from 'react';
 import { blockRegistry } from '@kit/blocks';
