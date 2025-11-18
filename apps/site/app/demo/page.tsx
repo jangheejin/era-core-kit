@@ -14,3 +14,13 @@ export default async function DemoPage() {
     </main>
   );
 }*/
+import React from 'react';
+
+export default function DemoPage() {
+  return (
+    <div>
+      <h1>Demo Page</h1>
+      {/* Content for the demo route goes here */}
+    </div>
+  );
+}
