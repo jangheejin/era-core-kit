@@ -1,11 +1,26 @@
 {
-  "buildCommand": "pnpm install && pnpm --filter site run build",
   "installCommand": "pnpm install",
+  "builds": [
+    {
+      "src": "apps/site/package.json", 
+      "use": "@vercel/next",
+      "config": {
+        "buildCommand": "pnpm --filter site run build",
+        "outputDirectory": ".next" 
+      }
+    }
+  ],
   "outputDirectory": "apps/site/.next",
   "framework": "nextjs",
   "build": {
     "env": {
       "NODE_VERSION": "20"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "apps/site/$1"
+    }
+  ]
 }
