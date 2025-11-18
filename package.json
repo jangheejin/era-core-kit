@@ -39,5 +39,9 @@
   },
   "engines": {
     "node": "20.x"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/oswald": "^5.2.8"
   }
 }
