@@ -7,4 +7,4 @@ export * from './components';
 export * from './registry';
 /*export * from './types';*/
 export type { LayoutBlock, BlockComponentProps, GenericBlock } from './types';
-export { Callout } from './components/Callout';
+//export { Callout } from './components/Callout';
