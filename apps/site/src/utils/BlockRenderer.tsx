@@ -1,5 +1,5 @@
 // apps/site/src/utils/BlockRenderer.tsx
-type _DEBUG_BlockTypes = LayoutBlock['type'];
+
 import React from 'react';
 import { blockRegistry } from '@kit/blocks';
 //import { LayoutBlock } from '@kit/blocks';
