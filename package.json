@@ -6,6 +6,8 @@
     "build": "pnpm -w run build:all",
     "build:packages": "pnpm --filter '@kit/*' build",
     "build:all": "pnpm build:packages && tsc -b",
+    "build:check": "next build && echo 'Passed dry build!'",
+    "build:preview": "vercel build && vercel deploy --prebuilt",
     "dev": "pnpm --filter site dev",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
