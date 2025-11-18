@@ -4,9 +4,16 @@ import '../styles/primitives.css';
 import { type Metadata } from 'next';
 //import { Inter, Oswald } from 'next/font/google';
 //import type { Metadata } from "next";
-const { Inter } = require('next/font/google');
-const { Oswald } = require('next/font/google');
+//const { Inter } = require('next/font/google');
+//const { Oswald } = require('next/font/google');
+import * as GoogleFonts from 'next/font/google';
+import { Inter, Oswald } from 'next/font/google/index';
+//import { Inter } from 'next/font/google'
 
+const inter = Inter({ subsets: ['latin'], display: 'swap', adjustFontFallback: false})
+
+
+/*
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -15,7 +22,16 @@ const inter = Inter({
 const oswald = Oswald({
   subsets: ['latin'],
   variable: '--font-oswald',
+});*/
+/*const inter = GoogleFonts.Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
+
+const oswald = GoogleFonts.Oswald({
+  subsets: ['latin'],
+  variable: '--font-oswald',
+});*/
 
 const site = {
   name: "ERA Government Affairs",
