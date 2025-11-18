@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": false,
-    "composite": false,
+    "composite": true,
 
     //Strictness, compatibility
     "strict": true,

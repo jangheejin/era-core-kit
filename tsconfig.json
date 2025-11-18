@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["packages", "apps"],
+  "references": [
+    { "path": "packages/schema" },
+    { "path": "packages/cms-contract" },
+    { "path": "packages/adapters/sanity" },
+    { "path": "packages/blocks" },
+    { "path": "apps/site" }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/node_modules",
+    "**/dist",
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.config.js",
+    "**/*.config.mjs"
+  ]
+}

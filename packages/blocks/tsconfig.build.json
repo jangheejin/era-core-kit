@@ -1,28 +1,16 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
     "declaration": true,
+    "composite": true,
+    "declarationMap": true,
     "emitDeclarationOnly": false,
-    "composite": false,
-
-    //Strictness, compatibility
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-
-    //Module and targeting
-    "module": "ESNext",
-    "target": "ES2020",
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-
-    "jsx": "react-jsx",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "noEmit": false
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../../packages/schema" }
+  ]
 }

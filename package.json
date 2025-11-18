@@ -3,14 +3,16 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "build": "pnpm -r run build",
+    "build": "pnpm -w run build:all",
+    "build:all": "tsc -b",
     "dev": "pnpm --filter site dev",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "format": "prettier --write .",
-    "postinstall": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... build",
-    "build:site": "pnpm --filter @kit-adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
+    "postinstall": "pnpm build",
+    "clean:build": "rimraf --glob \"packages/**/dist\" \"packages/**/*.tsbuildinfo\"",
+    "build:site": "pnpm --filter @kit/adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     "clean": "rimraf --glob \"packages/**/dist\" \"apps/**/dist\"",
     "bigclean": "pnpm run clean && rimraf .turbo && rimraf --glob \"apps/**/.next\"",
     "deepclean": "pnpm run bigclean && rimraf node_modules",
@@ -34,5 +36,12 @@
     "overrides": {
       "typescript": "5.6.2"
     }
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/oswald": "^5.2.8"
   }
 }

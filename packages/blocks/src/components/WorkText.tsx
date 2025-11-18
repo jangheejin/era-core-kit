@@ -1,4 +1,5 @@
 // apps/site/src/components/sections/WorkText.tsx
+// REACT COMPONENT FOR WORKTEXT
 'use client';
 import { ImageFigure } from './ImageFigure';
 import type { WorkTextProps } from '../types';

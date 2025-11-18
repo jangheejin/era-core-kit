@@ -4,9 +4,13 @@ node_modules/
 
 # Ignore build outputs
 .next/
-dist/
+#dist/
 build/
 out/
+
+# Ignore everything in dist except built files
+**/dist/*.tsbuildinfo
+**/dist/**/*.map
 
 # Ignore system files
 .DS_Store
@@ -26,3 +30,7 @@ yarn-error.log*
 # Ignore IDE configs
 .vscode/
 .idea/
+
+node_modules/
+.pnpm-store/
+.next/

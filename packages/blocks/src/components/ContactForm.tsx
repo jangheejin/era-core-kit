@@ -1,4 +1,5 @@
 // apps/site/src/components/sections/ContactForm.tsx
+// REACT COMPONENT FOR CONTACTFORM
 'use client';
 import { ImageFigure } from './ImageFigure';
 

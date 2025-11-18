@@ -2,21 +2,27 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "baseUrl": ".", // THIS IS LOCAL TO apps/site
-    "paths": {
-      "@/*": ["src/*"],
-      "@kit-adapters-sanity": ["../../packages/adapters/sanity/dist"],
-      "@kit/schema": ["../../packages/schema/dist"],
-      "@kit/blocks": ["../../packages/blocks/dist"]
-    }
+    "composite": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    "src", "app"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules", "dist", "**/*.test.ts",
+    "**/*.js", "**/*.mjs", "*.js", "*.mjs",
+    "next.config.js", "eslint.config.mjs", "next-env.d.ts",
+  ],
+  "references": [
+    { "path": "../../packages/blocks" },
+    { "path": "../../packages/cms-contract" },
+    { "path": "../../packages/schema" },
+    { "path": "../../packages/adapters/sanity" }
+  ]
 }

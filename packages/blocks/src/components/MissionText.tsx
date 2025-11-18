@@ -1,4 +1,5 @@
 // apps/site/src/components/sections/MissionText.tsx
+// REACT COMPONENT FOR MISSIONTEXT
 'use client';
 import { ImageFigure } from './ImageFigure';
 import type { MissionTextProps } from '../types';

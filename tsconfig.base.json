@@ -1,30 +1,27 @@
-//tsconfig.base.json
-//(root tsconfig.json)
-//changed "@kit/adapters/*": ["packages/adapters/*/src"], to "@kit/adapters/*": ["packages/adapters/*/src"], to
-//"@kit/adapters/sanity": ["packages/adapters/sanity/src"],
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    "paths": {
+      "@kit/schema": ["packages/schema/src", "packages/schema/dist"],
+      "@kit/blocks": ["packages/blocks/src", "packages/blocks/dist"],
+      "@kit/blocks/*": ["packages/blocks/src/*", "packages/blocks/dist/*"],
+      "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
+      "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
+      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
+      "@/*": ["apps/site/src/*"]
+    },
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-	  "paths": {
-      "@/*": ["apps/site/src/*"]
-	  }
-  },
-  "include": ["packages", "apps"],
-  "exclude": ["node_modules"]
+    "noFallthroughCasesInSwitch": true
+  }
 }

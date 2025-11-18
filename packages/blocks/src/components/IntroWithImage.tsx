@@ -1,4 +1,5 @@
 // apps/site/src/components/sections/IntroWithImage.tsx
+// REACT COMPONENT FOR INTROWITHIMAGE
 'use client';
 
 import type { IntroWithImageProps } from '../types';

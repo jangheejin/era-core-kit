@@ -1,3 +1,5 @@
+// packages/blocks/src/components/CaseGrid.tsx
+// REACT COMPONENT FOR CASEGRID
 'use client';
 
 import { ImageFigure } from './ImageFigure';
@@ -9,7 +11,7 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
       <div className="c-container">
         <h2 className="type-h2">Our Work</h2>
 
-        <div className={`casegrid layout-${layout ?? 'auto'}`}>
+        <div className="c-grid layout-2x2">
           {items.map((item) => (
             <a
               key={item.slug}

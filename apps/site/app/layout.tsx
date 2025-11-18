@@ -1,8 +1,17 @@
 //apps/site/app/layout.tsx
 import '../styles/tokens.css';
 import '../styles/primitives.css';
-import { Inter, Oswald } from 'next/font/google';
-import type { Metadata } from "next";
+import '../styles/casegrid.css';
+import { type Metadata } from 'next';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css'; 
+import '@fontsource/inter/600.css'; 
+import '@fontsource/oswald/600.css';
+//import { Inter, Oswald } from 'next/font/google';
+//import { Inter, Oswald } from 'next/font/google/index';
+
+//const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
+//const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
 
 const site = {
   name: "ERA Government Affairs",
@@ -12,9 +21,6 @@ const site = {
   twitter: "@example", //set real twitter
   locale: "en_US"
 };
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
-const oswald = Oswald({ subsets: ['latin'], weight: ['600'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -52,7 +58,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${oswald.variable}`}>
+    <html lang="en" className="font-setup">
       <body>{children}</body>
     </html>
   );
