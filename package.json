@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "pnpm -w run build:all",
-    "build:packages": "pnpm --filter '@kit/*' build",
+    "build:packages": "pnpm --filter 'packages/**' build",
     "build:all": "pnpm build:packages && tsc -b",
     "build:check": "next build && echo 'Passed dry build!'",
     "build:preview": "vercel build && vercel deploy --prebuilt",
