@@ -1,18 +1,17 @@
 //apps/site/app/layout.tsx
 import '../styles/tokens.css';
 import '../styles/primitives.css';
+import '../styles/casegrid.css'
 import { type Metadata } from 'next';
 //import { Inter, Oswald } from 'next/font/google';
-//import type { Metadata } from "next";
-//const { Inter } = require('next/font/google');
-//const { Oswald } = require('next/font/google');
 import * as GoogleFonts from 'next/font/google';
 import { Inter, Oswald } from 'next/font/google/index';
 //import { Inter } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap', adjustFontFallback: false})
-
-
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
+const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
+//const { Inter } = require('next/font/google');
+//const { Oswald } = require('next/font/google');
 /*
 const inter = Inter({
   subsets: ['latin'],
