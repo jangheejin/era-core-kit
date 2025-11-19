@@ -33,7 +33,8 @@
 //      "@kit/schema": ["../schema/src"]
 //    }
   },
-  "include": ["src/**/*"],
+//  "include": ["src/**/*"],
+  "include": ["src"],
   "references": [
     { "path": "../../packages/schema" }
   ]
