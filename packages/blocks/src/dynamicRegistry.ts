@@ -1,5 +1,7 @@
-// packages/blocks/src/registry.ts
+// packages/blocks/src/dynamicRegistry.ts
+import dynamic from 'next/dynamic';
 
+import type { BlockType } from './types';
 import type { LayoutBlock } from './types';
 
 import { Callout } from './components/Callout';
@@ -16,12 +18,14 @@ import { IntroWithImage } from './components/IntroWithImage';
 import { ContactForm } from './components/ContactForm';
 import { ImageFigure } from './components/ImageFigure';
 
-// 💡 This builds a map from block type string → props type
+// This builds a map from block type string → props type
 type RegistryType = {
   [K in LayoutBlock['type']]: React.FC<Extract<LayoutBlock, { type: K }>['props']>;
 };
 
-export const blockRegistry: RegistryType = {
+//export const blockRegistry: RegistryType = {
+// Actual React components, registered by block type
+/*export const blockRegistry: Record<BlockType, React.ComponentType<any>> = {
   Callout,
   callout: Callout, //alias
   PullQuote,
@@ -39,4 +43,25 @@ export const blockRegistry: RegistryType = {
   TeamStrip,
   IntroWithImage,
   ContactForm,
+};
+*/
+export const blockRegistry: RegistryType = {
+  Callout,
+  callout: Callout,
+  PullQuote,
+  pullQuote: PullQuote,
+  DocLink,
+  docLink: DocLink,
+  OutcomeList,
+  outcomeList: OutcomeList,
+  ImageFigure,
+  imageFigure: ImageFigure,
+  Hero,
+  MissionText,
+  WorkText,
+  CaseGrid,
+  TeamStrip,
+  IntroWithImage,
+  ContactForm,
+  contactForm: ContactForm,
 };

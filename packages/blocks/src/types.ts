@@ -120,6 +120,7 @@ export type BlockComponentProps = {
   TeamStrip: TeamStripProps;
   IntroWithImage: IntroWithImageProps;
   ContactForm: ContactFormProps;
+  contactForm: ContactFormProps;
 };
 
 

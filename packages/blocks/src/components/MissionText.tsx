@@ -1,8 +1,9 @@
 // apps/site/src/components/sections/MissionText.tsx
 // REACT COMPONENT FOR MISSIONTEXT
-'use client';
+//'use client';
 import { ImageFigure } from './ImageFigure';
 import type { MissionTextProps } from '../types';
+import { ClientAnimations } from './ClientAnimations';
 /*
 Renders the string you pass in text (as mission text?)
 Hardcoded heading is "Our Mission" (could be made flexible if needed later)
@@ -15,6 +16,7 @@ export function MissionText({ heading, text, imageUrl }: MissionTextProps & { im
         <div className="c-container c-grid">
           <div>
             <h2 className="type-h2">{heading}</h2>
+            <ClientAnimations />
             <p className="type-body">{text}</p>
           </div>
           <div className="card-media">

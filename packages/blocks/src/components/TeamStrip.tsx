@@ -1,15 +1,17 @@
 // apps/site/src/components/sections/TeamStrip.tsx
 // REACT COMPONENT FOR TEAMSTRIP
-'use client';
+//'use client';
 import { ImageFigure } from './ImageFigure';
 import React from 'react';
 import type { TeamStripProps } from '../types';
+import { ClientAnimations } from './ClientAnimations';
 
 export function TeamStrip({ people }: TeamStripProps) {
   return (
     <section className="c-section" id="team" style={{ background: 'var(--bg-2)' }}>
       <div className="c-container">
         <h2 className="type-h2">Our Team</h2>
+        <ClientAnimations />
         <ul className="team-list c-stack">
           {people.map((person) => (
             <li key={person.name} className="team-card">

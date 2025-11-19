@@ -1,7 +1,9 @@
 // apps/site/src/components/sections/Hero.tsx
-'use client';
+// SERVER COMPONENT
+//'use client';
 import { ImageFigure } from './ImageFigure';
 import type { HeroProps } from '../types';
+import { ClientAnimations } from './ClientAnimations';
 
 export function Hero({ heading, subhead, imageUrl }: HeroProps) {
   return (
@@ -12,6 +14,7 @@ export function Hero({ heading, subhead, imageUrl }: HeroProps) {
         </div>
         <div>
           <h1 className="type-hero">{heading}</h1>
+          <ClientAnimations />
           <p className="type-body">
           ERA Government Affairs, LLC is a premier government affairs, consulting and public affairs 
           firm. We solve problems, enhance your brand, offer strategic advice and leverage robust 

@@ -5,6 +5,7 @@ import { InMemoryCMS } from '@kit/adapters-sanity';
 //import type { CMS } from '@kit/adapters-sanity';
 //import type { CMS } from '@kit/adapters/CMS'; 
 import type { CMS } from '@kit/cms-contract';
+//import type { CMS } from '../../../../packages/cms-contract/src/CMS';
 
 let cms: CMS | null = null;
 
