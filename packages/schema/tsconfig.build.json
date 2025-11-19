@@ -1,6 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": [],
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
@@ -26,5 +25,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
+  "files": ["./src/index.ts"],
   "include": ["src/**/*"]
 }
