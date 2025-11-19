@@ -22,7 +22,7 @@ importers:
         specifier: ^20.14.9
         version: 20.19.25
       '@types/react':
-        specifier: ^19.2.4
+        specifier: ^19.2.6
         version: 19.2.6
       '@types/react-dom':
         specifier: ^19.2.3
@@ -39,6 +39,9 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2

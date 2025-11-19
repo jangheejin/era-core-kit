@@ -53,8 +53,10 @@ export declare class InMemoryCMS implements CMS {
         }[];
         nextCursor: string | undefined;
     }>;
+    getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]>;
     getCaseStudyBySlug(slug: string): Promise<CaseStudy | null>;
     getPeople(): Promise<Person[]>;
     getFeaturedCaseStudies(): Promise<never[]>;
 }
 export {};
+//# sourceMappingURL=inMemoryCMS.d.ts.map

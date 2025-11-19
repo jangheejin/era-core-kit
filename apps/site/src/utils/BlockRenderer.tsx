@@ -8,13 +8,13 @@ import dynamic from 'next/dynamic'; // Next.js dynamic import
 //import { blockRegistry } from '@kit/blocks';
 import { blockRegistry } from '@kit/blocks/src/dynamicRegistry';
 //import { LayoutBlock } from '@kit/blocks';
-import type { LayoutBlock } from '@kit/blocks/types';
+import type { LayoutBlock } from '@kit/blocks';
 /*import { 
   LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps 
 } from '@kit/blocks';*/
 import { 
   Hero
-} from '@kit/blocks/components';
+} from '@kit/blocks'
 
 // Define the props interface
 interface BlockRendererProps {

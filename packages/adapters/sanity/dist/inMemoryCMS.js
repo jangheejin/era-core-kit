@@ -24,12 +24,6 @@ function matchesFilter(item, filter) {
     }
     return true;
 }
-getHomeFeaturedCaseStudies(limit, number);
-Promise < CaseStudy[] > {
-    // TEMP FIX – return empty array for now
-    return: Promise.resolve([]),
-    return: []
-};
 export class InMemoryCMS {
     // FIX for 'filter' and 'cursor' implicit any (TS7031)
     async getCaseStudies({ filter, limit = 20, cursor, sort = 'newest' }) {
@@ -56,6 +50,11 @@ export class InMemoryCMS {
             items: pagedItems,
             nextCursor,
         };
+    }
+    async getHomeFeaturedCaseStudies(limit) {
+        // TEMP FIX – return empty array for now
+        //  return Promise.resolve([]);
+        return [];
     }
     //async getCaseStudyBySlug(slug: CaseStudySlug) {
     async getCaseStudyBySlug(slug) {
