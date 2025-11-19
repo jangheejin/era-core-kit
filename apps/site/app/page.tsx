@@ -3,7 +3,6 @@
 "use client";
 import React from 'react';
 import { homeLayout } from '@/content/home.layout';
-//import { homeLayout } from '../src/content/home.layout';
 import BlockRenderer from '@/utils/BlockRenderer'; 
 
 const Home = () => {
