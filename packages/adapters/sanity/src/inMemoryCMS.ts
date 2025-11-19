@@ -10,13 +10,15 @@ import {
 } from '@kit/schema';
 
 // Helper function signature (fixes TS7006/TS7031 inside the function)
+// Goal: "Only keep items (case studies) whose tags and mechanisms match what the user has selected"
 function matchesFilter(item: CaseStudy, filter: FilterAST): boolean {
-  const tagSet = new Set(item.tags);
+  const tagSet = new Set(item.tags);//where item is a case study
   const mechSet = new Set(item.mechanisms);
 
   if (filter.tags?.length) {
       // Fix for 't' implicit any
-      if (!filter.tags.every((t: string) => tagSet.has(t))) return false;
+      //if (!filter.tags.every((t: string) => tagSet.has(t))) return false;
+      if (!filter.tags.every((t) => tagSet.has(t))) return false;
   }
   if (filter.mechanisms?.length) {
       // Fix for 'm' implicit any
