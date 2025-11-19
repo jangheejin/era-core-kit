@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
+  "files": [],
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
@@ -7,6 +8,7 @@
     "emitDeclarationOnly": false,
     "noEmit": false,
     "composite": true,
+    "declarationDir": "./dist",
 
     //Strictness, compatibility
     "strict": true,
@@ -22,8 +24,7 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }

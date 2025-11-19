@@ -19,7 +19,7 @@ export default function NewCaseStudyForm() {
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
 
   function update(field: keyof CaseStudyType, value: any) {
-    setDraft((d) => ({ ...d, [field]: value }));
+    setDraft((d: Partial<CaseStudyType>) => ({ ...d, [field]: value }));
     setError(null);
     setPreview(null);
   }

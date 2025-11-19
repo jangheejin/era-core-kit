@@ -5,8 +5,9 @@
     { "path": "packages/schema" },
     { "path": "packages/cms-contract" },
     { "path": "packages/adapters/sanity" },
-    { "path": "packages/blocks" },
-    { "path": "apps/site" }
+    { "path": "packages/blocks" }
+//    { "path": "apps/site" }// Applications (like apps/site) are consumers of types, not producers, 
+// and should not be in this list.
   ],
   "exclude": [
     "node_modules",

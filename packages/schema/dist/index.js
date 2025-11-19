@@ -11,6 +11,8 @@ export type {
 } from './fixtures'; // Assuming CaseStudySort is defined in CaseStudy.ts
 */
 import { z } from 'zod';
+//DEBUG
+export const test = 42;
 export const Sector = z.enum([
     'Defense',
     'Health',

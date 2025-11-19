@@ -1,4 +1,10 @@
+// packages/cms-contract/src/CMS.ts
 import type { CaseStudy, FilterAST, Person } from '@kit/schema';
+
+// TEMP DEBUG:
+import { CASE_STUDIES_FIXTURE } from '@kit/schema';
+
+console.log(CASE_STUDIES_FIXTURE);
 
 export interface CMS {
   getCaseStudies(args: {

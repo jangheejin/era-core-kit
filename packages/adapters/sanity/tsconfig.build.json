@@ -6,6 +6,9 @@
     "declaration": true,
     "emitDeclarationOnly": false,
     "composite": true,
+
+    "declarationDir": "./dist",//best practice to include when composite is true
+
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -18,7 +21,7 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+//    "lib": ["DOM", "DOM.Iterable", "ESNext"],
   },
   "include": ["src/**/*"],
   "references": [

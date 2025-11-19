@@ -1,4 +1,5 @@
 import { z } from 'zod';
+export declare const test = 42;
 export type CaseStudySort = 'Newest' | 'ClientName' | 'Sector' | 'Year';
 export declare const Sector: z.ZodEnum<{
     Defense: "Defense";
@@ -154,4 +155,3 @@ export type FilterAST = {
     text?: string;
 };
 export { CASE_STUDIES_FIXTURE } from './fixtures';
-//# sourceMappingURL=index.d.ts.map

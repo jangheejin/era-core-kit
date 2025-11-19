@@ -4,7 +4,10 @@
 import React from 'react';
 import { blockRegistry } from '@kit/blocks';
 //import { LayoutBlock } from '@kit/blocks';
-import { LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps } from '@kit/blocks/types';
+import { 
+  LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps 
+} from '@kit/blocks';
+
 
 // Define the props interface
 interface BlockRendererProps {
