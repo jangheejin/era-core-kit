@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "watch": "tsc -b -w",
+
     "dev:all": "concurrently -n BUILD,SITE -c yellow,cyan \"pnpm run watch\" \"pnpm --filter site dev\"",
 
     "build": "pnpm -w run build:all",
@@ -20,11 +21,12 @@
     "clean:build": "rimraf --glob \"packages/**/dist\" \"packages/**/*.tsbuildinfo\"",
     "build:site": "pnpm --filter @kit/adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     
-    "clean": "shx rm -rf packages/**/dist apps/**/dist packages/**/*.tsbuildinfo",
-    "bigclean": "pnpm run clean && shx rm -rf .turbo apps/**/.next",
-    "deepclean": "pnpm run bigclean && shx rm -rf node_modules",
-    "nukeclean": "pnpm run bigclean && shx rm -rf pnpm-lock.yaml node_modules"
+    "clean": "rimraf \"packages/**/dist\" \"apps/**/dist\" \"packages/**/*.tsbuildinfo\"",
+    "bigclean": "pnpm run clean && rimraf .turbo \"apps/**/.next\"",
+    "deepclean": "pnpm run bigclean && rimraf node_modules",
+    "nukeclean": "pnpm run bigclean && rimraf pnpm-lock.yaml node_modules"
     },
+
   "devDependencies": {
     "@types/node": "^20.14.9",
     "@types/react": "^19.2.4",
