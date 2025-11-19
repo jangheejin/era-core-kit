@@ -28,7 +28,7 @@ function matchesFilter(item: CaseStudy, filter: FilterAST): boolean {
   return true;
 }
 
-// Define the arguments for getCaseStudies for clarity
+// Define the arguments for getCaseStudies
 interface GetCaseStudiesArgs {
   filter?: FilterAST;
   limit?: number;
