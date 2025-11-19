@@ -55,48 +55,7 @@ export declare class InMemoryCMS implements CMS {
     }>;
     getCaseStudyBySlug(slug: string): Promise<CaseStudy | null>;
     getPeople(): Promise<Person[]>;
-    getFeaturedCaseStudies(): Promise<{
-        id: string;
-        title: string;
-        slug: string;
-        sector: "Defense" | "Health" | "FinTech" | "Education" | "Nonprofit" | "GovContracting" | "EmergencyMgmt";
-        tags: string[];
-        summaryShort: string;
-        heroImageUrl: string;
-        mechanisms: ("Appropriation" | "Earmark" | "Grant" | "TaxCredit")[];
-        jurisdictions: ("Federal" | "State" | "Local")[];
-        outcomes: {
-            label: string;
-            description?: string | undefined;
-            evidenceUrl?: string | undefined;
-        }[];
-        evidence: {
-            label: string;
-            url: string;
-        }[];
-        sections: {
-            id: string;
-            title: string;
-            bodyMDX?: string | undefined;
-        }[];
-        attachments: {
-            label: string;
-            url: string;
-            kind: "pdf" | "ppt" | "doc" | "sheet" | "zip" | "other";
-            internalOnly: boolean;
-        }[];
-        links: {
-            label: string;
-            url: string;
-            category: "client" | "other" | "impact" | "legislation" | "press";
-            internalOnly: boolean;
-        }[];
-        isFeaturedHome: boolean;
-        isPublic: boolean;
-        client?: string | undefined;
-        year?: number | undefined;
-        brief?: string | undefined;
-        bodyMDX?: string | undefined;
-    }[]>;
+    getFeaturedCaseStudies(): Promise<never[]>;
 }
 export {};
+//# sourceMappingURL=inMemoryCMS.d.ts.map
