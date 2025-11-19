@@ -1,2 +1,0 @@
-export type { LayoutBlock, BlockType, HeroProps, IntroWithImageProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps } from './types';
-//# sourceMappingURL=index.d.ts.map

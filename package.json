@@ -25,7 +25,7 @@
     "clean:build": "rimraf --glob \"packages/**/dist\" \"packages/**/*.tsbuildinfo\"",
     "build:site": "pnpm --filter @kit/adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     
-    "clean": "rimraf packages/*/dist apps/*/dist packages/*/*.tsbuildinfo",
+    "clean": "pnpm exec rimraf packages/*/dist apps/*/dist packages/*/*.tsbuildinfo",
     "bigclean": "pnpm run clean && rimraf .turbo apps/*/.next",
     "deepclean": "pnpm run bigclean && rimraf node_modules",
     "nukeclean": "pnpm run deepclean && rimraf pnpm-lock.yaml"

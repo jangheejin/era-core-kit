@@ -42,11 +42,7 @@ interface GetCaseStudiesArgs {
   sort?: 'newest' | 'alpha';
 }
 
-getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]> {
-  // TEMP FIX – return empty array for now
-  return Promise.resolve([]);
-  return [];
-}
+
 
 export class InMemoryCMS implements CMS {
   // FIX for 'filter' and 'cursor' implicit any (TS7031)
@@ -81,8 +77,12 @@ export class InMemoryCMS implements CMS {
       };
   }
 
-
-
+  async getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]> {
+  // TEMP FIX – return empty array for now
+//  return Promise.resolve([]);
+    return [];
+  }
+  
   //async getCaseStudyBySlug(slug: CaseStudySlug) {
   async getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {    
     const caseStudy = CASE_STUDIES_FIXTURE.find(

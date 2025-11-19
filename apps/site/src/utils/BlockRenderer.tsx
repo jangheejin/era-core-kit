@@ -12,7 +12,9 @@ import type { LayoutBlock } from '@kit/blocks/types';
 /*import { 
   LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps 
 } from '@kit/blocks';*/
-
+import { 
+  Hero
+} from '@kit/blocks/components';
 
 // Define the props interface
 interface BlockRendererProps {
