@@ -6,7 +6,10 @@
     "watch": "tsc -b -w",
 
     "dev:all": "concurrently -n BUILD,SITE -c yellow,cyan \"pnpm run watch\" \"pnpm --filter site dev\"",
+    "dev:stop": "taskkill /F /IM node.exe /T",
 
+    "fix": "pnpm run dev:stop && pnpm run deepclean && pnpm install && pnpm run dev:all",
+    
     "build": "pnpm -w run build:all",
     "build:packages": "pnpm --filter @kit/schema build && pnpm --filter @kit/cms-contract build && pnpm --filter @kit/blocks build && pnpm --filter @kit/adapters-sanity build",
     "build:all": "pnpm build:packages && tsc -b",
