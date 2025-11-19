@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "pnpm -w run build:all",
-    "build:packages": "pnpm --filter 'packages/**' build",
+    "build:packages": "pnpm --filter @kit/schema build && pnpm --filter @kit/cms-contract build && pnpm --filter @kit/blocks build && pnpm --filter @kit/adapters-sanity build",
     "build:all": "pnpm build:packages && tsc -b",
     "build:check": "next build && echo 'Passed dry build!'",
     "build:preview": "vercel build && vercel deploy --prebuilt",

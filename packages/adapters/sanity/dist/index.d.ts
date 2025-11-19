@@ -1,6 +1,5 @@
 import type { CMS } from '@kit/cms-contract';
-import { createInMemoryCMS } from './inMemoryCMS';
+import { InMemoryCMS } from './inMemoryCMS';
 export type { CMS } from '@kit/cms-contract';
-export { createInMemoryCMS };
+export { InMemoryCMS };
 export declare const sanityAdapter: CMS;
-//# sourceMappingURL=index.d.ts.map

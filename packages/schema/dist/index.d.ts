@@ -48,8 +48,8 @@ export declare const CaseStudyLink: z.ZodObject<{
     label: z.ZodString;
     url: z.ZodString;
     category: z.ZodDefault<z.ZodEnum<{
-        other: "other";
         client: "client";
+        other: "other";
         impact: "impact";
         legislation: "legislation";
         press: "press";
@@ -118,8 +118,8 @@ export declare const CaseStudy: z.ZodObject<{
         label: z.ZodString;
         url: z.ZodString;
         category: z.ZodDefault<z.ZodEnum<{
-            other: "other";
             client: "client";
+            other: "other";
             impact: "impact";
             legislation: "legislation";
             press: "press";
@@ -155,4 +155,3 @@ export type FilterAST = {
     text?: string;
 };
 export { CASE_STUDIES_FIXTURE } from './fixtures';
-//# sourceMappingURL=index.d.ts.map

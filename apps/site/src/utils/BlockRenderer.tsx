@@ -1,12 +1,17 @@
 // apps/site/src/utils/BlockRenderer.tsx
-'use client';
+//MUST NOT have 'use client'
+//must run on the server to handle dynamic imports.
 
 import React from 'react';
-import { blockRegistry } from '@kit/blocks';
+import dynamic from 'next/dynamic'; // Next.js dynamic import
+
+//import { blockRegistry } from '@kit/blocks';
+import { blockRegistry } from '@kit/blocks/src/dynamicRegistry';
 //import { LayoutBlock } from '@kit/blocks';
-import { 
+import type { LayoutBlock } from '@kit/blocks/types';
+/*import { 
   LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps 
-} from '@kit/blocks';
+} from '@kit/blocks';*/
 
 
 // Define the props interface
@@ -15,74 +20,35 @@ interface BlockRendererProps {
   index: number;
 }
 
-// Define the BlockRenderer functional component
-function BlockRenderer({ block, index }: BlockRendererProps) {
-  
-  // The switch forces TypeScript to correctly correlate 'block.type' with 'block.props'
-  switch (block.type) {
-    case 'Hero': {
-      const Component = blockRegistry.Hero; // Component is guaranteed to be React.FC<HeroProps>
-      return <Component key={index} {...block.props} />;
-    }
-    case 'MissionText': {
-      const Component = blockRegistry.MissionText;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'WorkText': {
-      const Component = blockRegistry.WorkText;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'CaseGrid': {
-      const Component = blockRegistry.CaseGrid;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'TeamStrip': {
-      const Component = blockRegistry.TeamStrip;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'IntroWithImage': {
-      const Component = blockRegistry.IntroWithImage;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'ContactForm': {
-      const Component = blockRegistry.ContactForm;
-      return <Component key={index} {...block.props} />;
-    }
-    case 'callout': 
-    case 'Callout': {//CMS ITEMS NEED DUAL CASING BECAUSE OF HOW THE CMS STUFF WORKS IDK
-        const Component = blockRegistry.Callout;
-        return <Component key={index} {...block.props} />;
-    }
-    case 'pullQuote':
-    case 'PullQuote': {
-        const Component = blockRegistry.PullQuote;
-        return <Component key={index} {...block.props} />;
-    }
-    case 'docLink':
-    case 'DocLink': {
-        const Component = blockRegistry.DocLink;
-        return <Component key={index} {...block.props} />;
-    }
-    case 'outcomeList':
-    case 'OutcomeList': {
-        const Component = blockRegistry.OutcomeList;
-        return <Component key={index} {...block.props} />;
-    }
-    case 'imageFigure':
-    case 'ImageFigure': { 
-        const Component = blockRegistry.ImageFigure;
-        return <Component key={index} {...block.props} />;
-    }
-    // YOU MUST ADD ALL DEFINED BLOCK TYPES HERE to achieve exhaustiveness.
 
-    default: {
-      // BUILD-TIME FAILSAFE: This line will throw a TypeScript error 
-      // if a new type is added to LayoutBlock but not handled above.
-      const exhaustiveCheck: never = block;
-      console.error(`Unknown block type encountered: ${(exhaustiveCheck as LayoutBlock).type}`);
-      return null;
-    }
+//Dynamically import all registered blocks with ssr: false. fixes the unstable_prefetch.mode error.
+const dynamicBlockComponents = Object.fromEntries(
+  Object.entries(blockRegistry).map(([type, Component]) => [
+      type,
+      dynamic(
+        // dynamic() expects a function that returns a Promise resolving to a Component
+        () => Promise.resolve(Component), 
+        { 
+          // This is the key: forces the component's bundle to skip Server-Side Rendering (SSR)
+          ssr: false 
+        }
+      ),
+  ])
+);
+
+/**
+ * Renders a layout block by dynamically loading the corresponding component on the client.
+ */
+function BlockRenderer({ block, index }: BlockRendererProps) {
+  const Component = dynamicBlockComponents[block.type]; 
+
+  if (!Component) {
+    console.error(`Unknown block type encountered: ${block.type}`);
+    return null;
   }
+  
+  // Render the dynamically imported component
+  return <Component key={block._key ?? index} {...block.props} />;
 }
 
 export default BlockRenderer;

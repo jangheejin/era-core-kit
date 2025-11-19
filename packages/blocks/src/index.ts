@@ -2,9 +2,7 @@
 
 // Re-export layout components for use in apps
 // This is the one typescript actually sees
-
-export * from './components';
-export * from './registry';
+//ONLY EXPORT TYPES AND UTILITIES HERE
 export type { 
     LayoutBlock, 
     BlockType,
