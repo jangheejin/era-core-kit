@@ -27,7 +27,8 @@ function matchesFilter(item, filter) {
 getHomeFeaturedCaseStudies(limit, number);
 Promise < CaseStudy[] > {
     // TEMP FIX – return empty array for now
-    return: Promise.resolve([])
+    return: Promise.resolve([]),
+    return: []
 };
 export class InMemoryCMS {
     // FIX for 'filter' and 'cursor' implicit any (TS7031)
