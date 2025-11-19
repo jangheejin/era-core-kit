@@ -1,9 +1,14 @@
 {
   "name": "@kit/blocks",
   "version": "0.1.0",
+  
   "main": "dist/index.js", 
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+
+  "files": [
+    "dist"
+  ],
 
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
@@ -27,7 +32,7 @@
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@kit/schema": "workspace:"
+    "@kit/schema": "workspace:^"
   },
   "peerDependencies": {
     "next": "*"
