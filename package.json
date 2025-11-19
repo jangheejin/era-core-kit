@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "watch": "tsc -b -w",
-    "dev:all": "concurrently \"pnpm run watch\" \"pnpm --filter site dev\"",
+    "dev:all": "concurrently -n BUILD,SITE -c yellow,cyan \"pnpm run watch\" \"pnpm --filter site dev\"",
 
     "build": "pnpm -w run build:all",
     "build:packages": "pnpm --filter @kit/schema build && pnpm --filter @kit/cms-contract build && pnpm --filter @kit/blocks build && pnpm --filter @kit/adapters-sanity build",
