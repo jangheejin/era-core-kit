@@ -1,6 +1,6 @@
 //apps/site/app/page.tsx
 
-'use client';
+"use client";
 import React from 'react';
 import { homeLayout } from '@/content/home.layout';
 //import { homeLayout } from '../src/content/home.layout';
