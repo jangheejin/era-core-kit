@@ -25,9 +25,18 @@
     ],
 
     "paths": {
-      // Retaining only the necessary application-specific path for internal src resolution
+// path aliases need to point back to the monorepo root from this app folder.
+// mirror the workspace aliases but make them relative to apps/site.
+      
+      "@kit/schema": ["../../packages/schema/src", "../../packages/schema/dist"],
+      "@kit/blocks": ["../../packages/blocks/src", "../../packages/blocks/dist"],
+      "@kit/blocks/*": ["../../packages/blocks/src/*", "../../packages/blocks/dist/*"],
+      "@kit/cms-contract": ["../../packages/cms-contract/src", "../../packages/cms-contract/dist"],
+      "@kit/adapters/*": ["../../packages/adapters/*/src", "../../packages/adapters/*/dist"],
+      "@kit/adapters-sanity": ["../../packages/adapters/sanity/src", "../../packages/adapters/sanity/dist"],
       "@/*": ["src/*"],
-      "@kit/*": ["../../packages/*"]
+      "*": ["./*", "../../packages/*"]
+//      "@kit/*": ["../../packages/*"]
     }
   },
   "include": [
