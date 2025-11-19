@@ -24,10 +24,11 @@
       }
     ],
 
-//    "paths": {
+    "paths": {
       // Retaining only the necessary application-specific path for internal src resolution
-//      "@/*": ["src/*"]
-//    }
+      "@/*": ["src/*"],
+      "@kit/*": ["../../packages/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
