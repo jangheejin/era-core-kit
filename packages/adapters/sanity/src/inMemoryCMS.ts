@@ -45,6 +45,7 @@ interface GetCaseStudiesArgs {
 getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]> {
   // TEMP FIX – return empty array for now
   return Promise.resolve([]);
+  return [];
 }
 
 export class InMemoryCMS implements CMS {
@@ -105,9 +106,9 @@ export class InMemoryCMS implements CMS {
 //          (cs: CaseStudy) => cs.slug === slug && cs.isPublic,
 //      );
 //  }
-async getPeople(): Promise<Person[]> {
-  return []; // stubbed — won't break anything, satisfies contract
-}
+  async getPeople(): Promise<Person[]> {
+    return []; // stubbed — won't break anything, satisfies contract
+  }
 
   async getFeaturedCaseStudies() {
       // FIX for 'cs' implicit any (TS7006)
