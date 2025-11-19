@@ -8,6 +8,7 @@
       "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
       "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
       "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
+      "@kit/search": ["packages/search/src", "packages/search/dist"],
       "@/*": ["apps/site/src/*"]
     },
     "target": "ES2020",

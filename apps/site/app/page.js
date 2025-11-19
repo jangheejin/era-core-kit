@@ -1,5 +1,3 @@
-//apps/site/app/page.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { homeLayout } from '@/content/home.layout';
 //import { homeLayout } from '../src/content/home.layout';
@@ -10,3 +8,4 @@ const Home = () => {
         // 2. Pass 'block' and 'index' directly to BlockRenderer.
         _jsx(BlockRenderer, { block: block, index: index }, block._key ?? index))) }));
 };
+export default Home;

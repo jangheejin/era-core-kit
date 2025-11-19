@@ -13,11 +13,16 @@
 
     // --- Modern Next.js / React Directives ---
     "target": "ES2020",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],//required for frontend applications
     "module": "ESNext",
     "moduleResolution": "Node",
     "isolatedModules": true, // Mandatory for Vercel/Next.js
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
     "jsx": "preserve", // Mandatory for Next.js
+    "resolveJsonModule": true,
     "plugins": [
       {
         "name": "next"
@@ -25,8 +30,13 @@
     ],
 
     "paths": {
-      // Retaining only the necessary application-specific path for internal src resolution
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],//INTERNAL APPLICATION ALIAS
+      // MONOREPO PACKAGE ALIASES
+      "@kit/cms-contract": ["../packages/cms-contract/src"],
+      "@kit/adapters-sanity": ["../packages/adapters/sanity/src"],
+      "@kit/blocks": ["../packages/blocks/src"],
+      "@kit/schema": ["../packages/schema/src"],
+      "@kit/search": ["../packages/search/src"]
     }
   },
   "include": [

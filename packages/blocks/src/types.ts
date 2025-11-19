@@ -5,21 +5,16 @@
 // Never re-exports anything from elsewhere here
 //DATA MODEL AND PROPS LIVE HERE. components for rendering are defined in app.
 
-// Generic shape for all blocks
-/*export type GenericBlock<T extends string, P> = {
-  type: T;
-  props: P;
-};*/
+import type React from 'react'; 
 
+// Generic shape for all blocks
 export type GenericBlock<T extends keyof BlockComponentProps> = {
   type: T;
   props: BlockComponentProps[T];
   _key?: string;
 };
 
-
 // Props for ALL layout block components (not case study ones only)
-
 export type HeroProps = {
   heading: string;
   subhead: string;
@@ -70,10 +65,12 @@ export type CalloutProps = { content: string };
 export type PullQuoteProps = { content: string };
 export type DocLinkProps = { href: string; children: React.ReactNode };
 export type OutcomeListProps = { outcomes: string[] };
+
 export type ImageFigureProps = {
   src: string;
   alt: string;
   caption?: string;
+  style?: React.CSSProperties;//ensure user's styling data can flow from the CMS, through the schema, and land safely in component's style={style}
 };
 
 // Union of block types for different layouts

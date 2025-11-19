@@ -1,6 +1,6 @@
 // apps/site/src/components/sections/TeamStrip.tsx
 // REACT COMPONENT FOR TEAMSTRIP
-'use client';
+//'use client';
 import { ImageFigure } from './ImageFigure';
 import React from 'react';
 import type { TeamStripProps } from '../types';

@@ -1,4 +1,5 @@
-export * from './components';
+export * from './cms';
 export * from './registry';
-export type { LayoutBlock, BlockType, HeroProps, IntroWithImageProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps } from './types';
+export * from './types';
+export * from './components';
 //# sourceMappingURL=index.d.ts.map

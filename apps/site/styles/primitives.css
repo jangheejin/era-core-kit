@@ -93,6 +93,37 @@
   container-type: inline-size;
 }
 
+/* Structural CSS required by ImageFigure.tsx */
+
+/* For the 'fill' prop functionality (dynamic aspect ratio container) */
+.ImageFigure__fill-container {
+  position: relative;
+  width: 100%;
+}
+
+/* The actual image inside the fill container */
+.ImageFigure__fill-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* For standard (non-fill) image rendering */
+.ImageFigure__standard-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* The outermost wrapper/figure for custom styling */
+.ImageFigure {
+  display: block;
+/*  margin-bottom: 1.5rem;*/
+}
+
 /* ----------------------------------------------------- */
 /* FORM ELEMENTS (Using EXPLICIT Class Selectors) */
 /* ----------------------------------------------------- */

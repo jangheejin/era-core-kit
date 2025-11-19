@@ -1,7 +1,7 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // apps/site/src/components/sections/MissionText.tsx
 // REACT COMPONENT FOR MISSIONTEXT
-'use client';
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+//'use client';
 import { ImageFigure } from './ImageFigure';
 /*
 Renders the string you pass in text (as mission text?)

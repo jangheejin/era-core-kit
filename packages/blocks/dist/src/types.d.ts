@@ -1,3 +1,4 @@
+import type React from 'react';
 export type GenericBlock<T extends keyof BlockComponentProps> = {
     type: T;
     props: BlockComponentProps[T];
@@ -58,6 +59,7 @@ export type ImageFigureProps = {
     src: string;
     alt: string;
     caption?: string;
+    style?: React.CSSProperties;
 };
 export type BlockComponentProps = {
     Callout: CalloutProps;

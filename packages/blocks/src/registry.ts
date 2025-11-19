@@ -16,7 +16,7 @@ import { IntroWithImage } from './components/IntroWithImage';
 import { ContactForm } from './components/ContactForm';
 import { ImageFigure } from './components/ImageFigure';
 
-// 💡 This builds a map from block type string → props type
+// This builds a map from block type string → props type
 type RegistryType = {
   [K in LayoutBlock['type']]: React.FC<Extract<LayoutBlock, { type: K }>['props']>;
 };

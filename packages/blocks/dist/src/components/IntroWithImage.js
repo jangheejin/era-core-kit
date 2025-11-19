@@ -1,6 +1,3 @@
-// apps/site/src/components/sections/IntroWithImage.tsx
-// REACT COMPONENT FOR INTROWITHIMAGE
-'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { ImageFigure } from './ImageFigure';
 export function IntroWithImage({ heading, text, imageUrl }) {

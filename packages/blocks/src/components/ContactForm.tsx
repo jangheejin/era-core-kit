@@ -1,6 +1,6 @@
 // apps/site/src/components/sections/ContactForm.tsx
 // REACT COMPONENT FOR CONTACTFORM
-'use client';
+'use client';//component with actual state or interactivity, needs this
 import { ImageFigure } from './ImageFigure';
 
 export type ContactFormProps = {

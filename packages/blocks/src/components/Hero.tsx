@@ -1,5 +1,5 @@
 // apps/site/src/components/sections/Hero.tsx
-'use client';
+//'use client';
 import { ImageFigure } from './ImageFigure';
 import type { HeroProps } from '../types';
 

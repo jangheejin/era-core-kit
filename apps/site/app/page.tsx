@@ -1,10 +1,12 @@
 //apps/site/app/page.tsx
 
-'use client';
+//'use client';
+
 import React from 'react';
 import { homeLayout } from '@/content/home.layout';
 //import { homeLayout } from '../src/content/home.layout';
 import BlockRenderer from '@/utils/BlockRenderer'; 
+import { PageRenderer } from '@/components/PageRenderer'; // Import the new client component
 
 const Home = () => {
   return (
@@ -21,3 +23,5 @@ const Home = () => {
     </main>
   );
 };
+
+export default Home;
