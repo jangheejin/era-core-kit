@@ -23,7 +23,8 @@ function matchesFilter(item: CaseStudy, filter: FilterAST): boolean {
       // Use the concrete Mechanism type for the iteration, resolving the TS2345 type error.
       // Must use use typeof Mechanism.Type because the import is a Zod schema, but we need the inferred type.
 //      if (!filter.mechanisms.some((m: string) => mechSet.has(m))) return false;
-      if (!filter.mechanisms.some((m: z.infer<typeof Mechanism>) => mechSet.has(m))) return false;
+//      if (!filter.mechanisms.some((m: z.infer<typeof Mechanism>) => mechSet.has(m))) return false;
+      if (!filter.mechanisms.some((m) => mechSet.has(m))) return false;
   }
   return true;
 }
