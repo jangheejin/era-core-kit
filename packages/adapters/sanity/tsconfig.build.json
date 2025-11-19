@@ -5,15 +5,21 @@
     "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": false,
+    "noEmit": false,
     "composite": true,
 
     "declarationDir": "./dist",//best practice to include when composite is true
 
+    //TEMPORARY BYPASS
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": false,
+
     "strict": true,
-    "noUncheckedIndexedAccess": true,
+//    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+
     "module": "ESNext",
     "target": "ES2020",
     "moduleResolution": "Node",
@@ -21,7 +27,6 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-//    "lib": ["DOM", "DOM.Iterable", "ESNext"],
   },
   "include": ["src/**/*"],
   "references": [

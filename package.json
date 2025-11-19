@@ -17,14 +17,10 @@
     "clean:build": "rimraf --glob \"packages/**/dist\" \"packages/**/*.tsbuildinfo\"",
     "build:site": "pnpm --filter @kit/adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     
-    "clean": "pnpm exec rimraf packages/**/dist && pnpm exec rimraf apps/**/dist && pnpm exec rimraf packages/**/*.tsbuildinfo",
-    
-    "bigclean": "pnpm run clean && pnpm exec rimraf .turbo && pnpm exec rimraf apps/**/.next",
-    
-    "deepclean": "pnpm run bigclean && pnpm exec rimraf node_modules",
-
-    "nukeclean": "pnpm run bigclean && pnpm exec rimraf pnpm-lock.yaml && pnpm exec rimraf node_modules",
-    "fullReset": "pnpm run bigclean && pnpm exec rimraf pnpm-lock.yaml && pnpm exec rimraf node_modules"
+    "clean": "shx rm -rf packages/**/dist apps/**/dist packages/**/*.tsbuildinfo",
+    "bigclean": "pnpm run clean && shx rm -rf .turbo apps/**/.next",
+    "deepclean": "pnpm run bigclean && shx rm -rf node_modules",
+    "nukeclean": "pnpm run bigclean && shx rm -rf pnpm-lock.yaml node_modules"
     },
   "devDependencies": {
     "@types/node": "^20.14.9",

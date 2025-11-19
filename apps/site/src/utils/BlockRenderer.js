@@ -1,5 +1,8 @@
+// apps/site/src/utils/BlockRenderer.tsx
+'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { blockRegistry } from '@kit/blocks';
+// Define the BlockRenderer functional component
 function BlockRenderer({ block, index }) {
     // The switch forces TypeScript to correctly correlate 'block.type' with 'block.props'
     switch (block.type) {
