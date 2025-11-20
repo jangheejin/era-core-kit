@@ -23,9 +23,14 @@
     "skipLibCheck": true,
     "resolveJsonModule": true 
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"],
+//  "include": ["src/**/*"],
   "references": [
-    { "path": "../../packages/schema" },
-    { "path": "../../packages/cms-contract" }
+    { "path": "../schema" },
+    { "path": "../cms-contract" }
+//    { "path": "../../packages/schema" },
+//    { "path": "../../packages/cms-contract" }
   ]
 }
+
