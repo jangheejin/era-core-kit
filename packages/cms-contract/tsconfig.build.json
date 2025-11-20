@@ -9,7 +9,7 @@
     "composite": true,
     "declarationMap": true,
 
-    "declarationDir": "./dist",
+//    "declarationDir": "./dist",
 
     //Strictness, compatibility
     "strict": true,

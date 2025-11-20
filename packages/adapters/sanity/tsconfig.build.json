@@ -8,7 +8,7 @@
     "noEmit": false,
     "composite": true,
 
-    "declarationDir": "./dist",//best practice to include when composite is true
+//    "declarationDir": "./dist",//best practice to include when composite is true
 
     //TEMPORARY BYPASS
     "noImplicitAny": false,
