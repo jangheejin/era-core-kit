@@ -53,11 +53,11 @@ export const homeLayout = [
                 },
             ],
         },
-    },
+    } /*,
     {
-        type: "ContactForm",
-        props: {
-            heading: "We’re here to advance your interests",
-        },
-    },
+      type: "ContactForm",
+      props: {
+        heading: "We’re here to advance your interests",
+      },
+    },*/
 ];

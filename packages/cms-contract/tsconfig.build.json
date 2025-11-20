@@ -27,6 +27,9 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "paths": {
+      "@kit/schema": ["../schema/dist"]
+    }
 
 //    "baseUrl": "../../",
 //    "paths": {
