@@ -24,5 +24,13 @@
     "resolveJsonModule": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
-  "include": ["src/**/*"]
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"],
+
+  "references": [
+    { "path": "../schema" },
+    { "path": "../cms-contract" }
+  ]
+
+//  "include": ["src/**/*"]
 }
