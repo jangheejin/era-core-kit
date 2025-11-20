@@ -38,9 +38,6 @@ export type TeamStripProps = {
         imageUrl: string;
     }[];
 };
-export type ContactFormProps = {
-    heading: string;
-};
 export type CalloutProps = {
     content: string;
 };
@@ -76,8 +73,6 @@ export type BlockComponentProps = {
     CaseGrid: CaseGridProps;
     TeamStrip: TeamStripProps;
     IntroWithImage: IntroWithImageProps;
-    ContactForm: ContactFormProps;
-    contactForm: ContactFormProps;
 };
 export type LayoutBlock = {
     [K in keyof BlockComponentProps]: GenericBlock<K>;

@@ -16,6 +16,6 @@ export const blockRegistry = {
     CaseGrid: 'CaseGrid',
     TeamStrip: 'TeamStrip',
     IntroWithImage: 'IntroWithImage',
-    ContactForm: 'ContactForm',
-    contactForm: 'ContactForm',
+    //  ContactForm: 'ContactForm',
+    //  contactForm: 'ContactForm',
 };

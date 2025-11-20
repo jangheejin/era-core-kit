@@ -9,5 +9,4 @@ export { WorkText } from './components/WorkText';
 export { CaseGrid } from './components/CaseGrid';
 export { TeamStrip } from './components/TeamStrip';
 export { IntroWithImage } from './components/IntroWithImage';
-export { ContactForm } from './components/ContactForm';
 //# sourceMappingURL=components.d.ts.map
