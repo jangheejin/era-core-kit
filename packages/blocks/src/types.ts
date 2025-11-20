@@ -119,8 +119,8 @@ export type BlockComponentProps = {
   CaseGrid: CaseGridProps;
   TeamStrip: TeamStripProps;
   IntroWithImage: IntroWithImageProps;
-  ContactForm: ContactFormProps;
-  contactForm: ContactFormProps;
+//  ContactForm: ContactFormProps;
+//  contactForm: ContactFormProps;
 };
 
 
