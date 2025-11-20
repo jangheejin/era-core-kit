@@ -2,9 +2,7 @@
 const path = require('path')
 const createMDX = require('@next/mdx')
 
-const withMDX = createMDX({
-  extension: /\.mdx?$/,
-})
+const withMDX = createMDX({}) // <-- NO options
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
