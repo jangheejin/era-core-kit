@@ -56,11 +56,11 @@ export const homeLayout: LayoutBlock[] = [
         },
       ],
     },
-  },
+  }/*,
   {
     type: "ContactForm",
     props: {
       heading: "We’re here to advance your interests",
     },
-  },
+  },*/
 ];

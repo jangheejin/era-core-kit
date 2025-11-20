@@ -1,4 +1,8 @@
 // apps/site/src/components/ContactForm.tsx
+
+// Keep ContactForm as a client-only component.
+// Not imported or exported anywhere in packages/blocks
+
 'use client';
 
 export type ContactFormProps = {
