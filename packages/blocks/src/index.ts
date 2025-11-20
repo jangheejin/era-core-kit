@@ -14,7 +14,7 @@ export type {
     WorkTextProps,
     CaseGridProps,
     TeamStripProps,
-    ContactFormProps,
+//    ContactFormProps,
     
     // Case Study/Content Props
     CalloutProps,
@@ -31,7 +31,7 @@ export {
   WorkText,
   CaseGrid,
   TeamStrip,
-  ContactForm,
+//  ContactForm,
 
   // Case Study components
   Callout,
