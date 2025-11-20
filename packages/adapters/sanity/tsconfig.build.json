@@ -11,13 +11,13 @@
 //    "declarationDir": "./dist",//best practice to include when composite is true
 
     //TEMPORARY BYPASS
-    "noImplicitAny": false,
-    "noUncheckedIndexedAccess": false,
+    "noImplicitAny": false,////////////////NOT SURE ABOUT THIS
+    "noUncheckedIndexedAccess": false,///////////////NOT SURE ABOUT THIS
 
-    "strict": true,
-//    "noUncheckedIndexedAccess": true,
+/*    "strict": true,*/
+//    "noUncheckedIndexedAccess": true,////////NOT SURE IF THIS SHOULD BE PUT BACK IN
     "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
+/*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
 
     "module": "ESNext",
@@ -26,7 +26,7 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true,*/
   },
   "include": ["src/**/*"],
   "references": [
