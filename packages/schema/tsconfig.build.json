@@ -10,20 +10,21 @@
 //    "declarationDir": "./dist",
 
     //Strictness, compatibility
-    "strict": true,
+
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
+/*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+    "strict": true,*/
 
     //Compatibility: Module and targeting
-    "module": "ESNext",
+/*    "module": "ESNext",
     "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true*/
   },
 //  "files": ["./src/index.ts"],
 //  "include": ["src/**/*"]
