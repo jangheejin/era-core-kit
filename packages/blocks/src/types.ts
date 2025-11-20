@@ -61,9 +61,9 @@ export type TeamStripProps = {
   }[];
 };
 
-export type ContactFormProps = {
+/*export type ContactFormProps = {
   heading: string;
-};
+};*/
 
 // Props for each CASE STUDY block component (do NOT define in component files)
 export type CalloutProps = { content: string };
