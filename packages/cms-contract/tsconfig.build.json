@@ -28,7 +28,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "paths": {
-      "@kit/schema": ["../schema/dist"]
+      "@kit/schema": ["packages/schema/dist"]
+//      "@kit/schema": ["../schema/dist"]
     }
 
 //    "baseUrl": "../../",
