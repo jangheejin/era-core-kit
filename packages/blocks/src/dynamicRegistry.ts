@@ -26,6 +26,6 @@ import type { BlockType } from './types';export const blockRegistry: Record<Bloc
   CaseGrid: 'CaseGrid',
   TeamStrip: 'TeamStrip',
   IntroWithImage: 'IntroWithImage',
-  ContactForm: 'ContactForm',
-  contactForm: 'ContactForm',
+//  ContactForm: 'ContactForm',
+//  contactForm: 'ContactForm',
 };
