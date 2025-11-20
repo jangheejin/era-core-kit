@@ -36,6 +36,7 @@
 //  "include": ["src/**/*"],
   "include": ["src"],
   "references": [
-    { "path": "../../packages/schema" }
+//    { "path": "../../packages/schema" }
+    { "path": "../schema" }
   ]
 }
