@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+
     "declaration": true,
     "emitDeclarationOnly": false,
     "noEmit": false,
@@ -10,12 +11,12 @@
 
 //    "declarationDir": "./dist",//best practice to include when composite is true
 
-    //TEMPORARY BYPASS
-    "noImplicitAny": false,////////////////NOT SURE ABOUT THIS
-    "noUncheckedIndexedAccess": false,///////////////NOT SURE ABOUT THIS
+    //TEMPORARY BYPASS!!
+//    "noImplicitAny": false,
+//    "noUncheckedIndexedAccess": false,
 
 /*    "strict": true,*/
-//    "noUncheckedIndexedAccess": true,////////NOT SURE IF THIS SHOULD BE PUT BACK IN
+    "noUncheckedIndexedAccess": true,    
     "noImplicitOverride": true,
 /*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
@@ -28,7 +29,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,*/
   },
-  "include": ["src/**/*"],
+
+//  "include": ["src/**/*"],//////////////////NOT SURE IF OK
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"],
   "references": [
     { "path": "../../cms-contract" },
     { "path": "../../schema" }
