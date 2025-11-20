@@ -77,6 +77,7 @@ export type BlockComponentProps = {
     TeamStrip: TeamStripProps;
     IntroWithImage: IntroWithImageProps;
     ContactForm: ContactFormProps;
+    contactForm: ContactFormProps;
 };
 export type LayoutBlock = {
     [K in keyof BlockComponentProps]: GenericBlock<K>;

@@ -2,6 +2,7 @@
 // apps/site/app/lib/cms.ts
 //import { createInMemoryCMS } from '@kit/adapters-sanity';
 import { InMemoryCMS } from '@kit/adapters-sanity';
+//import type { CMS } from '../../../../packages/cms-contract/src/CMS';
 let cms = null;
 export function getCMS() {
     if (!cms) {

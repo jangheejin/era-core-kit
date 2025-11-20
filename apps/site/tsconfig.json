@@ -27,7 +27,12 @@
     "paths": {
 // path aliases need to point back to the monorepo root from this app folder.
 // mirror the workspace aliases but make them relative to apps/site.
-      
+// - Explicit entries allow TypeScript to resolve both source and built output
+    //   for each package (src + dist) instead of only the package root.
+    // - Packages like adapters have nested structure (adapters/*/src) that a
+    //   single wildcard cannot describe accurately.
+    // - The final "*" fallback still catches anything unforeseen, but specific
+    //   aliases keep editor/TS resolution reliable for known packages.
       "@kit/schema": ["../../packages/schema/src", "../../packages/schema/dist"],
       "@kit/blocks": ["../../packages/blocks/src", "../../packages/blocks/dist"],
       "@kit/blocks/*": ["../../packages/blocks/src/*", "../../packages/blocks/dist/*"],
