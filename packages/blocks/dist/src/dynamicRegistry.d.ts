@@ -1,9 +1,3 @@
-import type { LayoutBlock } from './types';
-type RegistryType = {
-    [K in LayoutBlock['type']]: React.FC<Extract<LayoutBlock, {
-        type: K;
-    }>['props']>;
-};
-export declare const blockRegistry: RegistryType;
-export {};
+import type { BlockType } from './types';
+export declare const blockRegistry: Record<BlockType, string>;
 //# sourceMappingURL=dynamicRegistry.d.ts.map

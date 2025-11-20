@@ -6,13 +6,8 @@ import dynamic from 'next/dynamic'; // Next.js dynamic import
 import type { ComponentType } from 'react';
 
 import { blockRegistry } from '@kit/blocks';
-import type { LayoutBlock } from '@kit/blocks';
-/*import { 
-  LayoutBlock, HeroProps, MissionTextProps, WorkTextProps, CaseGridProps, TeamStripProps, IntroWithImageProps, ContactFormProps, CalloutProps, PullQuoteProps, DocLinkProps, OutcomeListProps, ImageFigureProps 
-} from '@kit/blocks';*/
-/*import { 
-  Hero
-} from '@kit/blocks'*/
+//import type { LayoutBlock } from '@kit/blocks';
+import * as Components from '@kit/blocks/client';
 
 // Define the props interface
 interface BlockRendererProps {
@@ -27,8 +22,9 @@ type DynamicBlockMap = Record<string, ComponentType<any>>;
 const dynamicBlockComponents: DynamicBlockMap = {};
 
 for (const [key, Component] of Object.entries(blockRegistry)) {
-  dynamicBlockComponents[key] = dynamic(() =>
-    Promise.resolve({ default: Component as ComponentType<any> }),
+  const Component = Components[componentName];
+  dynamicBlockComponents[key] = dynamic(
+    () => Promise.resolve({ default: Component }),
     { ssr: false }
   );
 }
@@ -36,7 +32,7 @@ for (const [key, Component] of Object.entries(blockRegistry)) {
 /**
  * Renders a layout block by dynamically loading the corresponding component on the client.
  */
-function BlockRenderer({ block, index }: BlockRendererProps) {
+export default function BlockRenderer({ block, index }: BlockRendererProps) {
   const Component = dynamicBlockComponents[block.type]; 
 
   if (!Component) {
@@ -48,4 +44,3 @@ function BlockRenderer({ block, index }: BlockRendererProps) {
   return <Component key={block._key ?? index} {...block.props} />;
 }
 
-export default BlockRenderer;

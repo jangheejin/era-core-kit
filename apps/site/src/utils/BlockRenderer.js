@@ -1,21 +1,32 @@
+// apps/site/src/utils/BlockRenderer.tsx
+"use client";
 import { jsx as _jsx } from "react/jsx-runtime";
-import dynamic from 'next/dynamic'; // Next.js dynamic import
-import { blockRegistry } from '@kit/blocks';
-//Dynamically import all registered blocks with ssr: false. fixes the unstable_prefetch.mode error.
-const dynamicBlockComponents = {};
-for (const [key, Component] of Object.entries(blockRegistry)) {
-    dynamicBlockComponents[key] = dynamic(() => Promise.resolve({ default: Component }), { ssr: false });
-}
-/**
- * Renders a layout block by dynamically loading the corresponding component on the client.
- */
-function BlockRenderer({ block, index }) {
-    const Component = dynamicBlockComponents[block.type];
+import { Hero, MissionText, WorkText, CaseGrid, TeamStrip, IntroWithImage, ContactForm, Callout, PullQuote, DocLink, OutcomeList, ImageFigure, } from '@kit/blocks';
+const blockComponents = {
+    Hero,
+    MissionText,
+    WorkText,
+    CaseGrid,
+    TeamStrip,
+    IntroWithImage,
+    ContactForm,
+    contactForm: ContactForm,
+    Callout,
+    callout: Callout,
+    PullQuote,
+    pullQuote: PullQuote,
+    DocLink,
+    docLink: DocLink,
+    OutcomeList,
+    outcomeList: OutcomeList,
+    ImageFigure,
+    imageFigure: ImageFigure,
+};
+export default function BlockRenderer({ block, index }) {
+    const Component = blockComponents[block.type];
     if (!Component) {
-        console.error(`Unknown block type encountered: ${block.type}`);
+        console.error(`Unknown block type: ${block.type}`);
         return null;
     }
-    // Render the dynamically imported component
     return _jsx(Component, { ...block.props }, block._key ?? index);
 }
-export default BlockRenderer;
