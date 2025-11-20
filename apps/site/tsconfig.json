@@ -3,17 +3,19 @@
   "compilerOptions": {
     "baseUrl": ".",
     "incremental": true,
-//    "outDir": "dist",
-
+    //    "outDir": "dist",
     // --- Monorepo / Type-Checking Directives (CORRECT) ---
-    "composite": false,// Application package is generally NOT a composite project
-    "declaration": false,// Explicitly disabling declaration and declaration map generation
+    "composite": false, // Application package is generally NOT a composite project
+    "declaration": false, // Explicitly disabling declaration and declaration map generation
     "declarationMap": false,
-    "noEmit": true,// Tells tsc to only check types, not generate JS output (Next.js handles this)
-
+    "noEmit": true, // Tells tsc to only check types, not generate JS output (Next.js handles this)
     // --- Modern Next.js / React Directives ---
     "target": "ES2020",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "module": "ESNext",
     "moduleResolution": "Node",
     "isolatedModules": true, // Mandatory for Vercel/Next.js
@@ -23,43 +25,81 @@
         "name": "next"
       }
     ],
-
     "paths": {
-// path aliases need to point back to the monorepo root from this app folder.
-// mirror the workspace aliases but make them relative to apps/site.
-// - Explicit entries allow TypeScript to resolve both source and built output
-    //   for each package (src + dist) instead of only the package root.
-    // - Packages like adapters have nested structure (adapters/*/src) that a
-    //   single wildcard cannot describe accurately.
-    // - The final "*" fallback still catches anything unforeseen, but specific
-    //   aliases keep editor/TS resolution reliable for known packages.
-      "@kit/schema": ["../../packages/schema/src", "../../packages/schema/dist"],
-      "@kit/blocks": ["../../packages/blocks/src", "../../packages/blocks/dist"],
-      "@kit/blocks/*": ["../../packages/blocks/src/*", "../../packages/blocks/dist/*"],
-      "@kit/cms-contract": ["../../packages/cms-contract/src", "../../packages/cms-contract/dist"],
-      "@kit/adapters/*": ["../../packages/adapters/*/src", "../../packages/adapters/*/dist"],
-      "@kit/adapters-sanity": ["../../packages/adapters/sanity/src", "../../packages/adapters/sanity/dist"],
-      "@/*": ["src/*"],
-      "*": ["./*", "../../packages/*"]
-//      "@kit/*": ["../../packages/*"]
+      // path aliases need to point back to the monorepo root from this app folder.
+      // mirror the workspace aliases but make them relative to apps/site.
+      // - Explicit entries allow TypeScript to resolve both source and built output
+      //   for each package (src + dist) instead of only the package root.
+      // - Packages like adapters have nested structure (adapters/*/src) that a
+      //   single wildcard cannot describe accurately.
+      // - The final "*" fallback still catches anything unforeseen, but specific
+      //   aliases keep editor/TS resolution reliable for known packages.
+      "@kit/schema": [
+        "../../packages/schema/src",
+        "../../packages/schema/dist"
+      ],
+      "@kit/blocks": [
+        "../../packages/blocks/src",
+        "../../packages/blocks/dist"
+      ],
+      "@kit/blocks/*": [
+        "../../packages/blocks/src/*",
+        "../../packages/blocks/dist/*"
+      ],
+      "@kit/cms-contract": [
+        "../../packages/cms-contract/src",
+        "../../packages/cms-contract/dist"
+      ],
+      "@kit/adapters/*": [
+        "../../packages/adapters/*/src",
+        "../../packages/adapters/*/dist"
+      ],
+      "@kit/adapters-sanity": [
+        "../../packages/adapters/sanity/src",
+        "../../packages/adapters/sanity/dist"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+      "*": [
+        "./*",
+        "../../packages/*"
+      ]
+      //      "@kit/*": ["../../packages/*"]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src", 
-    "app"
+    "src",
+    "app",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules", "dist", "**/*.test.ts",
-    "**/*.js", "**/*.mjs", "*.js", "*.mjs",
-    "next.config.js", "eslint.config.mjs", "next-env.d.ts",
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.js",
+    "**/*.mjs",
+    "*.js",
+    "*.mjs",
+    "next.config.js",
+    "eslint.config.mjs",
+    "next-env.d.ts"
   ],
-  "references": [// Correct and comprehensive dependency list
-    { "path": "../../packages/blocks" },
-    { "path": "../../packages/cms-contract" },
-    { "path": "../../packages/schema" },
-    { "path": "../../packages/adapters/sanity" }
+  "references": [ // Correct and comprehensive dependency list
+    {
+      "path": "../../packages/blocks"
+    },
+    {
+      "path": "../../packages/cms-contract"
+    },
+    {
+      "path": "../../packages/schema"
+    },
+    {
+      "path": "../../packages/adapters/sanity"
+    }
   ]
 }
