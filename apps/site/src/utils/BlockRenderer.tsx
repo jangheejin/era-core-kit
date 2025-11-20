@@ -1,6 +1,5 @@
 // apps/site/src/utils/BlockRenderer.tsx
-//MUST NOT have 'use client'
-//must run on the server to handle dynamic imports.
+"use client";
 
 import React from 'react';
 import dynamic from 'next/dynamic'; // Next.js dynamic import
