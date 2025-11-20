@@ -1,8 +1,8 @@
 //apps/site/app/page.tsx
 
 "use client";
-import React from 'react';
-import dynamic from 'next/dynamic';
+//import React from 'react';
+//import dynamic from 'next/dynamic';
 import { homeLayout } from '@/content/home.layout';
 import BlockRenderer from '@/utils/BlockRenderer'; 
 
