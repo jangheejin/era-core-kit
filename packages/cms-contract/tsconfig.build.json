@@ -27,10 +27,10 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "paths": {
+/*    "paths": {
       "@kit/schema": ["packages/schema/dist"]
 //      "@kit/schema": ["../schema/dist"]
-    }
+    }*/
 
 //    "baseUrl": "../../",
 //    "paths": {
