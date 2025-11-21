@@ -27,6 +27,7 @@
       }
     ],
     "paths": {
+      "@styles/*": ["styles/*"],
       // path aliases need to point back to the monorepo root from this app folder.
       // mirror the workspace aliases but make them relative to apps/site.
       // - Explicit entries allow TypeScript to resolve both source and built output

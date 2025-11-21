@@ -2,6 +2,7 @@
 'use client';
 
 import './admin-cms.css'
+//import styles from './buttons.module.css'
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -145,18 +146,22 @@ export default function NewCaseStudyForm() {
     <main className="cs-form-shell max-w-3xl mx-auto py-10 space-y-8">
       {/* simple nav row */}
       <div className="mb-4 flex items-center justify-between text-sm">
-        <button
+
+          
+       {/* <div className="flex gap-4">*/}
+          <div className="buttonRow">
+          <button
           type="button"
           onClick={() => router.back()}
           className="text-neutral-600 hover:underline"
         >
           ← Back
         </button>
-          
-        <div className="flex gap-4">
-          <Link href="/admin" className="c-button c-button--tertiary">
+{/*          <Link href="/admin" className="c-button c-button--tertiary">
             Admin dashboard
-          </Link>
+          </Link>*/}
+          {/*<Link href="/admin" className={styles.buttonLink}>Admin dashboard</Link>*/}
+          <Link href="/admin" className="c-button c-button--tertiary">Admin Dashboard</Link>
           <Link href="/" className="c-button c-button--tertiary">
             Public site
           </Link>
