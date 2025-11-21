@@ -62,21 +62,12 @@ export function CMSDashboard() {
   return (
     //still using the strcutural wrappers defined in primitives.css
     <div className="c-container c-section c-stack">
-      {/* Top nav bar with back button */}
-      <div className="c-stack c-stack--row c-stack--between">
-      <button
-          type="button"
-          onClick={() => router.back()}
-          className="button button--ghost"
-        >
-          ← Back
-        </button>
-      </div>
+
 
       <h2 className="type-h2">CMS Content Editor (Mock) </h2>
 
       <div className="c-stack">
-        <h3 className="type-h2">Add New Case Study</h3>
+        <h4 className="type-h4">Add New Case Study</h4>
 
         <input
           className="input"
@@ -124,6 +115,9 @@ export function CMSDashboard() {
             </div>
           </div>
         ))}
+
+
+
       </div>
     </div>
   );

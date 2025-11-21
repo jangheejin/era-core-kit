@@ -20,11 +20,21 @@ export default function AdminPage() {
 
       </div>
       <div className="c-container c-stack">
-        <h1 className="type-h1">ERA CMS Admin</h1>
+
+        <h1 className="type-h1">ERA CMS Admin (Mock)</h1>
+
+        {!isLoggedIn && (
+          <section className="c-stack">
+            <p className="type-body">
+              This is a mock admin login for demo purposes only.
+            </p>
+          </section>
+
         {!isLoggedIn ? (
           <CMSLogin onLogin={() => setIsLoggedIn(true)} />
         ) : (
           <CMSDashboard />
+
         )}
       </div>
 
@@ -48,3 +58,12 @@ export default function AdminPage() {
     </main>
   );
 }
+
+{/* 🔙 This is your "back" / untoggle button */}
+<button
+type="button"
+className="c-button c-button--ghost"
+onClick={() => setIsLoggedIn(false)}
+>
+← Back to login view
+</button>

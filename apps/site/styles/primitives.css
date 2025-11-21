@@ -13,6 +13,7 @@
   --fs-hero: clamp(2rem, 1.2rem + 3vw, 3.5rem);
   --fs-h2: clamp(1.5rem, 1rem + 2vw, 2.5rem);
   --fs-h3: clamp(1.25rem, 1rem + 0.5vw, 1.5rem);
+  --fs-h4: clamp(1rem, 1rem + 0.25vw, 1.25rem);
   --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
   --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
 /*
@@ -339,6 +340,13 @@ a:hover {
 .type-h3 {
   font-size: var(--fs-h3);
   line-height: 1.25;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.type-h4 {
+  font-size: var(--fs-h4);
+  line-height: 1;
   margin: 0;
   text-transform: uppercase;
 }

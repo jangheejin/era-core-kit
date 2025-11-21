@@ -1,6 +1,8 @@
 // apps/site/app/admin/case-studies/new/page.tsx
 'use client';
 
+import './admin-cms.css'
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -140,7 +142,7 @@ export default function NewCaseStudyForm() {
   }
 
   return (
-    <main className="max-w-3xl mx-auto py-10 space-y-8">
+    <main className="cs-form-shell max-w-3xl mx-auto py-10 space-y-8">
       {/* simple nav row */}
       <div className="mb-4 flex items-center justify-between text-sm">
         <button
