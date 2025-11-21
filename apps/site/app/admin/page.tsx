@@ -22,7 +22,7 @@ export default function AdminPage() {
                 ← Back to public site
               </Link>
 
-            <h2 className="type-h2">ERA CMS admin demo</h2>
+            <h1 className="type-h1">ERA CMS admin demo</h1>
           </div>
 
           <p className="type-body type-muted">
@@ -39,6 +39,7 @@ export default function AdminPage() {
             <br />
             • Browse a mock “case study database” view.
           </p>
+          <hr />
         </header>
 
         {/* NOT LOGGED IN ---------------------------------------------------- */}
@@ -85,10 +86,10 @@ export default function AdminPage() {
               <CMSDashboard />
             </section>
 
-            <hr />
+
 
             {/* LINKS TO OTHER FLOWS */}
-            <section className="c-stack">
+{/**             <section className="c-stack">
               <h3 className="type-h3">Explore the mock CMS flows</h3>
               <p className="type-body type-muted">
                 Use these links to jump into the more structured views that mirror a real CMS.
@@ -103,7 +104,7 @@ export default function AdminPage() {
                   Open detailed case study builder
                 </Link>
               </div>
-            </section>
+            </section>*/}
           </section>
         )}
       </div>
