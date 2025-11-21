@@ -33,3 +33,6 @@ yarn-error.log*
 
 # Ignore runtime caches
 node-compile-cache/
+
+apps/site/**/*.js
+apps/site/**/*.js.map
