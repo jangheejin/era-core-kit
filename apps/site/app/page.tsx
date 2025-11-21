@@ -8,7 +8,7 @@ import BlockRenderer from '@/utils/BlockRenderer';
 import { ContactForm } from "@/components/sections/ContactForm";
 
 //const Home = () => {
-export default function Page() {
+export default function Home() {
   return (
     <main>
       {homeLayout.map((block, index) => (
