@@ -2,3 +2,4 @@
 
 export { CMSDashboard } from './CMSDashboard';
 export { CMSLogin } from './CMSLogin';
+export { CMSCreate } from './CMSCreate';

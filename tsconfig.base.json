@@ -9,6 +9,7 @@
 //      "@kit/blocks/*": ["packages/blocks/src/*", "packages/blocks/dist/*"],
       "@kit/blocks/*": ["packages/blocks/src/*"],
 //      "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
+      "@kit/blocks/cms": ["packages/blocks/src/cms"],
       "@kit/cms-contract": ["packages/cms-contract/src"],
 //      "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
       "@kit/adapters/*": ["packages/adapters/*/src"],
