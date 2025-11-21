@@ -13,7 +13,7 @@ import { CMSCreate } from '@kit/blocks/src/cms/CMSCreate';*/
 import { CMSLogin, CMSDashboard } from '@kit/blocks/cms';
 
 // pull the extra button locally from the app
-import { CMSCreate } from './CMSCreate';
+//import { CMSCreate } from './CMSCreate';
 
 import Link from 'next/link';
  
@@ -41,12 +41,6 @@ export default function AdminPage() {
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
             {/* New second button -> goes straight to the detailed builder */}
-
-            <CMSCreate
-              onPress={() => {
-                router.push('/admin/case-studies/new');
-              }}
-            />
             
             <p className="type-small type-muted">
               Or{' '}
