@@ -1,4 +1,4 @@
-//apps/site/app/admin/case-studies/new/page.tsx
+// apps/site/app/admin/case-studies/new/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -130,6 +130,9 @@ export default function NewCaseStudyForm() {
 
     setError(null);
     setPreview(result.data);
+
+    // optional for debugging: see what would be "saved"
+    console.log('Validated case study payload:', result.data);
   }
 
   return (
@@ -139,6 +142,7 @@ export default function NewCaseStudyForm() {
       {/* BASIC META */}
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Basics</h2>
+
         <input
           placeholder="Title"
           value={draft.title || ''}

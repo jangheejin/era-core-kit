@@ -56,6 +56,9 @@ export default function AdminPage() {
             <CMSDashboard />
 
             <hr />
+            <Link href="/admin/case-studies/list" className="c-button">
+              View mock case study database
+            </Link>
 
             <section className="c-stack">
               <h3 className="type-h3">Create a new mock case study</h3>
