@@ -7,7 +7,6 @@
       "use": "@vercel/next"
     }
   ],
-  "outputDirectory": "apps/site/.next",
   "build": {
     "env": {
       "NODE_VERSION": "20"
