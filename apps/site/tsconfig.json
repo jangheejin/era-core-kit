@@ -20,6 +20,7 @@
     "moduleResolution": "Node",
     "isolatedModules": true, // Mandatory for Vercel/Next.js
     "jsx": "preserve", // Mandatory for Next.js
+    "allowJs": true,
     "plugins": [
       {
         "name": "next"
