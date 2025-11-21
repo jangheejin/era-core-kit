@@ -151,6 +151,19 @@
   color: #fff;
 }
 
+.c-button--tertiary,
+.c-button--tertiary:link,
+.c-button--tertiary:visited {
+  border-radius: 6px;
+  border-width:2px;
+  border-color:#aaa;
+}
+
+.c-button--tertiary:hover {
+  background-color: #555;
+  border-radius: 6px;
+}
+
 /* ----------------------------------------------------- */
 /* FORM ELEMENTS (Using EXPLICIT Class Selectors) */
 /* ----------------------------------------------------- */

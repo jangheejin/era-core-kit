@@ -154,10 +154,10 @@ export default function NewCaseStudyForm() {
         </button>
           
         <div className="flex gap-4">
-          <Link href="/admin" className="c-button c-button--secondary">
+          <Link href="/admin" className="c-button c-button--tertiary">
             Admin dashboard
           </Link>
-          <Link href="/" className="c-button c-button--secondary">
+          <Link href="/" className="c-button c-button--tertiary">
             Public site
           </Link>
         </div>
