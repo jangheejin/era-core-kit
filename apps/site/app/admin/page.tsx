@@ -14,21 +14,22 @@ export default function AdminPage() {
         {/* Top bar / heading */}
         <header className="c-stack c-stack--row c-stack--between">
           <div className="c-stack">
-            <h1 className="type-h1">ERA Admin</h1>
+            <Link href="/" className="c-button c-button--secondary">
+              ← Back to public site
+            </Link>
+            <h1 className="type-h1">ERA CMS Admin (Mockup)</h1>
             <p className="type-body type-muted">
-              Temporary mock CMS so you can click around and see how content editing might feel.
+              Temporary demo CMS so you can click around and see how content editing might feel. 
+              This is for preview purposes only: nothing is persistently saved
             </p>
           </div>
 
-          <Link href="/" className="c-button c-button--secondary">
-            ← Back to public site
-          </Link>
         </header>
 
         {/* Before "login" */}
         {!isLoggedIn && (
           <section className="c-stack">
-            <h2 className="type-h3">Log in to view the CMS demo</h2>
+            <h2 className="type-h3">"Log in" to view the CMS demo</h2>
             <p className="type-body type-muted">
               This is a fake login — no real accounts or data. It just flips you into the demo view.
             </p>
@@ -49,16 +50,24 @@ export default function AdminPage() {
                 className="c-button c-button--ghost"
                 onClick={() => setIsLoggedIn(false)}
               >
-                ← Log out / back to login
+                ← "Log out" / back to login
               </button>
             </div>
 
             {/* Simple inline editor mock */}
-            <CMSDashboard />
+            <section className="c-stack">
+              <h3 className="type-h4">Quick add (inline)</h3>
+              <p className="type-body type-muted">
+                Super simple inline editor, just to prove “enter → save → preview” feels real.
+              </p>
+              <CMSDashboard />
+            </section>
 
             <hr />
 
-            <div className="c-stack">
+            
+
+            <section className="c-stack">
               <h3 className="type-h3">Explore the mock CMS flows</h3>
 
               <div className="c-stack c-stack--row c-stack--wrap c-stack--gap">
@@ -67,10 +76,10 @@ export default function AdminPage() {
                 </Link>
 
                 <Link href="/admin/case-studies/new" className="c-button">
-                  Open case study builder
+                  Open detailed case study builder
                 </Link>
               </div>
-            </div>
+            </section>
           </section>
         )}
       </div>
