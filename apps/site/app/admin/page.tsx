@@ -7,13 +7,13 @@ import { useRouter } from 'next/navigation';
 import { CMSDashboard } from '@kit/blocks/src/cms/CMSDashboard';
 import { CMSCreate } from '@kit/blocks/src/cms/CMSCreate';*/
 
-//import { CMSLogin, CMSDashboard, CMSCreate } from '@kit/blocks/cms';
+import { CMSLogin, CMSDashboard, CMSCreate } from '@kit/blocks/cms';
 
 // pull the CMS chrome bits from blocks
-import { CMSLogin, CMSDashboard } from '@kit/blocks/cms';
+//import { CMSLogin, CMSDashboard } from '@kit/blocks/cms';
 
 // pull the extra button locally from the app
-import { CMSCreate } from './CMSCreate';
+//import { CMSCreate } from './CMSCreate';
 
 import Link from 'next/link';
  
