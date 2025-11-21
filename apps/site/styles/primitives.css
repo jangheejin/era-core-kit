@@ -403,8 +403,11 @@ a:hover {
   text-transform: uppercase;
 }
 
-.type-body {
+.type-body,
+.type-body + ul,
+.type-body + ol {
   font-weight:400;
+  font-size:0.95rem; /*fallback*/
   font-size: var(--fs-body);
   line-height: 1.55;
 }
@@ -423,6 +426,33 @@ a:hover {
 
 .type-muted {
   opacity: 0.6;
+}
+
+/* Reset list defaults for control */
+ul,
+ol {
+  margin-block: 0;         /* no built-in top/bottom margin */
+  margin: 0; /*fallback*/
+  padding-inline-start: 1.5em; /* standard indent */
+}
+
+/* When a body paragraph is directly followed by a list */
+.type-body + ul,
+.type-body + ol {
+  /* pick a fraction of the line height for the gap */
+  margin-top:0.5em;
+
+  margin-block-start: 0.5em;  /* ≈ half a line of your body text */
+
+}
+
+/* Optional enhancement for newer browsers only */
+@supports (margin-block-start: 1lh) {
+  .type-body + ul,
+  .type-body + ol {
+    margin-top: 0;                 /* turn off legacy */
+    margin-block-start: 0.6lh;     /* 0.6 × computed line-height */
+  }
 }
 
 .type-hero {

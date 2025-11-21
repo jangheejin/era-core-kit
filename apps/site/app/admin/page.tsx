@@ -8,6 +8,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { CMSLogin, CMSDashboard } from '@kit/blocks';
 
+//import { CASE_STUDIES_FIXTURE } from '@kit/schema';
+
 export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -32,12 +34,13 @@ export default function AdminPage() {
 
           <p className="type-body type-muted">
             In this preview you can:
-            <br />
-            • Use a super simple inline editor (on this page) to create mock case studies.
-            <br />
-            • Open the full schema-aware case study builder.
-            <br />
-            • Browse a mock “case study database” view.
+          </p>
+            <ul className="type-muted">
+              <li>Open a case study builder, the template used to create mock case studies.</li>
+              <li>Browse a mock “case study database” view.</li>
+            </ul>
+          <p className="type-body type-muted"> 
+            The case study builder is database-ready, with schema that will allow for future filtering and searching by tags and other properties.
           </p>
           <hr />
         </header>
