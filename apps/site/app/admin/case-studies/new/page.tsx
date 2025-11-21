@@ -1,8 +1,10 @@
 // apps/site/app/admin/case-studies/new/page.tsx
 'use client';
 
-import './admin-cms.css'
-//import styles from './buttons.module.css'
+//import './admin-cms.css'
+import '@styles/admin-cms.css'
+import '@styles/admin-cms-buttons.css'
+//import styles from '@styles/buttons.module.css'
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';

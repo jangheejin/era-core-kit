@@ -1,6 +1,8 @@
 // apps/site/app/admin/page.tsx
 'use client';
 
+import '@styles/admin-cms-buttons.css';
+//import '@styles/admin-cms.css'
 import { useState } from 'react';
 import Link from 'next/link';
 import { CMSLogin, CMSDashboard } from '@kit/blocks';
@@ -11,68 +13,89 @@ export default function AdminPage() {
   return (
     <main className="c-page c-page-admin">
       <div className="c-container c-section c-stack">
-        {/* Top bar / heading */}
-        <header className="c-stack c-stack--row c-stack--between">
-          <div className="c-stack">
+        {/* HEADER */}
+        <header className="c-stack">
+          <div className="c-stack c-stack--row c-stack--between c-stack--center">
+            <h1 className="type-h1">ERA CMS admin (mockup)</h1>
             <Link href="/" className="c-button c-button--secondary">
               ← Back to public site
             </Link>
-            <h1 className="type-h1">ERA CMS Admin (Mockup)</h1>
-            <p className="type-body type-muted">
-              Temporary demo CMS so you can click around and see how content editing might feel. 
-              This is for preview purposes only: nothing is persistently saved
-            </p>
           </div>
 
+          <p className="type-body type-muted">
+            Temporary demo CMS so you can click around and see how content editing might feel.
+            This is for preview purposes only — nothing is persisted or connected to a real backend.
+          </p>
+
+          <p className="type-body type-muted">
+            In this preview you can:
+            <br />
+            • Use a super simple inline editor (on this page) to create mock case studies.
+            <br />
+            • Open the full schema-aware case study builder.
+            <br />
+            • Browse a mock “case study database” view.
+          </p>
         </header>
 
-        {/* Before "login" */}
+        {/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
-            <h2 className="type-h3">"Log in" to view the CMS demo</h2>
+            <h2 className="type-h3">Step 1 — Enter the CMS demo</h2>
             <p className="type-body type-muted">
-              This is a fake login — no real accounts or data. It just flips you into the demo view.
+              This is a fake login. Clicking the button below just switches the view into the
+              admin demo — it doesn&apos;t touch any real data or accounts.
             </p>
 
+            {/* Fake login button from the shared blocks package */}
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
-              <p className="type-body type-muted">The above fake-login opens a very simple case study creation template </p>
+            <p className="type-body type-muted">
+              Or, if you only want to see the detailed case study editor, you can skip straight to it: 
+              <Link href="/admin/case-studies/new">
+                Open detailed case study builder
+              </Link>
+            </p>
 
-            <Link href="/admin/case-studies/new" className="c-button">Or go directly to the new, more detailed case study creation template</Link>
+
           </section>
         )}
 
-        {/* After "login" */}
+        {/* LOGGED IN -------------------------------------------------------- */}
         {isLoggedIn && (
           <section className="c-stack">
+            {/* Top row: title + “log out” */}
             <div className="c-stack c-stack--row c-stack--between c-stack--center">
               <h2 className="type-h3">Content dashboard (mock)</h2>
 
-              {/* This "back" button un-toggles the dashboard */}
               <button
                 type="button"
                 className="c-button c-button--ghost"
                 onClick={() => setIsLoggedIn(false)}
               >
-                ← "Log out" / back to login
+                ← “Log out” / back to login
               </button>
             </div>
 
-            {/* Simple inline editor mock */}
+            {/* QUICK INLINE EDITOR */}
             <section className="c-stack">
               <h3 className="type-h4">Quick add (inline)</h3>
               <p className="type-body type-muted">
-                Super simple inline editor, just to prove “enter → save → preview” feels real.
+                Lightweight inline editor — type a title, slug, and body, then save to see how
+                “create → preview” feels without touching the full CMS.
               </p>
+
               <CMSDashboard />
             </section>
 
             <hr />
 
-            
-
+            {/* LINKS TO OTHER FLOWS */}
             <section className="c-stack">
               <h3 className="type-h3">Explore the mock CMS flows</h3>
+              <p className="type-body type-muted">
+                Use these links to jump into the more structured views that mirror a real CMS.
+              </p>
 
               <div className="c-stack c-stack--row c-stack--wrap c-stack--gap">
                 <Link href="/admin/case-studies/list" className="c-button">
