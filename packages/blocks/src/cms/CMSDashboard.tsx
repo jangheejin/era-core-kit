@@ -3,8 +3,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 import type { CaseStudy } from '@kit/schema';
-//import type { CaseStudy } from '../../../schema/src/index';
 
 /*
 type CaseStudy = {
