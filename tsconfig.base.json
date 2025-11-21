@@ -35,6 +35,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "types": ["react", "node"]
+    "types": ["react", "react-dom", "node"]
   }
 }

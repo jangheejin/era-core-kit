@@ -3,6 +3,9 @@
 // Re-export layout components for use in apps
 // This is the one typescript actually sees
 //ONLY EXPORT TYPES AND UTILITIES HERE
+
+export * from './cms'; 
+
 export type { 
     LayoutBlock, 
     BlockType,

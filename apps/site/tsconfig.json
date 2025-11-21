@@ -67,7 +67,8 @@
         "../../packages/*"
       ]
       //      "@kit/*": ["../../packages/*"]
-    }
+    },
+    "types": ["react", "react-dom", "node"]
   },
   "include": [
     "next-env.d.ts",
