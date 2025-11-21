@@ -22,7 +22,7 @@ export default function AdminPage() {
                 ← Back to public site
               </Link>
 
-            <h2 className="type-h2">ERA CMS admin (mockup)</h2>
+            <h2 className="type-h2">ERA CMS admin demo</h2>
           </div>
 
           <p className="type-body type-muted">
@@ -70,24 +70,17 @@ export default function AdminPage() {
           <section className="c-stack">
             {/* Top row: title + “log out” */}
             <div className="c-stack c-stack--row c-stack--between c-stack--center">
-              <h2 className="type-h3">Content dashboard (mock)</h2>
+              {/*<h2 className="type-h3">Content dashboard (mock)</h2>*/}
 
-              <button
-                type="button"
-                className="c-button c-button--ghost"
-                onClick={() => setIsLoggedIn(false)}
-              >
-                ← “Log out” / back to login
-              </button>
             </div>
 
             {/* QUICK INLINE EDITOR */}
             <section className="c-stack">
-              <h3 className="type-h4">Quick add (inline)</h3>
+{/*              <h3 className="type-h4">Quick add (inline)</h3>
               <p className="type-body type-muted">
                 Lightweight inline editor — type a title, slug, and body, then save to see how
                 “create → preview” feels without touching the full CMS.
-              </p>
+              </p>*/}
 
               <CMSDashboard />
             </section>
