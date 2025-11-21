@@ -74,6 +74,8 @@ export type ImageFigureProps = {
   src: string;
   alt: string;
   caption?: string;
+  aspect?: string;
+  fill?: boolean;
 };
 
 // Union of block types for different layouts

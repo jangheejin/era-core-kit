@@ -7,6 +7,7 @@ import '@styles/admin-cms.css'
 import { useState } from 'react';
 import Link from 'next/link';
 import { CMSLogin, CMSDashboard } from '@kit/blocks';
+import { useMockCMS } from './mockCMS';
 
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 
@@ -46,7 +47,7 @@ export default function AdminPage() {
           <hr />
         </header>
 
-        {/* NOT LOGGED IN ---------------------------------------------------- */}
+{/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
             <p className="type-body-semibold">Step 1 — Enter the CMS demo</p>
@@ -70,7 +71,7 @@ export default function AdminPage() {
           </section>
         )}
 
-        {/* LOGGED IN -------------------------------------------------------- */}
+{/* LOGGED IN -------------------------------------------------------- */}
         {isLoggedIn && (
           <section className="c-stack">
             {/* Top row: title + “log out” */}

@@ -12,7 +12,7 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
       <div className="c-container">
         <h2 className="type-h2">Our Work</h2>
 
-        <div className="c-grid layout-2x2">
+        <div className="casegrid layout-2x2">
           {items.map((item) => (
             <a
               key={item.slug}

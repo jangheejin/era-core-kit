@@ -1,4 +1,6 @@
-//apps/site/src/cms/mockCmsStore.tsx
+// apps/site/src/cms/mockCmsStore.tsx
+// CMS store wrapper
+// creates MockCMSProvider for AdminLayout in apps/site/app/admin/layout.tsx
 
 // Client-side only, NO PERSISTENCE
 /*
