@@ -1,47 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
     "rootDir": "./src",
+    "outDir": "./dist",
+
     "declaration": true,
-    "emitDeclarationOnly": false,
-    "noEmit": false,
-    "composite": true,
     "declarationMap": true,
+    "composite": true,
+    "emitDeclarationOnly": false,
 
-//    "declarationDir": "./dist",
-
-    //Strictness, compatibility
-//    "strict": true,
+    "noEmit": false,
+    "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-//    "noFallthroughCasesInSwitch": true,
-//    "forceConsistentCasingInFileNames": true,
-
-    //Compatibility: Module and targeting
-/*    "module": "ESNext",
-    "target": "ES2020",
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-
-    "jsx": "react-jsx",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,*/
-/*    "paths": {
-      "@kit/schema": ["packages/schema/dist"]
-//      "@kit/schema": ["../schema/dist"]
-    }*/
-
-//    "baseUrl": "../../",
-//    "paths": {
-//      "@kit/schema": ["../schema/src"]
-//    }
+    "noImplicitOverride": true
   },
-//  "include": ["src/**/*"],
+
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"],
   "references": [
-//    { "path": "../../packages/schema" }
     { "path": "../schema" }
   ]
 }

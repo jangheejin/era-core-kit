@@ -1,24 +1,25 @@
 {
   "compilerOptions": {
-//    "baseUrl": ".",
-//    "paths": {
+    "baseUrl": ".",
+    "paths": {
 //      "@kit/schema": ["packages/schema/src", "packages/schema/dist"],
-//      "@kit/schema": ["packages/schema/src"],
+      "@kit/schema": ["packages/schema/src"],
 //      "@kit/blocks": ["packages/blocks/src", "packages/blocks/dist"],
-//      "@kit/blocks": ["packages/blocks/src"],
+      "@kit/blocks": ["packages/blocks/src"],
 //      "@kit/blocks/*": ["packages/blocks/src/*", "packages/blocks/dist/*"],
-//      "@kit/blocks/*": ["packages/blocks/src/*"],
+      "@kit/blocks/*": ["packages/blocks/src/*"],
 //      "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
-//      "@kit/cms-contract": ["packages/cms-contract/src"],
+      "@kit/cms-contract": ["packages/cms-contract/src"],
 //      "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
-//      "@kit/adapters/*": ["packages/adapters/*/src"],
+      "@kit/adapters/*": ["packages/adapters/*/src"],
 //      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
-//      "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
-//      "@/*": ["apps/site/src/*"]
-//    },
+      "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
+      "@/*": ["apps/site/src/*"]
+    },
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
+
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
     "allowJs": true,
@@ -28,6 +29,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "types": ["react", "node"],
+    
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
   }

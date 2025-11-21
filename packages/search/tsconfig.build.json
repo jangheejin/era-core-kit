@@ -2,19 +2,22 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+
     "declaration": true,
     "emitDeclarationOnly": false,
     "composite": true,
+    "noEmit": false,
 
     //Strictness, compatibility
-    "strict": true,
+
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
+/*    "strict": true,    
     "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true,*/
 
     //Module and targeting
-    "module": "ESNext",
+/*    "module": "ESNext",
     "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
@@ -22,7 +25,7 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]*/
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"],
