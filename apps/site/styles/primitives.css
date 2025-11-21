@@ -463,57 +463,21 @@ ol {
   text-transform: uppercase;
 }
 
-
-/* ----------------------------------------------------- */
-/* Typography */
-/* ----------------------------------------------------- */
-/* Base Typography for all elements */
-body, p, li, label, pre, code {
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: 1.6;
-  color: var(--color-text);
+.richtext p,
+.richtext ul,
+.richtext ol {
+  margin: 0; /* nuke UA margins */
 }
 
-h1, h2, h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-heading);
-  color: var(--color-heading, #1a1a1a);
+/* Default vertical rhythm between any two blocks */
+.richtext > * + * {
+  margin-top: 0.75em; /* or whatever fraction of line-height you like */
 }
 
-h1 {
-  font-size: 2.5rem;
+/* Make paragraph + list tighter, symmetrically */
+.richtext > p + ul,
+.richtext > p + ol,
+.richtext > ul + p,
+.richtext > ol + p {
+  margin-top: 0.5em;
 }
-
-h2 {
-  font-size: 1.875rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-}
-
-body, p, li, label, input, textarea, button {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--color-text, #333);
-}
-
-h1, h2, h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-heading);
-}
-
-a {
-  color: var(--color-accent, #0057b8);
-  text-decoration: underline;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-
