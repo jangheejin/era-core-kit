@@ -29,9 +29,19 @@ export default function AdminPage() {
       </div>
 
       <div className="c-container c-stack pad-2">
-
         <Link href="/admin/case-studies/new">Updated Case Study Creation</Link>
       </div>
+      
+      <br/>
+      <hr />
+
+      <div className="c-container c-stack pad-2">
+        <h2>Database</h2>
+        <Link href="/admin/case-studies/list" className="c-button">
+          View mock case study database
+        </Link>
+      </div>
+
     </main>
   );
 }
