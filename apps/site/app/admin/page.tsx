@@ -52,7 +52,7 @@ export default function AdminPage() {
 
             <p className="type-body type-muted">
               Or, if you only want to see the detailed case study editor, you can skip straight to it: 
-              <Link href="/admin/case-studies/new">
+              <Link href="/admin/case-studies/new" className="cs-link">
                 Open detailed case study builder
               </Link>
             </p>

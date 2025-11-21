@@ -62,3 +62,9 @@ formerly NewCaseStudies.module.css */
   background-color: #003f8f;
   transform: translateY(-1px);
 }
+
+
+.cs-link {
+  padding-left: 5px;
+  padding-right: 5px;
+}

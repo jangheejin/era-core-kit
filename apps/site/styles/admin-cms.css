@@ -210,3 +210,8 @@ the user fills out)
 .cs-form-shell section:last-of-type {
   margin-bottom: 0;
 }
+
+.cs-link {
+  padding-left: 5px;
+  padding-right: 5px;
+}
