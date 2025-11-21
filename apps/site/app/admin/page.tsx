@@ -16,10 +16,12 @@ export default function AdminPage() {
         {/* HEADER */}
         <header className="c-stack">
           <div className="c-stack c-stack--row c-stack--between c-stack--center">
-            <h1 className="type-h1">ERA CMS admin (mockup)</h1>
-            <Link href="/" className="c-button c-button--secondary">
-              ← Back to public site
-            </Link>
+
+              <Link href="/" className="c-button c-button--secondary">
+                ← Back to public site
+              </Link>
+
+            <h2 className="type-h2">ERA CMS admin (mockup)</h2>
           </div>
 
           <p className="type-body type-muted">
@@ -41,13 +43,13 @@ export default function AdminPage() {
         {/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
-            <h2 className="type-h3">Step 1 — Enter the CMS demo</h2>
+            <p className="type-body-emphasized">Step 1 — Enter the CMS demo</p>
             <p className="type-body type-muted">
               This is a fake login. Clicking the button below just switches the view into the
               admin demo — it doesn&apos;t touch any real data or accounts.
             </p>
 
-            {/* Fake login button from the shared blocks package */}
+            {/* CMSLogin: Fake login button from the shared blocks package */}
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
             <p className="type-body type-muted">
@@ -56,6 +58,7 @@ export default function AdminPage() {
                 Open detailed case study builder
               </Link>
             </p>
+
 
 
           </section>
