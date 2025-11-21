@@ -36,3 +36,7 @@ node-compile-cache/
 
 apps/site/**/*.js
 apps/site/**/*.js.map
+
+#build outputs
+packages/*/dist/
+apps/*/.next/
