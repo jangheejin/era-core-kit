@@ -1,9 +1,10 @@
 // packages/blocks/src/components/CaseGrid.tsx
 // REACT COMPONENT FOR CASEGRID
-'use client';
+//'use client';
 
 import { ImageFigure } from './ImageFigure';
 import type { CaseGridProps } from '../types';
+//import { ClientAnimations } from './ClientAnimations';
 
 export function CaseGrid({ items, layout }: CaseGridProps) {
   return (

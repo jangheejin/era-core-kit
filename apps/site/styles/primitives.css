@@ -104,12 +104,22 @@
 /* Grid Layouts */
 .c-grid {
   display: grid;
-/*   gap: var(--space-3);*/
   gap: var(--space-3, 1.5rem);
   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr));
   container-type: inline-size;
 }
 
+.c-grid.layout-2x2 {
+  /* Exactly 2 tracks, each with a max width so they don't balloon */
+  grid-template-columns: repeat(2, minmax(0, var(--case-card-max, 22rem)));
+
+  /* Center the two columns in the available space */
+  justify-content: center;
+
+  /* Explicit gaps so outer margins grow but card gutter stays stable */
+  column-gap: var(--space-3);
+  row-gap: var(--space-3);
+}
 
 /* Base button style that works for <a> and <button> */
 .c-buttonRow {
