@@ -26,22 +26,23 @@ export default function AdminPage() {
 
             <h1 className="type-h1">ERA CMS admin demo</h1>
           </div>
+          <div className="richtext">
+            <p className="type-body type-muted">
+              Temporary demo CMS so you can click around and see how content editing might feel.
+              This is for preview purposes only — nothing is persisted or connected to a real backend.
+            </p>
 
-          <p className="type-body type-muted">
-            Temporary demo CMS so you can click around and see how content editing might feel.
-            This is for preview purposes only — nothing is persisted or connected to a real backend.
-          </p>
-
-          <p className="type-body type-muted">
-            In this preview you can:
-          </p>
-            <ul className="type-muted">
-              <li>Open a case study builder, the template used to create mock case studies.</li>
-              <li>Browse a mock “case study database” view.</li>
-            </ul>
-          <p className="type-body type-muted"> 
-            The case study builder is database-ready, with schema that will allow for future filtering and searching by tags and other properties.
-          </p>
+            <p className="type-body type-muted">
+              In this preview you can:
+            </p>
+              <ul className="type-muted">
+                <li>Open a case study builder, the template used to create mock case studies.</li>
+                <li>Browse a mock “case study database” view.</li>
+              </ul>
+            <p className="type-body type-muted"> 
+              The case study builder is database-ready, with schema that will allow for future filtering and searching by tags and other properties.
+            </p>
+          </div>
           <hr />
         </header>
 
