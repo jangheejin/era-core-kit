@@ -86,8 +86,8 @@
     "*.js",
     "*.mjs",
     "next.config.js",
-    "eslint.config.mjs",
-    "next-env.d.ts"
+    "eslint.config.mjs"//,
+//    "next-env.d.ts"
   ],
   "references": [ // Correct and comprehensive dependency list
     {
