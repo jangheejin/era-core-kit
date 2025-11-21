@@ -15,9 +15,34 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+  /* Forces a grid of 2 columns 
 .casegrid.layout-2x2 {
-  /* Forces a grid of 2 columns */
   grid-template-columns: repeat(2, 1fr);
+}*/
+
+.casegrid.layout-2x2 {
+  /* 1 column by default on narrow screens */
+  grid-template-columns: minmax(0, 1fr);
+
+  /* Cap the overall grid width so cards don't grow forever */
+  --case-card-max: 22rem; /* tweak this if you want wider/narrower cards */
+  max-width: calc(2 * var(--case-card-max) + 3rem); /* 2 cards + gutter */
+  margin-inline: auto;
+
+  /* Gutter between columns/rows — scales with viewport */
+  column-gap: clamp(var(--space-2), 2vw, var(--space-4));
+  row-gap: clamp(var(--space-2), 2vw, var(--space-3));
+}
+
+/* On medium+ screens, actually use 2 columns */
+@media (min-width: 768px) {
+  .casegrid.layout-2x2 {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, var(--case-card-max, 22rem))
+    );
+    justify-content: center; /* keep the pair of cards centered */
+  }
 }
 
 .case-card {
