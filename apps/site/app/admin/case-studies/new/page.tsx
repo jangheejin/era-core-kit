@@ -2,6 +2,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 import { CaseStudy as CaseStudySchema, type CaseStudy as CaseStudyType } from '@kit/schema';
 
 type Draft = Partial<CaseStudyType>;
@@ -20,6 +23,7 @@ const jurisdictionOptions: CaseStudyType['jurisdictions'][number][] = [
 ];
 
 export default function NewCaseStudyForm() {
+  const router = useRouter();
   const [draft, setDraft] = useState<Draft>({
     title: '',
     slug: '',
@@ -137,6 +141,27 @@ export default function NewCaseStudyForm() {
 
   return (
     <main className="max-w-3xl mx-auto py-10 space-y-8">
+      {/* simple nav row */}
+      <div className="mb-4 flex items-center justify-between text-sm">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="text-neutral-600 hover:underline"
+        >
+          ← Back
+        </button>
+          
+        <div className="flex gap-4">
+          <Link href="/admin" className="text-neutral-600 hover:underline">
+            Admin dashboard
+          </Link>
+          <Link href="/" className="text-neutral-600 hover:underline">
+            Public site
+          </Link>
+        </div>
+      
+      </div>
+
       <h1 className="text-2xl font-semibold">New Case Study (Mock)</h1>
 
       {/* BASIC META */}

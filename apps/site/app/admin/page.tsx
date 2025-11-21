@@ -29,9 +29,9 @@ export default function AdminPage() {
       </div>
 
       <div className="c-container c-stack pad-2">
-        <Link href="/admin/case-studies/new">Updated Case Study Creation</Link>
+        <Link href="/admin/case-studies/new" className="c-button">Updated Case Study Creation</Link>
       </div>
-      
+
       <br/>
       <hr />
 
