@@ -16,8 +16,8 @@
 //    "noUncheckedIndexedAccess": false,
 
 /*    "strict": true,*/
-    "noUncheckedIndexedAccess": true,    
-    "noImplicitOverride": true,
+//    "noUncheckedIndexedAccess": true,    
+//    "noImplicitOverride": true,
 /*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
 

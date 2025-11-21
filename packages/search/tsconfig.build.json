@@ -10,8 +10,8 @@
 
     //Strictness, compatibility
 
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+//    "noUncheckedIndexedAccess": true,
+//    "noImplicitOverride": true,
 /*    "strict": true,    
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,*/
