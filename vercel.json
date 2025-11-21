@@ -1,12 +1,10 @@
 {
   "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter site run build",
   "builds": [
     {
       "src": "apps/site/package.json", 
-      "use": "@vercel/next",
-      "config": {
-        "buildCommand": "pnpm --filter site run build"
-      }
+      "use": "@vercel/next"
     }
   ],
   "outputDirectory": "apps/site/.next",
