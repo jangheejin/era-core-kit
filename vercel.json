@@ -15,15 +15,5 @@
     "env": {
       "NODE_VERSION": "20"
     }
-  },
-  "routes": [
-    {
-      "src": "/",
-      "dest": "apps/site"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "apps/site/$1" 
-    }
-  ]
+  }
 }
