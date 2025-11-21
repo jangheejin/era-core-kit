@@ -21,15 +21,15 @@
 }*/
 
 .casegrid.layout-2x2 {
-  /* 1 column by default on narrow screens */
-  grid-template-columns: minmax(0, 1fr);
+  /* Card width cap for ALL sizes */
+  --case-card-max: 20rem; /* tweak this: 19–21rem range usually feels good */
 
-  /* Cap the overall grid width so cards don't grow forever */
-  --case-card-max: 22rem; /* tweak this if you want wider/narrower cards */
-  max-width: calc(2 * var(--case-card-max) + 3rem); /* 2 cards + gutter */
-  margin-inline: auto;
+  /* Mobile / narrow: single column, card never wider than case-card-max */
+  grid-template-columns: minmax(0, var(--case-card-max));
+  max-width: var(--case-card-max);
+  margin-inline: auto;      /* center the column inside the container */
 
-  /* Gutter between columns/rows — scales with viewport */
+  /* Gutter between rows/columns (even though columns=1 here) */
   column-gap: clamp(var(--space-2), 2vw, var(--space-4));
   row-gap: clamp(var(--space-2), 2vw, var(--space-3));
 }
@@ -39,8 +39,11 @@
   .casegrid.layout-2x2 {
     grid-template-columns: repeat(
       2,
-      minmax(0, var(--case-card-max, 22rem))
+      minmax(0, var(--case-card-max, 20rem))
     );
+    /* the grid is as wide as 2 cards + gutter, centered in the page */
+    max-width: calc(2 * var(--case-card-max) + 3rem);
+    margin-inline: auto;
     justify-content: center; /* keep the pair of cards centered */
   }
 }
