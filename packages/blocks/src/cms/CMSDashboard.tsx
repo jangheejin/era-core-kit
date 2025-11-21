@@ -16,6 +16,7 @@ type CaseStudy = {
 };*/
 
 export function CMSDashboard() {
+  const router = useRouter();
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
@@ -61,6 +62,17 @@ export function CMSDashboard() {
   return (
     //still using the strcutural wrappers defined in primitives.css
     <div className="c-container c-section c-stack">
+      {/* Top nav bar with back button */}
+      <div className="c-stack c-stack--row c-stack--between">
+      <button
+          type="button"
+          onClick={() => router.back()}
+          className="button button--ghost"
+        >
+          ← Back
+        </button>
+      </div>
+
       <h2 className="type-h2">CMS Content Editor (Mock) </h2>
 
       <div className="c-stack">

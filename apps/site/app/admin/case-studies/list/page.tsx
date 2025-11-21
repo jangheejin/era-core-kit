@@ -10,6 +10,11 @@ export default function CaseStudyListPage() {
 
   return (
     <main className="c-section">
+        <div className="mb-4">
+            <Link href="/admin" className="c-button c-button--secondary">
+            ← Back to dashboard
+            </Link>
+        </div>
       <div className="c-container c-stack">
         <h1 className="type-h2">Mock Case Study Database</h1>
         <p className="type-body type-muted">

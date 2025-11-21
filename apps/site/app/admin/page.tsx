@@ -16,6 +16,15 @@ export default function AdminPage() {
 
   return (
     <main className="c-page c-page-admin">
+      <div className="c-stack c-stack--row c-stack--between">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="button button--ghost"
+        >
+          ← Back
+        </button>
+      </div>
       <div className="c-container c-stack">
         <h1 className="type-h1">ERA CMS Admin</h1>
         {!isLoggedIn ? (
