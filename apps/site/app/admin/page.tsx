@@ -2,7 +2,8 @@
 'use client';
 
 import '@styles/admin-cms-buttons.css';
-//import '@styles/admin-cms.css'
+import '@styles/admin-cms.css'
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { CMSLogin, CMSDashboard } from '@kit/blocks';
@@ -43,7 +44,7 @@ export default function AdminPage() {
         {/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
-            <p className="type-body-emphasized">Step 1 — Enter the CMS demo</p>
+            <p className="type-body-semibold">Step 1 — Enter the CMS demo</p>
             <p className="type-body type-muted">
               This is a fake login. Clicking the button below just switches the view into the
               admin demo — it doesn&apos;t touch any real data or accounts.
