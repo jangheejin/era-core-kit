@@ -1,0 +1,210 @@
+/*
+apps/site/styles/admin-cms.css
+admin-case-study css
+syling for 'add a case study' template 
+*/
+
+/* Outer shell: centers the form + sets rhythm */
+.cs-form-shell {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: radial-gradient(circle at top left, #f9fafb 0, #e5e7eb 40%, #f9fafb 100%);
+}
+
+/* Top title block */
+.cs-form-shell > h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #020617;
+  margin-bottom: 0.25rem;
+}
+
+.cs-form-shell > section:first-of-type h2,
+.cs-form-shell > p {
+  margin: 0;
+}
+
+/* Each logical section becomes a card */
+.cs-form-shell > section {
+  background: #ffffff;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+}
+
+/* Section headings */
+.cs-form-shell section > h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+/* Labels inside sections (you already use some <label> tags) */
+.cs-form-shell label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #4b5563;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Basic input/textarea/select styling */
+.cs-form-shell input[type="text"],
+.cs-form-shell input[type="number"],
+.cs-form-shell input[type="url"],
+.cs-form-shell textarea,
+.cs-form-shell select {
+  width: 100%;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  background-color: #f9fafb;
+  color: #020617;
+  transition: background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.cs-form-shell input::placeholder,
+.cs-form-shell textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus states */
+.cs-form-shell input:focus,
+.cs-form-shell textarea:focus,
+.cs-form-shell select:focus {
+  outline: none;
+  border-color: #111827;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px #111827, 0 0 0 6px rgba(15, 23, 42, 0.13);
+}
+
+/* Textareas bigger & nicer */
+.cs-form-shell textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+/* Two-column layout you already use via grid classes */
+.cs-form-shell .grid.grid-cols-2.gap-4 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Mechanism / jurisdiction chips */
+.cs-form-shell .flex.flex-wrap.gap-3.text-sm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
+}
+
+.cs-form-shell .inline-flex.items-center.gap-1,
+.cs-form-shell .inline-flex.items-center.gap-2 {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.cs-form-shell .inline-flex.items-center input[type="checkbox"] {
+  margin-right: 0.3rem;
+}
+
+/* Hero image preview */
+.cs-form-shell img {
+  border-radius: 0.75rem;
+  max-height: 16rem;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Tags input hint */
+.cs-form-shell input[placeholder*="Tags"] {
+  font-size: 0.85rem;
+}
+
+/* Toggle row (isFeaturedHome / isPublic) */
+.cs-form-shell .flex.gap-4.text-sm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.cs-form-shell .flex.gap-4.text-sm label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  background: #f9fafb;
+}
+
+/* Primary button (Validate + Preview) */
+.cs-form-shell button.bg-black {
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  background: #020617;
+  color: #f9fafb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.28);
+}
+
+.cs-form-shell button.bg-black:hover {
+  background: #0b1120;
+  transform: translateY(-1px);
+}
+
+.cs-form-shell button.bg-black:active {
+  background: #020617;
+  transform: translateY(0);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+}
+
+/* Error message */
+.cs-form-shell .text-red-500.text-sm {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+/* JSON preview panel */
+.cs-form-shell pre.text-xs {
+  background: #020617;
+  color: #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(15, 23, 42, 0.7);
+  max-height: 20rem;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* Tiny spacing fix for the very bottom section */
+.cs-form-shell section:last-of-type {
+  margin-bottom: 0;
+}
