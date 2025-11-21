@@ -35,6 +35,10 @@ export default function AdminPage() {
             </p>
 
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
+
+              <p className="type-body type-muted">The above fake-login opens a very simple case study creation template </p>
+
+            <Link href="/admin/case-studies/new" class="c-button">Or go directly to the new, more detailed case study creation template</Link>
           </section>
         )}
 
