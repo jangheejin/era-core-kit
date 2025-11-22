@@ -3,61 +3,77 @@
 
 }*/
 
+/* apps/site/styles/hero.css */
 
-/* HERO layout: image first in DOM, on the left, no phantom space */
-#hero .hero-grid {
+/* Slightly tighter vertical padding than generic sections */
+.c-section--hero {
+  padding-block: var(--space-4);
+}
+
+/* HERO LAYOUT: logo left, text right */
+.hero-grid {
   display: flex;
   align-items: center;
+
+  /* Horizontal gap between logo + text */
+  gap: clamp(1rem, 4vw, 2.5rem);
+  /* gap: clamp(1rem, 2.5vw, 1.75rem); */
+}
+
+/* LOGO COLUMN */
+.hero-logo {
+  flex: 0 0 auto;          /* don't stretch */
+  /* padding-right:25px; */
+}
+
+.hero-image-container {
+  display: flex;
   justify-content: flex-start;
-  gap: var(--space-6);           /* more space between logo and text */
-}
-
-/* image column */
-#hero .hero-logo {
-  flex: 0 0 auto;                /* don't let the image get squished */
-  padding-right: 25px;
-}
-
-/* text column */
-#hero .hero-copy {
-  flex: 1 1 0;                   /* take all remaining horizontal space */
-  max-width: none;               /* ← kill the phantom right margin */
-}
-
-/* image container – no extra padding/margins */
-#hero .hero-image-container {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 0;
-  padding: 0;
 }
 
-/* actual image sizing */
-#hero .hero-image-container img,
-#hero .heroimage {
+/* Actual logo sizing */
+.hero-image-container img,
+.heroimage {
   display: block;
-  max-width: 225px;              /* tweak this number to taste */
   width: 100%;
+  max-width: clamp(180px, 22vw, 240px); /* stays reasonable on big screens */
   height: auto;
 }
 
-/* MOBILE: stack vertically */
-@media (max-width: 768px) {
-  #hero .hero-grid {
+/* TEXT COLUMN */
+.hero-copy {
+  flex: 1 1 0;
+  max-width: none;        /* or 48rem for a softer cap */
+}
+
+/* Tighten heading + subhead spacing */
+.hero-copy .type-hero {
+  margin-bottom: var(--space-2);
+}
+
+.hero-subhead {
+  margin: 0 0 var(--space-2) 0;
+}
+
+/* MOBILE / NARROW VIEWPORTS */
+@media (max-width: 800px) {
+  .hero-grid {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
   }
 
-  #hero .hero-logo,
-  #hero .hero-copy {
-    flex: 1 1 auto;
-    width: 100%;
+  .hero-logo {
+    width: 60%;
+    max-width: 220px;
   }
 
-  #hero .hero-image-container img,
-  #hero .heroimage {
-    max-width: 220px;
+  .hero-image-container {
+    justify-content: flex-start;
+  }
+
+  .hero-copy {
+    max-width: 100%;
   }
 }
