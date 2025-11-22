@@ -1,0 +1,42 @@
+/* hero-specific padding / background if you want */
+/*.c-section--hero {
+
+}*/
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.hero-copy {
+  max-width: 40rem;
+}
+
+.hero-logo {
+  justify-self: center;
+}
+
+.hero-image-container {
+  max-width: 220px;
+  width: 100%;
+}
+
+.heroimage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Optional: small screen behavior */
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .hero-logo {
+    order: -1; /* logo above or below copy depending on taste */
+  }
+}

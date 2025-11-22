@@ -1,0 +1,29 @@
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.intro-copy {
+  max-width: 40rem;
+}
+
+.intro-image img {
+  display: block;
+  max-width: 300px;      /* smaller than hero logo */
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+@media (max-width: 768px) {
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .intro-image img {
+    max-width: 260px;
+  }
+}

@@ -60,6 +60,12 @@ export type TeamStripProps = {
     imageUrl: string;
   }[];
 };
+export type WorkWithCaseGridProps = {
+  heading: string;
+  text: string;
+  layout: CaseGridProps['layout'];
+  items: CaseGridProps['items'];
+};
 
 /*export type ContactFormProps = {
   heading: string;

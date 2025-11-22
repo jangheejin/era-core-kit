@@ -1,0 +1,50 @@
+/* HERO LAYOUT */
+
+/* 2-column hero: text LEFT (wider), logo RIGHT (narrower) */
+.c-section--hero .hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); /* text wider than logo */
+  column-gap: clamp(1.5rem, 3vw, 2.5rem);              /* not a giant gulf */
+  row-gap: var(--space-3);
+  align-items: center;                                   /* vertical align */
+}
+
+/* Text column */
+.c-section--hero .hero-copy {
+  max-width: 32rem; /* keeps measure sane on big screens */
+}
+
+/* Logo column */
+.c-section--hero .hero-logo {
+  display: flex;
+  justify-content: flex-start;  /* no over-centering in a wide column */
+}
+
+/* Logo sizing: no random huge margins, no microscopic logo */
+.c-section--hero .hero-image-container {
+  max-width: clamp(180px, 14vw, 260px); /* scales but capped */
+  width: 100%;
+}
+
+.c-section--hero .hero-image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* MOBILE: stack, text first, logo under it, still controlled size */
+@media (max-width: 768px) {
+  .c-section--hero .hero-grid {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-3);
+  }
+
+  .c-section--hero .hero-logo {
+    justify-content: flex-start;
+  }
+
+  .c-section--hero .hero-image-container {
+    max-width: 200px;
+    margin-top: var(--space-3);
+  }
+}

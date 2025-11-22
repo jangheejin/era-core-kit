@@ -1,0 +1,54 @@
+/* hero-specific padding / background if you want */
+/*.c-section--hero {
+
+}*/
+
+
+
+/* Base layout: two columns on larger screens */
+.c-section--hero .hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.5fr) minmax(0, 1.5fr);
+  grid-template-areas: "logo copy"; /* image LEFT, text RIGHT */
+  gap: var(--space-4);
+  align-items: center;
+}
+
+/* Attach positions explicitly so DOM order doesn't matter */
+.c-section--hero .hero-logo {
+  grid-area: logo;
+  display: flex;
+  justify-content: center;
+}
+
+.c-section--hero .hero-copy {
+  grid-area: copy;
+}
+
+/* Constrain logo size so it doesn't explode or shrink randomly */
+.c-section--hero .hero-image-container {
+  max-width: 260px;      /* tweak this up/down to taste */
+  width: 100%;
+}
+
+.c-section--hero .hero-image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Mobile: stack text + logo, still with controlled size */
+@media (max-width: 768px) {
+  .c-section--hero .hero-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "logo"; /* text on top, logo below */
+  }
+
+  .c-section--hero .hero-image-container {
+    max-width: 220px;
+    margin-inline: auto;
+    margin-top: var(--space-3);
+  }
+}

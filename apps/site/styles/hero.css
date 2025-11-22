@@ -1,0 +1,63 @@
+/* hero-specific padding / background if you want */
+/*.c-section--hero {
+
+}*/
+
+
+/* HERO layout: image first in DOM, on the left, no phantom space */
+#hero .hero-grid {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-6);           /* more space between logo and text */
+}
+
+/* image column */
+#hero .hero-logo {
+  flex: 0 0 auto;                /* don't let the image get squished */
+  padding-right: 25px;
+}
+
+/* text column */
+#hero .hero-copy {
+  flex: 1 1 0;                   /* take all remaining horizontal space */
+  max-width: none;               /* ← kill the phantom right margin */
+}
+
+/* image container – no extra padding/margins */
+#hero .hero-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* actual image sizing */
+#hero .hero-image-container img,
+#hero .heroimage {
+  display: block;
+  max-width: 225px;              /* tweak this number to taste */
+  width: 100%;
+  height: auto;
+}
+
+/* MOBILE: stack vertically */
+@media (max-width: 768px) {
+  #hero .hero-grid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  #hero .hero-logo,
+  #hero .hero-copy {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  #hero .hero-image-container img,
+  #hero .heroimage {
+    max-width: 220px;
+  }
+}
