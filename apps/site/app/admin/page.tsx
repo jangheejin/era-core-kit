@@ -22,8 +22,8 @@ export default function AdminPage() {
           <div className="c-stack c-stack--row c-stack--between c-stack--center">
 
 
-            {/*<h1 className="type-h1">ERA CMS admin demo</h1>*/}
-            <p className="type-body-large">ERA CMS Admin Demo</p>
+            <h1 className="type-h1">ERA CMS admin demo</h1>
+            {/*<p className="type-body-large">ERA CMS Admin Demo</p>*/}
           </div>
           <div className="richtext">
             <p className="type-body type-muted">
@@ -57,9 +57,10 @@ export default function AdminPage() {
             {/* CMSLogin: Fake login button from the shared blocks package */}
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
-            <p className="type-body type-muted">
-              Or, if you only want to see the detailed case study editor, you can skip straight to it: 
-              <Link href="/admin/case-studies/new" className="cs-link">
+            <p className="type-body">
+            <hr /><br />
+              Or, if you only want to see the detailed case study editor, you can skip straight to it: <br/><br/>
+              <Link href="/admin/case-studies/new" className="c-button">
                 Open detailed case study builder
               </Link>
             </p>
