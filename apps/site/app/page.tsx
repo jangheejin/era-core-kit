@@ -5,8 +5,11 @@
 //"use client";
 //import React from 'react';
 //import dynamic from 'next/dynamic';
-import { homeLayout } from '@/content/home.layout';
+//import { homeLayout } from '@/content/home.layout';
 import BlockRenderer from '@/utils/BlockRenderer'; 
+
+import { homeLayout, workTextProps, caseGridProps } from '@/content/home.layout';
+import { WorkText, CaseGrid } from '@kit/blocks';
 import { ContactForm } from "@/components/sections/ContactForm";
 
 //const Home = () => {
@@ -22,6 +25,15 @@ export default function Home() {
           index={index} 
         />
       ))}
+
+{/* Combined section: WorkText + CaseGrid inside one .c-section */}
+{/*       <section className="c-section">
+        <div className="c-container c-stack">
+          <WorkText {...workTextProps} />
+          <CaseGrid {...caseGridProps} />
+        </div>
+      </section> */}
+
       {/* Contact section rendered explicitly, not via layout */}
       <ContactForm heading="We’re here to advance your interests" />
     </main>

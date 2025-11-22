@@ -1,4 +1,4 @@
-// apps/site/src/components/sections/WorkText.tsx
+// packages/blocks/src/components/WorkText.tsx
 // REACT COMPONENT FOR WORKTEXT
 //'use client';
 

@@ -26,6 +26,9 @@ const initialData: LayoutBlock[] = [
     props: {
       heading: 'Welcome to the site!',
       subhead: 'Here is where you can edit pages',
+      text: '',
+      text2: '',
+      text3: '',
       imageUrl: '/hero.jpg',
     },
     _key: 'hero-1',

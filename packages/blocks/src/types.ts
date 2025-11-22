@@ -22,20 +22,25 @@ export type GenericBlock<T extends keyof BlockComponentProps> = {
 
 export type HeroProps = {
   heading: string;
-  subhead: string;
+  text?: string;
+  text2?: string;
+  text3?: string;
   imageUrl: string;
+  subhead?: string;   // TEMP: support old shape
 };
 
 export type IntroWithImageProps = {
   heading: string;
-  text: string;
+  text?: string;
+  text2?: string;
   imageUrl: string;
 };
 
 export type MissionTextProps = {
   heading: string;
   text: string;
-  imageUrl: string; // <-- NEW
+  text2?: string;
+  imageUrl?: string; 
 };
 
 export type WorkTextProps = {
@@ -44,6 +49,7 @@ export type WorkTextProps = {
 };
 
 export type CaseGridProps = {
+  
   layout?: string;
   items: {
     title: string;
@@ -66,6 +72,25 @@ export type WorkWithCaseGridProps = {
   layout: CaseGridProps['layout'];
   items: CaseGridProps['items'];
 };
+
+export type WorkWithCaseGridProps = {
+  heading: string;
+  text: string;
+  layout: '4col' | '2col' | '2x2';
+  items: Array<{
+    title: string;
+    summary: string;
+    imageUrl: string;
+    slug: string;
+  }>;
+};
+/*export type WorkWithCaseGridProps = {
+  heading: string;
+  text: string;
+  layout: CaseGridProps['layout']; // or inline the union
+  items: CaseGridProps['items'];   // or inline array of items
+};
+*/
 
 /*export type ContactFormProps = {
   heading: string;
@@ -109,6 +134,9 @@ export type LayoutBlock = LandingBlock | CaseStudyBlock;
 // helper
 export type BlockType = LayoutBlock['type'];
 */
+
+
+
 // helper: map of block names (aka keys) to their prop types
 export type BlockComponentProps = {
   Callout: CalloutProps;
@@ -127,6 +155,7 @@ export type BlockComponentProps = {
   CaseGrid: CaseGridProps;
   TeamStrip: TeamStripProps;
   IntroWithImage: IntroWithImageProps;
+  WorkWithCaseGrid: WorkWithCaseGridProps;
 //  ContactForm: ContactFormProps;
 //  contactForm: ContactFormProps;
 };

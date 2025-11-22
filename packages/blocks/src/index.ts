@@ -24,15 +24,16 @@ export type {
     PullQuoteProps,
     DocLinkProps,
     OutcomeListProps,
-    ImageFigureProps
+    ImageFigureProps,
+    WorkWithCaseGridProps
 } from './types';
 //export { Callout } from './components/Callout';
 export {
   Hero,
   IntroWithImage,
   MissionText,
-  WorkText,
-  CaseGrid,
+//  WorkText,
+//  CaseGrid,
   TeamStrip,
 //  ContactForm,
 
@@ -41,7 +42,10 @@ export {
   PullQuote,
   DocLink,
   OutcomeList,
-  ImageFigure
+  ImageFigure,
 } from './components';
 
 export { blockRegistry } from './dynamicRegistry';
+export { WorkText } from './components/WorkText';
+export { CaseGrid } from './components/CaseGrid';
+export { WorkWithCaseGrid } from './components/WorkWithCaseGrid';

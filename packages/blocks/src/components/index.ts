@@ -12,3 +12,4 @@ export { CaseGrid } from './CaseGrid';
 export { TeamStrip } from './TeamStrip';
 export { IntroWithImage } from './IntroWithImage';
 //export { ContactForm } from './ContactForm';
+export { WorkWithCaseGrid } from './WorkWithCaseGrid';

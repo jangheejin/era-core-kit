@@ -4,9 +4,11 @@ node_modules/
 
 # Ignore build outputs
 .next/
-#dist/
+dist/
 build/
 out/
+apps/*/.next/
+packages/*/dist/
 
 # Ignore everything in dist except built files
 **/dist/*.tsbuildinfo
@@ -36,7 +38,3 @@ node-compile-cache/
 
 apps/site/**/*.js
 apps/site/**/*.js.map
-
-#build outputs
-packages/*/dist/
-apps/*/.next/

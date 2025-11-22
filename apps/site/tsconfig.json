@@ -8,7 +8,7 @@
     "composite": false, // Application package is generally NOT a composite project
     "declaration": false, // Explicitly disabling declaration and declaration map generation
     "declarationMap": false,
-    "noEmit": true, // Tells tsc to only check types, not generate JS output (Next.js handles this)
+    "noEmit": true, // Tells tsc to only check types, NEVER generate JS output (Next.js handles this)
     // --- Modern Next.js / React Directives ---
     "target": "ES2020",
     "lib": [
@@ -20,7 +20,7 @@
     "moduleResolution": "Node",
     "isolatedModules": true, // Mandatory for Vercel/Next.js
     "jsx": "preserve", // Mandatory for Next.js
-    "allowJs": true,
+    "allowJs": true,// !!!TO DO - MAYBE CHANGE
     "plugins": [
       {
         "name": "next"

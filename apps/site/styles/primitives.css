@@ -1,5 +1,5 @@
 /*apps/site/styles/primitives.css*/
-@import './casegrid.css';  
+/*@import './casegrid.css';  */
 
 /* ----------------------------------------------------- */
 /* ROOT VARIABLES & FLUID DESIGN SYSTEM */
@@ -92,7 +92,7 @@
 /* This will later become @apply p-4; */
 .c-section {
   /*padding-block: var(--space-8, 6rem);*/
-  padding-block: var(--space-6);
+  padding-block: var(--space-4);
   background: var(--bg);
 }
 

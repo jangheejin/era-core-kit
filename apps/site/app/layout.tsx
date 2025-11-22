@@ -14,6 +14,8 @@ import '@fontsource/inter/600.css';
 import '@fontsource/oswald/400.css';
 import '@fontsource/oswald/500.css';
 import '@fontsource/oswald/600.css';
+import '@styles/primitives.css';
+import '@styles/casegrid.css';
 
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})

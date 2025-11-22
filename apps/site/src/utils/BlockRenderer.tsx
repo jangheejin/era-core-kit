@@ -17,6 +17,7 @@ import {
   DocLink,
   OutcomeList,
   ImageFigure,
+  WorkWithCaseGrid
 } from "@kit/blocks";
 
 // Map each allowed block type to its React component.
@@ -28,6 +29,7 @@ const componentMap: Record<BlockType, ComponentType<any>> = {
   WorkText,
   CaseGrid,
   TeamStrip,
+  WorkWithCaseGrid,
 
   Callout,
   callout: Callout,
