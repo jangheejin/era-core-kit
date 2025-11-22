@@ -6,7 +6,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-//import { AdminCaseStudyProvider } from './AdminCaseStudyStore';
+import { AdminCaseStudyProvider } from './AdminCaseStudyStore';
 import { MockCMSProvider } from '@/cms/mockCmsStore';
 import { AdminShell } from '@/cms/AdminShell';
 
@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 // to wire the full builder into a shared mock database
 // everything is still purely client-side with no persistence
 
-
+/*
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <MockCMSProvider>
@@ -32,5 +32,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {children}
       </AdminShell>
     </MockCMSProvider>
+  );
+}*/
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return (
+    <AdminCaseStudyProvider>
+      <MockCMSProvider>
+        {children}
+      </MockCMSProvider>
+    </AdminCaseStudyProvider>
   );
 }
