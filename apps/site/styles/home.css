@@ -1,0 +1,90 @@
+/* Sticky header */
+.site-header {
+  position: sticky;   /* sticks relative to the viewport */
+  top: 0;
+  z-index: 100;       /* above content, below modals if you add them */
+
+  background: var(--bg);
+  border-bottom: 1px solid var(--gray-300);
+}
+
+/* Inner layout */
+.site-header__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0.5rem var(--space-4);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Brand / logo text */
+.site-header__brand {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+/* Nav links row */
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Plain nav links */
+.site-header__link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+  color: var(--color-text);
+
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 120ms ease-out,
+    border-color 120ms ease-out;
+}
+
+.site-header__link:hover {
+  color: var(--color-heading);
+  border-color: var(--color-accent);
+}
+
+/* Primary CTA */
+.site-header__link--primary {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-accent);
+  border-bottom-color: var(--color-accent); /* keep consistent */
+
+  color: var(--color-accent);
+}
+
+.site-header__link--primary:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+/* Simple small-screen tweak so nav doesn't explode */
+@media (max-width: 640px) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-header__nav {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+}

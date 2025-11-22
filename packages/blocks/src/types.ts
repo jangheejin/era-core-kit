@@ -46,6 +46,7 @@ export type MissionTextProps = {
 export type WorkTextProps = {
   heading: string;
   text: string;
+  text2?: string;// optional second paragraph
 };
 
 export type CaseGridProps = {
@@ -66,16 +67,17 @@ export type TeamStripProps = {
     imageUrl: string;
   }[];
 };
-export type WorkWithCaseGridProps = {
+/*export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
   layout: CaseGridProps['layout'];
   items: CaseGridProps['items'];
-};
+};*/
 
 export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
+  text2?: string;
   layout: '4col' | '2col' | '2x2';
   items: Array<{
     title: string;

@@ -17,12 +17,15 @@ import {
   DocLink,
   OutcomeList,
   ImageFigure,
-  WorkWithCaseGrid
+  WorkWithCaseGrid,
 } from "@kit/blocks";
 
 // Map each allowed block type to its React component.
 // Note: lowercase aliases share the same component.
-const componentMap: Record<BlockType, ComponentType<any>> = {
+
+//const blockComponentMap: Record<BlockType, ComponentType<any>> = {
+//const blockComponentMap: Partial<Record<BlockType, React.ComponentType<any>>> = {
+const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
   Hero,
   IntroWithImage,
   MissionText,
@@ -47,14 +50,18 @@ const componentMap: Record<BlockType, ComponentType<any>> = {
   imageFigure: ImageFigure,
   // No ContactForm here on purpose
 };
-
+/*
 interface BlockRendererProps {
   block: LayoutBlock;
   index: number;
-}
+}*/
+type BlockRendererProps = {
+  blocks: LayoutBlock[];
+};
 
+/*
 export default function BlockRenderer({ block, index }: BlockRendererProps) {
-  const Component = componentMap[block.type];
+  const Component = blockComponentMap[block.type];
 
   if (!Component) {
     if (process.env.NODE_ENV !== "production") {
@@ -64,4 +71,26 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
   }
 
   return <Component key={block._key ?? index} {...(block as any).props} />;
+}
+*/
+export default function BlockRenderer({ blocks }: BlockRendererProps) {
+  return (
+    <>
+      {blocks.map((block, idx) => {
+        const Component = blockComponents[block.type as BlockType];
+
+        if (!Component) {
+          console.warn('[BlockRenderer] Unknown block type:', block.type);
+          return null;
+        }
+
+        return (
+          <Component
+            key={block._key ?? `${block.type}-${idx}`}
+            {...(block as any).props}
+          />
+        );
+      })}
+    </>
+  );
 }

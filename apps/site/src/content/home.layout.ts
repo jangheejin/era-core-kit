@@ -34,7 +34,8 @@ export const homeLayout: LayoutBlock[] = [
     type: 'WorkWithCaseGrid',
     props: {
       heading: 'Our Work',
-      text: 'Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them. We work across disciplines and jurisdictions, helping clients navigate agencies, secure funding, and shape policy outcomes.',
+      text: 'As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.',
+      text2: 'Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.',
       layout: '4col',
       items: [
         { 
@@ -113,9 +114,9 @@ export const homeLayout: LayoutBlock[] = [
   },*/
 ];
 export const workTextProps = {
-  heading: 'Our Mission',
-  text:
-    'Our mission is to develop and maintain a close relationship with our clients, which means understanding their mission needs and objectives, and jointly developing a targeted and pragmatic strategy to achieve them. We work across disciplines and jurisdictions, helping clients navigate agencies, secure funding, and shape policy outcomes.',
+  heading: 'Our Work',
+  text: 'As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.',
+  text2: 'Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.',
 } as const;
 
 export const caseGridProps = {

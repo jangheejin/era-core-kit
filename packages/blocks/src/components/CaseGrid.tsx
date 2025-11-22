@@ -8,11 +8,12 @@ import type { CaseGridProps } from '../types';
 
 export function CaseGrid({ items, layout }: CaseGridProps) {
   return (
-    <section className="c-section" id="case-studies">
-      <div className="c-container">
-        <h2 className="type-h2">Our Work</h2>
+    <section id="case-studies">
+    {/* <section className="c-section" id="case-studies"> */}
+      {/* <div className="c-container"> */}
+        {/* <h2 className="type-h2">Our Work</h2> */}
 
-        <div className="casegrid layout-2x2">
+        <div className="casegrid layout-2x2" id="case-studies">
           {items.map((item) => (
             <a
               key={item.slug}
@@ -34,7 +35,7 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
             </a>
           ))}
         </div>
-      </div>
+      {/* </div> */}
     </section>
   );
 }
