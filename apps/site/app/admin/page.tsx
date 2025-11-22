@@ -21,11 +21,9 @@ export default function AdminPage() {
         <header className="c-stack">
           <div className="c-stack c-stack--row c-stack--between c-stack--center">
 
-              <Link href="/" className="c-button c-button--secondary">
-                ← Back to public site
-              </Link>
 
-            <h1 className="type-h1">ERA CMS admin demo</h1>
+            {/*<h1 className="type-h1">ERA CMS admin demo</h1>*/}
+            <p className="type-body-large">ERA CMS Admin Demo</p>
           </div>
           <div className="richtext">
             <p className="type-body type-muted">
@@ -65,6 +63,11 @@ export default function AdminPage() {
                 Open detailed case study builder
               </Link>
             </p>
+
+            <Link href="/" className="c-button c-button--secondary">
+                ← Back to public site
+            </Link>
+
 
 
 

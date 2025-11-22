@@ -6,208 +6,278 @@ syling for 'add a case study' template (the containers that hold the fields that
 the user fills out)
 */
 
-/* Outer shell: centers the form + sets rhythm */
-.cs-form-shell {
-  max-width: 60rem;
+/* ---------- ADMIN PAGE BACKGROUND ---------- */
+
+.c-page-admin {
+  background: #f5f5f7;
+  min-height: 100vh;
+}
+
+.c-page-admin .c-section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* ---------- ADMIN FORM LAYOUT ---------- */
+
+.admin-form {
+  max-width: 56rem;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  background: radial-gradient(circle at top left, #f9fafb 0, #e5e7eb 40%, #f9fafb 100%);
+  gap: 2.5rem;
 }
 
-/* Top title block */
-.cs-form-shell > h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #020617;
-  margin-bottom: 0.25rem;
+.admin-form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
-.cs-form-shell > section:first-of-type h2,
-.cs-form-shell > p {
-  margin: 0;
-}
-
-/* Each logical section becomes a card */
-.cs-form-shell > section {
-  background: #ffffff;
-  border-radius: 0.9rem;
-  border: 1px solid rgba(148, 163, 184, 0.45);
-  padding: 1.5rem 1.75rem;
+.admin-form-header-main {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+  gap: 0.75rem;
 }
 
-/* Section headings */
-.cs-form-shell section > h2 {
-  font-size: 0.8rem;
+.admin-kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  color: #6b7280;
+}
+
+/* Section wrapper */
+.admin-form-section {
+  padding: 1.5rem 1.75rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-section-title {
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #4b5563;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 
-/* Labels inside sections (you already use some <label> tags) */
-.cs-form-shell label {
-  font-size: 0.8rem;
+/* Field group */
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-label-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  justify-content: space-between;
+}
+
+.admin-label {
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #4b5563;
-  display: block;
-  margin-bottom: 0.25rem;
+  color: #111827;
 }
 
-/* Basic input/textarea/select styling */
-.cs-form-shell input[type="text"],
-.cs-form-shell input[type="number"],
-.cs-form-shell input[type="url"],
-.cs-form-shell textarea,
-.cs-form-shell select {
+.admin-label-required {
+  color: #b91c1c;
+  font-size: 0.8rem;
+}
+
+.admin-hint {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Controls */
+.admin-input,
+.admin-textarea,
+.admin-select {
   width: 100%;
   border-radius: 0.55rem;
-  border: 1px solid rgba(148, 163, 184, 0.9);
-  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.55rem 0.7rem;
   font-size: 0.9rem;
-  line-height: 1.4;
-  background-color: #f9fafb;
-  color: #020617;
-  transition: background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  color: #111827;
+  background: #f9fafb;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease;
 }
 
-.cs-form-shell input::placeholder,
-.cs-form-shell textarea::placeholder {
-  color: #9ca3af;
-}
-
-/* Focus states */
-.cs-form-shell input:focus,
-.cs-form-shell textarea:focus,
-.cs-form-shell select:focus {
-  outline: none;
-  border-color: #111827;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 1px #111827, 0 0 0 6px rgba(15, 23, 42, 0.13);
-}
-
-/* Textareas bigger & nicer */
-.cs-form-shell textarea {
-  min-height: 7rem;
+.admin-textarea {
+  min-height: 5.5rem;
   resize: vertical;
 }
 
-/* Two-column layout you already use via grid classes */
-.cs-form-shell .grid.grid-cols-2.gap-4 {
+.admin-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 1px rgba(15, 118, 110, 0.6);
+  background: #ffffff;
+}
+
+/* 2-column layout */
+.admin-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-/* Mechanism / jurisdiction chips */
-.cs-form-shell .flex.flex-wrap.gap-3.text-sm {
+/* Checkbox rows */
+.admin-checkbox-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.8rem;
-}
-
-.cs-form-shell .inline-flex.items-center.gap-1,
-.cs-form-shell .inline-flex.items-center.gap-2 {
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(209, 213, 219, 0.9);
-  background: #f9fafb;
-  cursor: pointer;
-}
-
-.cs-form-shell .inline-flex.items-center input[type="checkbox"] {
-  margin-right: 0.3rem;
-}
-
-/* Hero image preview */
-.cs-form-shell img {
-  border-radius: 0.75rem;
-  max-height: 16rem;
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Tags input hint */
-.cs-form-shell input[placeholder*="Tags"] {
+  gap: 0.75rem 1.25rem;
   font-size: 0.85rem;
 }
 
-/* Toggle row (isFeaturedHome / isPublic) */
-.cs-form-shell .flex.gap-4.text-sm {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
-}
-
-.cs-form-shell .flex.gap-4.text-sm label {
+.admin-checkbox-row label {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(209, 213, 219, 0.9);
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.admin-checkbox-row input[type='checkbox'] {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+/* Image preview */
+.admin-image-preview {
+  margin-top: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
   background: #f9fafb;
 }
 
-/* Primary button (Validate + Preview) */
-.cs-form-shell button.bg-black {
-  align-self: flex-start;
-  border-radius: 999px;
-  padding: 0.6rem 1.4rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: none;
-  background: #020617;
-  color: #f9fafb;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.28);
+.admin-image-preview img {
+  display: block;
+  width: 100%;
+  max-height: 14rem;
+  object-fit: cover;
+  border-radius: 0.65rem;
 }
 
-.cs-form-shell button.bg-black:hover {
-  background: #0b1120;
-  transform: translateY(-1px);
+/* Tags / chips hint */
+.admin-chip-hint {
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
-.cs-form-shell button.bg-black:active {
-  background: #020617;
-  transform: translateY(0);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+/* Error + JSON preview */
+.admin-error {
+  font-size: 0.8rem;
+  color: #b91c1c;
 }
 
-/* Error message */
-.cs-form-shell .text-red-500.text-sm {
-  margin-top: 0.5rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-}
-
-/* JSON preview panel */
-.cs-form-shell pre.text-xs {
-  background: #020617;
-  color: #e5e7eb;
+.admin-json-preview {
+  margin-top: 0.75rem;
   border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid rgba(15, 23, 42, 0.7);
-  max-height: 20rem;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.72rem;
-  line-height: 1.5;
+  border: 1px solid #e5e7eb;
+  background: #0b1120;
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  overflow: hidden;
 }
 
-/* Tiny spacing fix for the very bottom section */
-.cs-form-shell section:last-of-type {
-  margin-bottom: 0;
+.admin-json-preview-header {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
 }
 
+.admin-json-preview pre {
+  margin: 0;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .admin-form {
+    gap: 1.75rem;
+  }
+
+  .admin-form-section {
+    padding: 1.25rem 1.1rem;
+  }
+
+  .admin-form-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cms-logo {
+  font-family:'Oswald';
+}
+
+
+/* TYPOGRAPHY */
+.cms-h1 {
+  font-family: 'Inter';
+  font-size: var(--fs-hero);
+  line-height: 1.1;
+/*  text-transform: uppercase;*/
+}
+
+.cms-h2 {
+  font-family: 'Inter';
+  font-size: var(--fs-h2);
+  line-height: 1.2;
+/*  text-transform: uppercase;*/
+}
+
+.cms-h2b {/*slightly smaller*/
+  font-family: 'Inter';
+  font-size: var(--fs-h2b);
+  line-height: 1.2;
+/*  text-transform: uppercase;*/
+}
+
+.cms-h2c {/*slightly smaller*/
+  font-family: 'Inter';
+  font-size: var(--fs-h2b);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cms-h3 {
+  font-family: 'Inter';
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  margin: 0;
+/*  text-transform: uppercase;*/
+}
+
+.cms-h4 {
+  font-family: 'Inter';
+  font-size: var(--fs-h4);
+  line-height: 1;
+  margin: 0;
+/*  text-transform: uppercase;*/
+}

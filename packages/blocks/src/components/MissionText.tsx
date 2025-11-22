@@ -18,6 +18,8 @@ export function MissionText({ heading, text, imageUrl }: MissionTextProps & { im
             <h2 className="type-h2">{heading}</h2>
             <ClientAnimations />
             <p className="type-body">{text}</p>
+{/**!!!!!!!!!!!!TO FIX LATER? */}
+{/*            <p className="type-body"></p>*/}
           </div>
           <div className="card-media">
             <ImageFigure

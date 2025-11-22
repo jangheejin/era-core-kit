@@ -1,5 +1,7 @@
 //apps/site/app/page.tsx
 
+// LANDING PAGE
+
 //"use client";
 //import React from 'react';
 //import dynamic from 'next/dynamic';

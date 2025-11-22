@@ -26,7 +26,7 @@ export function AdminShell({ children }: AdminShellProps) {
   return (
     <div className="cms-shell">
       <aside className="cms-sidebar">
-        <div className="cms-logo">ERA CMS</div>
+        <div className="cms-logo">ERA CMS Admin Demo</div>
         <nav className="cms-nav">
           {navItems.map((item) => (
             <a key={item.href} href={item.href} className="cms-nav-link">

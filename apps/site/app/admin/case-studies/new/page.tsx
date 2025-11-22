@@ -1,16 +1,15 @@
 // apps/site/app/admin/case-studies/new/page.tsx
 'use client';
 
-//import './admin-cms.css'
+import '@styles/admin-cms-buttons.css';
 import '@styles/admin-cms.css'
-import '@styles/admin-cms-buttons.css'
-//import styles from '@styles/buttons.module.css'
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-import { CaseStudy as CaseStudySchema, type CaseStudy as CaseStudyType } from '@kit/schema';
+import {
+  CaseStudy as CaseStudySchema,
+  type CaseStudy as CaseStudyType,
+} from '@kit/schema';
 
 type Draft = Partial<CaseStudyType>;
 
@@ -28,7 +27,6 @@ const jurisdictionOptions: CaseStudyType['jurisdictions'][number][] = [
 ];
 
 export default function NewCaseStudyForm() {
-  const router = useRouter();
   const [draft, setDraft] = useState<Draft>({
     title: '',
     slug: '',
@@ -49,7 +47,6 @@ export default function NewCaseStudyForm() {
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
 
-  // Simple helper for scalar fields on the CaseStudy
   function update<K extends keyof Draft>(field: K, value: Draft[K]) {
     setDraft((d) => ({ ...d, [field]: value }));
     setError(null);
@@ -79,13 +76,11 @@ export default function NewCaseStudyForm() {
   }
 
   function validate() {
-    // Parse tags from comma-separated string
     const tags = tagsInput
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
 
-    // Build sections from the 3 textareas
     const sections: CaseStudyType['sections'] = [
       contextBody.trim()
         ? { id: 'context', title: 'Context', bodyMDX: contextBody }
@@ -98,7 +93,6 @@ export default function NewCaseStudyForm() {
         : null,
     ].filter(Boolean) as CaseStudyType['sections'];
 
-    // Normalize into a complete object for Zod
     const candidate: CaseStudyType = {
       id: draft.id ?? `draft-${Date.now()}`,
       title: draft.title ?? '',
@@ -139,262 +133,333 @@ export default function NewCaseStudyForm() {
 
     setError(null);
     setPreview(result.data);
-
-    // optional for debugging: see what would be "saved"
-    console.log('Validated case study payload:', result.data);
   }
 
   return (
-    <main className="cs-form-shell max-w-3xl mx-auto py-10 space-y-8">
-      {/* simple nav row */}
-      <div className="mb-4 flex items-center justify-between text-sm">
-
-          
-       {/* <div className="flex gap-4">*/}
-          <div className="buttonRow">
-          <button
-          type="button"
-          onClick={() => router.back()}
-          className="text-neutral-600 hover:underline"
-        >
-          ← Back
-        </button>
-{/*          <Link href="/admin" className="c-button c-button--tertiary">
-            Admin dashboard
-          </Link>*/}
-          {/*<Link href="/admin" className={styles.buttonLink}>Admin dashboard</Link>*/}
-          <Link href="/admin" className="c-button c-button--tertiary">Admin Dashboard</Link>
-          <Link href="/" className="c-button c-button--tertiary">
-            Public site
+    <main className="c-page c-page-admin">
+      <div className="c-container c-section admin-form">
+        {/* Header row */}
+        <header className="admin-form-header">
+          <div className="admin-form-header-main">
+            <p className="admin-kicker">CMS demo</p>
+            <h1 className="type-h1">Create a mock case study</h1>
+            <p className="type-body type-muted">
+              This mirrors the real data model: sectors, tags, mechanisms, summary,
+              and structured MDX sections. Nothing is saved to a backend&mdash;it&apos;s
+              just for clicking through how the CMS could feel.
+            </p>
+          </div>
+          <Link href="/admin" className="cms-button cms-button--secondary">
+            ← Back to admin dashboard
           </Link>
-        </div>
-      
-      </div>
+        </header>
 
-      <h1 className="text-2xl font-semibold">New Case Study (Mock)</h1>
+        {/* BASICS */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Basics</h2>
 
-      {/* BASIC META */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Basics</h2>
-
-        <input
-          placeholder="Title"
-          value={draft.title || ''}
-          onChange={(e) => update('title', e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-
-        <input
-          placeholder="Slug (e.g., sanborn-appgeo)"
-          value={draft.slug || ''}
-          onChange={(e) => update('slug', e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-
-        <input
-          placeholder="Client name"
-          value={draft.client || ''}
-          onChange={(e) => update('client', e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1">Sector</label>
-            <select
-              value={draft.sector || 'GovContracting'}
-              onChange={(e) =>
-                update('sector', e.target.value as CaseStudyType['sector'])
-              }
-              className="w-full p-2 border rounded"
-            >
-              <option value="Defense">Defense</option>
-              <option value="Health">Health</option>
-              <option value="FinTech">FinTech</option>
-              <option value="Education">Education</option>
-              <option value="Nonprofit">Nonprofit</option>
-              <option value="GovContracting">GovContracting</option>
-              <option value="EmergencyMgmt">EmergencyMgmt</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1">Year (optional)</label>
+          {/* Title */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">
+                Title <span className="admin-label-required">*</span>
+              </span>
+              <span className="admin-hint">Public-facing case study title.</span>
+            </div>
             <input
-              type="number"
-              min={1990}
-              max={2100}
-              value={draft.year ?? ''}
-              onChange={(e) =>
-                update('year', e.target.value ? Number(e.target.value) : undefined)
-              }
-              className="w-full p-2 border rounded"
+              className="admin-input"
+              placeholder="Ex: Sanborn + AppGeo statewide mapping modernization"
+              value={draft.title || ''}
+              onChange={(e) => update('title', e.target.value)}
             />
           </div>
-        </div>
-      </section>
 
-      {/* IMAGE + TAGS */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Display</h2>
-        <input
-          placeholder="Hero image URL"
-          value={draft.heroImageUrl || ''}
-          onChange={(e) => update('heroImageUrl', e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-        {draft.heroImageUrl && (
-          <div className="mt-2 border p-2 rounded">
-            <p className="text-xs text-neutral-600 mb-1">Hero image preview</p>
-            <img
-              src={draft.heroImageUrl}
-              alt="Hero preview"
-              className="w-full max-h-64 object-cover border rounded"
-            />
-          </div>
-        )}
-
-        <input
-          placeholder="Tags (comma-separated)"
-          value={tagsInput}
-          onChange={(e) => setTagsInput(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </section>
-
-      {/* SUMMARY / BRIEF */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Summary</h2>
-        <textarea
-          placeholder="Summary (short, ~1–2 sentences)"
-          value={draft.summaryShort || ''}
-          onChange={(e) => update('summaryShort', e.target.value)}
-          className="w-full p-2 border rounded min-h-[80px]"
-        />
-        <textarea
-          placeholder="Brief (optional, up to ~280 chars)"
-          value={draft.brief || ''}
-          onChange={(e) => update('brief', e.target.value)}
-          className="w-full p-2 border rounded min-h-[80px]"
-        />
-      </section>
-
-      {/* MECHANISMS / JURISDICTIONS */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Mechanics</h2>
-        <div>
-          <p className="text-sm font-medium mb-1">Mechanisms</p>
-          <div className="flex flex-wrap gap-3 text-sm">
-            {mechanismOptions.map((m) => (
-              <label key={m} className="inline-flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={(draft.mechanisms ?? []).includes(m)}
-                  onChange={() => toggleMechanism(m)}
-                />
-                <span>{m}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <p className="text-sm font-medium mb-1">Jurisdictions</p>
-          <div className="flex flex-wrap gap-3 text-sm">
-            {jurisdictionOptions.map((j) => (
-              <label key={j} className="inline-flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={(draft.jurisdictions ?? []).includes(j)}
-                  onChange={() => toggleJurisdiction(j)}
-                />
-                <span>{j}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex gap-4 text-sm">
-          <label className="inline-flex items-center gap-2">
+          {/* Slug */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">
+                Slug <span className="admin-label-required">*</span>
+              </span>
+              <span className="admin-hint">Used in URLs (lowercase, dashes).</span>
+            </div>
             <input
-              type="checkbox"
-              checked={draft.isFeaturedHome ?? false}
-              onChange={(e) => update('isFeaturedHome', e.target.checked)}
+              className="admin-input"
+              placeholder="ex: sanborn-appgeo"
+              value={draft.slug || ''}
+              onChange={(e) => update('slug', e.target.value)}
             />
-            <span>Feature on home?</span>
-          </label>
-          <label className="inline-flex items-center gap-2">
+          </div>
+
+          {/* Client */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Client</span>
+              <span className="admin-hint">Who you did the work for (optional).</span>
+            </div>
             <input
-              type="checkbox"
-              checked={draft.isPublic ?? true}
-              onChange={(e) => update('isPublic', e.target.checked)}
+              className="admin-input"
+              placeholder="Ex: Sanborn"
+              value={draft.client || ''}
+              onChange={(e) => update('client', e.target.value)}
             />
-            <span>Public</span>
-          </label>
-        </div>
-      </section>
+          </div>
 
-      {/* STRUCTURED SECTIONS */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Structured Sections (MDX)</h2>
+          {/* Sector + year */}
+          <div className="admin-grid-2">
+            <div className="admin-field">
+              <div className="admin-label-row">
+                <span className="admin-label">Sector</span>
+              </div>
+              <select
+                className="admin-select"
+                value={draft.sector || 'GovContracting'}
+                onChange={(e) =>
+                  update('sector', e.target.value as CaseStudyType['sector'])
+                }
+              >
+                <option value="Defense">Defense</option>
+                <option value="Health">Health</option>
+                <option value="FinTech">FinTech</option>
+                <option value="Education">Education</option>
+                <option value="Nonprofit">Nonprofit</option>
+                <option value="GovContracting">GovContracting</option>
+                <option value="EmergencyMgmt">EmergencyMgmt</option>
+              </select>
+            </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium">
-            Context
+            <div className="admin-field">
+              <div className="admin-label-row">
+                <span className="admin-label">Year</span>
+                <span className="admin-hint">Optional</span>
+              </div>
+              <input
+                className="admin-input"
+                type="number"
+                min={1990}
+                max={2100}
+                value={draft.year ?? ''}
+                onChange={(e) =>
+                  update(
+                    'year',
+                    e.target.value ? Number(e.target.value) : undefined,
+                  )
+                }
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* DISPLAY */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Display</h2>
+
+          {/* Hero image */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Hero image URL</span>
+              <span className="admin-hint">Full-width banner image.</span>
+            </div>
+            <input
+              className="admin-input"
+              placeholder="https://example.com/hero.jpg"
+              value={draft.heroImageUrl || ''}
+              onChange={(e) => update('heroImageUrl', e.target.value)}
+            />
+            {draft.heroImageUrl && (
+              <div className="admin-image-preview">
+                <p className="admin-hint">Hero image preview</p>
+                <img src={draft.heroImageUrl} alt="Hero preview" />
+              </div>
+            )}
+          </div>
+
+          {/* Tags */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Tags</span>
+              <span className="admin-hint">
+                Comma-separated; used for search and filters.
+              </span>
+            </div>
+            <input
+              className="admin-input"
+              placeholder="GIS, Modernization, Data integration"
+              value={tagsInput}
+              onChange={(e) => setTagsInput(e.target.value)}
+            />
+            <p className="admin-chip-hint">
+              Example: <code>GIS, Modernization, Data integration</code>
+            </p>
+          </div>
+        </section>
+
+        {/* SUMMARY */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Summary</h2>
+
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Summary (short)</span>
+              <span className="admin-hint">1–2 sentences for listing cards.</span>
+            </div>
             <textarea
+              className="admin-textarea"
+              placeholder="Short summary used on listing cards."
+              value={draft.summaryShort || ''}
+              onChange={(e) => update('summaryShort', e.target.value)}
+            />
+          </div>
+
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Brief (optional)</span>
+              <span className="admin-hint">Up to ~280 characters.</span>
+            </div>
+            <textarea
+              className="admin-textarea"
+              placeholder="Optional slightly longer teaser for briefs or social."
+              value={draft.brief || ''}
+              onChange={(e) => update('brief', e.target.value)}
+            />
+          </div>
+        </section>
+
+        {/* MECHANICS */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Mechanics</h2>
+
+          {/* Mechanisms */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Mechanisms</span>
+            </div>
+            <div className="admin-checkbox-row">
+              {mechanismOptions.map((m) => (
+                <label key={m}>
+                  <input
+                    type="checkbox"
+                    checked={(draft.mechanisms ?? []).includes(m)}
+                    onChange={() => toggleMechanism(m)}
+                  />
+                  <span>{m}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Jurisdictions */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Jurisdictions</span>
+            </div>
+            <div className="admin-checkbox-row">
+              {jurisdictionOptions.map((j) => (
+                <label key={j}>
+                  <input
+                    type="checkbox"
+                    checked={(draft.jurisdictions ?? []).includes(j)}
+                    onChange={() => toggleJurisdiction(j)}
+                  />
+                  <span>{j}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Flags */}
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Flags</span>
+            </div>
+            <div className="admin-checkbox-row">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={draft.isFeaturedHome ?? false}
+                  onChange={(e) => update('isFeaturedHome', e.target.checked)}
+                />
+                <span>Feature on home</span>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={draft.isPublic ?? true}
+                  onChange={(e) => update('isPublic', e.target.checked)}
+                />
+                <span>Public</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        {/* STRUCTURED SECTIONS */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Structured sections (MDX)</h2>
+
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Context</span>
+              <span className="admin-hint">Problem framing / starting point.</span>
+            </div>
+            <textarea
+              className="admin-textarea"
               value={contextBody}
               onChange={(e) => setContextBody(e.target.value)}
-              className="w-full p-2 border rounded min-h-[80px]"
               placeholder="Context / problem framing..."
             />
-          </label>
-        </div>
+          </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium">
-            Approach
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Approach</span>
+              <span className="admin-hint">What ERA actually did.</span>
+            </div>
             <textarea
+              className="admin-textarea"
               value={approachBody}
               onChange={(e) => setApproachBody(e.target.value)}
-              className="w-full p-2 border rounded min-h-[80px]"
               placeholder="What ERA did / strategy..."
             />
-          </label>
-        </div>
+          </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium">
-            Impact
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Impact</span>
+              <span className="admin-hint">Outcomes, numbers, changes.</span>
+            </div>
             <textarea
+              className="admin-textarea"
               value={impactBody}
               onChange={(e) => setImpactBody(e.target.value)}
-              className="w-full p-2 border rounded min-h-[80px]"
               placeholder="Outcomes, impact, results..."
             />
-          </label>
-        </div>
-      </section>
-
-      {/* VALIDATE + PREVIEW */}
-      <section className="space-y-3">
-        <button
-          onClick={validate}
-          className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-        >
-          Validate + Preview
-        </button>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        {preview && (
-          <div className="mt-4 border rounded p-4 bg-neutral-50">
-            <h2 className="text-sm font-semibold mb-2">Validated payload</h2>
-            <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
-{JSON.stringify(preview, null, 2)}
-            </pre>
           </div>
-        )}
-      </section>
+        </section>
+
+        {/* VALIDATE + PREVIEW */}
+        <section className="admin-form-section">
+          <h2 className="admin-section-title">Validate &amp; preview</h2>
+
+          <div className="admin-field">
+            <button
+              type="button"
+              onClick={validate}
+              className="cms-button"
+            >
+              Validate + preview payload
+            </button>
+          </div>
+
+          {error && <p className="admin-error">{error}</p>}
+
+          {preview && (
+            <div className="admin-json-preview">
+              <div className="admin-json-preview-header">Validated payload</div>
+              <pre>{JSON.stringify(preview, null, 2)}</pre>
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }

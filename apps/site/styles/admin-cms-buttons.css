@@ -39,7 +39,8 @@ formerly NewCaseStudies.module.css */
   outline-offset: 2px;
 }
 
-.buttonLink-2 {
+.buttonLink-2,
+.cms-nav-link {
   display: inline-flex;          /* make it a box, not inline text */
   align-items: center;
   justify-content: center;
@@ -67,4 +68,72 @@ formerly NewCaseStudies.module.css */
 .cs-link {
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.cms-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  background: #111827;
+  color: #f9fafb;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.05s ease;
+}
+
+
+
+.cms-button:hover {
+  background: #020617;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+.cms-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Outline / secondary */
+.cms-button--secondary {
+  background: #f9fafb;
+  color: #111827;
+  border-color: #d1d5db;
+}
+
+.cms-button--secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Ghost / text button */
+.cms-button--ghost {
+  background: transparent;
+  color: #4b5563;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.cms-button--ghost:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+/* Accent / alt button */
+.cms-button--alt3 {
+  background: #0f766e;
+  color: #ecfeff;
+}
+
+.cms-button--alt3:hover {
+  background: #115e59;
 }
