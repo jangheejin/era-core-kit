@@ -19,7 +19,6 @@
 
 
 
-
 /* Photo normalization */
 /*.team-card__photo {
   width: 100%;
@@ -40,46 +39,16 @@
 
 /* SHARED bio card photo styling */
 /* larger photos */
-/* /* .team-card__photo {
+/* .team-card__photo {
   position: relative;
-  width: 100%; */ */
+  width: 100%; */
   /* let grid define the height from the text side; we just fill it */
-/* /*   max-width: 220px;
+/*   max-width: 220px;
   max-width: 130px;
   aspect-ratio: 3 / 3;
-  aspect-ratio: 3 / 3;
   overflow: hidden;
-  flex-shrink: 0; */ */
+  flex-shrink: 0; */
   /* background: #f3f4f6; */
-/*   border-radius: 12px; */ 
-/* } */
-
-
-/* fixed-ish column width for photos */
-/* .team-card__photo {
-  flex: 0 0 160px;          
-  max-width: 160px;
-  aspect-ratio: 3 / 3; 
-  overflow: hidden;
-  border-radius: 8px;
-} */
-
-/* Photo column (used even when empty) */
-.team-card__photo {
-  flex: 0 0 160px;      /* fixed-ish width */
-  max-width: 160px;
-  aspect-ratio: 3 / 3; 
-  overflow: hidden;
-
-  background: transparent;
-  border: none;
-}  /* critical: no bg, no border, so “blank” looks truly blank */
-  
-
-/*founders' photos a bit larger*/
-.team-card--founder .team-card__photo {
-  max-width: 260px;
-  flex-basis: 260px;
 /*   border-radius: 12px; */ 
 /* } */
 
@@ -250,7 +219,6 @@
 }
 
 /* ========================= */
-/* Non-founder team grid         */
 /* Non-founder team grid         */
 /* ========================= */
 
