@@ -140,16 +140,25 @@
 }
 
 /* Base style for all bio paragraphs on team page */
-.c-section--team .team-card__bio {
+/* .c-section--team .type-body .team-card__bio { */
   /* margin-top: 0.75rem; */
-  /*font-size: var(--fs-body);     normal body size */
-  /*line-height: 1.3;         */
-  line-height:1.4;
+  /*font-size: var(--fs-body);     normal body size */ 
+/*   line-height: 1.3;      */   
+  /* line-height:1.4; */
   /* letter-spacing: -0.015em; */
+/*   letter-spacing: -0.015em;
+  font-size: 14.5px;
+} */
+/* .c-section--team .type-body .team-card__bio {
+  line-height: 1.3;        
   letter-spacing: -0.015em;
   font-size: 14.5px;
-}
-
+} */
+/* .team-grid-section .team-card__body {
+  line-height: 1.3;        
+  letter-spacing: -0.015em;
+  font-size: 14.5px;
+} */
 
 /* ========================= */
 /* Founders section          */
@@ -185,7 +194,8 @@
 /* Founder bio: slightly more readable for long text */
 .team-card__bio--founder {
   margin-top: 0.75rem;
-  line-height: 1.7;
+  /* line-height: 1.7; */
+  line-height: 1.5;
 }
 
 /* ========================= */
