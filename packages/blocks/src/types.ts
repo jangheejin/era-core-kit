@@ -49,15 +49,26 @@ export type WorkTextProps = {
   text2?: string;// optional second paragraph
 };
 
+
+export type CaseGridItem = {
+  title?: string;
+  sector?: string;
+  client: string;
+  summary?: string;
+  brief?: string;
+  imageUrl: string;
+  slug: string;
+}
 export type CaseGridProps = {
   
   layout?: string;
-  items: {
-    title: string;
+  //items: {
+    items: CaseGridItem[];
+/*    title: string;
     summary: string;
     imageUrl: string;
-    slug: string;
-  }[];
+    slug: string;*/
+  //}[];
 };
 
 export type TeamStripProps = {
@@ -80,8 +91,11 @@ export type WorkWithCaseGridProps = {
   text2?: string;
   layout: '4col' | '2col' | '2x2';
   items: Array<{
-    title: string;
-    summary: string;
+    title?: string;
+    sector?: string;
+    client: string;
+    summary?: string;
+    brief?: string;
     imageUrl: string;
     slug: string;
   }>;
@@ -111,32 +125,7 @@ export type ImageFigureProps = {
   fill?: boolean;
 };
 
-// Union of block types for different layouts
-//Landing page blocks
-/*export type LandingBlock =
-| GenericBlock<'Hero', HeroProps>
-| GenericBlock<'MissionText', MissionTextProps>
-| GenericBlock<'WorkText', WorkTextProps>
-| GenericBlock<'CaseGrid', CaseGridProps>
-| GenericBlock<'TeamStrip', TeamStripProps>
-| GenericBlock<'IntroWithImage', IntroWithImageProps>
-| GenericBlock<'ContactForm', ContactFormProps>;
-
-//per-page blocks go here
-export type CaseStudyBlock =
-  | GenericBlock<'Callout', CalloutProps>
-  | GenericBlock<'PullQuote', PullQuoteProps>
-  | GenericBlock<'DocLink', DocLinkProps>
-  | GenericBlock<'OutcomeList', OutcomeListProps>;
-
-
-// Final exported layout block types
-export type LayoutBlock = LandingBlock | CaseStudyBlock;
-
-// helper
-export type BlockType = LayoutBlock['type'];
-*/
-
+// !!!TO DO: Union of block types for different layouts
 
 
 // helper: map of block names (aka keys) to their prop types

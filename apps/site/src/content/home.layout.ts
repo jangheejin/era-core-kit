@@ -39,26 +39,30 @@ export const homeLayout: LayoutBlock[] = [
       layout: '4col',
       items: [
         { 
-          title: "Geospatial Solutions", 
-          summary: "Sanborn + AppGeo",
+          sector: "Geospatial Solutions",
+          client: "Sanborn + AppGeo",
+/*           summary: "Sanborn + AppGeo", */
           imageUrl: '/img/case1.webp',
           slug: 'sanborn-appgeo',
         },
         {
-          title: "Nonprofit Organizations", 
-          summary: "NAPSG Foundation",
+          sector: "Nonprofit Organizations", 
+          client: "NAPSG Foundation",
+/*           summary: "NAPSG Foundation", */
           imageUrl: '/img/case2.webp',
           slug: 'napsg-foundation',
         },
         {
-          title: "Government Contracting", 
-          summary: "Crucis",
+          sector: "Government Contracting", 
+          client: "Crucis",
+/*           summary: "Crucis", */
           imageUrl: '/img/case3.webp',
           slug: 'crucis',
         },
         { 
-          title: "Emergency Response", 
-          summary: "MKR Fabricators",
+          sector: "Emergency Response", 
+          client: "MKR Fabricators",
+/*           summary: "MKR Fabricators", */
           imageUrl: '/img/temp.svg',
           slug: 'mkr-fabricators',
         },

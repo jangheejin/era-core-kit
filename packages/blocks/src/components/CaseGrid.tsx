@@ -1,7 +1,7 @@
 // packages/blocks/src/components/CaseGrid.tsx
 // REACT COMPONENT FOR CASEGRID
 //'use client';
-
+import '@styles/casegrid.css'
 import { ImageFigure } from './ImageFigure';
 import type { CaseGridProps } from '../types';
 //import { ClientAnimations } from './ClientAnimations';
@@ -23,14 +23,17 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
               <div className="case-card__image">
                 <ImageFigure
                   src={item.imageUrl}
-                  alt={item.title}
+                  alt={item.client}
                   aspect="4/3"
                 />
               </div>
 
               <div className="case-card__body">
-                <h3 className="type-h3">{item.title}</h3>
-                <p className="type-body">{item.summary}</p>
+                <h3 className="card-h3">{item.sector}</h3>
+                <h2 className="card-h2">{item.client}</h2>
+                {item.summary && (
+                  <p className="type-body case-card__summary">{item.summary}</p>
+                )}
               </div>
             </a>
           ))}
