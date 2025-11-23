@@ -121,6 +121,25 @@
   gap: var(--space-2);
 }
 
+.site-footer__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-footer__logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.site-footer__logo {
+  display: block;
+  height: 28px;   /* smaller than header */
+  width: auto;
+}
+
 .site-footer__brand-name {
   font-family: var(--font-heading);
   text-transform: uppercase;

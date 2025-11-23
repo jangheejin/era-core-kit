@@ -10,9 +10,21 @@ export function Footer() {
     <footer className="site-footer">
       <div className="c-container site-footer__inner">
         <div className="site-footer__brand">
-          <span className="site-footer__brand-name">
-            ERA Government Affairs
-          </span>
+          <Link href="/" className="site-footer__brand-link">
+            <span className="site-footer__logo-wrap">
+              <img
+                src="/icon-192.png"
+                alt="ERA Government Affairs logo"
+                className="site-footer__logo"
+              />
+            </span>
+          
+            <span className="site-footer__brand-name">
+              ERA Government Affairs
+            </span>
+
+          </Link>
+
           <p className="type-small site-footer__tagline">
             Federal advocacy & business consulting in Washington, D.C.
           </p>
