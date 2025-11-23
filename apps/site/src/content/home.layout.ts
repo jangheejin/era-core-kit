@@ -73,6 +73,13 @@ export const homeLayout: LayoutBlock[] = [
           imageUrl: '/img/temp2.svg',
           slug: 'stemheads',
         },
+        { 
+          sector: "Nonprofits", 
+          client: "Placeholder Org",
+/*           summary: "MKR Fabricators", */
+          imageUrl: '/img/temp.svg',
+          slug: 'non-profit',
+        },
       ]
     }
   },
