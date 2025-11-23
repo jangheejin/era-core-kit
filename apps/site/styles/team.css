@@ -1,52 +1,81 @@
 /* Our Team page */
+/* ========================= */
+/* OUR TEAM PAGE             */
+/* ========================= */
 
 .c-section--team {
   background: var(--bg);
 }
 
 .team-header {
-  max-width: 40rem;
+  /* max-width: 40rem; */
   margin: 0 auto var(--space-4);
-  text-align: left;
 }
 
 .team-header .type-h1 {
   margin-bottom: 0.75rem;
 }
 
-.team-list {
+/* 2-column grid of team cards on desktop */
+.team-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
 }
 
-/* Each member row: photo left, content right on desktop */
-.team-card {
-  display: grid;
-  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
-  gap: var(--space-3);
-  align-items: flex-start;
+/* Single column on smaller screens */
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
 }
+/*
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  align-items: stretch;
+}*/
 
-/* Headshot normalization wrapper */
-.team-card__photo {
+/* Photo normalization */
+/*.team-card__photo {
   width: 100%;
-  max-width: 220px;
-  aspect-ratio: 4 / 5;      /* consistent portrait ratio */
-  border-radius: 999px;     /* pill / pseudo-circle; switch to 12px for rectangles */
-  overflow: hidden;
-  background: #d1d5db;
-  margin-inline: auto;
+  max-width: 260px;*/        /* keeps them from getting huge */
+/*   aspect-ratio: 1 / 1.05;  */    /* consistent portrait ratio */
+/*   border-radius: 0px;  */    /* subtle, not fully rounded */
+/*   overflow: hidden;
+  background: #e5e7eb;
+  margin-bottom: var(--space-2);
+} 
+.team-card__photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;*/
+/*   object-position: 50% 20%; */ /* bias upward so faces sit nicely */
+/* } */
+
+
+/* larger photos */
+.team-card__photo {
+  position: relative;
+  width: 100%;
+  /* let grid define the height from the text side; we just fill it */
 }
 
 .team-card__photo img {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
-  object-position: 50% 20%; /* bias slightly upward to keep faces centered */
+  object-fit: cover;      /* fill the available area */
+  object-position: 50% 20%; /* bias up so faces sit nicely */
+  border-radius: 8px;     /* subtle rounding */
 }
 
-/* “No photo” state */
+
+
+/* “No photo” fallback 
 .team-card__placeholder {
   width: 100%;
   height: 100%;
@@ -58,11 +87,11 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #4b5563;
-  background: #e5e7eb;
-}
+  background: #d1d5db;
+}*/
 
-.team-card__content {
-  max-width: 46rem;
+.team-card__body {
+  max-width: 40rem;
 }
 
 .team-card__title {
@@ -78,15 +107,4 @@
 
 .team-card__bio {
   margin-top: 0.75rem;
-}
-
-/* stack on smaller screens */
-@media (max-width: 768px) {
-  .team-card {
-    grid-template-columns: 1fr;
-  }
-
-  .team-card__photo {
-    max-width: 180px;
-  }
 }

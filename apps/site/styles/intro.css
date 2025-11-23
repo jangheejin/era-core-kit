@@ -9,12 +9,17 @@
   max-width: 40rem;
 }
 
+.intro-image {
+  display: flex;
+  justify-content:center;
+}
+
 .intro-image img {
   display: block;
-  max-width: 300px;      /* smaller than hero logo */
+  max-width: 310px;      /* smaller than hero logo */
   width: 100%;
   height: auto;
-  margin-inline: auto;
+  /* margin-inline: auto; */
 }
 
 @media (max-width: 768px) {

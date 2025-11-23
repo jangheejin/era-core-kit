@@ -34,10 +34,10 @@ export function Header() {
             Our Work
           </a>
           <a href="#mission" className="site-header__link">
-            Mission
+            Our Mission
           </a>
           <a href="/our-team" className="site-header__link">
-            Team
+            Our Team
           </a>
           <a href="#contact" className="site-header__link site-header__link--primary">
             Contact
