@@ -41,6 +41,7 @@
   padding-right:20px;
 }
 
+/* center the image inside the logo column */
 /* .hero-image-container { */
 .c-section--hero .hero-image-container {
   display: flex;
@@ -56,7 +57,8 @@
   display: block;
   width: 100%;
   /* max-width: clamp(180px, 22vw, 240px);  *//* stays reasonable on big screens */
-  max-width: 260px;
+  /* max-width: 260px; */
+  max-width: clamp(140px, 18vw, 240px);
   height: auto;
 }
 
