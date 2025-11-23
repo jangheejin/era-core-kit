@@ -17,8 +17,6 @@
   margin-bottom: 0.75rem;
 }
 
-
-
 /* Photo normalization */
 /*.team-card__photo {
   width: 100%;
@@ -42,7 +40,7 @@
 /* .team-card__photo {
   position: relative;
   width: 100%; */
-  /* let grid define the height from the text side; we just fill it */
+  /* let grid define the height from the text side */
 /*   max-width: 220px;
   max-width: 130px;
   aspect-ratio: 3 / 3;
@@ -52,16 +50,6 @@
 /*   border-radius: 12px; */ 
 /* } */
 
-
-/* fixed-ish column width for photos */
-/* .team-card__photo {
-  flex: 0 0 160px;          
-  max-width: 160px;
-  aspect-ratio: 3 / 3; 
-  overflow: hidden;
-  border-radius: 8px;
-} */
-
 /* Photo column (used even when empty) */
 .team-card__photo {
   flex: 0 0 160px;      /* fixed-ish width */
@@ -70,27 +58,9 @@
   overflow: hidden;
 
   background: transparent;
-  border: none;
-}  /* critical: no bg, no border, so “blank” looks truly blank */
-  
-
-/*founders' photos a bit larger*/
-.team-card--founder .team-card__photo {
-  max-width: 260px;
-  flex-basis: 260px;
-}
-
-/* Photo column (used even when empty) */
-.team-card__photo {
-  flex: 0 0 160px;      /* fixed-ish width */
-  max-width: 160px;
-  aspect-ratio: 3 / 3; 
-  overflow: hidden;
-
-  background: transparent;
-  border: none;
+  border: none;  
   /*border-radius: 8px;*/
-}  /* critical: no bg, no border, so blank space is completely blank */
+}  /* critical: no bg, no border, so “blank” looks truly blank */
   
 
 /*founders' photos a bit larger*/
@@ -107,23 +77,6 @@
   object-position: 50% 20%; /* bias up so faces sit nicely */
   border-radius: 6px;     /* subtle rounding */
 }
-
-
-
-/* “No photo” fallback 
-.team-card__placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #4b5563;
-  background: #d1d5db;
-}*/
 
 .team-card__body {
   /* max-width: 40rem; */
@@ -192,16 +145,18 @@
 
 .team-founders {
   display: grid;
-  gap: var(--space-4);
-  margin-block: var(--space-4);
+  gap: var(--space-3);       /* space between heading and first card */
+  margin-block: var(--space-4);/* space above + below the whole founders section */
 }
 
 .team-founders__heading {
-  margin-block-end: var(--space-2);
+  /* margin-block-end: var(--space-2); */ /*remove extra margin so row-gap dictates*/
+  margin: 0;
 }
 
 /* Full-width founder card */
-.team-card--founder {
+/* .team-card--founder { */
+.team-card .team-card--founder {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); /* photo | text */
   column-gap: clamp(1.5rem, 4vw, 3rem);
@@ -210,6 +165,17 @@
   /* border: 1px solid rgba(0,0,0,0.06); */
   background: #f9fafb; /*subtle*/
 }
+
+/* Full-width founder card */
+/* .team-card--founder { */
+/* .team-card.team-card--founder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  column-gap: var(--space-1);
+  align-items: flex-start;
+  padding: var(--space-3);
+  background: #f9fafb; 
+} */
 
 /* Founder bio: slightly more readable for long text */
 .team-card__bio--founder {
@@ -227,7 +193,7 @@
 }
 
 .team-grid__heading {
-  margin-block-end: var(--space-2);
+  margin-block-end: var(--space-4);
 }
 
 .team-grid {
@@ -236,19 +202,12 @@
   /* gap: var(--space-2); */
 /*   column-gap: var(--space-4);
   row-gap: var(--space-4); */
-  column-gap: var(--space-1);
+  /* column-gap: var(--space-1); */
   row-gap: var(--space-2);
   align-items: flex-start;
   /* column-gap: clamp(9.5rem, 5vw, 4rem); */
+  margin-block-start: var(--space-3);
 }
-
-/* .team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-  column-gap: clamp(9.5rem, 5vw, 4rem);
-  
-} */
   /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  *//* photo | text */
   /* grid-template-columns: auto minmax(0, 1fr); */
   /* column-gap: var(--space-3); */
@@ -261,9 +220,7 @@
   align-items: stretch;
 }
  */
-
-/* Regular team cards: simpler layout */
-/* IT MUST be flex and not grid since there's already a grid defined */
+/* SHARED STYLING FOR MEMBER CARDS */
 .team-card {
   display: flex;
   flex-wrap: nowrap;          /* keep photo + text on one row */
@@ -273,12 +230,25 @@
   /* gap: var(--space-2); */
 }
 
+/* Regular team cards: simpler layout */
+/* IT MUST be flex and not grid since there's already a grid defined */
+.team-grid-section .team-card {
+  gap: var(--space-2);
+}
 
-/* If there is no image, let text span full width */
-/* .team-card__photo:empty {
-  display: none;
-} */
-
+/* give same indent as founders */
+/* .team-grid .team-card {
+  padding-inline: var(--space-3);  */  /* left/right */
+/*   padding-block: var(--space-2); */    /* top/bottom can be slightly smaller if you want */
+/* } */
+/* Non-founder cards: stack photo above text */
+/* .team-grid .team-card {
+  display: flex;
+  flex-direction: column; */   /* vertical stack: photo then text */
+/*   align-items: flex-start;
+  gap: var(--space-2);
+}
+ */
 .team-card__body {
   flex: 1 1 auto;
   min-width: 0;

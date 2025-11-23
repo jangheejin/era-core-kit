@@ -77,7 +77,7 @@ export default function OurTeamPage() {
           {/* Founders block – full-width cards */}
           {founders.length > 0 && (
             <section className="team-founders">
-              <h2 className="type-h3 team-founders__heading">Founders</h2>
+              <h2 className="type-h2b team-founders__heading">Founders</h2>
 
               {founders.map((member) => (
                 <article
@@ -118,7 +118,7 @@ export default function OurTeamPage() {
           {/* Rest of team – two-column grid as before */}
           {others.length > 0 && (
             <section className="team-grid-section">
-              <h2 className="type-h3 team-grid__heading">Team</h2>
+              <h2 className="type-h2b team-grid__heading">Team</h2>
 
               <div className="team-grid">
                 {others.map((member) => (
