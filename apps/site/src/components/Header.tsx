@@ -13,8 +13,13 @@ export function Header() {
         <Link href="/" className="site-header__brand">
         {/* Logo + wordmark */}
           <span className="site-header__logo-wrap">
-            <img
+            {/* <img
               src="ERA.png"
+              alt="ERA Government Affairs logo"
+              className="site-header__logo"
+            /> */}
+            <img
+              src="icon-192.png"
               alt="ERA Government Affairs logo"
               className="site-header__logo"
             />

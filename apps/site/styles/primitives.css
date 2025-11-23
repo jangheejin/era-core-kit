@@ -92,7 +92,8 @@
 /* This will later become @apply p-4; */
 .c-section {
   /*padding-block: var(--space-8, 6rem);*/
-  padding-block: var(--space-4);
+  /* padding-block: var(--space-6); */
+  padding-block: var(--space-3);
   background: var(--bg);
 }
 
