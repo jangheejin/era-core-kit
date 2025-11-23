@@ -15,6 +15,7 @@
   display: flex; 
 /*   display: grid; */
   /* flex-wrap: wrap; */
+  flex-direction: row; /* SINGLE ROW*/
   flex-wrap: nowrap;
   align-items: center;
   /* grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); */
