@@ -16,12 +16,12 @@ const teamMembers: TeamMember[] = [
     title: 'Founding Partner',
     isFounder: true,
     bio: [
-        "Ed formerly served as a Senior Policy Advisor in the United States Senate, and later as a government-affairs professional in the private sector, with a focus and expertise in geospatial, infrastructure, energy, natural resources, environmental, and agricultural policy.",
-        "Prior to his time on Capitol Hill, Ed served as the campaign director for Senator Orrin G. Hatch. After helping re-elect the senator in 2012, he joined the legislative staff in Washington, D.C., as a senior policy advisor. During his time in the Senate, he wrote and helped pass several legislative priorities, including a large-scale federal land and mineral exchange of over 100,000 acres in the State of Utah. Additionally, on behalf of Senator Hatch, Ed organized a bipartisan team and worked with a wide range of relevant stakeholders to draft the Geospatial Data Act, which was signed into law in 2018.",
-        "Ed has also previously worked as a political consultant and managed the campaigns of various candidates at the municipal and state level, as well as a member of Congressman Chris Cannon's re-election campaign. With extensive experience working with various departments and agencies of both Democratic and Republican Administrations, Ed values his ability to identify stakeholder needs while also pursuing a comprehensive policy agenda",
-        "A graduate of the University of Utah, Ed holds a B.S. in Economics. He served as the State Chairman for Utah's Federation of College Republicans and later as the College Republican National Committee's Regional Political Director. Ed is an Eagle Scout and practiced as a small-engine mechanic, having worked for his family's small business. Originally from St. George, Utah, and after living in Washington, D.C. for a decade, he now resides in Denver, Colorado with his wife Karen, daughter Emery, and sons Everett and Ellis.",
+      "Ed formerly served as a Senior Policy Advisor in the United States Senate, and later as a government-affairs professional in the private sector, with a focus and expertise in geospatial, infrastructure, energy, natural resources, environmental, and agricultural policy.",
+      "Prior to his time on Capitol Hill, Ed served as the campaign director for Senator Orrin G. Hatch. After helping re-elect the senator in 2012, he joined the legislative staff in Washington, D.C., as a senior policy advisor. During his time in the Senate, he wrote and helped pass several legislative priorities, including a large-scale federal land and mineral exchange of over 100,000 acres in the State of Utah. Additionally, on behalf of Senator Hatch, Ed organized a bipartisan team and worked with a wide range of relevant stakeholders to draft the Geospatial Data Act, which was signed into law in 2018.",
+      "Ed has also previously worked as a political consultant and managed the campaigns of various candidates at the municipal and state level, as well as a member of Congressman Chris Cannon's re-election campaign. With extensive experience working with various departments and agencies of both Democratic and Republican Administrations, Ed values his ability to identify stakeholder needs while also pursuing a comprehensive policy agenda",
+      "A graduate of the University of Utah, Ed holds a B.S. in Economics. He served as the State Chairman for Utah's Federation of College Republicans and later as the College Republican National Committee's Regional Political Director. Ed is an Eagle Scout and practiced as a small-engine mechanic, having worked for his family's small business. Originally from St. George, Utah, and after living in Washington, D.C. for a decade, he now resides in Denver, Colorado with his wife Karen, daughter Emery, and sons Everett and Ellis.",
     ],
-    imageUrl: '/team/edwardcox.jpg', // update to your real path
+    imageUrl: '/team/edwardcox.jpg',
   },
   {
     name: 'Romel Nicholas',
@@ -37,7 +37,6 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Lonald Wishom',
     title: 'Director, Business Development',
-    // no imageUrl → tests “no photo” state
     imageUrl: '/team/lonaldwishom.png',
     bio: [
       "Lonald Wishom, with his extensive experience as a staff member in the United States Senate, Customer Success Manager at Salesforce, now significantly contributes as the Director of Business Development at ERA Government Affairs.",
@@ -49,11 +48,11 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Danny Scales',
     title: 'Director, Legislative Research',
-    // no imageUrl → tests “no photo” state
     bio: [],
   },
 ];
 
+// If you don't use this anywhere, you can delete it safely.
 function getInitials(name: string) {
   return name
     .split(' ')
@@ -66,6 +65,62 @@ function getInitials(name: string) {
 
 const founders = teamMembers.filter(m => m.isFounder);
 const others = teamMembers.filter(m => !m.isFounder);
+
+function BioDetails({ bio }: { bio: string[] }) {
+  if (!bio || bio.length === 0) return null;
+
+  const firstParagraph = bio[0] ?? '';
+
+  // Try to split on the first period.
+  const dotIndex = firstParagraph.indexOf('.');
+  // If there's no ".", treat the whole thing as a snippet with no "read more".
+  if (dotIndex === -1) {
+    return (
+      <p className="type-body team-card__bio-snippet">
+        {firstParagraph}
+      </p>
+    );
+  }
+
+  const firstSentence = firstParagraph.slice(0, dotIndex + 1).trim();
+  const restOfFirst = firstParagraph.slice(dotIndex + 1).trim();
+
+  const remainingParagraphs = bio.slice(1);
+  const hasMore = restOfFirst.length > 0 || remainingParagraphs.length > 0;
+
+  return (
+    <div className="team-card__bio-wrapper">
+      {/* Always-visible snippet (first sentence only) */}
+      <p className="type-body team-card__bio-snippet">
+        {firstSentence}
+      </p>
+
+      {/* Only render details if there's actually more content */}
+      {hasMore && (
+        <details className="team-card__details">
+          <summary className="team-card__summary type-small">
+            Read full bio
+          </summary>
+
+          {/* Rest of first paragraph, if any */}
+          {restOfFirst && (
+            <p className="type-body team-card__bio">
+              {restOfFirst}
+            </p>
+          )}
+
+          {/* Remaining paragraphs */}
+          {remainingParagraphs.map((para, idx) => (
+            <p key={idx} className="type-body team-card__bio">
+              {para}
+            </p>
+          ))}
+        </details>
+      )}
+    </div>
+  );
+}
+
 
 export default function OurTeamPage() {
   return (
@@ -101,21 +156,14 @@ export default function OurTeamPage() {
                       </p>
                     )}
 
-                    {member.bio?.map((para, idx) => (
-                      <p
-                        key={idx}
-                        className="type-body team-card__bio team-card__bio--founder"
-                      >
-                        {para}
-                      </p>
-                    ))}
+                    <BioDetails bio={member.bio} />
                   </div>
                 </article>
               ))}
             </section>
           )}
 
-          {/* Rest of team – two-column grid as before */}
+          {/* Rest of team – two-column grid */}
           {others.length > 0 && (
             <section className="team-grid-section">
               <h2 className="type-h3 team-grid__heading">Team</h2>
@@ -140,14 +188,7 @@ export default function OurTeamPage() {
                         </p>
                       )}
 
-                      {member.bio?.map((para, idx) => (
-                        <p
-                          key={idx}
-                          className="type-body team-card__bio"
-                        >
-                          {para}
-                        </p>
-                      ))}
+                      <BioDetails bio={member.bio} />
                     </div>
                   </article>
                 ))}
