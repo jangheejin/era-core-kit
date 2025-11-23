@@ -22,7 +22,7 @@ const teamMembers: TeamMember[] = [
     imageUrl: '/team/edwardcox.jpg', // update to your real path
   },
   {
-    name: 'Person Two',
+    name: 'Romel Nicholas',
     title: 'Managing Partner',
     imageUrl: '/team/romelnicholas.jpg',
     bio: [
@@ -69,7 +69,7 @@ export default function OurTeamPage() {
           <header className="team-header">
             <h1 className="type-h1">Our Team</h1>
             {/* <p className="type-body"> */}
-              {/* Replace this with the real positioning copy */}
+              {/* TO DO: add positioning copy? */}
               {/* ERA Government Affairs is led by a team of experienced
               advocates and advisors with deep expertise in federal policy,
               congressional process, and public affairs.

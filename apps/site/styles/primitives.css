@@ -97,6 +97,16 @@
   background: var(--bg);
 }
 
+/*override for team page*/
+/*more outer padding from the page edge
+.c-section--team .c-container {
+  padding-inline: clamp(2rem, 6vw, 4rem);
+}
+*/
+.c-section.c-section--team > .c-container {
+  padding-inline: clamp(2.5rem, 7vw, 5rem);
+}
+
 .c-stack > * + * {
     /*margin-top: var(--space-3);*/
     margin-top: var(--space-4, 2rem);
