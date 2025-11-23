@@ -1,25 +1,46 @@
 .intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  align-items: center;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  /* align-items: center; */
+  align-items: start; 
   gap: var(--space-4);
 }
 
 .intro-copy {
-  max-width: 40rem;
+  max-width: 45rem;
 }
 
 .intro-image {
   display: flex;
-  justify-content:center;
+  justify-content:right;
 }
 
 .intro-image img {
   display: block;
-  max-width: 310px;      /* smaller than hero logo */
+  max-width: 280px;      /* smaller than hero logo */
   width: 100%;
   height: auto;
   /* margin-inline: auto; */
+}
+
+/* tighten heading + animation spacing */
+.c-section--intro .intro-copy .type-h2 {
+  margin: 0 0 var(--space-2);
+}
+
+/* first paragraph = “lead” */
+.c-section--intro .intro-lead {
+  margin-top: 0;
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+
+/* second + later paragraphs = slightly lighter / smaller */
+.c-section--intro .intro-body {
+  margin-top: 0.6rem;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  opacity: 0.9;
 }
 
 @media (max-width: 768px) {

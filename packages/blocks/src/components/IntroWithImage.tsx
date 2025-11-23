@@ -17,8 +17,8 @@ export function IntroWithImage({ heading, text, text2, imageUrl }: IntroWithImag
         <div className="intro-copy">
           <h2 className="type-h2">{heading}</h2>
           <ClientAnimations />
-          {text && <p className="type-body">{text}</p>}
-          {text2 && <p className="type-body">{text2}</p>}
+          {text && <p className="type-body intro-lead">{text}</p>}
+          {text2 && <p className="type-body intro-body">{text2}</p>}
         </div>
         {/* <div className="intro-image"> */}
 {/*           <ImageFigure
