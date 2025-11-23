@@ -65,7 +65,7 @@
   width: 100%;
   /* let grid define the height from the text side; we just fill it */
   max-width: 220px;             /* cap photo width */
-  aspect-ratio: 3 / 4;          /* normalize headshot geometry */
+  aspect-ratio: 3 / 3;          /* normalize headshot geometry */
   overflow: hidden;
 /*   border-radius: 12px; */          /* softer, not extreme rounding */
 }
