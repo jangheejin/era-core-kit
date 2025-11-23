@@ -264,16 +264,6 @@ textarea.input {
   background-color: #003f8f;
 }
 
-.hero-image-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hero-image-container img{
-  max-width: clamp(220px, 18vw, 300px);
-}
-
 /* CMS: Page Editing */
 .block-edit-wrapper {
   /* Original border style for the block container */
@@ -456,4 +446,19 @@ ol {
 .richtext > ul + p,
 .richtext > ol + p {
   margin-top: 0.5em;
+}
+
+.c-section h1,
+.c-section h2,
+.c-section h3,
+.c-section h4 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.c-section--hero .type-hero,
+.c-section--intro .type-h2,
+.c-section--mission .type-h2,
+.c-section--work .type-h2 {
+  margin-block-end: clamp(0.75rem, 1.4vw, 1.1rem);
 }

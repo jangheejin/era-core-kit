@@ -11,8 +11,7 @@ import { ClientAnimations } from './ClientAnimations';
 
 export function IntroWithImage({ heading, text, text2, imageUrl }: IntroWithImageProps) {
   return (
-    <section className="c-section" id="intro">
-      {/* <div className="c-container c-grid" style={{ alignItems: 'center' }}> */}
+    <section className="c-section c-section--intro" id="intro">
       <div className="c-container intro-grid">
         <div className="intro-copy">
           <h2 className="type-h2">{heading}</h2>
