@@ -7,6 +7,7 @@ import '@styles/primitives.css';
 import '@styles/casegrid.css';
 import '@styles/home.css'
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { type Metadata } from 'next';
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

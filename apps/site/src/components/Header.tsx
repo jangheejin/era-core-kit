@@ -1,4 +1,4 @@
-// apps/site/src/components/layout/Header.tsx
+// apps/site/src/components/Header.tsx
 
 //Sticky top navbar
 
@@ -36,7 +36,7 @@ export function Header() {
           <a href="#mission" className="site-header__link">
             Mission
           </a>
-          <a href="#team" className="site-header__link">
+          <a href="/our-team" className="site-header__link">
             Team
           </a>
           <a href="#contact" className="site-header__link site-header__link--primary">

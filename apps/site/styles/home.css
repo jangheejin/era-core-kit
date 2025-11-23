@@ -106,3 +106,66 @@
     row-gap: 0.25rem;
   }
 }
+
+
+/*--- FOOTER STYLING ---*/
+.site-footer {
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  margin-top: var(--space-6);
+}
+
+.site-footer__inner {
+  padding-block: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.site-footer__brand-name {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+}
+
+.site-footer__tagline {
+  margin-top: 0.25rem;
+  max-width: 26rem;
+}
+
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.site-footer__link {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.site-footer__link:hover {
+  text-decoration: underline;
+}
+
+.site-footer__link--primary {
+  font-weight: 600;
+}
+
+.site-footer__legal {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+@media (min-width: 768px) {
+  .site-footer__inner {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+    align-items: flex-start;
+  }
+
+  .site-footer__legal {
+    grid-column: 1 / -1;
+  }
+}
