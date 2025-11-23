@@ -5,6 +5,7 @@
 
 .c-section--team {
   background: var(--bg);
+  /*padding-block: var(--space-6);*/
 }
 
 .team-header {
@@ -21,7 +22,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
-  column-gap: clamp(2.5rem, 5vw, 4rem);
+  column-gap: clamp(9.5rem, 5vw, 4rem);
 }
 
 /* Single column on smaller screens */
@@ -110,3 +111,27 @@
   margin-top: 0.75rem;
 }
 
+.c-section--team .type-h3 {
+  margin: 0;
+  font-size: var(--fs-h2b); /* whatever you already use */
+  line-height: 1.2;
+}
+.c-section--team .team-card__title {
+  margin-top: 0.2rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  /* font-size: var(--fs-small); */
+  font-size: var(--fs-3);
+  /* font-family: 'Oswald', sans-serif; */
+}
+
+/* Base style for all bio paragraphs on team page */
+.c-section--team .team-card__bio {
+  /* margin-top: 0.75rem; */
+  /*font-size: var(--fs-body);     normal body size */
+  /*line-height: 1.3;         */
+  line-height:1.4;
+  /* letter-spacing: -0.015em; */
+  letter-spacing: -0.015em;
+  font-size: 14.5px;
+}

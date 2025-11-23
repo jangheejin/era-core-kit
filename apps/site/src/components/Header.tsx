@@ -30,6 +30,9 @@ export function Header() {
         </Link>
 
         <nav className="site-header__nav">
+          <a href="/" className="site-header__link">
+            Home
+          </a>
           <a href="#case-studies" className="site-header__link">
             Our Work
           </a>
