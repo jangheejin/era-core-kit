@@ -38,7 +38,7 @@ export const homeLayout: LayoutBlock[] = [
       text2: 'Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.',
       layout: '4col',
       items: [
-        { 
+        {
           sector: "Geospatial Solutions",
           client: "Sanborn + AppGeo",
 /*           summary: "Sanborn + AppGeo", */
