@@ -2,8 +2,8 @@
 .site-header {
   position: sticky;   /* sticks relative to the viewport */
   top: 0;
-  z-index: 100;       /* above content, below modals if you add them */
-
+/*  z-index: 100;*/       /* above content, below modals if you add them */
+  z-index: 50;
   background: var(--bg);
   border-bottom: 1px solid var(--gray-300);
 }
@@ -13,15 +13,16 @@
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0.5rem var(--space-4);
+  /*padding: 0.75rem var(--gutter, 1.5rem);*/   /*more padding*/
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  /* gap: 1.5rem; */
 }
 
 /* Brand / logo text */
-.site-header__brand {
+/* .site-header__brand {
   font-family: var(--font-heading);
   font-size: 0.95rem;
   letter-spacing: 0.08em;
@@ -29,8 +30,14 @@
 
   color: var(--color-heading);
   text-decoration: none;
+} */
+.site-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
 }
-
 /* Nav links row */
 .site-header__nav {
   display: flex;
@@ -76,6 +83,17 @@
   border-color: var(--color-accent);
 }
 
+.site-header__logo {
+  display: block;
+  height: 32px;   /* tweak until it feels right */
+  width: auto;
+}
+.site-header__brand-text {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
 /* Simple small-screen tweak so nav doesn't explode */
 @media (max-width: 640px) {
   .site-header__inner {

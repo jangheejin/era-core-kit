@@ -11,7 +11,17 @@ export function Header() {
     <header className="site-header">
       <div className="site-header__inner">
         <Link href="/" className="site-header__brand">
-          ERA Government Affairs
+        {/* Logo + wordmark */}
+          <span className="site-header__logo-wrap">
+            <img
+              src="ERA.png"
+              alt="ERA Government Affairs logo"
+              className="site-header__logo"
+            />
+          </span>
+          <span className="site-header__brand-text">
+            ERA Government Affairs
+          </span>
         </Link>
 
         <nav className="site-header__nav">
