@@ -23,7 +23,8 @@
   /* ("no smaller than X", "bodytxtsz+1% screen", "no bigger than X")
               clamp(LOWERLIMIT, 14px+0.1*W,     UPPERLIMIT)
               clamp(min,        formula,         max)  */
-  --fs-body:  clamp(0.9rem, 0.86rem + 0.25vw, 0.97rem);/* ~14.5px → ~15.5px */
+  /* --fs-body:  clamp(0.9rem, 0.86rem + 0.25vw, 0.97rem); *//* ~14.5px → ~15.5px */
+  --fs-body:  clamp(0.9rem, 0.9rem + 0.25vw, 1rem);
   --fs-small: clamp(0.84rem, 0.80rem + 0.2vw, 0.91rem);/* ~13.5px → ~14.5px */
 
   /* HEADINGS

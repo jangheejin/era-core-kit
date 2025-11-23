@@ -17,7 +17,7 @@
 
 .intro-image img {
   display: block;
-  max-width: 280px;      /* smaller than hero logo */
+  max-width: 275px;      /* smaller than hero logo */
   width: 100%;
   height: auto;
   /* margin-inline: auto; */
