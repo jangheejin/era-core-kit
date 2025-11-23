@@ -10,9 +10,8 @@
   align-items: center;
 }
 
-/* Text column */
 .c-section--intro .intro-copy {
-  max-width: 40rem;
+  max-width: 47rem;
 }
 
 /* Heading spacing under intro */
