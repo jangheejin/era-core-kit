@@ -7,12 +7,14 @@ type TeamMember = {
   location?: string;
   bio: string[];
   imageUrl?: string; // optional → supports "no photo"
+  isFounder?: boolean;
 };
 
 const teamMembers: TeamMember[] = [
   {
     name: 'Edward Cox',
     title: 'Founding Partner',
+    isFounder: true,
     bio: [
         "Ed formerly served as a Senior Policy Advisor in the United States Senate, and later as a government-affairs professional in the private sector, with a focus and expertise in geospatial, infrastructure, energy, natural resources, environmental, and agricultural policy.",
         "Prior to his time on Capitol Hill, Ed served as the campaign director for Senator Orrin G. Hatch. After helping re-elect the senator in 2012, he joined the legislative staff in Washington, D.C., as a senior policy advisor. During his time in the Senate, he wrote and helped pass several legislative priorities, including a large-scale federal land and mineral exchange of over 100,000 acres in the State of Utah. Additionally, on behalf of Senator Hatch, Ed organized a bipartisan team and worked with a wide range of relevant stakeholders to draft the Geospatial Data Act, which was signed into law in 2018.",
@@ -24,6 +26,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Romel Nicholas',
     title: 'Managing Partner',
+    isFounder: true,
     imageUrl: '/team/romelnicholas.jpg',
     bio: [
       "Romel possesses expertise in energy, natural resources, environmental, GIS/geospatial, agriculture, and transportation policy. Prior to founding his own practice, he served as a senior policy advisor to two U.S. Senators on matters under the jurisdiction of the Commerce, Energy & Natural Resources, and Environment & Public Works Committees, among others. Romel first served under Senator Orrin Hatch (R-UT) from 2014 until his retirement and subsequently worked for his home-state senator, Senator Pat Toomey (R-PA), in a similar role. He served as Chair of the Senate GIS Working Group during his time with both senators.",
@@ -60,6 +63,9 @@ function getInitials(name: string) {
     .toUpperCase()
     .slice(0, 2);
 }
+
+const founders = teamMembers.filter(m => m.isFounder);
+const others = teamMembers.filter(m => !m.isFounder);
 
 export default function OurTeamPage() {
   return (
