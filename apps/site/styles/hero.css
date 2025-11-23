@@ -67,17 +67,15 @@
   flex: 1 1 0; */
 /*   max-width: none;  */       /* or 48rem for a softer cap */
 /* } */
+/* Text column takes the remaining space */
 .c-section--hero .hero-copy {
   /* flex: 1 1 min(32rem, 100%); */
-  flex: 1 1 0; /* allow the text column to shrink instead of forcing ~32rem minimum */
+  /* flex: 1 1 0; */ /* allow the text column to shrink instead of forcing ~32rem minimum */
+  flex: 1 1 18rem; /* wants ~18rem, but can shrink and grow */
   min-width: 0; /* avoids overflow */
 }
 
-/* Tighten heading + subhead spacing */
-/* .hero-copy .type-hero {
-  margin-bottom: var(--space-2);
-} */
-
+/* Hero heading spacing */
 .c-section--hero .hero-copy .type-hero {
   margin-bottom: var(--space-2);
 }
@@ -91,13 +89,13 @@
 }
  */
 /* MOBILE / NARROW VIEWPORTS */
-@media (max-width: 800px) {
+/* @media (max-width: 800px) { */
 /*   .hero-grid {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
   } */
-
+/* 
   .c-section--hero .hero-grid {
     flex-direction: column;
     align-items: center;
@@ -116,5 +114,31 @@
 
   .hero-copy {
     max-width: 100%;
+  }
+}
+ */
+
+/* === NARROW LAYOUT ================================================ */
+/* Below ~650px, stacking is cleaner than a squished two-column row */
+
+@media (max-width: 650px) {
+  .c-section--hero .hero-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .c-section--hero .hero-logo {
+    padding-right: 0;
+  }
+
+  .c-section--hero .hero-image-container {
+    justify-content: center;
+  }
+
+  .c-section--hero .hero-copy {
+    flex: 0 1 auto;
+    max-width: 40rem;
   }
 }
