@@ -129,9 +129,9 @@
 }
 
 /* Forces a grid of 2 columns */
-.c-grid.layout-2x2 {
+/* .c-grid.layout-2x2 {
   grid-template-columns: repeat(2, 1fr);
-}
+} */
 
 
 /* Base button style that works for <a> and <button> */

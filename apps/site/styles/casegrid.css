@@ -15,12 +15,12 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-  /* Forces a grid of 2 columns 
-.casegrid.layout-2x2 {
+  /* Forces a grid of 2 columns */
+/* .casegrid.layout-2x2 {
   grid-template-columns: repeat(2, 1fr);
-}*/
+} */
 
-.casegrid.layout-2x2 {
+/* .casegrid.layout-2x2 {
   --card-max: clamp(18rem, 35vw, 24rem);
 
   grid-template-columns: minmax(0, var(--card-max));
@@ -28,10 +28,10 @@
   margin-inline: auto;
 
   gap: clamp(var(--space-2), 2vw, var(--space-4));
-}
+} */
 
 /* On medium+ screens, actually use 2 columns */
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .casegrid.layout-2x2 {
     grid-template-columns: repeat(
       2,
@@ -45,7 +45,7 @@
     margin-inline: auto;
   }
 }
-
+ */
 .case-card {
   display: flex;
   flex-direction: column;
@@ -54,7 +54,7 @@
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
   overflow: hidden;
-  background-color: white;
+/*   background-color: white; */
   transition: box-shadow 0.2s ease;
 }
 
@@ -68,12 +68,13 @@
 }
 
 .case-card__body {
-/*  aspect-ratio: 2 / 1;*/
-  padding: var(--space-3);
-  display: flex;
-  flex-direction: column;
   /* gap: 0.4rem; */
-  flex: 1 1 auto;
+  /*  aspect-ratio: 2 / 1;*/
+  padding: var(--space-3);
+
+/*   display: flex;
+  flex-direction: column;
+  flex: 1 1 auto; */
 }
 
 /* ---- Typography inside the card ---- */
