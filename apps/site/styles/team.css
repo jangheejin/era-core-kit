@@ -64,9 +64,12 @@
   position: relative;
   width: 100%;
   /* let grid define the height from the text side; we just fill it */
-  max-width: 220px;             /* cap photo width */
+  max-width: 220px;
+  max-width: 130px;
   aspect-ratio: 3 / 3;          /* normalize headshot geometry */
   overflow: hidden;
+  flex-shrink: 0;
+  /* background: #f3f4f6; */
 /*   border-radius: 12px; */          /* softer, not extreme rounding */
 }
 
@@ -97,13 +100,20 @@
 }*/
 
 .team-card__body {
-  max-width: 40rem;
+  /* max-width: 40rem; */
+  min-width:0;
 }
 
+/* .team-card__name {
+  margin: 0 0 0.25rem 0;
+} */
+
 .team-card__title {
-  margin-top: 0.25rem;
+  margin-top: 0.45rem;
+ /*  margin: 0 0 0.25rem 0; */ /*less spacing*/
   font-weight: 500;
   color: var(--color-heading);
+  text-transform:uppercase;
 }
 
 .team-card__location {
@@ -130,16 +140,25 @@
 }
 
 /* Base style for all bio paragraphs on team page */
-.c-section--team .team-card__bio {
+/* .c-section--team .type-body .team-card__bio { */
   /* margin-top: 0.75rem; */
-  /*font-size: var(--fs-body);     normal body size */
-  /*line-height: 1.3;         */
-  line-height:1.4;
+  /*font-size: var(--fs-body);     normal body size */ 
+/*   line-height: 1.3;      */   
+  /* line-height:1.4; */
   /* letter-spacing: -0.015em; */
+/*   letter-spacing: -0.015em;
+  font-size: 14.5px;
+} */
+/* .c-section--team .type-body .team-card__bio {
+  line-height: 1.3;        
   letter-spacing: -0.015em;
   font-size: 14.5px;
-}
-
+} */
+/* .team-grid-section .team-card__body {
+  line-height: 1.3;        
+  letter-spacing: -0.015em;
+  font-size: 14.5px;
+} */
 
 /* ========================= */
 /* Founders section          */
@@ -175,7 +194,8 @@
 /* Founder bio: slightly more readable for long text */
 .team-card__bio--founder {
   margin-top: 0.75rem;
-  line-height: 1.7;
+  /* line-height: 1.7; */
+  line-height: 1.5;
 }
 
 /* ========================= */
@@ -183,7 +203,8 @@
 /* ========================= */
 
 .team-grid-section {
-  margin-block: var(--space-4);
+ /*  margin-block: var(--space-4); */
+  margin-block: var(--space-6);
 }
 
 .team-grid__heading {
@@ -194,14 +215,17 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)); /* two columns on desktop */
   gap: var(--space-4);
+  align-items: flex-start;
 }
 
 /* Regular team cards: simpler layout */
 .team-card {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr); /* photo | text */
+  /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  *//* photo | text */
+  grid-template-columns: auto minmax(0, 1fr);
   column-gap: var(--space-3);
   align-items: flex-start;
+  /* border: 1px solid var(--gray-300); */
 }
 
 /* If there is no image, let text span full width */
