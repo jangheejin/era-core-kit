@@ -1,9 +1,8 @@
-/* hero-specific padding / background if you want */
+/* apps/site/styles/hero.css */
+
 .c-section--hero {
   background: var(--bg);
 }
-
-/* apps/site/styles/hero.css */
 
 /* Slightly tighter vertical padding than generic sections */
 .c-section--hero {
@@ -15,7 +14,8 @@
 .c-section--hero .hero-grid {
   display: flex; 
 /*   display: grid; */
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  flex-wrap: nowrap;
   align-items: center;
   /* grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); */
   /* Horizontal gap between logo + text */
@@ -65,7 +65,8 @@
 /*   max-width: none;  */       /* or 48rem for a softer cap */
 /* } */
 .c-section--hero .hero-copy {
-  flex: 1 1 min(32rem, 100%);
+  /* flex: 1 1 min(32rem, 100%); */
+  flex: 1 1 0; /* allow the text column to shrink instead of forcing ~32rem minimum */
   min-width: 0; /* avoids overflow */
 }
 

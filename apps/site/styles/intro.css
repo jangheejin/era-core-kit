@@ -41,7 +41,7 @@
 /* MOBILE: < 580px → 1 col   */
 /* ========================= */
 
-@media (max-width: 580px) {
+@media (max-width: 655px) {
   .c-section--intro .intro-grid {
     grid-template-columns: minmax(0, 1fr); /* single column stack */
     row-gap: var(--space-3);
