@@ -70,55 +70,90 @@ const others = teamMembers.filter(m => !m.isFounder);
 export default function OurTeamPage() {
   return (
     <main>
-      <section className="c-section c-section--team">
+      <section className="c-section team-section">
         <div className="c-container">
-          <header className="team-header">
-            <h1 className="type-h1">Our Team</h1>
-            {/* <p className="type-body"> */}
-              {/* TO DO: add positioning copy? */}
-              {/* ERA Government Affairs is led by a team of experienced
-              advocates and advisors with deep expertise in federal policy,
-              congressional process, and public affairs.
-            </p> */}
-          </header>
+          <h1 className="type-h2">Our Team</h1>
 
-          <div className="team-grid">
-            {teamMembers.map((member) => (
-              <article key={member.name} className="team-card">
-                {member.imageUrl && (
-                  <div className="team-card__photo">
-                    <img src={member.imageUrl} alt={member.name} />
-                  </div>
-                )}
-                {/* <div className="team-card__photo">
-                  {member.imageUrl ? (
-                    <img src={member.imageUrl} alt={member.name} />
-                  ) : (
-                    <div className="team-card__placeholder">
-                      <span>{getInitials(member.name)}</span>
+          {/* Founders block – full-width cards */}
+          {founders.length > 0 && (
+            <section className="team-founders">
+              <h2 className="type-h3 team-founders__heading">Founders</h2>
+
+              {founders.map((member) => (
+                <article
+                  key={member.name}
+                  className="team-card team-card--founder"
+                >
+                  {member.imageUrl && (
+                    <div className="team-card__photo">
+                      <img src={member.imageUrl} alt={member.name} />
                     </div>
                   )}
-                </div> */}
 
-                <div className="team-card__body">
-                  <h2 className="type-h3">{member.name}</h2>
-                  <p className="type-small team-card__title">
-                    {member.title}
-                  </p>
-                  {member.location && (
-                    <p className="type-small team-card__location">
-                      {member.location}
+                  <div className="team-card__body">
+                    <h3 className="type-h3">{member.name}</h3>
+                    <p className="type-small team-card__title">
+                      {member.title}
                     </p>
-                  )}
-                  {member.bio.map((para, idx) => (
-                    <p key={idx} className="type-body team-card__bio">
-                      {para}
-                    </p>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
+                    {member.location && (
+                      <p className="type-small team-card__location">
+                        {member.location}
+                      </p>
+                    )}
+
+                    {member.bio?.map((para, idx) => (
+                      <p
+                        key={idx}
+                        className="type-body team-card__bio team-card__bio--founder"
+                      >
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </section>
+          )}
+
+          {/* Rest of team – two-column grid as before */}
+          {others.length > 0 && (
+            <section className="team-grid-section">
+              <h2 className="type-h3 team-grid__heading">Team</h2>
+
+              <div className="team-grid">
+                {others.map((member) => (
+                  <article key={member.name} className="team-card">
+                    {member.imageUrl && (
+                      <div className="team-card__photo">
+                        <img src={member.imageUrl} alt={member.name} />
+                      </div>
+                    )}
+
+                    <div className="team-card__body">
+                      <h3 className="type-h3">{member.name}</h3>
+                      <p className="type-small team-card__title">
+                        {member.title}
+                      </p>
+                      {member.location && (
+                        <p className="type-small team-card__location">
+                          {member.location}
+                        </p>
+                      )}
+
+                      {member.bio?.map((para, idx) => (
+                        <p
+                          key={idx}
+                          className="type-body team-card__bio"
+                        >
+                          {para}
+                        </p>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </section>
     </main>

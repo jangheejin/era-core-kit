@@ -58,12 +58,16 @@
 /*   object-position: 50% 20%; */ /* bias upward so faces sit nicely */
 /* } */
 
-
+/* SHARED bio card photo styling */
 /* larger photos */
 .team-card__photo {
   position: relative;
   width: 100%;
   /* let grid define the height from the text side; we just fill it */
+  max-width: 220px;             /* cap photo width */
+  aspect-ratio: 3 / 4;          /* normalize headshot geometry */
+  overflow: hidden;
+/*   border-radius: 12px; */          /* softer, not extreme rounding */
 }
 
 .team-card__photo img {
@@ -72,7 +76,7 @@
   display: block;
   object-fit: cover;      /* fill the available area */
   object-position: 50% 20%; /* bias up so faces sit nicely */
-  border-radius: 8px;     /* subtle rounding */
+  border-radius: 6px;     /* subtle rounding */
 }
 
 
@@ -134,4 +138,102 @@
   /* letter-spacing: -0.015em; */
   letter-spacing: -0.015em;
   font-size: 14.5px;
+}
+
+
+/* ========================= */
+/* Founders section          */
+/* ========================= */
+
+.team-founders {
+  display: grid;
+  gap: var(--space-4);
+  margin-block: var(--space-4);
+}
+
+.team-founders__heading {
+  margin-block-end: var(--space-2);
+}
+
+/* Full-width founder card */
+.team-card--founder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); /* photo | text */
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: flex-start;
+  padding: var(--space-3);
+/*   border-radius: 12px; */
+  border: 1px solid rgba(0,0,0,0.06);
+  background: #f9fafb; /* subtle, not screaming */
+}
+
+/* Let founder photos be a bit larger */
+.team-card--founder .team-card__photo {
+  max-width: 260px;
+}
+
+/* Founder bio: slightly more readable for long text */
+.team-card__bio--founder {
+  margin-top: 0.75rem;
+  line-height: 1.7;
+}
+
+/* ========================= */
+/* Regular team grid         */
+/* ========================= */
+
+.team-grid-section {
+  margin-block: var(--space-4);
+}
+
+.team-grid__heading {
+  margin-block-end: var(--space-2);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* two columns on desktop */
+  gap: var(--space-4);
+}
+
+/* Regular team cards: simpler layout */
+.team-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr); /* photo | text */
+  column-gap: var(--space-3);
+  align-items: flex-start;
+}
+
+/* If there is no image, let text span full width */
+.team-card__photo:empty {
+  display: none;
+}
+
+.team-card__body {
+  min-width: 0;
+}
+
+/* ========================= */
+/* Responsive adjustments    */
+/* ========================= */
+
+@media (max-width: 800px) {
+  .team-card--founder {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-3);
+  }
+
+  .team-card {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-3);
+  }
+
+  .team-card__photo {
+    max-width: 220px;
+    margin-bottom: var(--space-2);
+  }
+
+  .team-grid {
+    grid-template-columns: minmax(0, 1fr); /* one card per row on small screens */
+  }
 }
