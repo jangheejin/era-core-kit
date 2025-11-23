@@ -9,7 +9,8 @@ import Link from 'next/link';
 export function Header() {
   return (
     <header className="site-header">
-      <div className="site-header__inner">
+      {/* <div className="site-header__inner"> */}
+      <div className="c-container site-header__inner">
         <Link href="/" className="site-header__brand">
         {/* Logo + wordmark */}
           <span className="site-header__logo-wrap">
