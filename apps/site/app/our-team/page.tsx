@@ -123,11 +123,16 @@ export default function OurTeamPage() {
               <div className="team-grid">
                 {others.map((member) => (
                   <article key={member.name} className="team-card">
-                    {member.imageUrl && (
+{/*                     {member.imageUrl && (
                       <div className="team-card__photo">
                         <img src={member.imageUrl} alt={member.name} />
                       </div>
-                    )}
+                    )} */}
+                    <div className="team-card__photo">
+                      {member.imageUrl && (
+                        <img src={member.imageUrl} alt={member.name} />
+                      )}
+                    </div>
 
                     <div className="team-card__body">
                       <h3 className="type-h3">{member.name}</h3>
