@@ -17,28 +17,7 @@
   margin-bottom: 0.75rem;
 }
 
-/* 2-column grid of team cards on desktop */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-  column-gap: clamp(9.5rem, 5vw, 4rem);
-}
 
-/* Single column on smaller screens */
-@media (max-width: 768px) {
-  .team-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.team-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
-  align-items: stretch;
-}
 
 /* Photo normalization */
 /*.team-card__photo {
@@ -60,17 +39,45 @@
 
 /* SHARED bio card photo styling */
 /* larger photos */
-.team-card__photo {
+/* .team-card__photo {
   position: relative;
-  width: 100%;
+  width: 100%; */
   /* let grid define the height from the text side; we just fill it */
-  max-width: 220px;
+/*   max-width: 220px;
   max-width: 130px;
-  aspect-ratio: 3 / 3;          /* normalize headshot geometry */
+  aspect-ratio: 3 / 3;
   overflow: hidden;
-  flex-shrink: 0;
+  flex-shrink: 0; */
   /* background: #f3f4f6; */
-/*   border-radius: 12px; */          /* softer, not extreme rounding */
+/*   border-radius: 12px; */ 
+/* } */
+
+
+/* fixed-ish column width for photos */
+/* .team-card__photo {
+  flex: 0 0 160px;          
+  max-width: 160px;
+  aspect-ratio: 3 / 3; 
+  overflow: hidden;
+  border-radius: 8px;
+} */
+
+/* Photo column (used even when empty) */
+.team-card__photo {
+  flex: 0 0 160px;      /* fixed-ish width */
+  max-width: 160px;
+  aspect-ratio: 3 / 3; 
+  overflow: hidden;
+
+  background: transparent;
+  border: none;
+}  /* critical: no bg, no border, so “blank” looks truly blank */
+  
+
+/*founders' photos a bit larger*/
+.team-card--founder .team-card__photo {
+  max-width: 260px;
+  flex-basis: 260px;
 }
 
 .team-card__photo img {
@@ -186,11 +193,6 @@
   background: #f9fafb; /* subtle, not screaming */
 }
 
-/* Let founder photos be a bit larger */
-.team-card--founder .team-card__photo {
-  max-width: 260px;
-}
-
 /* Founder bio: slightly more readable for long text */
 .team-card__bio--founder {
   margin-top: 0.75rem;
@@ -199,7 +201,7 @@
 }
 
 /* ========================= */
-/* Regular team grid         */
+/* Non-founder team grid         */
 /* ========================= */
 
 .team-grid-section {
@@ -214,26 +216,50 @@
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)); /* two columns on desktop */
-  gap: var(--space-4);
+  /* gap: var(--space-4); */
+  /* gap: var(--space-2); */
+  column-gap: var(--space-4);
+  row-gap: var(--space-4);
   align-items: flex-start;
+  /* column-gap: clamp(9.5rem, 5vw, 4rem); */
 }
 
+/* .team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  column-gap: clamp(9.5rem, 5vw, 4rem);
+} */
+
+
+/* .team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+ */
 /* Regular team cards: simpler layout */
 .team-card {
-  display: grid;
+  display: flex;
+  flex-wrap: nowrap;          /* keep photo + text on one row */
   /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  *//* photo | text */
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: var(--space-3);
+  /* grid-template-columns: auto minmax(0, 1fr); */
+  /* column-gap: var(--space-3); */
   align-items: flex-start;
+  gap: var(--space-3);
   /* border: 1px solid var(--gray-300); */
 }
 
+
 /* If there is no image, let text span full width */
-.team-card__photo:empty {
+/* .team-card__photo:empty {
   display: none;
-}
+} */
 
 .team-card__body {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -248,6 +274,7 @@
   }
 
   .team-card {
+    flex-wrap: wrap;
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--space-3);
   }
@@ -256,8 +283,9 @@
     max-width: 220px;
     margin-bottom: var(--space-2);
   }
-
+/* one card per row on small screens */
   .team-grid {
-    grid-template-columns: minmax(0, 1fr); /* one card per row on small screens */
+    /* grid-template-columns: 1fr; */
+    grid-template-columns: minmax(0, 1fr); 
   }
 }
