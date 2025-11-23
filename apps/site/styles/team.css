@@ -19,6 +19,7 @@
 
 
 
+
 /* Photo normalization */
 /*.team-card__photo {
   width: 100%;
@@ -39,16 +40,46 @@
 
 /* SHARED bio card photo styling */
 /* larger photos */
-/* .team-card__photo {
+/* /* .team-card__photo {
   position: relative;
-  width: 100%; */
+  width: 100%; */ */
   /* let grid define the height from the text side; we just fill it */
-/*   max-width: 220px;
+/* /*   max-width: 220px;
   max-width: 130px;
   aspect-ratio: 3 / 3;
+  aspect-ratio: 3 / 3;
   overflow: hidden;
-  flex-shrink: 0; */
+  flex-shrink: 0; */ */
   /* background: #f3f4f6; */
+/*   border-radius: 12px; */ 
+/* } */
+
+
+/* fixed-ish column width for photos */
+/* .team-card__photo {
+  flex: 0 0 160px;          
+  max-width: 160px;
+  aspect-ratio: 3 / 3; 
+  overflow: hidden;
+  border-radius: 8px;
+} */
+
+/* Photo column (used even when empty) */
+.team-card__photo {
+  flex: 0 0 160px;      /* fixed-ish width */
+  max-width: 160px;
+  aspect-ratio: 3 / 3; 
+  overflow: hidden;
+
+  background: transparent;
+  border: none;
+}  /* critical: no bg, no border, so “blank” looks truly blank */
+  
+
+/*founders' photos a bit larger*/
+.team-card--founder .team-card__photo {
+  max-width: 260px;
+  flex-basis: 260px;
 /*   border-radius: 12px; */ 
 /* } */
 
@@ -188,9 +219,8 @@
   column-gap: clamp(1.5rem, 4vw, 3rem);
   align-items: flex-start;
   padding: var(--space-3);
-/*   border-radius: 12px; */
-  border: 1px solid rgba(0,0,0,0.06);
-  background: #f9fafb; /* subtle, not screaming */
+  /* border: 1px solid rgba(0,0,0,0.06); */
+  background: #f9fafb; /*subtle*/
 }
 
 /* Founder bio: slightly more readable for long text */
@@ -202,11 +232,11 @@
 
 /* ========================= */
 /* Non-founder team grid         */
+/* Non-founder team grid         */
 /* ========================= */
 
 .team-grid-section {
- /*  margin-block: var(--space-4); */
-  margin-block: var(--space-6);
+  margin-block: var(--space-6); /*the space between founder and non-founder section*/
 }
 
 .team-grid__heading {
@@ -216,7 +246,6 @@
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)); /* two columns on desktop */
-  /* gap: var(--space-4); */
   /* gap: var(--space-2); */
   column-gap: var(--space-4);
   row-gap: var(--space-4);
@@ -229,8 +258,11 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
   column-gap: clamp(9.5rem, 5vw, 4rem);
+  
 } */
-
+  /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  *//* photo | text */
+  /* grid-template-columns: auto minmax(0, 1fr); */
+  /* column-gap: var(--space-3); */
 
 /* .team-card {
   display: flex;
@@ -240,16 +272,16 @@
   align-items: stretch;
 }
  */
+
 /* Regular team cards: simpler layout */
+/* IT MUST be flex and not grid since there's already a grid defined */
 .team-card {
   display: flex;
   flex-wrap: nowrap;          /* keep photo + text on one row */
-  /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  *//* photo | text */
-  /* grid-template-columns: auto minmax(0, 1fr); */
-  /* column-gap: var(--space-3); */
   align-items: flex-start;
   gap: var(--space-3);
   /* border: 1px solid var(--gray-300); */
+  /* gap: var(--space-2); */
 }
 
 
