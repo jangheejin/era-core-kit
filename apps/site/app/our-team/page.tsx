@@ -92,9 +92,9 @@ export default function OurTeamPage() {
 
                   <div className="team-card__body">
                     <h3 className="type-h3">{member.name}</h3>
-                    <p className="type-small team-card__title">
+                    <h5 className="type-h5 team-card__title">
                       {member.title}
-                    </p>
+                    </h5>
                     {member.location && (
                       <p className="type-small team-card__location">
                         {member.location}
