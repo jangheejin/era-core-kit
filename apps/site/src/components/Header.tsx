@@ -10,32 +10,34 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="c-container site-header__inner">
-        <div className="site-footer__brand">
-          <Link href="/" className="site-footer__brand-link">
+        {/* Brand: logo + wordmark */}
+        <div className="site-header__brand">
+          <Link href="/" className="site-header__brand-link">
           {/* Logo + wordmark */}
-            <span className="site-footer__logo-wrap">
+            <span className="site-header__logo-wrap">
               {/* <img
                 src="ERA.png"
                 alt="ERA Government Affairs logo"
                 className="site-header__logo"
               /> */}
               <img
-                src="icon-192.png"
+                src="/icon-192.png"
                 alt="ERA Government Affairs logo"
                 className="site-header__logo"
               />
             </span>
-            <span className="site-footer__brand-name">
+            <span className="site-header__brand-text">
               ERA Government Affairs
             </span>
           </Link>
         </div>
-
+        
+        {/* Nav */}
         <nav className="site-header__nav">
           <a href="/" className="site-header__link">
             Home
           </a>
-          <a href="#case-studies" className="site-header__link">
+          <a href="/our-work" className="site-header__link">
             Our Work
           </a>
           <a href="#mission" className="site-header__link">
