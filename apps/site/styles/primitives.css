@@ -26,6 +26,7 @@
   /* --fs-body:  clamp(0.9rem, 0.86rem + 0.25vw, 0.97rem); */ /* ~14.5px → ~15.5px */
   --fs-body: clamp(0.9rem, 0.9rem + 0.25vw, 1rem);
   --fs-small: clamp(0.84rem, 0.8rem + 0.2vw, 0.91rem); /* ~13.5px → ~14.5px */
+  --fs-xsmall: clamp(0.8rem, 0.7rem + 0.2vw, 0.78rem);
 
   /* HEADINGS
      H1: ≈ 28px → <= 32px

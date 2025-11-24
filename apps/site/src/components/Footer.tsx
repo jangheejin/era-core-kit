@@ -25,7 +25,7 @@ export function Footer() {
           </Link>
 
           <p className="type-small site-footer__tagline">
-            Federal advocacy & business consulting in Washington, D.C.
+            Federal advocacy & business consulting
           </p>
         </div>
 
@@ -33,14 +33,14 @@ export function Footer() {
           <Link href="/" className="site-footer__link">
             Home
           </Link>
-          <a href="#case-studies" className="site-footer__link">
+          <a href="/our-work" className="site-footer__link">
             Our Work
           </a>
-          <Link href="/our-team" className="site-footer__link">
-            Our Team
+          <Link href="#mission" className="site-footer__link">
+            Our Mission
           </Link>
-          <a href="#mission" className="site-footer__link">
-            Mission
+          <a href="/our-team" className="site-footer__link">
+            Our Team
           </a>
           <a
             href="#contact"
