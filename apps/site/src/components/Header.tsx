@@ -9,26 +9,27 @@ import Link from 'next/link';
 export function Header() {
   return (
     <header className="site-header">
-      {/* <div className="site-header__inner"> */}
       <div className="c-container site-header__inner">
-        <Link href="/" className="site-header__brand">
-        {/* Logo + wordmark */}
-          <span className="site-header__logo-wrap">
-            {/* <img
-              src="ERA.png"
-              alt="ERA Government Affairs logo"
-              className="site-header__logo"
-            /> */}
-            <img
-              src="icon-192.png"
-              alt="ERA Government Affairs logo"
-              className="site-header__logo"
-            />
-          </span>
-          <span className="site-header__brand-text">
-            ERA Government Affairs
-          </span>
-        </Link>
+        <div className="site-footer__brand">
+          <Link href="/" className="site-footer__brand-link">
+          {/* Logo + wordmark */}
+            <span className="site-footer__logo-wrap">
+              {/* <img
+                src="ERA.png"
+                alt="ERA Government Affairs logo"
+                className="site-header__logo"
+              /> */}
+              <img
+                src="icon-192.png"
+                alt="ERA Government Affairs logo"
+                className="site-header__logo"
+              />
+            </span>
+            <span className="site-footer__brand-name">
+              ERA Government Affairs
+            </span>
+          </Link>
+        </div>
 
         <nav className="site-header__nav">
           <a href="/" className="site-header__link">
