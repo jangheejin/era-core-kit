@@ -17,7 +17,7 @@ export function MissionText({
   imageUrl,
 }: MissionTextProps & { imageUrl: string }) {
   return (
-    <section className="c-section" id="missiontext">
+    <section className="c-section" id="mission">
       <div className="c-container c-grid">
         <div>
           <h2 className="type-h2">{heading}</h2>

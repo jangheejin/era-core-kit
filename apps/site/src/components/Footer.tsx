@@ -36,14 +36,14 @@ export function Footer() {
           <a href="/our-work" className="site-footer__link">
             Our Work
           </a>
-          <Link href="#mission" className="site-footer__link">
+          <Link href="/#mission" className="site-footer__link">
             Our Mission
           </Link>
           <a href="/our-team" className="site-footer__link">
             Our Team
           </a>
           <a
-            href="#contact"
+            href="/#contact"
             className="site-footer__link site-footer__link--primary"
           >
             Contact
