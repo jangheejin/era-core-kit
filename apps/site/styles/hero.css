@@ -150,4 +150,8 @@
     flex: 0 1 auto;
     max-width: 40rem;
   }
+
+  .type-hero {
+    text-align:center;
+  }
 }
