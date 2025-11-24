@@ -110,6 +110,11 @@ export default function OurWorkPage() {
           </header>
 
           {/* Preview grid – auto wraps for 3, 4, 6, etc. */}
+          {/* small label above the strip */}
+          <p className="type-body work-grid__label">
+            Select a case study to view its story below
+          </p>
+
           <section aria-label="Featured case studies" className="work-grid">
             {FEATURED_CASES.map((cs) => (
               <button
@@ -144,6 +149,12 @@ export default function OurWorkPage() {
               className="work-detail"
               aria-label={`Case study detail: ${selected.client}`}
             >
+
+              {/* label mirrors the strip copy */}
+              <p className="type-small work-detail__label">
+                Currently viewing
+              </p>
+
               <div className="work-detail__top">
                 <div className="work-detail__text">
                   <p className="type-small work-detail__sector">

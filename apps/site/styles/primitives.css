@@ -28,6 +28,12 @@
   --fs-small: clamp(0.84rem, 0.8rem + 0.2vw, 0.91rem); /* ~13.5px → ~14.5px */
   --fs-xsmall: clamp(0.8rem, 0.7rem + 0.2vw, 0.78rem);
 
+/* OLD, LARGER */
+/*   --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+  --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
+  --fs-h2: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
+  --fs-hero: clamp(1.7rem, 1.2rem + 1.5vw, 2.4rem); */
+
   /* HEADINGS
      H1: ≈ 28px → <= 32px
      H2: ≈ 22px → 26px
