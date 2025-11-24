@@ -12,7 +12,7 @@ uses .c-section padding + background
 
 /* Header block */
 .work-header {
-  max-width: 42rem;
+  /* max-width: 42rem; */
 }
 
 .work-header h1 {
