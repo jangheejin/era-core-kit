@@ -159,7 +159,8 @@
 }
 .site-footer__logo {
   display: block;
-  height: 28px;   /* smaller than header */
+  /* height: 28px; */
+  height: 40px;
   width: auto;
 }
 
