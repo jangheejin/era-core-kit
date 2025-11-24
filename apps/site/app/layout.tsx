@@ -1,11 +1,17 @@
 // apps/site/app/layout.tsx
 
 //'use client';
+/* ROOT LAYOUT for App Router. 
+Required, must wrap all routes (every page under apps/site/app is wrapped in this by default)
+Only gets overridden if another layout.tsx is added deeper in the tree
+
+Renders once and stays mounted as you navigate. Only the children swap.
+  */
 
 import "@styles/tokens.css";
 import "@styles/primitives.css";
 import "@styles/casegrid.css";
-import "@styles/home.css";
+import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */ 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { type Metadata } from "next";

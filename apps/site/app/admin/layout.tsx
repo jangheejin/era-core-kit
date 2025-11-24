@@ -1,5 +1,7 @@
 //apps/site/app/admin/layout.tsx
 
+// app/layout.tsx is still the outer shell, /app/admin/layout.tsx is inside that shell, wrapping only /admin/*
+
 // ROUTE LAYOUT
 
 "use client";
@@ -42,3 +44,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     </AdminCaseStudyProvider>
   );
 }
+/* THE TREE RENDERED BY THIS IS:
+<html>
+  <body>
+    <Header />
+    
+    <AdminCaseStudyProvider>
+      <MockCMSProvider>
+          ADMIN PAGE CONTENT
+      </MockCMSProvider>
+    </AdminCaseStudyProvider>
+
+    <Footer />
+  </body>
+</html>
+*/ 

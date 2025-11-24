@@ -9,13 +9,7 @@
   --font-body: "Inter", sans-serif;
   --font-heading: "Oswald", sans-serif;
   --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
-
-  /* BODY + SMALL TEXT (OLD, smaller)
-     ≈ 13.3px → 14px for body
-     ≈ 12.3px → 13px for small */
-  /*  --fs-body:  clamp(0.8125rem, 0.8rem + 0.15vw, 0.875rem);*/ /*≈ 13.3px → 14px for body*/
-  /*  --fs-small: clamp(0.75rem,   0.75rem + 0.10vw, 0.8125rem);*/ /*≈ 12.3px → 13px for small*/
-
+  
   /* BODY + SMALL TEXT (NEW, bigger but less than 16)
      ~14.5px → ~15.5px for body
      ~13.5px → ~14.5px for small */
@@ -28,9 +22,11 @@
   --fs-small: clamp(0.84rem, 0.8rem + 0.2vw, 0.91rem); /* ~13.5px → ~14.5px */
   --fs-xsmall: clamp(0.8rem, 0.7rem + 0.2vw, 0.78rem);
 
-/* OLD, LARGER */
-/*   --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
-  --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);
+/* OLD, LARGER 
+  --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+  --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);*/
+  
+/* OLD, SMALLER
   --fs-h2: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
   --fs-hero: clamp(1.7rem, 1.2rem + 1.5vw, 2.4rem); */
 
@@ -201,6 +197,20 @@
 
 .c-button--secondary:hover {
   background-color: #111;
+  color: #fff;
+}
+
+.c-button--alt2,
+.c-button--alt2:link,
+.c-button--alt2:visited {
+  background-color: var(--color-accent);
+  color: #111;
+  border-color: #111;
+  border-width:2px;
+}
+
+.c-button--alt2:hover {
+  background-color: #003f8f;
   color: #fff;
 }
 

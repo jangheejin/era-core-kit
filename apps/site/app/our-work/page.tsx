@@ -213,7 +213,7 @@ export default function OurWorkPage() {
             {/* CTA */}
             <a
               href={`/case-studies/${selected.slug}`}
-              className="c-button c-button--secondary work-detail__link"
+              className="c-button c-button--alt2 work-detail__link"
             >
               View full case study
             </a>
