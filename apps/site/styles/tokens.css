@@ -9,6 +9,7 @@
   --font-body: "Inter", sans-serif;
   --font-heading: "Oswald", sans-serif;
   --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
+  --letter-spacing-heading-sm: 0.003em; 
   
   /*FLUID TYPOGRAPHY VARIABLES*/
 
@@ -44,6 +45,7 @@
   --fs-h2b: clamp(1.3rem, 1.25rem + 0.2vw, 1.5rem); /* H2b (mid-size) */
   --fs-h3: clamp(1.125rem, 1.1rem + 0.3vw, 1.1125rem); /* H3 */
   --fs-h4: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* H4 */
+  --fs-h5: clamp(0.75, 0.85rem + 0.2vw, 1.1rem); /* H5 */
 
   /* Spacing Scale (fluid, responsive) */
   --space-half: clamp(0.2rem, 0.5vw, 0.4rem);

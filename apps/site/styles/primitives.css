@@ -258,10 +258,24 @@ code {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   font-family: var(--font-heading);
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-weight: 500;
   letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-heading);
+}
+
+/*h5 is for very small headings, e.g. for preview cards*/
+h5 {
+  font-weight: 400;
+  letter-spacing: var(--letter-spacing-heading-sm);
   color: var(--color-heading);
 }
 
@@ -276,6 +290,9 @@ h3 {
 }
 h3 {
   font-size: var(--fs-h4);
+}
+h5 {
+  font-size: var(--fs-h5);
 }
 /* Anchor Links */
 a {
@@ -418,7 +435,8 @@ ol {
 .c-section h1,
 .c-section h2,
 .c-section h3,
-.c-section h4 {
+.c-section h4,
+.c-section h5 {
   margin-block-start: 0;
   margin-block-end: 0;
 }

@@ -33,6 +33,7 @@ import { Footer } from "@/components/Footer";
 import { type Metadata } from "next";
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
+import "@fontsource/inter/300.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";

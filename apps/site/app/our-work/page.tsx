@@ -98,7 +98,7 @@ export default function OurWorkPage() {
       <main>
         <section className="c-section work-section">
           <div className="c-container">
-            <h1 className="type-h2">Our Work</h1>
+            <h1 className="type-h1">Our Work</h1>
             <p className="type-body">Case studies coming soon.</p>
           </div>
         </section>
@@ -112,7 +112,7 @@ export default function OurWorkPage() {
         <div className="c-container work-layout">
           {/* Page header */}
           <header className="work-header">
-            <h1 className="type-h2">Our Work</h1>
+            <h1 className="type-h1">Our Work</h1>
             <p className="type-body work-header__intro">
               We work with clients across geospatial, emergency management,
               government contracting, and nonprofit sectors to translate
@@ -150,7 +150,7 @@ export default function OurWorkPage() {
                     </div>
                   )}
 
-                  <p className="type-small work-card__sector">{cs.sector}</p>
+                  <h5 className="type-h5 work-card__sector">{cs.sector}</h5>
                   <h2 className="type-h3 work-card__client">{cs.client}</h2>
                   {/* If you want teaser back: */}
                   {/* {cs.teaser && (
@@ -171,9 +171,9 @@ export default function OurWorkPage() {
             <div className="work-detail__top">
               {/* TEXT COLUMN: sector → title → summary → outcomes */}
               <div className="work-detail__text">
-                <p className="type-small work-detail__sector">
+                <h5 className="type-h5 work-detail__sector">
                   {selected.sector}
-                </p>
+                </h5>
                 <h2 className="type-h2 work-detail__title">
                   {selected.client}
                 </h2>
@@ -184,7 +184,7 @@ export default function OurWorkPage() {
 
                 {selected.outcomes && selected.outcomes.length > 0 && (
                   <div className="work-detail__outcomes">
-                    <h3 className="type-h4">
+                    <h3 className="type-h3">
                       What we helped our client achieve
                     </h3>
                     <ul>
