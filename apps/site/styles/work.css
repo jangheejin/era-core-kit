@@ -168,14 +168,14 @@ uses .c-section padding + background
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -0.55rem;
+  bottom: -0.9rem;
   transform: translateX(-50%);
 
   width: 0;
   height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 7px solid var(--brand);
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid var(--brand);
 }
 
 /* Card media – normalized small thumbnail at top */
