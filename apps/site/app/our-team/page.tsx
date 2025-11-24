@@ -74,6 +74,17 @@ export default function OurTeamPage() {
         <div className="c-container">
           <h1 className="type-h1">Our Team</h1>
 
+          <div className="team-intro">
+            <p className="type-body">
+            As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.
+            </p>
+            <p className="type-body">
+              Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.
+            </p>
+            <br/>
+            <hr />
+          </div>
+
           {/* Founders block – full-width cards */}
           {founders.length > 0 && (
             <section className="team-founders">
