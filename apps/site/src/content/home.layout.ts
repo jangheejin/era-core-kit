@@ -28,7 +28,7 @@ export const homeLayout: LayoutBlock[] = [
     type: "MissionText",
     props: {
       heading: "Our Mission",
-      text: "We are a federal advocacy and business consultant team with expertise in federal policy on Capitol Hill as well as robust experience working with industry, the federal government and its programmatic efforts across myriad departments and agencies.",
+      text: "ERA Government Affairs is a federal advocacy and business consulting team with expertise in federal policy on Capitol Hill and extensive experience working with industry, the federal government, and relevant programmatic efforts across various departments and agencies.",
       text2:
         "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
     },
