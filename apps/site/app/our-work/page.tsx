@@ -1,4 +1,3 @@
-// apps/site/app/our-work/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -70,7 +69,7 @@ const ALL_CASES: WorkCase[] = [
     client: 'MKR Fabricators',
     teaser:
       'Connecting real-world emergency response manufacturing needs with the federal ecosystem.',
-    featured: true, // now also featured → gives you 4 cards
+    featured: true, // also featured → gives you 4 cards
     imageUrl: '/img/temp.svg',
     summary:
       'ERA supported MKR Fabricators in aligning their emergency response manufacturing capabilities with evolving federal program and procurement needs, with a focus on practical deployment in emergency and disaster-response contexts.',
@@ -94,6 +93,19 @@ export default function OurWorkPage() {
     FEATURED_CASES[0] ??
     null;
 
+  if (!selected) {
+    return (
+      <main>
+        <section className="c-section work-section">
+          <div className="c-container">
+            <h1 className="type-h2">Our Work</h1>
+            <p className="type-body">Case studies coming soon.</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main>
       <section className="c-section work-section">
@@ -109,72 +121,66 @@ export default function OurWorkPage() {
             </p>
           </header>
 
-          {/* Preview grid – auto wraps for 3, 4, 6, etc. */}
-          {/* small label above the strip */}
+          {/* Small label above the strip */}
           <p className="type-body work-grid__label">
             Select a case study to view its story below
           </p>
 
+          {/* Preview strip – horizontal, scrolls when there are many cards */}
           <section aria-label="Featured case studies" className="work-grid">
-            {FEATURED_CASES.map((cs) => (
-              <button
-                key={cs.slug}
-                type="button"
-                className={
-                  'work-card' +
-                  (cs.slug === selected?.slug ? ' work-card--active' : '')
-                }
-                onClick={() => setSelectedSlug(cs.slug)}
-              >
-                {cs.imageUrl && (
-                  <div className="work-card__media">
-                    <img
-                      src={cs.imageUrl}
-                      alt={`${cs.client} case study`}
-                      loading="lazy"
-                    />
-                  </div>
-                )}
+            {FEATURED_CASES.map((cs) => {
+              const isActive = cs.slug === selected.slug;
 
-                <p className="type-small work-card__sector">{cs.sector}</p>
-                <h2 className="type-h3 work-card__client">{cs.client}</h2>
-                {/* <p className="type-body work-card__teaser">{cs.teaser}</p> */}
-              </button>
-            ))}
+              return (
+                <button
+                  key={cs.slug}
+                  type="button"
+                  className={
+                    'work-card' + (isActive ? ' work-card--active' : '')
+                  }
+                  onClick={() => setSelectedSlug(cs.slug)}
+                >
+                  {cs.imageUrl && (
+                    <div className="work-card__media">
+                      <img
+                        src={cs.imageUrl}
+                        alt={`${cs.client} case study`}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  <p className="type-small work-card__sector">{cs.sector}</p>
+                  <h2 className="type-h3 work-card__client">{cs.client}</h2>
+                  {/* If you want teaser back: */}
+                  {/* {cs.teaser && (
+                    <p className="type-body work-card__teaser">{cs.teaser}</p>
+                  )} */}
+                </button>
+              );
+            })}
           </section>
 
           {/* Detail panel below grid */}
-          {selected && (
-            <section
-              className="work-detail"
-              aria-label={`Case study detail: ${selected.client}`}
-            >
+          <section
+            className="work-detail"
+            aria-label={`Case study detail: ${selected.client}`}
+          >
+            <p className="type-small work-detail__label">Currently viewing</p>
 
-              {/* label mirrors the strip copy */}
-              <p className="type-small work-detail__label">
-                Currently viewing
-              </p>
+            <div className="work-detail__top">
+              {/* TEXT COLUMN: sector → title → summary → outcomes */}
+              <div className="work-detail__text">
+                <p className="type-small work-detail__sector">
+                  {selected.sector}
+                </p>
+                <h2 className="type-h2 work-detail__title">
+                  {selected.client}
+                </h2>
 
-              <div className="work-detail__top">
-                <div className="work-detail__text">
-                  <p className="type-small work-detail__sector">
-                    {selected.sector}
-                  </p>
-                  <h2 className="type-h2 work-detail__title">
-                    {selected.client}
-                  </h2>
-
-                  <p className="type-body work-detail__summary">
-                    {selected.summary}
-                  </p>
-
-                  {/* image column */}
-                  {selected.imageUrl && (
-                    <div className="work-detail__media">
-                      <img src={selected.imageUrl} alt={selected.client} loading="lazy" />
-                    </div>
-                  )}
-                </div>
+                <p className="type-body work-detail__summary">
+                  {selected.summary}
+                </p>
 
                 {selected.outcomes && selected.outcomes.length > 0 && (
                   <div className="work-detail__outcomes">
@@ -182,7 +188,7 @@ export default function OurWorkPage() {
                       What we helped our client achieve
                     </h3>
                     <ul>
-                      {selected.outcomes.map((item,idx) => (
+                      {selected.outcomes.map((item, idx) => (
                         <li key={idx} className="type-body">
                           {item}
                         </li>
@@ -190,40 +196,28 @@ export default function OurWorkPage() {
                     </ul>
                   </div>
                 )}
+              </div>
+
+              {/* IMAGE COLUMN */}
+              {selected.imageUrl && (
+                <div className="work-detail__media">
+                  <img
+                    src={selected.imageUrl}
+                    alt={selected.client}
+                    loading="lazy"
+                  />
                 </div>
+              )}
+            </div>
 
-{/*                 {selected.imageUrl && (
-                  <div className="work-detail__media">
-                    <img
-                      src={selected.imageUrl}
-                      alt={selected.client}
-                      loading="lazy"
-                    />
-                  </div>
-                )}
-              </div> */}
-
-{/*               {selected.outcomes && selected.outcomes.length > 0 && (
-                <div className="work-detail__outcomes">
-                  <h3 className="type-h4">What we helped our client achieve</h3>
-                  <ul>
-                    {selected.outcomes.map((item, idx) => (
-                      <li key={idx} className="type-body">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )} */}
-
-              <a
-                href={`/case-studies/${selected.slug}`}
-                className="c-button c-button--secondary work-detail__link"
-              >
-                View full case study
-              </a>
-            </section>
-          )}
+            {/* CTA */}
+            <a
+              href={`/case-studies/${selected.slug}`}
+              className="c-button c-button--secondary work-detail__link"
+            >
+              View full case study
+            </a>
+          </section>
         </div>
       </section>
     </main>

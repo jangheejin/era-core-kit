@@ -1,53 +1,57 @@
-/* Our Work page layout */
+/* ========================= */
+/* OUR WORK PAGE             */
+/* ========================= */
 
-  /* .work-section {
-uses .c-section padding + background
-} */
+.work-section {
+  background: var(--bg);
+}
 
 .work-layout {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-/* Header block */
-/* .work-header { */
-  /* max-width: 42rem; */
-/* } */
-
-.work-header h1 {
-  margin: 0 0 0.75rem 0;
-}
-
-.work-header__intro {
-  margin: 0;
-  line-height: 1.7;
-}
-
-/* Preview grid – 3 columns on desktop */
-/* .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-3);
-} */
+  row-gap: var(--space-4);
+}
 
-/* Preview strip – single horizontal row, scrollable if needed */
+.work-header {
+/*   max-width: 44rem; */
+  margin-inline: auto;
+  margin-bottom: 0;
+}
+/* 
+.work-header__intro {
+  margin-top: 0.75rem;
+} */
+.work-header__intro {
+  margin-bottom:0;
+}
+/* Label above the preview strip */
+.work-grid__label {
+/*   margin-bottom: 0.75rem; */
+  opacity: 0.8;
+  text-transform:uppercase;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2b);
+  margin-block:0;
+}
+
+/* ========================= */
+/* Preview strip of cards    */
+/* ========================= */
+
 .work-grid {
   display: flex;
-  flex-wrap: nowrap;              /* force a single row */
+  flex-wrap: nowrap;
   gap: var(--space-2);
-
   overflow-x: auto;
-  padding-block: 0.25rem 0.5rem;  /* a little breathing room around the strip */
-  margin-block-end: var(--space-3);
+  padding-block: 0.25rem 0.75rem;
+  margin-bottom: var(--space-3);
+  scroll-snap-type: x mandatory;
 
-  scroll-snap-type: x mandatory;  /* optional: makes snapping nicer */
-
+  /* Firefox scrollbar */
   scrollbar-width: thin;
   scrollbar-color: rgba(15, 23, 42, 0.35) transparent;
 }
 
-/* Optional: nicer scrollbar – safe to skip if you hate this */
+/* WebKit scrollbars (Chrome / Edge / Safari) */
 .work-grid::-webkit-scrollbar {
   height: 6px;
 }
@@ -57,137 +61,41 @@ uses .c-section padding + background
 }
 
 .work-grid::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.25);
+  background: rgba(15, 23, 42, 0.35);
   border-radius: 999px;
 }
 
-.work-grid {
-  scrollbar-width: thin; /* Firefox */
-}
-
-/* @media (max-width: 1024px) {
-  .work-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .work-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-} */
-
-/* Card styles */
-/* .work-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-
-  padding: var(--space-2);
-  border-radius: 10px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: #ffffff;
-
-  text-align: left;
-  cursor: pointer;
-
-  transition:
-    border-color 120ms ease-out,
-    box-shadow 120ms ease-out,
-    transform 80ms ease-out,
-    background-color 120ms ease-out;
-}
-
-
-
-.work-card:hover {
-  border-color: var(--brand);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-  transform: translateY(-1px);
-}
-
-.work-card--active {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 1px var(--brand);
-  background: #f3f6ff;
-}
- */
-
+/* Card styles in the strip */
 .work-card {
-  /* sizing: one compact tile in the strip */
-  flex: 0 0 clamp(220px, 24vw, 260px);  /* min 220px, max 260px on large screens */
+  position: relative;
   scroll-snap-align: start;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+  min-width: 220px;
+  max-width: 260px;
 
-  padding: var(--space-2);
+  padding: 0.9rem 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   background: #ffffff;
 
-  text-align: left;
   cursor: pointer;
+  text-align: left;
+  display: grid;
+  row-gap: 0.5rem;
 
   transition:
-    border-color 120ms ease-out,
-    box-shadow 120ms ease-out,
-    transform 80ms ease-out,
-    background-color 120ms ease-out;
+    border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    transform 0.1s ease-out;
 }
 
-@media (max-width: 640px) {
-  .work-card {
-    flex-basis: clamp(240px, 75vw, 320px);  /* a bit wider on very small screens */
-  }
-}
-
-.work-grid__label {
-  text-transform:uppercase;
-  font-family: var(--font-heading);
-  font-size: var(--fs-h2b);
-  margin-block:0;
-}
-
-.work-card:hover {
-  border-color: var(--brand);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-  transform: translateY(-1px);
-}
-
-/* ACTIVE CARD – clearly “linked” to the panel below */
-.work-card--active {
-  border-color: var(--brand);
-  /* box-shadow: 0 0 0 1px var(--brand); */
-  box-shadow: 0 0 0 2px rgba(11, 95, 255, 0.18);
-  background: #f3f6ff;
-}
-
-/* Little arrow “stem” pointing down toward the detail panel */
-.work-card--active::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -0.9rem;
-  transform: translateX(-50%);
-
-  width: 0;
-  height: 0;
-  border-left: 11px solid transparent;
-  border-right: 11px solid transparent;
-  border-top: 11px solid var(--brand);
-}
-
-/* Card media – normalized small thumbnail at top */
 .work-card__media {
   width: 100%;
   aspect-ratio: 4 / 3;
   border-radius: 8px;
   overflow: hidden;
   background: #e5e7eb;
+  margin-bottom: 0.5rem;
 }
 
 .work-card__media img {
@@ -198,31 +106,50 @@ uses .c-section padding + background
 }
 
 .work-card__sector {
-  margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  opacity: 0.7;
-  font-family: var(--font-heading);
+  font-weight: 500;
+  opacity: 0.75;
 }
 
 .work-card__client {
   margin: 0;
 }
 
-.work-card__teaser {
-  margin: 0.25rem 0 0 0;
+/* Active state + arrow pointing at detail panel */
+.work-card--active {
+  border-color: var(--brand);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
 }
 
-/* Detail panel */
+.work-card--active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -0.9rem; /* more breathing room for bigger arrow */
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid var(--brand);
+}
+
+/* ========================= */
+/* Detail panel              */
+/* ========================= */
+
 .work-detail {
-  margin-top: 1.1rem;
   border-radius: 14px;
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-top: 3px solid var(--brand);
   background: var(--bg-2);
   padding: var(--space-3);
   display: grid;
-  row-gap: var(--space-1);
+  row-gap: var(--space-3);
+  margin-top: 1.1rem;      /* gives room for arrow */
+  justify-items: start;    /* children hug content, no full-width stretch */
 }
 
 @media (min-width: 960px) {
@@ -231,73 +158,57 @@ uses .c-section padding + background
   }
 }
 
-/* Top row: text + larger image side by side on desktop */
+.work-detail__label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+/* Top area: text column + image column */
 .work-detail__top {
+  width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
   column-gap: var(--space-4);
   row-gap: var(--space-3);
   align-items: flex-start;
 }
+
 @media (max-width: 768px) {
   .work-detail__top {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr); /* stack on small screens */
   }
 }
 
 .work-detail__text {
-  max-width: 60rem;
+  min-width: 0;
 }
 
 .work-detail__sector {
-  margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: var(--fs-small);
-  opacity: 0.7;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+  opacity: 0.75;
+  margin-bottom: 0.25rem;
 }
 
 .work-detail__title {
-  /* margin: 0; */
-  margin: 0.25rem 0 0 0;
+  margin: 0 0 0.75rem 0;
 }
 
 .work-detail__summary {
-  margin: 0.5rem 0 0 0;
-/*   max-width: 60rem; */
+  margin: 0.6rem 0 0 0;
   line-height: 1.7;
 }
 
-/* Detail media */
-.work-detail__media {
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4 / 3;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #e5e7eb;
-  justify-self: flex-end;
-}
-
-.work-detail__media img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-/* Outcomes list */
-/* .work-detail__outcomes {
-  margin-top: 0.75rem;
-} */
-
+/* Outcomes live directly BELOW summary in same column */
 .work-detail__outcomes {
-  margin-top: 0; /* small, controlled gap after the summary */
+  margin-top: 0.8rem; /* this is THE gap between summary and bullets */
 }
-
 
 .work-detail__outcomes h3 {
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.4rem 0;
 }
 
 .work-detail__outcomes ul {
@@ -309,22 +220,28 @@ uses .c-section padding + background
   margin-top: 0.25rem;
 }
 
-/* Link to full case study */
-.work-detail__link {
-  display: inline-flex;  
-  margin-top: 0.75rem;
+/* Image column */
+.work-detail__media {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e5e7eb;
+  justify-self: flex-end;
   align-self: flex-start;
 }
 
-/* Slightly tighter vertical rhythm on very small screens */
-
-@media (max-width: 640px) {
-  .work-layout {
-    gap: var(--space-3);
-  }
-
-  .work-detail {
-    row-gap: var(--space-2);
-  }
+.work-detail__media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
+/* CTA button – no more full-width nonsense */
+.work-detail__link {
+  display: inline-flex;
+  margin-top: var(--space-2);
+  justify-self: flex-start; /* grid item hugs its content */
+}
