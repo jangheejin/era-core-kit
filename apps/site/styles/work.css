@@ -42,6 +42,9 @@ uses .c-section padding + background
   margin-block-end: var(--space-3);
 
   scroll-snap-type: x mandatory;  /* optional: makes snapping nicer */
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.35) transparent;
 }
 
 /* Optional: nicer scrollbar – safe to skip if you hate this */
@@ -212,6 +215,7 @@ uses .c-section padding + background
 
 /* Detail panel */
 .work-detail {
+  margin-top: 1.1rem;
   border-radius: 14px;
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-top: 3px solid var(--brand);
@@ -307,7 +311,9 @@ uses .c-section padding + background
 
 /* Link to full case study */
 .work-detail__link {
+  display: inline-flex;  
   margin-top: 0.75rem;
+  align-self: flex-start;
 }
 
 /* Slightly tighter vertical rhythm on very small screens */

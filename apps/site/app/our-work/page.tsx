@@ -167,9 +167,32 @@ export default function OurWorkPage() {
                   <p className="type-body work-detail__summary">
                     {selected.summary}
                   </p>
+
+                  {/* image column */}
+                  {selected.imageUrl && (
+                    <div className="work-detail__media">
+                      <img src={selected.imageUrl} alt={selected.client} loading="lazy" />
+                    </div>
+                  )}
                 </div>
 
-                {selected.imageUrl && (
+                {selected.outcomes && selected.outcomes.length > 0 && (
+                  <div className="work-detail__outcomes">
+                    <h3 className="type-h4">
+                      What we helped our client achieve
+                    </h3>
+                    <ul>
+                      {selected.outcomes.map((item,idx) => (
+                        <li key={idx} className="type-body">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                </div>
+
+{/*                 {selected.imageUrl && (
                   <div className="work-detail__media">
                     <img
                       src={selected.imageUrl}
@@ -178,9 +201,9 @@ export default function OurWorkPage() {
                     />
                   </div>
                 )}
-              </div>
+              </div> */}
 
-              {selected.outcomes && selected.outcomes.length > 0 && (
+{/*               {selected.outcomes && selected.outcomes.length > 0 && (
                 <div className="work-detail__outcomes">
                   <h3 className="type-h4">What we helped our client achieve</h3>
                   <ul>
@@ -191,7 +214,7 @@ export default function OurWorkPage() {
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
 
               <a
                 href={`/case-studies/${selected.slug}`}
