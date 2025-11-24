@@ -72,7 +72,7 @@ export default function OurTeamPage() {
     <main>
       <section className="c-section team-section">
         <div className="c-container">
-          <h1 className="type-h2">Our Team</h1>
+          <h1 className="type-h1">Our Team</h1>
 
           {/* Founders block – full-width cards */}
           {founders.length > 0 && (
