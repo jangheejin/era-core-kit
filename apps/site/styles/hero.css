@@ -58,7 +58,9 @@
   width: 100%;
   /* max-width: clamp(180px, 22vw, 240px);  *//* stays reasonable on big screens */
   /* max-width: 260px; */
-  max-width: clamp(140px, 18vw, 240px);
+  /* max-width: clamp(140px, 26vw, 260px); */
+  max-width: clamp(200px, 30vw, 260px);
+  /* max-width: min(260px, 40vw); */
   height: auto;
 }
 
@@ -121,13 +123,21 @@
 /* === NARROW LAYOUT ================================================ */
 /* Below ~650px, stacking is cleaner than a squished two-column row */
 
-@media (max-width: 650px) {
-  .c-section--hero .hero-grid {
+@media (max-width: 756px) {
+/*   .c-section--hero .hero-grid {
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
     text-align: center;
+  } */
+  .c-section--hero .hero-grid {
+    display: grid; /* STOP using flex; switch to a 1-column grid */
+    grid-template-columns: 1fr;
+    row-gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
   }
+
 
   .c-section--hero .hero-logo {
     padding-right: 0;
