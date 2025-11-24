@@ -80,7 +80,7 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
         const Component = blockComponents[block.type as BlockType];
 
         if (!Component) {
-          console.warn('[BlockRenderer] Unknown block type:', block.type);
+          console.warn("[BlockRenderer] Unknown block type:", block.type);
           return null;
         }
 

@@ -1,7 +1,7 @@
 // apps/site/src/components/Footer.tsx
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -18,11 +18,10 @@ export function Footer() {
                 className="site-footer__logo"
               />
             </span>
-          
+
             <span className="site-footer__brand-name">
               ERA Government Affairs
             </span>
-
           </Link>
 
           <p className="type-small site-footer__tagline">
@@ -43,7 +42,10 @@ export function Footer() {
           <a href="#mission" className="site-footer__link">
             Mission
           </a>
-          <a href="#contact" className="site-footer__link site-footer__link--primary">
+          <a
+            href="#contact"
+            className="site-footer__link site-footer__link--primary"
+          >
             Contact
           </a>
         </nav>

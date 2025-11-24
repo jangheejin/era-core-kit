@@ -6,18 +6,18 @@
     "declaration": true,
     "emitDeclarationOnly": false,
     "composite": true,
-    "noEmit": false,
+    "noEmit": false
 
     //Strictness, compatibility
 
-//    "noUncheckedIndexedAccess": true,
-//    "noImplicitOverride": true,
-/*    "strict": true,    
+    //    "noUncheckedIndexedAccess": true,
+    //    "noImplicitOverride": true,
+    /*    "strict": true,    
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,*/
 
     //Module and targeting
-/*    "module": "ESNext",
+    /*    "module": "ESNext",
     "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
@@ -30,10 +30,7 @@
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"],
 
-  "references": [
-    { "path": "../schema" },
-    { "path": "../cms-contract" }
-  ]
+  "references": [{ "path": "../schema" }, { "path": "../cms-contract" }]
 
-//  "include": ["src/**/*"]
+  //  "include": ["src/**/*"]
 }

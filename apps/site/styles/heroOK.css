@@ -3,24 +3,23 @@
 
 }*/
 
-
 /* HERO layout: image first in DOM, on the left, no phantom space */
 #hero .hero-grid {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--space-6);           /* more space between logo and text */
+  gap: var(--space-6); /* more space between logo and text */
 }
 
 /* image column */
 #hero .hero-logo {
-  flex: 0 0 auto;                /* don't let the image get squished */
+  flex: 0 0 auto; /* don't let the image get squished */
 }
 
 /* text column */
 #hero .hero-copy {
-  flex: 1 1 0;                   /* take all remaining horizontal space */
-  max-width: none;               /* ← kill the phantom right margin */
+  flex: 1 1 0; /* take all remaining horizontal space */
+  max-width: none; /* ← kill the phantom right margin */
 }
 
 /* image container – no extra padding/margins */
@@ -36,7 +35,7 @@
 #hero .hero-image-container img,
 #hero .heroimage {
   display: block;
-  max-width: 250px;              /* tweak this number to taste */
+  max-width: 250px; /* tweak this number to taste */
   width: 100%;
   height: auto;
 }

@@ -4,38 +4,38 @@
 // This is the one typescript actually sees
 //ONLY EXPORT TYPES AND UTILITIES HERE
 
-export * from './cms'; 
+export * from "./cms";
 
-export type { 
-    LayoutBlock, 
-    BlockType,
+export type {
+  LayoutBlock,
+  BlockType,
 
-    // Landing Page Props
-    HeroProps,
-    IntroWithImageProps,
-    MissionTextProps,
-    WorkTextProps,
-    CaseGridProps,
-    TeamStripProps,
-//    ContactFormProps,
-    
-    // Case Study/Content Props
-    CalloutProps,
-    PullQuoteProps,
-    DocLinkProps,
-    OutcomeListProps,
-    ImageFigureProps,
-    WorkWithCaseGridProps
-} from './types';
+  // Landing Page Props
+  HeroProps,
+  IntroWithImageProps,
+  MissionTextProps,
+  WorkTextProps,
+  CaseGridProps,
+  TeamStripProps,
+  //    ContactFormProps,
+
+  // Case Study/Content Props
+  CalloutProps,
+  PullQuoteProps,
+  DocLinkProps,
+  OutcomeListProps,
+  ImageFigureProps,
+  WorkWithCaseGridProps,
+} from "./types";
 //export { Callout } from './components/Callout';
 export {
   Hero,
   IntroWithImage,
   MissionText,
-//  WorkText,
-//  CaseGrid,
+  //  WorkText,
+  //  CaseGrid,
   TeamStrip,
-//  ContactForm,
+  //  ContactForm,
 
   // Case Study components
   Callout,
@@ -43,9 +43,9 @@ export {
   DocLink,
   OutcomeList,
   ImageFigure,
-} from './components';
+} from "./components";
 
-export { blockRegistry } from './dynamicRegistry';
-export { WorkText } from './components/WorkText';
-export { CaseGrid } from './components/CaseGrid';
-export { WorkWithCaseGrid } from './components/WorkWithCaseGrid';
+export { blockRegistry } from "./dynamicRegistry";
+export { WorkText } from "./components/WorkText";
+export { CaseGrid } from "./components/CaseGrid";
+export { WorkWithCaseGrid } from "./components/WorkWithCaseGrid";

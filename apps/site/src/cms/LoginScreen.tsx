@@ -1,22 +1,22 @@
 //apps/site/src/cms/LoginScreen.tsx
-'use client';
+"use client";
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent } from "react";
 
 type LoginScreenProps = {
   onSuccess: () => void;
 };
 
 export function LoginScreen({ onSuccess }: LoginScreenProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); // demo only
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // demo only
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     // DEMO-ONLY "AUTH"
     if (!email || !password) {
-      setError('Enter any email + password to continue.');
+      setError("Enter any email + password to continue.");
       return;
     }
     setError(null);

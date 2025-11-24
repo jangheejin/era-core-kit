@@ -2,9 +2,9 @@
 
 //Sticky top navbar
 
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -13,7 +13,7 @@ export function Header() {
         {/* Brand: logo + wordmark */}
         <div className="site-header__brand">
           <Link href="/" className="site-header__brand-link">
-          {/* Logo + wordmark */}
+            {/* Logo + wordmark */}
             <span className="site-header__logo-wrap">
               {/* <img
                 src="ERA.png"
@@ -31,7 +31,7 @@ export function Header() {
             </span>
           </Link>
         </div>
-        
+
         {/* Nav */}
         <nav className="site-header__nav">
           <a href="/" className="site-header__link">
@@ -46,8 +46,11 @@ export function Header() {
           <a href="/our-team" className="site-header__link">
             Our Team
           </a>
-          <a href="#contact" className="site-header__link site-header__link--contact">
-          {/* <a href="#contact" className="site-header__link site-header__link--primary"> */}
+          <a
+            href="#contact"
+            className="site-header__link site-header__link--contact"
+          >
+            {/* <a href="#contact" className="site-header__link site-header__link--primary"> */}
             Contact
           </a>
         </nav>

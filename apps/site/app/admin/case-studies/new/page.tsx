@@ -1,48 +1,48 @@
 // apps/site/app/admin/case-studies/new/page.tsx
-'use client';
+"use client";
 
-import '@styles/admin-cms-buttons.css';
-import '@styles/admin-cms.css'
+import "@styles/admin-cms-buttons.css";
+import "@styles/admin-cms.css";
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState } from "react";
+import Link from "next/link";
 import {
   CaseStudy as CaseStudySchema,
   type CaseStudy as CaseStudyType,
-} from '@kit/schema';
+} from "@kit/schema";
 
 type Draft = Partial<CaseStudyType>;
 
-const mechanismOptions: CaseStudyType['mechanisms'][number][] = [
-  'Appropriation',
-  'Earmark',
-  'Grant',
-  'TaxCredit',
+const mechanismOptions: CaseStudyType["mechanisms"][number][] = [
+  "Appropriation",
+  "Earmark",
+  "Grant",
+  "TaxCredit",
 ];
 
-const jurisdictionOptions: CaseStudyType['jurisdictions'][number][] = [
-  'Federal',
-  'State',
-  'Local',
+const jurisdictionOptions: CaseStudyType["jurisdictions"][number][] = [
+  "Federal",
+  "State",
+  "Local",
 ];
 
 export default function NewCaseStudyForm() {
   const [draft, setDraft] = useState<Draft>({
-    title: '',
-    slug: '',
-    client: '',
-    sector: 'GovContracting',
-    summaryShort: '',
-    brief: '',
-    heroImageUrl: '',
+    title: "",
+    slug: "",
+    client: "",
+    sector: "GovContracting",
+    summaryShort: "",
+    brief: "",
+    heroImageUrl: "",
     isFeaturedHome: false,
     isPublic: true,
   });
 
-  const [tagsInput, setTagsInput] = useState('');
-  const [contextBody, setContextBody] = useState('');
-  const [approachBody, setApproachBody] = useState('');
-  const [impactBody, setImpactBody] = useState('');
+  const [tagsInput, setTagsInput] = useState("");
+  const [contextBody, setContextBody] = useState("");
+  const [approachBody, setApproachBody] = useState("");
+  const [impactBody, setImpactBody] = useState("");
 
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
@@ -53,18 +53,20 @@ export default function NewCaseStudyForm() {
     setPreview(null);
   }
 
-  function toggleMechanism(mech: CaseStudyType['mechanisms'][number]) {
+  function toggleMechanism(mech: CaseStudyType["mechanisms"][number]) {
     setDraft((d) => {
       const current = d.mechanisms ?? [];
       const exists = current.includes(mech);
-      const next = exists ? current.filter((m) => m !== mech) : [...current, mech];
+      const next = exists
+        ? current.filter((m) => m !== mech)
+        : [...current, mech];
       return { ...d, mechanisms: next };
     });
     setError(null);
     setPreview(null);
   }
 
-  function toggleJurisdiction(j: CaseStudyType['jurisdictions'][number]) {
+  function toggleJurisdiction(j: CaseStudyType["jurisdictions"][number]) {
     setDraft((d) => {
       const current = d.jurisdictions ?? [];
       const exists = current.includes(j);
@@ -77,41 +79,41 @@ export default function NewCaseStudyForm() {
 
   function validate() {
     const tags = tagsInput
-      .split(',')
+      .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
 
-    const sections: CaseStudyType['sections'] = [
+    const sections: CaseStudyType["sections"] = [
       contextBody.trim()
-        ? { id: 'context', title: 'Context', bodyMDX: contextBody }
+        ? { id: "context", title: "Context", bodyMDX: contextBody }
         : null,
       approachBody.trim()
-        ? { id: 'approach', title: 'Approach', bodyMDX: approachBody }
+        ? { id: "approach", title: "Approach", bodyMDX: approachBody }
         : null,
       impactBody.trim()
-        ? { id: 'impact', title: 'Impact', bodyMDX: impactBody }
+        ? { id: "impact", title: "Impact", bodyMDX: impactBody }
         : null,
-    ].filter(Boolean) as CaseStudyType['sections'];
+    ].filter(Boolean) as CaseStudyType["sections"];
 
     const candidate: CaseStudyType = {
       id: draft.id ?? `draft-${Date.now()}`,
-      title: draft.title ?? '',
-      slug: draft.slug ?? '',
-      client: draft.client ?? '',
-      sector: draft.sector ?? 'GovContracting',
+      title: draft.title ?? "",
+      slug: draft.slug ?? "",
+      client: draft.client ?? "",
+      sector: draft.sector ?? "GovContracting",
       year: draft.year ?? undefined,
 
       tags,
-      summaryShort: draft.summaryShort ?? '',
+      summaryShort: draft.summaryShort ?? "",
       brief: draft.brief ?? undefined,
-      heroImageUrl: draft.heroImageUrl ?? '',
+      heroImageUrl: draft.heroImageUrl ?? "",
 
       mechanisms: draft.mechanisms ?? [],
       jurisdictions: draft.jurisdictions ?? [],
       outcomes: draft.outcomes ?? [],
       evidence: draft.evidence ?? [],
 
-      bodyMDX: draft.bodyMDX ?? '',
+      bodyMDX: draft.bodyMDX ?? "",
       sections,
 
       attachments: draft.attachments ?? [],
@@ -125,8 +127,8 @@ export default function NewCaseStudyForm() {
 
     if (!result.success) {
       const issue = result.error.issues[0];
-      const path = issue?.path?.length ? issue.path.join('.') : '(root)';
-      setError(`${path}: ${issue?.message ?? 'Validation failed.'}`);
+      const path = issue?.path?.length ? issue.path.join(".") : "(root)";
+      setError(`${path}: ${issue?.message ?? "Validation failed."}`);
       setPreview(null);
       return;
     }
@@ -144,9 +146,10 @@ export default function NewCaseStudyForm() {
             <p className="admin-kicker">CMS demo</p>
             <h1 className="type-h1">Create a mock case study</h1>
             <p className="type-body type-muted">
-              This mirrors the real data model: sectors, tags, mechanisms, summary,
-              and structured MDX sections. Nothing is saved to a backend&mdash;it&apos;s
-              just for clicking through how the CMS could feel.
+              This mirrors the real data model: sectors, tags, mechanisms,
+              summary, and structured MDX sections. Nothing is saved to a
+              backend&mdash;it&apos;s just for clicking through how the CMS
+              could feel.
             </p>
           </div>
           <Link href="/admin" className="cms-button cms-button--secondary">
@@ -164,13 +167,15 @@ export default function NewCaseStudyForm() {
               <span className="admin-label">
                 Title <span className="admin-label-required">*</span>
               </span>
-              <span className="admin-hint">Public-facing case study title.</span>
+              <span className="admin-hint">
+                Public-facing case study title.
+              </span>
             </div>
             <input
               className="admin-input"
               placeholder="Ex: Sanborn + AppGeo statewide mapping modernization"
-              value={draft.title || ''}
-              onChange={(e) => update('title', e.target.value)}
+              value={draft.title || ""}
+              onChange={(e) => update("title", e.target.value)}
             />
           </div>
 
@@ -180,13 +185,15 @@ export default function NewCaseStudyForm() {
               <span className="admin-label">
                 Slug <span className="admin-label-required">*</span>
               </span>
-              <span className="admin-hint">Used in URLs (lowercase, dashes).</span>
+              <span className="admin-hint">
+                Used in URLs (lowercase, dashes).
+              </span>
             </div>
             <input
               className="admin-input"
               placeholder="ex: sanborn-appgeo"
-              value={draft.slug || ''}
-              onChange={(e) => update('slug', e.target.value)}
+              value={draft.slug || ""}
+              onChange={(e) => update("slug", e.target.value)}
             />
           </div>
 
@@ -194,13 +201,15 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Client</span>
-              <span className="admin-hint">Who you did the work for (optional).</span>
+              <span className="admin-hint">
+                Who you did the work for (optional).
+              </span>
             </div>
             <input
               className="admin-input"
               placeholder="Ex: Sanborn"
-              value={draft.client || ''}
-              onChange={(e) => update('client', e.target.value)}
+              value={draft.client || ""}
+              onChange={(e) => update("client", e.target.value)}
             />
           </div>
 
@@ -212,9 +221,9 @@ export default function NewCaseStudyForm() {
               </div>
               <select
                 className="admin-select"
-                value={draft.sector || 'GovContracting'}
+                value={draft.sector || "GovContracting"}
                 onChange={(e) =>
-                  update('sector', e.target.value as CaseStudyType['sector'])
+                  update("sector", e.target.value as CaseStudyType["sector"])
                 }
               >
                 <option value="Defense">Defense</option>
@@ -237,10 +246,10 @@ export default function NewCaseStudyForm() {
                 type="number"
                 min={1990}
                 max={2100}
-                value={draft.year ?? ''}
+                value={draft.year ?? ""}
                 onChange={(e) =>
                   update(
-                    'year',
+                    "year",
                     e.target.value ? Number(e.target.value) : undefined,
                   )
                 }
@@ -262,8 +271,8 @@ export default function NewCaseStudyForm() {
             <input
               className="admin-input"
               placeholder="https://example.com/hero.jpg"
-              value={draft.heroImageUrl || ''}
-              onChange={(e) => update('heroImageUrl', e.target.value)}
+              value={draft.heroImageUrl || ""}
+              onChange={(e) => update("heroImageUrl", e.target.value)}
             />
             {draft.heroImageUrl && (
               <div className="admin-image-preview">
@@ -300,13 +309,15 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Summary (short)</span>
-              <span className="admin-hint">1–2 sentences for listing cards.</span>
+              <span className="admin-hint">
+                1–2 sentences for listing cards.
+              </span>
             </div>
             <textarea
               className="admin-textarea"
               placeholder="Short summary used on listing cards."
-              value={draft.summaryShort || ''}
-              onChange={(e) => update('summaryShort', e.target.value)}
+              value={draft.summaryShort || ""}
+              onChange={(e) => update("summaryShort", e.target.value)}
             />
           </div>
 
@@ -318,8 +329,8 @@ export default function NewCaseStudyForm() {
             <textarea
               className="admin-textarea"
               placeholder="Optional slightly longer teaser for briefs or social."
-              value={draft.brief || ''}
-              onChange={(e) => update('brief', e.target.value)}
+              value={draft.brief || ""}
+              onChange={(e) => update("brief", e.target.value)}
             />
           </div>
         </section>
@@ -376,7 +387,7 @@ export default function NewCaseStudyForm() {
                 <input
                   type="checkbox"
                   checked={draft.isFeaturedHome ?? false}
-                  onChange={(e) => update('isFeaturedHome', e.target.checked)}
+                  onChange={(e) => update("isFeaturedHome", e.target.checked)}
                 />
                 <span>Feature on home</span>
               </label>
@@ -384,7 +395,7 @@ export default function NewCaseStudyForm() {
                 <input
                   type="checkbox"
                   checked={draft.isPublic ?? true}
-                  onChange={(e) => update('isPublic', e.target.checked)}
+                  onChange={(e) => update("isPublic", e.target.checked)}
                 />
                 <span>Public</span>
               </label>
@@ -399,7 +410,9 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Context</span>
-              <span className="admin-hint">Problem framing / starting point.</span>
+              <span className="admin-hint">
+                Problem framing / starting point.
+              </span>
             </div>
             <textarea
               className="admin-textarea"
@@ -441,11 +454,7 @@ export default function NewCaseStudyForm() {
           <h2 className="admin-section-title">Validate &amp; preview</h2>
 
           <div className="admin-field">
-            <button
-              type="button"
-              onClick={validate}
-              className="cms-button"
-            >
+            <button type="button" onClick={validate} className="cms-button">
               Validate + preview payload
             </button>
           </div>

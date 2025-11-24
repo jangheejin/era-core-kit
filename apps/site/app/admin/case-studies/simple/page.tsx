@@ -1,8 +1,8 @@
 // apps/site/app/admin/case-studies/simple/page.tsx
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { CMSDashboard } from '@kit/blocks';
+import Link from "next/link";
+import { CMSDashboard } from "@kit/blocks";
 
 export default function SimpleCaseStudyPage() {
   return (
@@ -13,8 +13,8 @@ export default function SimpleCaseStudyPage() {
             <p className="type-eyebrow type-muted">Simple mock builder</p>
             <h1 className="type-h1">Quick case study creator</h1>
             <p className="type-body type-muted">
-              Super stripped-down mock: title, slug, and body only. Nothing is saved
-              outside this browser tab.
+              Super stripped-down mock: title, slug, and body only. Nothing is
+              saved outside this browser tab.
             </p>
           </div>
 

@@ -1,29 +1,30 @@
 // apps/site/app/admin/case-studies/list/page.tsx
 // "database" view of case studies
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useAdminCaseStudies } from '../../AdminCaseStudyStore';
+import Link from "next/link";
+import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 export default function CaseStudyListPage() {
   const { items } = useAdminCaseStudies();
 
   return (
     <main className="c-section">
-        <div className="mb-4">
-            <Link href="/admin" className="c-button c-button--secondary">
-            ← Back to dashboard
-            </Link>
-        </div>
+      <div className="mb-4">
+        <Link href="/admin" className="c-button c-button--secondary">
+          ← Back to dashboard
+        </Link>
+      </div>
       <div className="c-container c-stack">
         <h1 className="type-h2">Mock Case Study Database</h1>
         <p className="type-body type-muted">
-          These entries exist only in your current browser session and are not stored anywhere permanent.
+          These entries exist only in your current browser session and are not
+          stored anywhere permanent.
         </p>
 
         {items.length === 0 ? (
           <p className="type-body type-muted">
-            No mock case studies yet.{' '}
+            No mock case studies yet.{" "}
             <Link href="/admin/case-studies/new" className="c-link">
               Create one now
             </Link>

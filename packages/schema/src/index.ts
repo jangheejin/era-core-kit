@@ -1,6 +1,6 @@
 // packages/schema/src/index.ts
 // Export the core data types
-//export * from './CaseStudy'; 
+//export * from './CaseStudy';
 //export * from './Filter';
 /*
 export type { 
@@ -10,32 +10,28 @@ export type {
   FilterAST 
 } from './fixtures'; // Assuming CaseStudySort is defined in CaseStudy.ts
 */
-import { z } from 'zod';
+import { z } from "zod";
 
-export type CaseStudySort = 'Newest' | 'ClientName' | 'Sector' | 'Year';
+export type CaseStudySort = "Newest" | "ClientName" | "Sector" | "Year";
 
 export const Sector = z.enum([
-  'Defense',
-  'Health',
-  'FinTech',
-  'Education',
-  'Nonprofit',
-  'GovContracting',
-  'EmergencyMgmt',
+  "Defense",
+  "Health",
+  "FinTech",
+  "Education",
+  "Nonprofit",
+  "GovContracting",
+  "EmergencyMgmt",
 ]);
 
 export const Mechanism = z.enum([
-  'Appropriation',
-  'Earmark',
-  'Grant',
-  'TaxCredit',
+  "Appropriation",
+  "Earmark",
+  "Grant",
+  "TaxCredit",
 ]);
 
-export const Jurisdiction = z.enum([
-  'Federal',
-  'State',
-  'Local',
-]);
+export const Jurisdiction = z.enum(["Federal", "State", "Local"]);
 
 export const Outcome = z.object({
   label: z.string().max(80),
@@ -45,28 +41,26 @@ export const Outcome = z.object({
 
 //NEW: structured sections
 export const CaseStudySection = z.object({
-  id: z.string(),              // stable key, e.g. "context", "approach"
-  title: z.string().max(80),   // section title
+  id: z.string(), // stable key, e.g. "context", "approach"
+  title: z.string().max(80), // section title
   bodyMDX: z.string().optional(), // markdown/MDX for that section
 });
 
 //NEW: attachments (downloads)
 export const CaseStudyAttachment = z.object({
-  label: z.string().max(120),  // "Full report (PDF)"
+  label: z.string().max(120), // "Full report (PDF)"
   url: z.string().url(),
-  kind: z
-    .enum(['pdf', 'ppt', 'doc', 'sheet', 'zip', 'other'])
-    .default('other'),
+  kind: z.enum(["pdf", "ppt", "doc", "sheet", "zip", "other"]).default("other"),
   internalOnly: z.boolean().default(false),
 });
 
 //NEW: extra links
 export const CaseStudyLink = z.object({
-  label: z.string().max(120),  // "Client website", "Legislation text"
+  label: z.string().max(120), // "Client website", "Legislation text"
   url: z.string().url(),
   category: z
-    .enum(['client', 'impact', 'legislation', 'press', 'other'])
-    .default('other'),
+    .enum(["client", "impact", "legislation", "press", "other"])
+    .default("other"),
   internalOnly: z.boolean().default(false),
 });
 
@@ -134,4 +128,4 @@ export type FilterAST = {
   text?: string;
 };
 
-export { CASE_STUDIES_FIXTURE } from './fixtures';
+export { CASE_STUDIES_FIXTURE } from "./fixtures";

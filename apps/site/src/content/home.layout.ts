@@ -1,5 +1,5 @@
 // apps/site/src/content/home.layout.ts
-import type { LayoutBlock } from '@kit/blocks';
+import type { LayoutBlock } from "@kit/blocks";
 
 export const homeLayout: LayoutBlock[] = [
   {
@@ -8,8 +8,10 @@ export const homeLayout: LayoutBlock[] = [
       heading: "Welcome to a new era",
       subhead: "",
       text: "ERA Government Affairs, LLC is a premier government affairs, consulting and public affairs firm.",
-      text2: "We solve problems, enhance your brand, offer strategic advice and leverage robust relationships to advance your interests in Washington D.C.",
-      text3: "With years of experience working both in Congress and as government affairs professionals, we have a proud track record of getting legislation signed into law by working across the aisle with Congress, the Administration and their staff.",
+      text2:
+        "We solve problems, enhance your brand, offer strategic advice and leverage robust relationships to advance your interests in Washington D.C.",
+      text3:
+        "With years of experience working both in Congress and as government affairs professionals, we have a proud track record of getting legislation signed into law by working across the aisle with Congress, the Administration and their staff.",
       imageUrl: "/img/ERAgovaffairs.png",
     },
   },
@@ -18,70 +20,72 @@ export const homeLayout: LayoutBlock[] = [
     props: {
       heading: "Your voice in Washington",
       text: "We are a federal advocacy and business consultant team with expertise in federal policy on Capitol Hill as well as robust experience working with industry, the federal government and its programmatic efforts across myriad departments and agencies.",
-//      text2: "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
-      imageUrl: '/img/capitol-building.jpg', // Move here
-    }
+      //      text2: "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
+      imageUrl: "/img/capitol-building.jpg", // Move here
+    },
   },
   {
     type: "MissionText",
     props: {
       heading: "Our Mission",
       text: "We are a federal advocacy and business consultant team with expertise in federal policy on Capitol Hill as well as robust experience working with industry, the federal government and its programmatic efforts across myriad departments and agencies.",
-      text2: "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
+      text2:
+        "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
     },
   },
   {
-    type: 'WorkWithCaseGrid',
+    type: "WorkWithCaseGrid",
     props: {
-      heading: 'Our Work',
-      text: 'As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.',
-      text2: 'Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.',
-      layout: '4col',
+      heading: "Our Work",
+      text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
+      text2:
+        "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
+      layout: "4col",
       items: [
         {
           sector: "Geospatial Solutions",
           client: "Sanborn + AppGeo",
-/*           summary: "Sanborn + AppGeo", */
-          imageUrl: '/img/case1.webp',
-          slug: 'sanborn-appgeo',
+          /*           summary: "Sanborn + AppGeo", */
+          imageUrl: "/img/case1.webp",
+          slug: "sanborn-appgeo",
         },
         {
-          sector: "Nonprofit Organizations", 
+          sector: "Nonprofit Organizations",
           client: "NAPSG Foundation",
-/*           summary: "NAPSG Foundation", */
-          imageUrl: '/img/case2.webp',
-          slug: 'napsg-foundation',
+          /*           summary: "NAPSG Foundation", */
+          imageUrl: "/img/case2.webp",
+          slug: "napsg-foundation",
         },
         {
-          sector: "Government Contracting", 
+          sector: "Government Contracting",
           client: "Crucis",
-/*           summary: "Crucis", */
-          imageUrl: '/img/case3.webp',
-          slug: 'crucis',
+          /*           summary: "Crucis", */
+          imageUrl: "/img/case3.webp",
+          slug: "crucis",
         },
-        { 
-          sector: "Emergency Response", 
+        {
+          sector: "Emergency Response",
           client: "MKR Fabricators",
-/*           summary: "MKR Fabricators", */
-          imageUrl: '/img/temp.svg',
-          slug: 'mkr-fabricators',
+          /*           summary: "MKR Fabricators", */
+          imageUrl: "/img/temp.svg",
+          slug: "mkr-fabricators",
         },
-        { 
-          sector: "Education", 
+        {
+          sector: "Education",
           client: "STEMheads",
-/*           summary: "MKR Fabricators", */
-          imageUrl: '/img/temp2.svg',
-          slug: 'stemheads',
+          /*           summary: "MKR Fabricators", */
+          imageUrl: "/img/temp2.svg",
+          slug: "stemheads",
         },
-        { 
-          sector: "Nonprofits", 
+        {
+          sector: "Nonprofits",
           client: "Placeholder Org",
-/*           summary: "MKR Fabricators", */
-          imageUrl: '/img/temp.svg',
-          slug: 'non-profit',
+          /*           summary: "MKR Fabricators", */
+          imageUrl: "/img/temp.svg",
+          slug: "non-profit",
         },
-      ]
-    }
+      ],
+    },
   },
   /* COMBINING WORKTEXT AND CASEGRID INTO ONE SECTION
   {
@@ -123,7 +127,7 @@ export const homeLayout: LayoutBlock[] = [
       ],
     },
   }*/
-    /*,
+  /*,
   {
     type: "ContactForm",
     props: {
@@ -132,37 +136,38 @@ export const homeLayout: LayoutBlock[] = [
   },*/
 ];
 export const workTextProps = {
-  heading: 'Our Work',
-  text: 'As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.',
-  text2: 'Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.',
+  heading: "Our Work",
+  text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
+  text2:
+    "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
 } as const;
 
 export const caseGridProps = {
-  layout: '4col' as const,
+  layout: "4col" as const,
   items: [
     {
-      title: 'Geospatial Solutions',
-      summary: 'Sanborn + AppGeo',
-      imageUrl: '/img/case1.webp',
-      slug: 'sanborn-appgeo',
+      title: "Geospatial Solutions",
+      summary: "Sanborn + AppGeo",
+      imageUrl: "/img/case1.webp",
+      slug: "sanborn-appgeo",
     },
     {
-      title: 'Nonprofit Organizations',
-      summary: 'NAPSG Foundation',
-      imageUrl: '/img/case2.webp',
-      slug: 'napsg-foundation',
+      title: "Nonprofit Organizations",
+      summary: "NAPSG Foundation",
+      imageUrl: "/img/case2.webp",
+      slug: "napsg-foundation",
     },
     {
-      title: 'Government Contracting',
-      summary: 'Crucis',
-      imageUrl: '/img/case3.webp',
-      slug: 'crucis',
+      title: "Government Contracting",
+      summary: "Crucis",
+      imageUrl: "/img/case3.webp",
+      slug: "crucis",
     },
     {
-      title: 'Emergency Response',
-      summary: 'MKR Fabricators',
-      imageUrl: '/img/temp.svg',
-      slug: 'mkr-fabricators',
+      title: "Emergency Response",
+      summary: "MKR Fabricators",
+      imageUrl: "/img/temp.svg",
+      slug: "mkr-fabricators",
     },
   ],
 } as const;

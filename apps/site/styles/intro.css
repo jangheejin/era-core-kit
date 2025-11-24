@@ -6,7 +6,7 @@
 .c-section--intro .intro-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) auto; /* text | image-sized column */
-  column-gap: clamp(1.5rem, 4vw, 4.5rem);      /* space between text and image */
+  column-gap: clamp(1.5rem, 4vw, 4.5rem); /* space between text and image */
   align-items: center;
 }
 
@@ -34,7 +34,7 @@
 .c-section--intro .intro-image img {
   display: block;
   height: auto;
-  max-width: 275px;  /* cap size so it doesn’t blow up */
+  max-width: 275px; /* cap size so it doesn’t blow up */
 }
 
 /* ========================= */
@@ -49,7 +49,7 @@
 
   .c-section--intro .intro-image {
     margin-top: var(--space-3);
-    justify-self: center;  /* center the image block under the text */
+    justify-self: center; /* center the image block under the text */
   }
 
   .c-section--intro .intro-image img {

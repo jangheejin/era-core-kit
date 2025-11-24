@@ -3,8 +3,6 @@
 
 }*/
 
-
-
 /* Base layout: two columns on larger screens */
 .c-section--hero .hero-grid {
   display: grid;
@@ -27,7 +25,7 @@
 
 /* Constrain logo size so it doesn't explode or shrink randomly */
 .c-section--hero .hero-image-container {
-  max-width: 260px;      /* tweak this up/down to taste */
+  max-width: 260px; /* tweak this up/down to taste */
   width: 100%;
 }
 

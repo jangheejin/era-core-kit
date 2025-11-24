@@ -12,8 +12,8 @@
 /* HERO LAYOUT: logo left, text right */
 /* .hero-grid { */
 .c-section--hero .hero-grid {
-  display: flex; 
-/*   display: grid; */
+  display: flex;
+  /*   display: grid; */
   /* flex-wrap: wrap; */
   flex-direction: row; /* SINGLE ROW*/
   flex-wrap: nowrap;
@@ -28,8 +28,8 @@
 
 /* LOGO COLUMN */
 /* .hero-logo { */
-  /* flex: 0 0 auto;  */         /* don't stretch */
-  /* padding-right:25px; */
+/* flex: 0 0 auto;  */ /* don't stretch */
+/* padding-right:25px; */
 /* } */
 /* .hero-logo {
   display: flex;
@@ -38,7 +38,7 @@
 } */
 .c-section--hero .hero-logo {
   flex: 0 0 auto; /* only as wide as the logo needs */
-  padding-right:20px;
+  padding-right: 20px;
 }
 
 /* center the image inside the logo column */
@@ -56,7 +56,7 @@
 .c-section--hero .heroimage {
   display: block;
   width: 100%;
-  /* max-width: clamp(180px, 22vw, 240px);  *//* stays reasonable on big screens */
+  /* max-width: clamp(180px, 22vw, 240px);  */ /* stays reasonable on big screens */
   /* max-width: 260px; */
   /* max-width: clamp(140px, 26vw, 260px); */
   max-width: clamp(200px, 30vw, 260px);
@@ -67,7 +67,7 @@
 /* TEXT COLUMN */
 /* .hero-copy {
   flex: 1 1 0; */
-/*   max-width: none;  */       /* or 48rem for a softer cap */
+/*   max-width: none;  */ /* or 48rem for a softer cap */
 /* } */
 /* Text column takes the remaining space */
 .c-section--hero .hero-copy {
@@ -124,7 +124,7 @@
 /* Below ~650px, stacking is cleaner than a squished two-column row */
 
 @media (max-width: 756px) {
-/*   .c-section--hero .hero-grid {
+  /*   .c-section--hero .hero-grid {
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
@@ -137,7 +137,6 @@
     justify-items: center;
     text-align: center;
   }
-
 
   .c-section--hero .hero-logo {
     padding-right: 0;

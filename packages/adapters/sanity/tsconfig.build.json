@@ -1,5 +1,5 @@
 {
-  "extends": "../../../tsconfig.base.json", 
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
@@ -7,18 +7,18 @@
     "declaration": true,
     "emitDeclarationOnly": false,
     "noEmit": false,
-    "composite": true,
+    "composite": true
 
-//    "declarationDir": "./dist",//best practice to include when composite is true
+    //    "declarationDir": "./dist",//best practice to include when composite is true
 
     //TEMPORARY BYPASS!!
-//    "noImplicitAny": false,
-//    "noUncheckedIndexedAccess": false,
+    //    "noImplicitAny": false,
+    //    "noUncheckedIndexedAccess": false,
 
-/*    "strict": true,*/
-//    "noUncheckedIndexedAccess": true,    
-//    "noImplicitOverride": true,
-/*    "noFallthroughCasesInSwitch": true,
+    /*    "strict": true,*/
+    //    "noUncheckedIndexedAccess": true,
+    //    "noImplicitOverride": true,
+    /*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
 
     "module": "ESNext",
@@ -30,11 +30,8 @@
     "resolveJsonModule": true,*/
   },
 
-//  "include": ["src/**/*"],//////////////////NOT SURE IF OK
+  //  "include": ["src/**/*"],//////////////////NOT SURE IF OK
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"],
-  "references": [
-    { "path": "../../cms-contract" },
-    { "path": "../../schema" }
-  ]
+  "references": [{ "path": "../../cms-contract" }, { "path": "../../schema" }]
 }

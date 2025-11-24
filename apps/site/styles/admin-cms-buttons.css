@@ -10,17 +10,17 @@ formerly NewCaseStudies.module.css */
 
 /* actual button-style link */
 .buttonLink {
-  display: inline-flex;          /* make it a box, not inline text */
+  display: inline-flex; /* make it a box, not inline text */
   align-items: center;
   justify-content: center;
 
-  padding: 0.5rem 1rem;          /* inside space: vertical, horizontal */
-  border-radius: 9999px;         /* pill. change this to control roundness */
+  padding: 0.5rem 1rem; /* inside space: vertical, horizontal */
+  border-radius: 9999px; /* pill. change this to control roundness */
   /* e.g. 4px for sharp, 12px mild, 9999px pill */
 
   background: #111;
   color: #fff;
-  text-decoration: none;         /* remove underline */
+  text-decoration: none; /* remove underline */
   font-size: 0.95rem;
   font-weight: 500;
 
@@ -41,17 +41,17 @@ formerly NewCaseStudies.module.css */
 
 .buttonLink-2,
 .cms-nav-link {
-  display: inline-flex;          /* make it a box, not inline text */
+  display: inline-flex; /* make it a box, not inline text */
   align-items: center;
   justify-content: center;
 
-  padding: 0.5rem 1rem;          /* inside space: vertical, horizontal */
-  border-radius: 9999px;         /* pill. change this to control roundness */
+  padding: 0.5rem 1rem; /* inside space: vertical, horizontal */
+  border-radius: 9999px; /* pill. change this to control roundness */
   /* e.g. 4px for sharp, 12px mild, 9999px pill */
 
   background: #0b5fff;
   color: #fff;
-  text-decoration: none;         /* remove underline */
+  text-decoration: none; /* remove underline */
   font-size: 0.95rem;
   font-weight: 500;
 
@@ -63,7 +63,6 @@ formerly NewCaseStudies.module.css */
   background-color: #003f8f;
   transform: translateY(-1px);
 }
-
 
 .cs-link {
   padding-left: 5px;
@@ -91,8 +90,6 @@ formerly NewCaseStudies.module.css */
     box-shadow 0.15s ease,
     transform 0.05s ease;
 }
-
-
 
 .cms-button:hover {
   background: #020617;

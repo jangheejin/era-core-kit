@@ -17,7 +17,6 @@ export type GenericBlock<T extends keyof BlockComponentProps> = {
   _key?: string;
 };
 
-
 // Props for ALL layout block components (not case study ones only)
 
 export type HeroProps = {
@@ -26,7 +25,7 @@ export type HeroProps = {
   text2?: string;
   text3?: string;
   imageUrl: string;
-  subhead?: string;   // TEMP: support old shape
+  subhead?: string; // TEMP: support old shape
 };
 
 export type IntroWithImageProps = {
@@ -40,15 +39,14 @@ export type MissionTextProps = {
   heading: string;
   text: string;
   text2?: string;
-  imageUrl?: string; 
+  imageUrl?: string;
 };
 
 export type WorkTextProps = {
   heading: string;
   text: string;
-  text2?: string;// optional second paragraph
+  text2?: string; // optional second paragraph
 };
-
 
 export type CaseGridItem = {
   title?: string;
@@ -58,13 +56,12 @@ export type CaseGridItem = {
   brief?: string;
   imageUrl: string;
   slug: string;
-}
+};
 export type CaseGridProps = {
-  
   layout?: string;
   //items: {
-    items: CaseGridItem[];
-/*    title: string;
+  items: CaseGridItem[];
+  /*    title: string;
     summary: string;
     imageUrl: string;
     slug: string;*/
@@ -89,7 +86,7 @@ export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
   text2?: string;
-  layout: '4col' | '2col' | '2x2';
+  layout: "4col" | "2col" | "2x2";
   items: Array<{
     title?: string;
     sector?: string;
@@ -127,7 +124,6 @@ export type ImageFigureProps = {
 
 // !!!TO DO: Union of block types for different layouts
 
-
 // helper: map of block names (aka keys) to their prop types
 export type BlockComponentProps = {
   Callout: CalloutProps;
@@ -147,14 +143,13 @@ export type BlockComponentProps = {
   TeamStrip: TeamStripProps;
   IntroWithImage: IntroWithImageProps;
   WorkWithCaseGrid: WorkWithCaseGridProps;
-//  ContactForm: ContactFormProps;
-//  contactForm: ContactFormProps;
+  //  ContactForm: ContactFormProps;
+  //  contactForm: ContactFormProps;
 };
-
 
 // All layout blocks (shared + landing)
 export type LayoutBlock = {
-  [K in keyof BlockComponentProps]: GenericBlock<K>
+  [K in keyof BlockComponentProps]: GenericBlock<K>;
 }[keyof BlockComponentProps];
 
-export type BlockType = LayoutBlock['type'];
+export type BlockType = LayoutBlock["type"];

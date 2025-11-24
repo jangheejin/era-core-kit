@@ -2,23 +2,23 @@
 
 //'use client';
 
-import '@styles/tokens.css';
-import '@styles/primitives.css';
-import '@styles/casegrid.css';
-import '@styles/home.css'
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { type Metadata } from 'next';
+import "@styles/tokens.css";
+import "@styles/primitives.css";
+import "@styles/casegrid.css";
+import "@styles/home.css";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { type Metadata } from "next";
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css'; 
-import '@fontsource/inter/600.css'; 
-import '@fontsource/oswald/400.css';
-import '@fontsource/oswald/500.css';
-import '@fontsource/oswald/600.css';
-import '@styles/primitives.css';
-import '@styles/casegrid.css';
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/oswald/400.css";
+import "@fontsource/oswald/500.css";
+import "@fontsource/oswald/600.css";
+import "@styles/primitives.css";
+import "@styles/casegrid.css";
 
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
@@ -29,7 +29,7 @@ const site = {
   description:
     "ERA Government Affairs is a premier government affairs, consulting and public affairs firm",
   twitter: "@example", //set real twitter
-  locale: "en_US"
+  locale: "en_US",
 };
 
 export const metadata: Metadata = {
@@ -66,7 +66,11 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="font-setup">
       <body>

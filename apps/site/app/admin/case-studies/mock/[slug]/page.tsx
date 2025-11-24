@@ -1,9 +1,9 @@
 // apps/site/app/admin/case-studies/mock/[slug]/page.tsx
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import { useAdminCaseStudies } from '../../../AdminCaseStudyStore';
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 
 export default function MockCaseStudyPage() {
   const params = useParams<{ slug: string }>();
@@ -18,7 +18,8 @@ export default function MockCaseStudyPage() {
         <div className="c-container c-stack">
           <h1 className="type-h2">Mock case study not found</h1>
           <p className="type-body type-muted">
-            This mock entry only lives in your current browser session. If you refresh or open a new browser, it disappears.
+            This mock entry only lives in your current browser session. If you
+            refresh or open a new browser, it disappears.
           </p>
           <Link href="/admin/case-studies/list" className="c-link">
             Back to mock database
@@ -44,7 +45,7 @@ export default function MockCaseStudyPage() {
               <img
                 src={cs.heroImageUrl}
                 alt={cs.title}
-                style={{ width: '100%', maxHeight: 360, objectFit: 'cover' }}
+                style={{ width: "100%", maxHeight: 360, objectFit: "cover" }}
               />
             </div>
           )}
@@ -53,12 +54,12 @@ export default function MockCaseStudyPage() {
             <article className="type-body">
               {/* For now, treat bodyMDX as plain text. Later this will go
                  through your MDX renderer pipeline. */}
-              <p style={{ whiteSpace: 'pre-wrap' }}>{cs.bodyMDX}</p>
+              <p style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</p>
             </article>
           )}
         </section>
 
-        <footer className="c-stack" style={{ marginTop: '2rem' }}>
+        <footer className="c-stack" style={{ marginTop: "2rem" }}>
           <Link href="/admin/case-studies/list" className="c-link">
             ← Back to mock database
           </Link>

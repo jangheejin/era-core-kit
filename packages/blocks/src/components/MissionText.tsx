@@ -1,28 +1,33 @@
 // packages/blocks/src/components/MissionText.tsx
 // REACT COMPONENT FOR MISSIONTEXT
 //'use client';
-import { ImageFigure } from './ImageFigure';
-import type { MissionTextProps } from '../types';
-import { ClientAnimations } from './ClientAnimations';
+import { ImageFigure } from "./ImageFigure";
+import type { MissionTextProps } from "../types";
+import { ClientAnimations } from "./ClientAnimations";
 /*
 Renders the string you pass in text (as mission text?)
 Hardcoded heading is "Our Mission" (could be made flexible if needed later)
 If you want to allow CMS control over the heading too, change props to { heading: string, text: string }
 */
 
-export function MissionText({ heading, text, text2, imageUrl }: MissionTextProps & { imageUrl: string }) {
-    return (
-      <section className="c-section" id="missiontext">
-        <div className="c-container c-grid">
-          <div>
-            <h2 className="type-h2">{heading}</h2>
-            <ClientAnimations />
-            <p className="type-body">{text}</p>
-            {text2 && <p className="type-body">{text2}</p>}
-{/**!!!!!!!!!!!!TO FIX LATER? */}
-{/*            <p className="type-body"></p>*/}
-          </div>
-{/*           <div className="card-media">
+export function MissionText({
+  heading,
+  text,
+  text2,
+  imageUrl,
+}: MissionTextProps & { imageUrl: string }) {
+  return (
+    <section className="c-section" id="missiontext">
+      <div className="c-container c-grid">
+        <div>
+          <h2 className="type-h2">{heading}</h2>
+          <ClientAnimations />
+          <p className="type-body">{text}</p>
+          {text2 && <p className="type-body">{text2}</p>}
+          {/**!!!!!!!!!!!!TO FIX LATER? */}
+          {/*            <p className="type-body"></p>*/}
+        </div>
+        {/*           <div className="card-media">
             <ImageFigure
               src={imageUrl}
               alt={heading}
@@ -31,7 +36,7 @@ export function MissionText({ heading, text, text2, imageUrl }: MissionTextProps
               style={{ objectFit: 'cover' }}
             />
           </div> */}
-        </div>
-      </section>
-    );
-  }
+      </div>
+    </section>
+  );
+}

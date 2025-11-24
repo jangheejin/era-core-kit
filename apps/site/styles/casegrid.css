@@ -15,7 +15,7 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-  /* Forces a grid of 2 columns */
+/* Forces a grid of 2 columns */
 /* .casegrid.layout-2x2 {
   grid-template-columns: repeat(2, 1fr);
 } */
@@ -54,7 +54,7 @@
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
   overflow: hidden;
-/*   background-color: white; */
+  /*   background-color: white; */
   transition: box-shadow 0.2s ease;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .case-card__image {
-/*  ImageFigure handles aspect ratio */
+  /*  ImageFigure handles aspect ratio */
   overflow: hidden;
 }
 
@@ -72,7 +72,7 @@
   /*  aspect-ratio: 2 / 1;*/
   padding: var(--space-3);
 
-/*   display: flex;
+  /*   display: flex;
   flex-direction: column;
   flex: 1 1 auto; */
 }
@@ -105,24 +105,36 @@
   line-height: 1.5;
   color: var(--color-text);
   margin: 0.4rem 0 0;
-  margin-block-start:0em;
+  margin-block-start: 0em;
 }
 
 .card-h3 {
-  font-weight:400;
-  text-transform:uppercase;
-  font-size: clamp(.99rem,  .75rem + 0.1vw, 1.225rem);
-  margin-block-start:0; margin-block-end:0; margin-inline-start:0; margin-inline-end:0;
-padding-block-start:0; padding-block-end:0; padding-inline-start:0; padding-inline-end:0;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(0.99rem, 0.75rem + 0.1vw, 1.225rem);
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-block-start: 0;
+  padding-block-end: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
 }
 
 .card-h2 {
-  font-weight:500;
-  text-transform:uppercase;
-  font-size: clamp(1.3rem,  1.75rem + 0.2vw, 1.125rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(1.3rem, 1.75rem + 0.2vw, 1.125rem);
   /* letter-spacing: .025rem; */
-  margin-block-start:0; margin-block-end:0; margin-inline-start:0; margin-inline-end:0;
-  padding-block-start:5px; padding-block-end:5px; padding-inline-start:0; padding-inline-end:0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-block-start: 5px;
+  padding-block-end: 5px;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
 }
 
 /* ----------------------------------------------------- */
@@ -181,7 +193,6 @@ padding-block-start:0; padding-block-end:0; padding-inline-start:0; padding-inli
   font-size: var(--fs-body);
   margin: 0;
 } */
-
 
 /*
 .case-card__body h3 {

@@ -2,23 +2,23 @@
 // VISUAL SHELL
 // simple/dummy client shell for the CMS
 // 'CHROME' only - doesn't know about case studies / CMS stuff
-// - sidebar 
-// - nav links 
+// - sidebar
+// - nav links
 // - wraps {children}
-'use client';
+"use client";
 //import React from 'react';
-import type { ReactNode } from 'react';
-import Link from 'next/link';
-import '@styles/admin-cms-buttons.css';
-import '@styles/admin-cms.css'
+import type { ReactNode } from "react";
+import Link from "next/link";
+import "@styles/admin-cms-buttons.css";
+import "@styles/admin-cms.css";
 
 type AdminShellProps = {
   children: ReactNode;
 };
 
 const navItems = [
-  { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/case-studies/new', label: 'New Case Study' },
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/case-studies/new", label: "New Case Study" },
   // later: { href: '/admin/case-studies/list', label: 'All Case Studies' },
 ];
 
@@ -36,9 +36,7 @@ export function AdminShell({ children }: AdminShellProps) {
         </nav>
       </aside>
 
-      <main className="cms-main">
-        {children}
-      </main>
+      <main className="cms-main">{children}</main>
     </div>
   );
 }

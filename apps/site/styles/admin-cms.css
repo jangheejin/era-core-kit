@@ -152,7 +152,7 @@ the user fills out)
   cursor: pointer;
 }
 
-.admin-checkbox-row input[type='checkbox'] {
+.admin-checkbox-row input[type="checkbox"] {
   width: 0.9rem;
   height: 0.9rem;
 }
@@ -233,51 +233,52 @@ the user fills out)
 }
 
 .cms-logo {
-  font-family:'Oswald';
+  font-family: "Oswald";
 }
-
 
 /* TYPOGRAPHY */
 .cms-h1 {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-size: var(--fs-hero);
   line-height: 1.1;
-/*  text-transform: uppercase;*/
+  /*  text-transform: uppercase;*/
 }
 
 .cms-h2 {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-size: var(--fs-h2);
   line-height: 1.2;
-/*  text-transform: uppercase;*/
+  /*  text-transform: uppercase;*/
 }
 
-.cms-h2b {/*slightly smaller*/
-  font-family: 'Inter';
+.cms-h2b {
+  /*slightly smaller*/
+  font-family: "Inter";
   font-size: var(--fs-h2b);
   line-height: 1.2;
-/*  text-transform: uppercase;*/
+  /*  text-transform: uppercase;*/
 }
 
-.cms-h2c {/*slightly smaller*/
-  font-family: 'Inter';
+.cms-h2c {
+  /*slightly smaller*/
+  font-family: "Inter";
   font-size: var(--fs-h2b);
   line-height: 1.2;
   text-transform: uppercase;
 }
 
 .cms-h3 {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-size: var(--fs-h3);
   line-height: 1.25;
   margin: 0;
-/*  text-transform: uppercase;*/
+  /*  text-transform: uppercase;*/
 }
 
 .cms-h4 {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-size: var(--fs-h4);
   line-height: 1;
   margin: 0;
-/*  text-transform: uppercase;*/
+  /*  text-transform: uppercase;*/
 }

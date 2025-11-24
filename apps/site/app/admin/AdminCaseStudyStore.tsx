@@ -1,14 +1,9 @@
 //apps/site/app/admin/AdminCaseStudyStore.tsx
 // This is only in memory for the current browser session
-'use client';
+"use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from 'react';
-import type { CaseStudy as CaseStudyType } from '@kit/schema';
+import { createContext, useContext, useState, type ReactNode } from "react";
+import type { CaseStudy as CaseStudyType } from "@kit/schema";
 
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
@@ -41,7 +36,7 @@ export function useAdminCaseStudies() {
   const ctx = useContext(AdminCaseStudyContext);
   if (!ctx) {
     throw new Error(
-      'useAdminCaseStudies must be used within <AdminCaseStudyProvider>',
+      "useAdminCaseStudies must be used within <AdminCaseStudyProvider>",
     );
   }
   return ctx;

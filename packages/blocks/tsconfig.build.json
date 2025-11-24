@@ -3,18 +3,18 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    
+
     "declaration": true,
     "composite": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "noEmit": false,
-//    "declarationDir": "./dist",
-    
-//    "noUncheckedIndexedAccess": true,
-//    "noImplicitOverride": true,
+    "noEmit": false
+    //    "declarationDir": "./dist",
 
-/*    "strict": true,
+    //    "noUncheckedIndexedAccess": true,
+    //    "noImplicitOverride": true,
+
+    /*    "strict": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
@@ -27,12 +27,11 @@
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"],
-//  "include": ["src/**/*"],
+  //  "include": ["src/**/*"],
   "references": [
     { "path": "../schema" },
     { "path": "../cms-contract" }
-//    { "path": "../../packages/schema" },
-//    { "path": "../../packages/cms-contract" }
+    //    { "path": "../../packages/schema" },
+    //    { "path": "../../packages/cms-contract" }
   ]
 }
-

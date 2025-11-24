@@ -1,9 +1,9 @@
 // apps/site/app/edit/page.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import type { LayoutBlock } from '@kit/blocks';
-import BlockRenderer from '@/utils/BlockRenderer';
+import { useState } from "react";
+import type { LayoutBlock } from "@kit/blocks";
+import BlockRenderer from "@/utils/BlockRenderer";
 
 // Define the component props interface
 interface InlineEditFormProps {
@@ -12,7 +12,7 @@ interface InlineEditFormProps {
 }
 
 const InlineEditForm = ({ block /*, onUpdate */ }: InlineEditFormProps) => {
-  // In a real application, this component would render inputs based on block.type 
+  // In a real application, this component would render inputs based on block.type
   return (
     <div className="block-edit-form">
       <strong>Inline Form:</strong> Editing {block.type} props
@@ -22,23 +22,23 @@ const InlineEditForm = ({ block /*, onUpdate */ }: InlineEditFormProps) => {
 
 const initialData: LayoutBlock[] = [
   {
-    type: 'Hero',
+    type: "Hero",
     props: {
-      heading: 'Welcome to the site!',
-      subhead: 'Here is where you can edit pages',
-      text: '',
-      text2: '',
-      text3: '',
-      imageUrl: '/hero.jpg',
+      heading: "Welcome to the site!",
+      subhead: "Here is where you can edit pages",
+      text: "",
+      text2: "",
+      text3: "",
+      imageUrl: "/hero.jpg",
     },
-    _key: 'hero-1',
+    _key: "hero-1",
   },
   {
-    type: 'Callout',
+    type: "Callout",
     props: {
-      content: 'This is a callout.',
+      content: "This is a callout.",
     },
-    _key: 'callout-1',
+    _key: "callout-1",
   },
 ];
 
@@ -70,7 +70,9 @@ export default function EditPage() {
               onUpdate={(newProps) => {
                 setBlocks((prev) =>
                   prev.map((b, i) =>
-                    i === index ? { ...b, props: { ...b.props, ...newProps } } : b,
+                    i === index
+                      ? { ...b, props: { ...b.props, ...newProps } }
+                      : b,
                   ),
                 );
               }}

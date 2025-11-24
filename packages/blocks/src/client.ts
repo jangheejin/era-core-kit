@@ -1,6 +1,6 @@
 //packages/blocks/src/client.ts
 // A client-only entrypoint for the actual blocks components
-'use client';
+"use client";
 /*
 export {
     Hero,
@@ -10,4 +10,4 @@ export {
     ContactForm,
     ...
 } from './components';*/
-export * from './components';
+export * from "./components";

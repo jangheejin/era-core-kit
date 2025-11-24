@@ -1,13 +1,13 @@
 //apps/site/src/components/mdx-client.tsx
-'use client';
+"use client";
 
-import { MDXProvider } from '@mdx-js/react';
+import { MDXProvider } from "@mdx-js/react";
 //import { Callout, PullQuote, DocLink, OutcomeList, ImageFigure } from '@kit/blocks';
 //import { useMDXComponent } from 'next-contentlayer/hooks'; // or wherever your MDX source comes from
-import { useMemo } from 'react';
-import * as runtime from 'react/jsx-runtime';
+import { useMemo } from "react";
+import * as runtime from "react/jsx-runtime";
 //import { compile } from '@mdx-js/mdx';
-import { Fragment } from 'react';
+import { Fragment } from "react";
 
 /*
 const components = {
@@ -24,7 +24,7 @@ const components = {
 
 /*
 type Props = { code: string };*/
-<div>Coming soon: Blocks</div>
+<div>Coming soon: Blocks</div>;
 
 /*
 export function MDXClient({ code }: Props) {

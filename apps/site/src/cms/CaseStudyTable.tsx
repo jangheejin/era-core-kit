@@ -1,7 +1,7 @@
 // apps/site/src/cms/CaseStudyTable.tsx
-'use client';
+"use client";
 
-import type { CaseStudy } from '@kit/schema';
+import type { CaseStudy } from "@kit/schema";
 
 type Props = {
   items: CaseStudy[];
@@ -36,11 +36,11 @@ export function CaseStudyTable({ items }: Props) {
               {items.map((cs) => (
                 <tr key={cs.id}>
                   <td>{cs.title}</td>
-                  <td>{cs.client ?? '—'}</td>
+                  <td>{cs.client ?? "—"}</td>
                   <td>{cs.sector}</td>
-                  <td>{cs.year ?? '—'}</td>
-                  <td>{cs.isFeaturedHome ? 'Yes' : 'No'}</td>
-                  <td>{cs.isPublic ? 'Public' : 'Internal'}</td>
+                  <td>{cs.year ?? "—"}</td>
+                  <td>{cs.isFeaturedHome ? "Yes" : "No"}</td>
+                  <td>{cs.isPublic ? "Public" : "Internal"}</td>
                 </tr>
               ))}
             </tbody>

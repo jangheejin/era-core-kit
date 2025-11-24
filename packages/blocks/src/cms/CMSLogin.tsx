@@ -1,6 +1,6 @@
 // packages/blocks/src/cms/CMSLogin.tsx
 // WAS: apps/site/app/admin/CMSLogin.tsx
-'use client';
+"use client";
 export function CMSLogin({ onLogin }: { onLogin: () => void }) {
   return (
     <div className="p-4">

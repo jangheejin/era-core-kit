@@ -4,9 +4,9 @@
 .c-section--hero .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); /* text wider than logo */
-  column-gap: clamp(1.5rem, 3vw, 2.5rem);              /* not a giant gulf */
+  column-gap: clamp(1.5rem, 3vw, 2.5rem); /* not a giant gulf */
   row-gap: var(--space-3);
-  align-items: center;                                   /* vertical align */
+  align-items: center; /* vertical align */
 }
 
 /* Text column */
@@ -17,7 +17,7 @@
 /* Logo column */
 .c-section--hero .hero-logo {
   display: flex;
-  justify-content: flex-start;  /* no over-centering in a wide column */
+  justify-content: flex-start; /* no over-centering in a wide column */
 }
 
 /* Logo sizing: no random huge margins, no microscopic logo */

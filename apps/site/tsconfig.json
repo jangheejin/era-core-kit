@@ -11,16 +11,12 @@
     "noEmit": true, // Tells tsc to only check types, NEVER generate JS output (Next.js handles this)
     // --- Modern Next.js / React Directives ---
     "target": "ES2020",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "isolatedModules": true, // Mandatory for Vercel/Next.js
     "jsx": "preserve", // Mandatory for Next.js
-    "allowJs": true,// !!!TO DO - MAYBE CHANGE
+    "allowJs": true, // !!!TO DO - MAYBE CHANGE
     "plugins": [
       {
         "name": "next"
@@ -60,13 +56,8 @@
         "../../packages/adapters/sanity/src",
         "../../packages/adapters/sanity/dist"
       ],
-      "@/*": [
-        "src/*"
-      ],
-      "*": [
-        "./*",
-        "../../packages/*"
-      ]
+      "@/*": ["src/*"],
+      "*": ["./*", "../../packages/*"]
       //      "@kit/*": ["../../packages/*"]
     },
     "types": ["react", "react-dom", "node"]
@@ -88,10 +79,11 @@
     "*.js",
     "*.mjs",
     "next.config.js",
-    "eslint.config.mjs"//,
-//    "next-env.d.ts"
+    "eslint.config.mjs" //,
+    //    "next-env.d.ts"
   ],
-  "references": [ // Correct and comprehensive dependency list
+  "references": [
+    // Correct and comprehensive dependency list
     {
       "path": "../../packages/blocks"
     },

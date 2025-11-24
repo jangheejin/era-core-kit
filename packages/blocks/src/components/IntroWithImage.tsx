@@ -4,12 +4,17 @@
 
 // This is actually the mission section but renaming the actual components caused havoc
 
-import '@styles/intro.css'
-import type { IntroWithImageProps } from '../types';
-import { ImageFigure } from './ImageFigure';
-import { ClientAnimations } from './ClientAnimations';
+import "@styles/intro.css";
+import type { IntroWithImageProps } from "../types";
+import { ImageFigure } from "./ImageFigure";
+import { ClientAnimations } from "./ClientAnimations";
 
-export function IntroWithImage({ heading, text, text2, imageUrl }: IntroWithImageProps) {
+export function IntroWithImage({
+  heading,
+  text,
+  text2,
+  imageUrl,
+}: IntroWithImageProps) {
   return (
     <section className="c-section c-section--intro" id="intro">
       <div className="c-container intro-grid">
@@ -20,13 +25,13 @@ export function IntroWithImage({ heading, text, text2, imageUrl }: IntroWithImag
           {text2 && <p className="type-body intro-body">{text2}</p>}
         </div>
         {/* <div className="intro-image"> */}
-{/*           <ImageFigure
+        {/*           <ImageFigure
             src={imageUrl}
             alt={heading}
             aspect="4/3"
             style={{ objectFit: 'cover' }}
           /> */}
-          {/* <img src={imageUrl} alt={heading} className="intro-image"/>
+        {/* <img src={imageUrl} alt={heading} className="intro-image"/>
         </div> */}
         {imageUrl && (
           <div className="intro-image">

@@ -1,5 +1,5 @@
 //apps/site/app/admin/mockCMS.tsx
-'use client';
+"use client";
 
 import {
   createContext,
@@ -7,9 +7,9 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from 'react';
-import type { CaseStudy } from '@kit/schema';
-import { CASE_STUDIES_FIXTURE } from '@kit/schema';
+} from "react";
+import type { CaseStudy } from "@kit/schema";
+import { CASE_STUDIES_FIXTURE } from "@kit/schema";
 
 type MockCMSState = {
   items: CaseStudy[];
@@ -23,9 +23,9 @@ export function MockCMSProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CaseStudy[]>(() => CASE_STUDIES_FIXTURE);
 
   const addCaseStudy = (payload: CaseStudy) => {
-    setItems(prev => {
+    setItems((prev) => {
       const idx = prev.findIndex(
-        cs => cs.id === payload.id || cs.slug === payload.slug,
+        (cs) => cs.id === payload.id || cs.slug === payload.slug,
       );
 
       if (idx === -1) {
@@ -49,7 +49,7 @@ export function MockCMSProvider({ children }: { children: ReactNode }) {
 export function useMockCMS(): MockCMSState {
   const ctx = useContext(MockCMSContext);
   if (!ctx) {
-    throw new Error('useMockCMS must be used within <MockCMSProvider>');
+    throw new Error("useMockCMS must be used within <MockCMSProvider>");
   }
   return ctx;
 }

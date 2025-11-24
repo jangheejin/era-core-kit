@@ -8,19 +8,19 @@
     "declarationMap": true,
     "emitDeclarationOnly": false,
     "noEmit": false,
-    "composite": true,
-//    "declarationDir": "./dist",
+    "composite": true
+    //    "declarationDir": "./dist",
 
     //Strictness, compatibility
 
-//    "noUncheckedIndexedAccess": true,
-//    "noImplicitOverride": true,
-/*    "noFallthroughCasesInSwitch": true,
+    //    "noUncheckedIndexedAccess": true,
+    //    "noImplicitOverride": true,
+    /*    "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,*/
 
     //Compatibility: Module and targeting
-/*    "module": "ESNext",
+    /*    "module": "ESNext",
     "target": "ES2020",
     "moduleResolution": "Node",
     "esModuleInterop": true,
@@ -28,8 +28,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true*/
   },
-//  "files": ["./src/index.ts"],
-//  "include": ["src/**/*"]
+  //  "files": ["./src/index.ts"],
+  //  "include": ["src/**/*"]
   "include": ["src"],
   "exclude": ["dist", "node_modules", "**/*.test.ts"]
 }

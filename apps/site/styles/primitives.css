@@ -6,15 +6,15 @@
 /* ----------------------------------------------------- */
 
 :root {
-  --font-body: 'Inter', sans-serif;
-  --font-heading: 'Oswald', sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-heading: "Oswald", sans-serif;
   --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
 
   /* BODY + SMALL TEXT (OLD, smaller)
      ≈ 13.3px → 14px for body
      ≈ 12.3px → 13px for small */
-/*  --fs-body:  clamp(0.8125rem, 0.8rem + 0.15vw, 0.875rem);*//*≈ 13.3px → 14px for body*/
-/*  --fs-small: clamp(0.75rem,   0.75rem + 0.10vw, 0.8125rem);*//*≈ 12.3px → 13px for small*/
+  /*  --fs-body:  clamp(0.8125rem, 0.8rem + 0.15vw, 0.875rem);*/ /*≈ 13.3px → 14px for body*/
+  /*  --fs-small: clamp(0.75rem,   0.75rem + 0.10vw, 0.8125rem);*/ /*≈ 12.3px → 13px for small*/
 
   /* BODY + SMALL TEXT (NEW, bigger but less than 16)
      ~14.5px → ~15.5px for body
@@ -23,9 +23,9 @@
   /* ("no smaller than X", "bodytxtsz+1% screen", "no bigger than X")
               clamp(LOWERLIMIT, 14px+0.1*W,     UPPERLIMIT)
               clamp(min,        formula,         max)  */
-  /* --fs-body:  clamp(0.9rem, 0.86rem + 0.25vw, 0.97rem); *//* ~14.5px → ~15.5px */
-  --fs-body:  clamp(0.9rem, 0.9rem + 0.25vw, 1rem);
-  --fs-small: clamp(0.84rem, 0.80rem + 0.2vw, 0.91rem);/* ~13.5px → ~14.5px */
+  /* --fs-body:  clamp(0.9rem, 0.86rem + 0.25vw, 0.97rem); */ /* ~14.5px → ~15.5px */
+  --fs-body: clamp(0.9rem, 0.9rem + 0.25vw, 1rem);
+  --fs-small: clamp(0.84rem, 0.8rem + 0.2vw, 0.91rem); /* ~13.5px → ~14.5px */
 
   /* HEADINGS
      H1: ≈ 28px → <= 32px
@@ -33,19 +33,19 @@
      H2b: between H2 and H3 (optional)
      H3: ≈ 18.5px → 21px
      H4: ≈ 16px → 18px */
-  --fs-hero:  clamp(1.75rem,   1.65rem + 0.50vw, 2rem);    /* H1 */
-  --fs-h2:    clamp(1.375rem,  1.30rem + 0.50vw, 1.975rem); /* H2 */
-  --fs-h2b:   clamp(1.3rem,    1.25rem + 0.20vw, 1.5rem);   /* H2b (mid-size) */
-  --fs-h3:    clamp(1.125rem,  1.10rem + 0.30vw, 1.1125rem);/* H3 */
-  --fs-h4:    clamp(1rem,      0.95rem + 0.25vw, 1.125rem); /* H4 */
+  --fs-hero: clamp(1.75rem, 1.65rem + 0.5vw, 2rem); /* H1 */
+  --fs-h2: clamp(1.375rem, 1.3rem + 0.5vw, 1.975rem); /* H2 */
+  --fs-h2b: clamp(1.3rem, 1.25rem + 0.2vw, 1.5rem); /* H2b (mid-size) */
+  --fs-h3: clamp(1.125rem, 1.1rem + 0.3vw, 1.1125rem); /* H3 */
+  --fs-h4: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* H4 */
 
-/* Spacing Scale (fluid, ensures responsiveness) */
-  --space-1:  clamp(0.5rem, 0.8vw, 0.75rem);
-  --space-2:  clamp(0.75rem, 1.2vw, 1rem);
-  --space-3:  clamp(1rem, 1.8vw, 1.5rem);
-  --space-4:  clamp(1.5rem, 2.5vw, 2rem);
-  --space-6:  clamp(2rem, 3.5vw, 3rem);
-  --space-8:  clamp(3rem, 5vw, 4rem);
+  /* Spacing Scale (fluid, ensures responsiveness) */
+  --space-1: clamp(0.5rem, 0.8vw, 0.75rem);
+  --space-2: clamp(0.75rem, 1.2vw, 1rem);
+  --space-3: clamp(1rem, 1.8vw, 1.5rem);
+  --space-4: clamp(1.5rem, 2.5vw, 2rem);
+  --space-6: clamp(2rem, 3.5vw, 3rem);
+  --space-8: clamp(3rem, 5vw, 4rem);
 
   /* Layout */
   --container-max: 72rem;
@@ -58,12 +58,11 @@
   --ink-2: #374151;
   --bg: #ffffff;
   --bg-2: #f7f7f9;
-  --color-accent: var(--brand); 
+  --color-accent: var(--brand);
   --color-heading: var(--ink);
   --color-text: var(--ink-2);
   --gray-300: #d1d5db; /* Assuming this value from typical scales */
 }
-
 
 /* ----------------------------------------------------- */
 /* LAYOUT & COMPONENTS */
@@ -73,28 +72,29 @@
 }
 
 .c-container-OLD {
-    max-width: var(--container-max);
-/*    margin-inline: auto;*/
-    margin: 0 auto;
-/*    padding-inline: var(--gutter);*/
-    padding-inline: var(--gutter, 1.5rem);
+  max-width: var(--container-max);
+  /*    margin-inline: auto;*/
+  margin: 0 auto;
+  /*    padding-inline: var(--gutter);*/
+  padding-inline: var(--gutter, 1.5rem);
 }
 
 .c-container {
   /*max-width: 1200px;*/
   max-width: var(--container-max);
-/*  max-width: 72rem;*/
+  /*  max-width: 72rem;*/
   margin: 0 auto;
   /*padding-inline: var(--gutter, 1.5rem);*/
-  padding-inline: var(--space-4)
-
+  padding-inline: var(--space-4);
 }
 
 /* This will later become @apply p-4; */
 .c-section {
   /*padding-block: var(--space-8, 6rem);*/
   /* padding-block: var(--space-6); */
-  padding-block: var(--space-3); /*adjust space between homepage layout sections*/
+  padding-block: var(
+    --space-3
+  ); /*adjust space between homepage layout sections*/
   background: var(--bg);
 }
 
@@ -106,7 +106,7 @@
 */
 
 .c-section--team .c-container {
-  /* max-width: 72rem;  */              /* keeps things from going too wide */
+  /* max-width: 72rem;  */ /* keeps things from going too wide */
   /* max-width: 58rem; */
   /* max-width: 65rem; */
   max-width: 68rem;
@@ -116,10 +116,10 @@
 }
 
 .c-stack > * + * {
-    /*margin-top: var(--space-3);*/
-    margin-top: var(--space-4, 2rem);
+  /*margin-top: var(--space-3);*/
+  margin-top: var(--space-4, 2rem);
 }
-  
+
 /* Grid Layouts */
 .c-grid {
   display: grid;
@@ -132,7 +132,6 @@
 /* .c-grid.layout-2x2 {
   grid-template-columns: repeat(2, 1fr);
 } */
-
 
 /* Base button style that works for <a> and <button> */
 .c-buttonRow {
@@ -202,8 +201,8 @@
 .c-button--tertiary:link,
 .c-button--tertiary:visited {
   border-radius: 6px;
-  border-width:2px;
-  border-color:#aaa;
+  border-width: 2px;
+  border-color: #aaa;
 }
 
 .c-button--tertiary:hover {
@@ -214,10 +213,10 @@
 .c-button--alt3,
 .c-button--alt3:link,
 .c-button--alt3:visited {
-  background-color:#003f8f;
+  background-color: #003f8f;
   border-radius: 6px;
-  border-width:2px;
-  border-color:#aaa;
+  border-width: 2px;
+  border-color: #aaa;
 }
 
 /* ----------------------------------------------------- */
@@ -284,32 +283,48 @@ textarea.input {
 /* ----------------------------------------------------- */
 .font-setup {
   /* 1. Define the CSS variables */
-  --font-inter: 'Inter', sans-serif;
-  --font-oswald: 'Oswald', sans-serif;
-  
+  --font-inter: "Inter", sans-serif;
+  --font-oswald: "Oswald", sans-serif;
+
   /* 2. Apply the default font to the body/app root */
-  font-family: var(--font-inter); 
+  font-family: var(--font-inter);
 }
 
 /* Base Typography for all elements */
-body, p, li, label, pre, code {
+body,
+p,
+li,
+label,
+pre,
+code {
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: 1.6;
   color: var(--color-text);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-heading);
   font-weight: 500;
   letter-spacing: var(--letter-spacing-heading);
   color: var(--color-heading);
 }
 
-h1 { font-size: var(--fs-hero); }
-h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); }
-h3 { font-size: var(--fs-h4); }
+h1 {
+  font-size: var(--fs-hero);
+}
+h2 {
+  font-size: var(--fs-h2);
+}
+h3 {
+  font-size: var(--fs-h3);
+}
+h3 {
+  font-size: var(--fs-h4);
+}
 /* Anchor Links */
 a {
   color: var(--color-accent);
@@ -334,7 +349,8 @@ a:hover {
   text-transform: uppercase;
 }
 
-.type-h2b {/*slightly smaller*/
+.type-h2b {
+  /*slightly smaller*/
   font-size: var(--fs-h2b);
   line-height: 1.2;
   text-transform: uppercase;
@@ -356,7 +372,7 @@ a:hover {
 }
 
 .type-h4 {
-  font-weight:400;
+  font-weight: 400;
   font-size: var(--fs-h4);
   line-height: 1;
   margin: 0;
@@ -366,26 +382,26 @@ a:hover {
 .type-body,
 .type-body + ul,
 .type-body + ol {
-  font-weight:400;
-  font-size:0.95rem; /*fallback*/
+  font-weight: 400;
+  font-size: 0.95rem; /*fallback*/
   font-size: var(--fs-body);
   line-height: 1.55;
 }
 
-.type-body-semibold{
+.type-body-semibold {
   color: var(--color-heading);
-  font-weight:500;
+  font-weight: 500;
   font-size: var(--fs-h3);
 }
 
-.type-body-large{
+.type-body-large {
   color: var(--color-heading);
-  font-weight:600;
+  font-weight: 600;
   font-size: var(--fs-h2b);
 }
 
 .type-small {
-  font-weight:400;
+  font-weight: 400;
   font-size: var(--fs-small);
   line-height: 1.4;
 }
@@ -397,7 +413,7 @@ a:hover {
 /* Reset list defaults for control */
 ul,
 ol {
-  margin-block: 0;         /* no built-in top/bottom margin */
+  margin-block: 0; /* no built-in top/bottom margin */
   margin: 0; /*fallback*/
   padding-inline-start: 1.5em; /* standard indent */
 }
@@ -406,25 +422,24 @@ ol {
 .type-body + ul,
 .type-body + ol {
   /* pick a fraction of the line height for the gap */
-  margin-top:0.5em;
+  margin-top: 0.5em;
 
-  margin-block-start: 0.5em;  /* ≈ half a line of your body text */
-
+  margin-block-start: 0.5em; /* ≈ half a line of your body text */
 }
 
 /* Optional enhancement for newer browsers only */
 @supports (margin-block-start: 1lh) {
   .type-body + ul,
   .type-body + ol {
-    margin-top: 0;                 /* turn off legacy */
-    margin-block-start: 0.6lh;     /* 0.6 × computed line-height */
+    margin-top: 0; /* turn off legacy */
+    margin-block-start: 0.6lh; /* 0.6 × computed line-height */
   }
 }
 
 .type-hero {
   font-size: var(--fs-hero);
   line-height: 1.1;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
