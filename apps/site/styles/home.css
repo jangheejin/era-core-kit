@@ -48,7 +48,8 @@
 
 /* Plain nav links */
 .site-header__link {
-  font-size: 0.85rem;
+  /* font-size: 0.85rem; */
+  font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
