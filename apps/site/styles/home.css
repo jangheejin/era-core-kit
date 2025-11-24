@@ -213,6 +213,7 @@
   letter-spacing: 0.08em;
   font-size: 0.95rem;
   font-weight: 600;
+  padding-left:1rem;
 /*   line-height: 1; */
 }
 
@@ -227,7 +228,7 @@
   font-weight:300;
   text-transform:uppercase;
   letter-spacing:0.03em;
-  font-size: var(--fs-xsmall);
+  font-size: clamp(0.82rem, 0.75rem + 0.2vw, 0.85rem);
 }
 
 .site-footer__nav {
