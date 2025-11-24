@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import '@styles/work.css';
 
 type WorkCase = {
@@ -93,6 +93,26 @@ export default function OurWorkPage() {
     FEATURED_CASES[0] ??
     null;
 
+  
+  // ref for the new horizontal strip
+  const stripRef = useRef<HTMLDivElement | null>(null);
+
+  // simple scroll helper – one “card width” per click
+  const scrollStrip = (direction: 'left' | 'right') => {
+    const el = stripRef.current;
+    if (!el) return;
+
+    // Approximate one card + gap, maybe tweak this
+    const CARD_STEP = 280; // px
+
+    const delta = direction === 'left' ? -CARD_STEP : CARD_STEP;
+
+    el.scrollBy({
+      left: delta,
+      behavior: 'smooth',
+    });
+  };
+
   if (!selected) {
     return (
       <main>
@@ -126,8 +146,63 @@ export default function OurWorkPage() {
             Select a case study to view its story below
           </p>
 
-          {/* Preview strip – horizontal, scrolls when there are many cards */}
-          <section aria-label="Featured case studies" className="work-grid">
+          {/**NEW preview strip! shell: nav buttons + scrollable strip */}
+
+          <div className="work-grid-shell">
+            <button
+              type="button"
+              className="work-grid-nav work-grid-nav--left"
+              onClick={() => scrollStrip('left')}
+              aria-label="Scroll case studies left"
+            >
+              ‹
+            </button>
+
+            <section
+              aria-label="Featured case studies"
+              className="work-grid"
+              ref={stripRef}
+            >
+              {FEATURED_CASES.map((cs) => {
+                const isActive = cs.slug === selected.slug;
+                return (
+                  <button
+                    key={cs.slug}
+                    type="button"
+                    className={
+                      'work-card' + (isActive ? ' work-card--active' : '')
+                    }
+                    onClick={() => setSelectedSlug(cs.slug)}
+                  >
+                    {cs.imageUrl && (
+                      <div className="work-card__media">
+                        <img
+                          src={cs.imageUrl}
+                          alt={`${cs.client} case study`}
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+
+                    <h5 className="type-h5 work-card__sector">{cs.sector}</h5>
+                    <h2 className="type-h3 work-card__client">{cs.client}</h2>
+                  </button>
+                );
+              })}
+            </section>
+
+            <button
+              type="button"
+              className="work-grid-nav work-grid-nav--right"
+              onClick={() => scrollStrip('right')}
+              aria-label="Scroll case studies right"
+            >
+              ›
+            </button>
+          </div>
+
+          {/* OLD Preview strip – horizontal, scrolls when there are many cards */}
+{/*           <section aria-label="Featured case studies" className="work-grid">
             {FEATURED_CASES.map((cs) => {
               const isActive = cs.slug === selected.slug;
 
@@ -151,15 +226,15 @@ export default function OurWorkPage() {
                   )}
 
                   <h5 className="type-h5 work-card__sector">{cs.sector}</h5>
-                  <h2 className="type-h3 work-card__client">{cs.client}</h2>
+                  <h2 className="type-h3 work-card__client">{cs.client}</h2> */}
                   {/* If you want teaser back: */}
                   {/* {cs.teaser && (
                     <p className="type-body work-card__teaser">{cs.teaser}</p>
                   )} */}
-                </button>
+{/*                 </button>
               );
             })}
-          </section>
+          </section> */}
 
           {/* Detail panel below grid */}
           <section
