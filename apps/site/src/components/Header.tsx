@@ -46,7 +46,8 @@ export function Header() {
           <a href="/our-team" className="site-header__link">
             Our Team
           </a>
-          <a href="#contact" className="site-header__link site-header__link--primary">
+          <a href="#contact" className="site-header__link site-header__link--contact">
+          {/* <a href="#contact" className="site-header__link site-header__link--primary"> */}
             Contact
           </a>
         </nav>

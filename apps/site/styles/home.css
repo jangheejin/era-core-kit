@@ -258,3 +258,8 @@
     grid-column: 1 / -1;
   }
 }
+
+
+a.site-header__link.site-header__link--contact {
+  color: var(--color-brand);
+}
