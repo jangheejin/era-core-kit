@@ -6,7 +6,23 @@ Required, must wrap all routes (every page under apps/site/app is wrapped in thi
 Only gets overridden if another layout.tsx is added deeper in the tree
 
 Renders once and stays mounted as you navigate. Only the children swap.
-  */
+
+ROOT TREE:
+
+<html>
+  <body>
+    <Header />
+    
+    everything under /admin goes here
+    
+    <AdminLayout>
+      <AdminPage /> / <AdminSubPage /> / ...
+    </AdminLayout>
+    <Footer />
+  </body>
+</html>
+
+*/
 
 import "@styles/tokens.css";
 import "@styles/primitives.css";
