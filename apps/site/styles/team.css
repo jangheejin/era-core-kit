@@ -111,6 +111,10 @@
   margin-top: 0.75rem;
 }
 
+/* .type-body {
+  letter-spacing: -0.02em;
+} */
+
 .c-section--team .type-h3 {
   margin: 0;
   font-size: var(--fs-h2b); /* whatever you already use */
