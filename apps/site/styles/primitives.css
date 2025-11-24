@@ -31,7 +31,7 @@
   /*padding-block: var(--space-8, 6rem);*/
   /* padding-block: var(--space-6); */
   padding-block: var(
-    --space-4
+    --space-2
   ); /*adjust space between homepage layout sections*/
   background: var(--bg);
 }
