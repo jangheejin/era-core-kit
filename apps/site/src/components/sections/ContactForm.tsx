@@ -25,8 +25,10 @@ export function ContactForm({
           <div className="field-group">
             <div className="field">
                 <label className="type-label" htmlFor="name">
-                    Name
-                    <input type="text" id="name" name="name" placeholder="Name" required/>
+                    <div className="field-label">
+                      Name
+                    </div>
+                  <input type="text" id="name" name="name" placeholder="Name" required/>
                 </label>
             </div>
 
