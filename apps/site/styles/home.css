@@ -95,6 +95,7 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  line-height:1;
 }
 /* Simple small-screen tweak so nav doesn't explode */
 @media (max-width: 768px) {
