@@ -131,7 +131,7 @@ export default function OurTeamPage() {
           {others.length > 0 && (
             <section className="team-grid-section">
               < hr/>
-              <h2 className="type-h2b team-grid__heading">Team</h2>
+              <h2 className="type-h2b team-grid__heading">Specialists</h2>
 
               <div className="team-grid">
                 {others.map((member) => (
