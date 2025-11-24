@@ -332,6 +332,8 @@ h5.work-detail__sector {
   overflow-y: hidden;
 
   padding-block: 0.25rem 1.75rem; /* room for arrow */
+  padding-inline: var(--space-2);
+  justify-content: center;
 /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
 
