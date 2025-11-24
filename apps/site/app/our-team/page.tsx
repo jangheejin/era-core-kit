@@ -121,6 +121,7 @@ export default function OurTeamPage() {
                       </p>
                     ))}
                   </div>
+                  
                 </article>
               ))}
             </section>
@@ -129,6 +130,7 @@ export default function OurTeamPage() {
           {/* Rest of team – two-column grid as before */}
           {others.length > 0 && (
             <section className="team-grid-section">
+              < hr/>
               <h2 className="type-h2b team-grid__heading">Team</h2>
 
               <div className="team-grid">
