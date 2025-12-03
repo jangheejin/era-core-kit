@@ -14,6 +14,50 @@ const AdminCaseStudyContext = createContext<AdminCaseStudyContextValue | null>(
   null,
 );
 
+const SEED_CASE_STUDIES: CaseStudyType[] = [
+  {
+    id: "seed-sanborn-appgeo",
+    title: "Geospatial Solutions",
+    slug: "sanborn-appgeo",
+    client: "Sanborn + AppGeo",
+    sector: "GovContracting",
+    tags: ["seed"],
+    summaryShort: "Demo entry seeded into the toy CMS store.",
+    heroImageUrl: "/img/case1.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content.",
+    sections: [],
+    attachments: [],
+    links: [],
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+
+  {
+    id: "seed-napsg-foundation",
+    title: "Nonprofit Organizations",
+    slug: "napsg-foundation",
+    client: "NAPSG Foundation",
+    sector: "Nonprofit",
+    tags: ["seed"],
+    summaryShort: "Another demo entry seeded into the toy CMS store.",
+    heroImageUrl: "/img/case2.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content for NAPSG Foundation.",
+    sections: [],
+    attachments: [],
+    links: [],
+    isFeaturedHome: false,
+    isPublic: true,
+  }
+];
+
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CaseStudyType[]>([]);
 
