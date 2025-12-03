@@ -9,8 +9,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { AdminCaseStudyProvider } from "./AdminCaseStudyStore";
-import { MockCMSProvider } from "@/cms/mockCmsStore";
-import { AdminShell } from "@/cms/AdminShell";
+//import { MockCMSProvider } from "@/cms/mockCmsStore";
+//import { AdminShell } from "@/cms/AdminShell";
 
 // OLD VERSION
 // context provider/wrapper
@@ -37,10 +37,17 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   );
 }*/
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+/*export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <AdminCaseStudyProvider>
       <MockCMSProvider>{children}</MockCMSProvider>
+    </AdminCaseStudyProvider>
+  );
+}*/
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return (
+    <AdminCaseStudyProvider>
+      {children}
     </AdminCaseStudyProvider>
   );
 }
