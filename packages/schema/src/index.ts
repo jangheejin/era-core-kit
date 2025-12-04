@@ -12,8 +12,17 @@ export type {
 */
 import { z } from "zod";
 
-export type CaseStudySort = "Newest" | "ClientName" | "Sector" | "Year";
+import {
+  CaseStudySort,
+  Sector,
+  Mechanism,
+  Jurisdiction,
+  AttachmentKind,
+  LinkCategory,
+} from "./enums";
 
+//export type CaseStudySort = "Newest" | "ClientName" | "Sector" | "Year";
+/* 
 export const Sector = z.enum([
   "Defense",
   "Health",
@@ -31,7 +40,7 @@ export const Mechanism = z.enum([
   "TaxCredit",
 ]);
 
-export const Jurisdiction = z.enum(["Federal", "State", "Local"]);
+export const Jurisdiction = z.enum(["Federal", "State", "Local"]); */
 
 export const Outcome = z.object({
   label: z.string().max(80),
@@ -50,7 +59,8 @@ export const CaseStudySection = z.object({
 export const CaseStudyAttachment = z.object({
   label: z.string().max(120), // "Full report (PDF)"
   url: z.string().url(),
-  kind: z.enum(["pdf", "ppt", "doc", "sheet", "zip", "other"]).default("other"),
+//  kind: z.enum(["pdf", "ppt", "doc", "sheet", "zip", "other"]).default("other"),
+  kind: AttachmentKind.default("other"),//use AttachmentKind enum
   internalOnly: z.boolean().default(false),
 });
 
@@ -58,9 +68,10 @@ export const CaseStudyAttachment = z.object({
 export const CaseStudyLink = z.object({
   label: z.string().max(120), // "Client website", "Legislation text"
   url: z.string().url(),
-  category: z
-    .enum(["client", "impact", "legislation", "press", "other"])
-    .default("other"),
+//  category: z
+//    .enum(["client", "impact", "legislation", "press", "other"])
+//    .default("other"),
+  category: LinkCategory.default("other"), //use LinkCategory enum
   internalOnly: z.boolean().default(false),
 });
 
@@ -76,7 +87,19 @@ export const CaseStudy = z.object({
 
   summaryShort: z.string().max(180),
   brief: z.string().max(280).optional(),
-  heroImageUrl: z.string().url(),
+  //heroImageUrl: z.string().url(),
+  heroImageUrl: z
+  .string()
+  .refine((s) => {
+    if (!s) return true; // OPTIONAL hero images: allow empty for now if you want
+    if (s.startsWith("/")) return true; // allow public/ paths like /img/case1.webp
+    try {
+      new URL(s);
+      return true; // absolute URL ok
+    } catch {
+      return false;
+    }
+  }, "heroImageUrl must be an absolute URL or a root-relative path like /img/..."),
 
   mechanisms: z.array(Mechanism).default([]),
   jurisdictions: z.array(Jurisdiction).default([]),
@@ -129,3 +152,11 @@ export type FilterAST = {
 };
 
 export { CASE_STUDIES_FIXTURE } from "./fixtures";
+
+export type { CaseStudySeed } from "./seeds";
+export { CaseStudySeedSchema } from "./seeds"; // optional
+
+/*enums*/
+
+export { CaseStudySort, Sector, Mechanism, Jurisdiction, AttachmentKind, LinkCategory };
+export type { CaseStudySort, Sector, Mechanism, Jurisdiction, AttachmentKind, LinkCategory };

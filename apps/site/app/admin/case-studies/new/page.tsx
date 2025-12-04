@@ -4,14 +4,35 @@
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";
 
-import { useState } from "react";
+import { 
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+
 import Link from "next/link";
 import {
   CaseStudy as CaseStudySchema,
   type CaseStudy as CaseStudyType,
 } from "@kit/schema";
 
+//import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
+import { useRouter } from "next/navigation";
+import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+
 type Draft = Partial<CaseStudyType>;
+
+const sectorOptions: CaseStudyType["sector"][] = [
+  "Defense",
+  "Health",
+  "FinTech",
+  "Education",
+  "Nonprofit",
+  "GovContracting",
+  "EmergencyMgmt",
+];
 
 const mechanismOptions: CaseStudyType["mechanisms"][number][] = [
   "Appropriation",
@@ -26,7 +47,22 @@ const jurisdictionOptions: CaseStudyType["jurisdictions"][number][] = [
   "Local",
 ];
 
+
+function slugify(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+
+
 export default function NewCaseStudyForm() {
+  /*implementing the hook & router for the advanced builder*/
+  const router = useRouter();
+  const { addCaseStudy } = useAdminCaseStudies();
+
   const [draft, setDraft] = useState<Draft>({
     title: "",
     slug: "",
@@ -46,11 +82,20 @@ export default function NewCaseStudyForm() {
 
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
+//  const [validated, setValidated] = useState<boolean>(false);
+  const [validated, setValidated] = useState<CaseStudyType | null>(null);
+
+  function resetValidation() {
+    setError(null);
+    setPreview(null);
+    setValidated(null);
+  }
 
   function update<K extends keyof Draft>(field: K, value: Draft[K]) {
     setDraft((d) => ({ ...d, [field]: value }));
-    setError(null);
-    setPreview(null);
+    /*setError(null);
+    setPreview(null);*/
+    resetValidation();
   }
 
   function toggleMechanism(mech: CaseStudyType["mechanisms"][number]) {
@@ -62,19 +107,24 @@ export default function NewCaseStudyForm() {
         : [...current, mech];
       return { ...d, mechanisms: next };
     });
-    setError(null);
-    setPreview(null);
+    /*setError(null);
+    setPreview(null);*/
+    resetValidation();
   }
 
   function toggleJurisdiction(j: CaseStudyType["jurisdictions"][number]) {
     setDraft((d) => {
       const current = d.jurisdictions ?? [];
-      const exists = current.includes(j);
-      const next = exists ? current.filter((v) => v !== j) : [...current, j];
+/*       const exists = current.includes(j);
+      const next = exists ? current.filter((v) => v !== j) : [...current, j]; */
+      const next = current.includes(j)
+        ? current.filter((v) => v !== j)
+        : [...current, j];
       return { ...d, jurisdictions: next };
     });
-    setError(null);
-    setPreview(null);
+/*     setError(null);
+    setPreview(null); */
+    resetValidation();
   }
 
   function validate() {
@@ -128,13 +178,30 @@ export default function NewCaseStudyForm() {
     if (!result.success) {
       const issue = result.error.issues[0];
       const path = issue?.path?.length ? issue.path.join(".") : "(root)";
-      setError(`${path}: ${issue?.message ?? "Validation failed."}`);
+      setError(`${path}: ${issue?.message ?? "Validation failed. Please validate the case study before saving."}`);
       setPreview(null);
+      setValidated(null);
       return;
     }
 
+    /*now we have result.data (it's only real after the result.success check)*/    
+    // however, some Zod typings make data possibly-undefined even on success:
+    const parsed = result.data ?? candidate;
+
     setError(null);
-    setPreview(result.data);
+    setPreview(parsed);
+    setValidated(parsed);
+    // DO NOT ADD OR PUSH YET!
+  }
+
+  function save() {
+    if (!validated) {
+      setError("Please validate the case study before saving.");
+      return;
+    }
+
+    addCaseStudy(validated);
+    router.push(`/admin/case-studies/mock/${validated.slug}`);
   }
 
   return (
@@ -453,9 +520,16 @@ export default function NewCaseStudyForm() {
         <section className="admin-form-section">
           <h2 className="admin-section-title">Validate &amp; preview</h2>
 
-          <div className="admin-field">
+          <div className="admin-field admin-button-row">
             <button type="button" onClick={validate} className="cms-button">
               Validate + preview payload
+            </button>
+
+            <button type="button" onClick={save} className="cms-button cms-button--secondary"
+              disabled={!validated} aria-disabled={!validated} 
+              title={!validated ? "Please validate before saving." : "Save into mock case study database"}
+            >
+              Save to mock database
             </button>
           </div>
 

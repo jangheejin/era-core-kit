@@ -1,27 +1,333 @@
 // packages/schema/src/fixtures.ts
 import type { CaseStudy } from "./index";
+//normalize seeds (shorter-form case studies meant for landing cards, etc) into full CaseStudy entries at import time
+import { CaseStudySeedSchema, type CaseStudySeed } from "./seeds";
 
-export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
+/**
+ * Full, richly-populated fixtures 
+ * To be used later */
+export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
+  {
+    id: "cs-sanborn-appgeo",
+    title: "Geospatial modernization and federal engagement",
+    slug: "sanborn-appgeo",
+    client: "Sanborn + AppGeo",
+    sector: "GovContracting",
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+
+    heroImageUrl: "/img/case1.webp",
+
+    summaryShort:
+      "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
+    brief:
+      "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
+
+    outcomes: [
+      {
+        label: "Program positioning",
+        description:
+          "Positioned combined capabilities within key federal geospatial programs.",
+      },
+      {
+        label: "Engagement strategy",
+        description:
+          "Developed targeted engagement strategy with priority agencies and committees.",
+      },
+      {
+        label: "Preparedness visibility",
+        description:
+          "Improved visibility for geospatial contributions to national preparedness.",
+      },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nERA Government Affairs partnered with Sanborn and AppGeo to strengthen their federal profile, align geospatial capabilities with agency program needs, and position them for long-term contract and grant opportunities across emergency management, transportation, and homeland security.\n",
+
+    sections: [
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX:
+          "Strengthen federal profile, align capabilities with program needs, and support long-term contract + grant pathways.",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX:
+          "- Positioned combined capabilities within key federal geospatial programs.\n- Developed targeted engagement strategy with priority agencies and committees.\n- Improved visibility for geospatial contributions to national preparedness.\n",
+      },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+
+  {
+    id: "cs-napsg-foundation",
+    title: "Policy-facing storytelling for a technical nonprofit",
+    slug: "napsg-foundation",
+    client: "NAPSG Foundation",
+    sector: "Nonprofit",
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+
+    heroImageUrl: "/img/case2.webp",
+
+    summaryShort:
+      "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
+    brief:
+      "Helped NAPSG translate technical geospatial capabilities into accessible narratives for federal decision-makers, aligned to current priorities and usable in outreach.",
+
+    outcomes: [
+      {
+        label: "Clearer value proposition",
+        description:
+          "Clarified value proposition for non-technical federal audiences.",
+      },
+      {
+        label: "Policy alignment",
+        description:
+          "Connected nonprofit initiatives to active federal policy conversations.",
+      },
+      {
+        label: "Stakeholder relationships",
+        description:
+          "Supported durable relationships with key emergency management stakeholders.",
+      },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nFor the NAPSG Foundation, ERA helped bridge the gap between highly technical geospatial work and decision-makers in Washington. We translated complex capabilities into accessible narratives, aligned them with current federal priorities, and supported outreach to agencies and Hill offices.\n",
+
+    sections: [
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX:
+          "Highly technical work needed a policy-facing narrative that travels well in DC conversations.",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX:
+          "- Clarified value proposition for non-technical federal audiences.\n- Connected initiatives to active policy conversations.\n- Supported relationships with emergency management stakeholders.\n",
+      },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+
+  {
+    id: "cs-crucis",
+    title: "Federal procurement strategy for a growing contractor",
+    slug: "crucis",
+    client: "Crucis",
+    sector: "GovContracting",
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["procurement", "govcon", "strategy", "federal"],
+
+    heroImageUrl: "/img/case3.webp",
+
+    summaryShort:
+      "Guiding a growing government contractor through the realities of federal procurement and engagement.",
+    brief:
+      "Advised Crucis on realistic entry points into the federal marketplace: procurement pathways, program alignment, and relationship-building with agencies and Hill staff.",
+
+    outcomes: [
+      {
+        label: "Entry points mapped",
+        description:
+          "Mapped realistic entry points into federal programs and contracts.",
+      },
+      {
+        label: "Targeted outreach plan",
+        description:
+          "Developed a targeted plan for outreach and capability briefing.",
+      },
+      {
+        label: "Avoided common pitfalls",
+        description:
+          "Helped avoid common missteps that slow or stall federal growth.",
+      },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nERA advised Crucis on how to navigate the federal marketplace, including realistic pathways into procurement, program alignment, and long-term relationship-building with agencies and Hill staff. The work centered on strategy over spectacle: understanding timelines, constraints, and where Crucis could authentically add value.\n",
+
+    sections: [
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX:
+          "Growth in federal markets is constrained by procurement rules, timelines, and trust-building—so strategy matters more than hype.",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX:
+          "- Mapped realistic entry points into federal programs and contracts.\n- Built a plan for outreach and capability briefing.\n- Avoided missteps that slow federal growth.\n",
+      },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+
+  {
+    id: "cs-mkr-fabricators",
+    title: "Emergency response manufacturing alignment",
+    slug: "mkr-fabricators",
+    client: "MKR Fabricators",
+    sector: "EmergencyMgmt",
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+
+    heroImageUrl: "/img/temp.svg",
+
+    summaryShort:
+      "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
+    brief:
+      "Aligned emergency response manufacturing capabilities with federal program and procurement realities, focused on practical deployment in disaster-response contexts.",
+
+    outcomes: [
+      {
+        label: "Program alignment",
+        description:
+          "Aligned manufacturing capabilities with specific federal emergency programs.",
+      },
+      {
+        label: "Procurement positioning",
+        description:
+          "Clarified how to position products against existing procurement pathways.",
+      },
+      {
+        label: "Sustainable engagement",
+        description:
+          "Supported a strategy for sustainable public-sector engagement.",
+      },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nERA supported MKR Fabricators in aligning their emergency response manufacturing capabilities with evolving federal program and procurement needs, with a focus on practical deployment in emergency and disaster-response contexts.\n",
+
+    sections: [
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX:
+          "Emergency manufacturing value has to map cleanly onto programs + procurement pathways to actually deploy.",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX:
+          "- Aligned manufacturing capabilities with specific federal emergency programs.\n- Clarified positioning against procurement pathways.\n- Supported sustainable public-sector engagement.\n",
+      },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+
+  {
+    id: "cs-stemheads",
+    title: "STEMheads (draft sample)",
+    slug: "stemheads",
+    client: "STEMheads",
+    sector: "Education",
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["education", "draft"],
+
+    heroImageUrl: "/img/temp2.svg",
+
+    summaryShort:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    brief:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
+    outcomes: [
+      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
+
+    sections: [
+      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
+      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+    ],
+
+    attachments: [],
+    links: [],
+
+    // If you ONLY want 4 featured cards on home, set this one false.
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+];
+
+
+/* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {
     id: "cs-001",
-    title: "Unlocking Federal Grants for a Mid-Sized City",
-    slug: "federal-grants-mid-sized-city",
-    client: "City of Exampleton",
+    title: "Unlocking Federal Grants for a Nonprofit",
+    slug: "federal-grants-nonprofit",
+    client: "Example Nonprofit",
     sector: "GovContracting",
     year: 2024,
     mechanisms: ["Grant"],
     jurisdictions: ["Local"],
     tags: ["grants", "capacity", "ops"],
-    heroImageUrl: "https://placehold.co/1200x600?text=Case+Study+Hero",
+    heroImageUrl: "/img/casestudy1.webp",
 
     summaryShort:
-      "Helped a mid-sized city triple their throughput on federal grants without adding headcount.",
+      "Helped a mid-sized nonprofit triple their throughput on federal grants without adding headcount.",
     brief: "We worked with finance and program teams...",
 
     outcomes: [
       {
         label: "3x grant throughput",
-        description: "Within 12 months, successful submissions tripled.",
+        description: "Within 12 months, successful grant submissions tripled.",
         evidenceUrl: "https://example.com/case-study-evidence",
       },
     ],
@@ -96,3 +402,225 @@ export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
     isPublic: true,
   },
 ];
+ */
+
+//map simpler case study "seeds" onto full CaseStudy entries for fixtures
+/* type CaseStudySeed = {
+  slug: string;
+  client: string;
+  sector: CaseStudy["sector"];
+  teaser: string;
+  featured?: boolean;
+  imageUrl?: string; // "/img/..." or "https://..."
+}; */
+
+/* 
+function seedToCaseStudy(seed: CaseStudySeed): CaseStudy {
+  return {
+    id: `cs-${seed.slug}`,
+    title: seed.client,              // minimal now; can become richer later
+    slug: seed.slug,
+    client: seed.client,
+    sector: seed.sector,
+
+    year: undefined,
+    tags: [],
+
+    summaryShort: seed.teaser,
+    brief: undefined,
+    heroImageUrl: seed.imageUrl ?? "",
+
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+
+    evidence: [],
+    bodyMDX: "",
+    sections: [],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: !!seed.featured,
+    isPublic: true,
+  };
+} */
+
+
+/* INFLATE SEEDS (very bare bones case studies) TO FULL CASESTUDIES */ 
+
+function normalize(seed: CaseStudySeed): CaseStudy {
+  const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
+  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
+
+  return {
+    id: `cs-${seed.slug}`,
+    title: seed.title ?? (seed.client ? seed.client : seed.slug),
+    slug: seed.slug,
+    client: seed.client,
+    sector: seed.sector,
+    year: seed.year,
+
+    tags: seed.tags ?? [],
+
+    summaryShort,
+//    brief: undefined,
+    brief: seed.brief,
+    heroImageUrl,
+
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+
+    bodyMDX: "",
+    sections: [],
+
+    attachments: [],
+    links: [],
+
+//    isFeaturedHome: !!seed.featured,
+    isFeaturedHome: seed.isFeaturedHome ?? seed.featured ?? false,
+    isPublic: seed.isPublic ?? true,
+  };
+}
+
+
+const SEEDS: CaseStudySeed[] = [
+  {
+    slug: "sanborn-appgeo",
+    title: "Geospatial modernization and federal engagement",
+    client: "Sanborn + AppGeo",
+    sector: "GovContracting",
+    heroImageUrl: "/img/case1.webp",
+    summaryShort:
+      "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
+    brief:
+      "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
+    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+    year: 2024,
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+  {
+    slug: "napsg-foundation",
+    title: "Policy-facing storytelling for a technical nonprofit",
+    client: "NAPSG Foundation",
+    sector: "Nonprofit",
+    heroImageUrl: "/img/case2.webp",
+    summaryShort:
+      "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
+    brief:
+      "Helped NAPSG translate technical geospatial capabilities into accessible narratives for federal decision-makers, aligned to current priorities and usable in outreach.",
+    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+    year: 2024,
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+  {
+    slug: "crucis",
+    title: "Federal procurement strategy for a growing contractor",
+    client: "Crucis",
+    sector: "GovContracting",
+    heroImageUrl: "/img/case3.webp",
+    summaryShort:
+      "Guiding a growing government contractor through the realities of federal procurement and engagement.",
+    brief:
+      "Advised Crucis on realistic entry points into the federal marketplace: procurement pathways, program alignment, and relationship-building with agencies and Hill staff.",
+    tags: ["procurement", "govcon", "strategy", "federal"],
+    year: 2024,
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+  {
+    slug: "mkr-fabricators",
+    title: "Emergency response manufacturing alignment",
+    client: "MKR Fabricators",
+    sector: "EmergencyMgmt",
+    heroImageUrl: "/img/temp.svg",
+    summaryShort:
+      "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
+    brief:
+      "Aligned emergency response manufacturing capabilities with federal program and procurement realities, focused on practical deployment in disaster-response contexts.",
+    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+    year: 2024,
+    isFeaturedHome: true,
+    isPublic: true,
+  },
+  {
+    slug: "stemheads",
+    title: "STEMheads (draft sample)",
+    client: "STEMheads",
+    sector: "Education",
+    heroImageUrl: "/img/temp2.svg",
+    summaryShort:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    brief:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    tags: ["education", "draft"],
+    year: 2024,
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+];
+
+// Validate + inflate seeds into full CaseStudy entries
+const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
+  normalize(CaseStudySeedSchema.parse(s)),
+);
+
+/**
+ * Canonical full set with deterministic dedupe-by-slug:
+ * - start from seeds (so new seeds appear automatically)
+ * - then overlay FULL fixtures (so fully-written entries win)
+ * - preserve the manual FULL ordering, then append any seed-only cases
+ */
+
+const bySlug = new Map<string, CaseStudy>();
+for (const cs of FULL_FROM_SEEDS) bySlug.set(cs.slug, cs);
+for (const cs of CASE_STUDIES_FIXTURE_FULL) bySlug.set(cs.slug, cs);
+
+const orderedFull: CaseStudy[] = [];
+const seen = new Set<string>();
+
+for (const cs of CASE_STUDIES_FIXTURE_FULL) {
+  const winner = bySlug.get(cs.slug);
+  if (winner) {
+    orderedFull.push(winner);
+    seen.add(cs.slug);
+  }
+}
+
+for (const cs of FULL_FROM_SEEDS) {
+  if (!seen.has(cs.slug)) orderedFull.push(cs);
+}
+
+/**
+ * This is the fixture that the app should use "for now" during demo phase:
+ * it intentionally strips detail while keeping the *schema shape* intact.
+ */
+export const CASE_STUDIES_FIXTURE: CaseStudy[] = orderedFull.map((cs) => ({
+  ...cs,
+  // "less info" for now:
+  brief: undefined,
+  outcomes: [],
+  bodyMDX: "",
+  sections: [],
+  evidence: [],
+  attachments: [],
+  links: [],
+}));
+
+/* export const CASE_STUDIES_FIXTURE: CaseStudy[] =
+  CASE_STUDIES_FIXTURE_FULL.map((cs) => ({
+    ...cs,
+    // "less info" for now:
+    brief: undefined,
+    outcomes: [],     // or keep outcomes if you want
+    bodyMDX: "",
+    sections: [],
+    evidence: [],
+    attachments: [],
+    links: [],
+  }));
+ */

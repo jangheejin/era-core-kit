@@ -107,7 +107,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     const map = new Map<string, CaseStudyType>();
     for (const cs of [...SEED_CASE_STUDIES, ...stored]) map.set(cs.slug, cs);
     for (const cs of CASE_STUDIES_FIXTURE) map.set(cs.slug, cs);
-    for (const cs of stored) map.set(cs.slug, cs);
+    for (const cs of stored) map.set(cs.slug, cs);// stored overrides fixture (seeded)
     return Array.from(map.values());
   });
 
