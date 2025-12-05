@@ -16,17 +16,16 @@ import React, {
 import {
   CaseStudy as CaseStudySchema,
   CASE_STUDIES_FIXTURE,
-  type CaseStudyInput,
   type CaseStudyType,
 } from "@kit/schema";
 
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
 
-  /** Back-compat name (your original API). Newest-first semantics. */
+  /** Back-compat name (your existing API). */
   addCaseStudy: (cs: CaseStudyType) => void;
 
-  /** Preferred name (same semantics as addCaseStudy). */
+  /** Preferred name (same behavior). */
   upsertCaseStudy: (cs: CaseStudyType) => void;
 
   removeCaseStudy: (slug: string) => void;
@@ -35,7 +34,7 @@ type AdminCaseStudyContextValue = {
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
 
-  /** Optional: wipe local overrides and return to fixtures+seeds. */
+  /** Clears local overrides and returns to fixture baseline. */
   resetToBaseline: () => void;
 };
 
@@ -44,64 +43,7 @@ const AdminCaseStudyContext =
 
 const STORAGE_KEY = "era_admin_case_studies_v1";
 
-/** Keep your explicit seed layer (separate from fixtures). */
-const RAW_SEEDS: CaseStudyInput[] = [
-  {
-    id: "seed-sanborn-appgeo",
-    title: "Geospatial Solutions",
-    slug: "sanborn-appgeo",
-    client: "Sanborn + AppGeo",
-    sector: "GovContracting",
-    year: 2024,
-    tags: ["seed"],
-    summaryShort: "Demo entry seeded into the toy CMS store.",
-    brief: "Another short description",
-    heroImageUrl: "/img/case1.webp",
-    mechanisms: [],
-    jurisdictions: [],
-    outcomes: [],
-    evidence: [],
-    bodyMDX: "Seed body content.",
-    sections: [],
-    attachments: [],
-    links: [],
-    status: "Draft",
-    visibility: "Internal",
-    isFeaturedHome: false,
-    isPublic: true,
-  },
-  {
-    id: "seed-napsg-foundation",
-    title: "Nonprofit Organizations",
-    slug: "napsg-foundation",
-    client: "NAPSG Foundation",
-    sector: "Nonprofit",
-    year: 2024,
-    tags: ["seed"],
-    summaryShort: "Another demo entry seeded into the toy CMS store.",
-    brief: "Another short description",
-    heroImageUrl: "/img/case2.webp",
-    mechanisms: [],
-    jurisdictions: [],
-    outcomes: [],
-    evidence: [],
-    bodyMDX: "Seed body content for NAPSG Foundation.",
-    sections: [],
-    attachments: [],
-    links: [],
-    status: "Draft",
-    visibility: "Internal",
-    isFeaturedHome: false,
-    isPublic: true,
-  },
-];
-
-const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
-  const res = CaseStudySchema.safeParse(item);
-  return res.success ? [res.data] : [];
-});
-
-function loadLocal(): CaseStudyType[] {
+function loadLocalValidated(): CaseStudyType[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -130,15 +72,14 @@ function saveLocal(items: CaseStudyType[]) {
 }
 
 /**
- * Merge rules: fixture baseline → seeds baseline → stored overrides
- * Ordering: fixture order, then seed-only, then stored-only (deterministic)
+ * Merge rules: fixture baseline → stored overrides
+ * Ordering: fixture order first, then any stored-only slugs appended (deterministic)
  */
-function buildItemsWithStored(stored: CaseStudyType[]): CaseStudyType[] {
+function mergeFixtureWithStored(stored: CaseStudyType[]): CaseStudyType[] {
   const bySlug = new Map<string, CaseStudyType>();
 
   for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs);
-  for (const cs of stored) bySlug.set(cs.slug, cs);
+  for (const cs of stored) bySlug.set(cs.slug, cs); // overrides baseline
 
   const order: string[] = [];
   const push = (slug: string) => {
@@ -146,17 +87,11 @@ function buildItemsWithStored(stored: CaseStudyType[]): CaseStudyType[] {
   };
 
   for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  for (const cs of SEED_CASE_STUDIES) push(cs.slug);
-  for (const cs of stored) push(cs.slug);
+  for (const cs of stored) push(cs.slug); // adds stored-only slugs
 
   return order
     .map((slug) => bySlug.get(slug))
     .filter((x): x is CaseStudyType => Boolean(x));
-}
-
-/** Baseline items without reading window/localStorage (avoids SSR/CSR mismatch risk). */
-function buildBaselineItems(): CaseStudyType[] {
-  return buildItemsWithStored([]);
 }
 
 function slugify(s: string) {
@@ -169,17 +104,17 @@ function slugify(s: string) {
 }
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
-  // Start from baseline to keep server/client consistent.
-  const [items, setItems] = useState<CaseStudyType[]>(() => buildBaselineItems());
+  // Start from fixtures only to avoid SSR/CSR mismatch.
+  const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
 
-  // Hydrate local overrides after mount.
+  // Hydrate stored overrides on mount.
   useEffect(() => {
-    const stored = loadLocal();
+    const stored = loadLocalValidated();
     if (stored.length === 0) return;
-    setItems(buildItemsWithStored(stored));
+    setItems(mergeFixtureWithStored(stored));
   }, []);
 
-  // Persist changes
+  // Persist any changes (yes, this will store fixtures too; that’s OK for toy mode).
   useEffect(() => {
     saveLocal(items);
   }, [items]);
@@ -202,7 +137,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   );
 
   const addCaseStudy = useCallback((cs: CaseStudyType) => {
-    // Your original semantics: newest first, replace by slug.
+    // Keep your existing behavior: newest first, replace by slug.
     setItems((prev) => {
       const filtered = prev.filter((p) => p.slug !== cs.slug);
       return [cs, ...filtered];
@@ -221,7 +156,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   );
 
   const resetToBaseline = useCallback(() => {
-    setItems(buildBaselineItems());
+    setItems(CASE_STUDIES_FIXTURE);
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
@@ -258,6 +193,7 @@ export function useAdminCaseStudies() {
   }
   return ctx;
 }
+
 
 /* const AdminCaseStudyContext =
   createContext<AdminCaseStudyContextValue | null>(null);
