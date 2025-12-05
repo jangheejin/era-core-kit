@@ -1,5 +1,6 @@
 // apps/site/app/admin/case-studies/list/page.tsx
 // "database" view of case studies
+
 "use client";
 
 import Link from "next/link";
@@ -15,11 +16,12 @@ export default function CaseStudyListPage() {
           ← Back to dashboard
         </Link>
       </div>
+
       <div className="c-container c-stack">
         <h1 className="type-h2">Mock Case Study Database</h1>
         <p className="type-body type-muted">
-          These entries exist only in your current browser session and are not
-          stored anywhere permanent.
+          These entries are stored locally in this browser (localStorage). They
+          are not synced to a backend.
         </p>
 
         {items.length === 0 ? (
@@ -41,7 +43,13 @@ export default function CaseStudyListPage() {
                       <p className="type-small type-muted">
                         /admin/case-studies/mock/{cs.slug}
                       </p>
+                      <p className="type-small type-muted">
+                        <strong>Status:</strong> {cs.status}{" "}
+                        <strong style={{ marginLeft: 12 }}>Visibility:</strong>{" "}
+                        {cs.visibility}
+                      </p>
                     </div>
+
                     <Link
                       href={`/admin/case-studies/mock/${cs.slug}`}
                       className="c-button"
@@ -49,6 +57,7 @@ export default function CaseStudyListPage() {
                       View page
                     </Link>
                   </div>
+
                   <p className="type-body type-muted">{cs.summaryShort}</p>
                 </div>
               </div>

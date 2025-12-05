@@ -54,12 +54,35 @@ const jurisdictionOptions: CaseStudyType["jurisdictions"][number][] = [
   "Local",
 ];
 
+// keep in sync with schema enums here for now
+// (if later we export CASE_STUDY_STATUS_VALUES etc, we can import them instead.)
+const statusOptions: CaseStudyType["status"][] = [
+  "Draft",
+  "InProgress",
+  "NeedsReview",
+  "Approved",
+  "Published",
+  "Archived",
+];
+
+const visibilityOptions: CaseStudyType["visibility"][] = [
+  "Public",
+  "Internal",
+  "ClientSafe",
+];
+
 function slugify(raw: string): string {
   return raw
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function emptyToUndefined(s: unknown): string | undefined {
+  if (typeof s !== "string") return undefined;
+  const t = s.trim();
+  return t ? t : undefined;
 }
 
 export default function NewCaseStudyForm() {
@@ -75,8 +98,11 @@ export default function NewCaseStudyForm() {
     summaryShort: "",
     brief: "",
     heroImageUrl: "",
+
+    status: "Draft",
+    visibility: "Internal",
     isFeaturedHome: false,
-    isPublic: false,
+    isPublic: true,
   });
 
   const [tagsInput, setTagsInput] = useState("");
@@ -86,8 +112,10 @@ export default function NewCaseStudyForm() {
 
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
-  const [validatedCase, setValidatedCase] = useState<CaseStudyType | null>(null);
-  const isValidated = !!validatedCase;
+  const [validatedCaseStudy, setValidatedCaseStudy] =
+    useState<CaseStudyType | null>(null);
+//  const [validatedCase, setValidatedCase] = useState<CaseStudyType | null>(null);
+  const isValidated = !!validatedCaseStudy;
 //  const [validated, setValidated] = useState<boolean>(false);
 //  const [validated, setValidated] = useState<CaseStudyType | null>(null);
 
@@ -96,7 +124,7 @@ export default function NewCaseStudyForm() {
     setPreview(null);
 //    setValidatedCase(null);
 //    setValidated(null);
-    setValidated(false);
+//    setValidated(false);
     setValidatedCaseStudy(null);
   }
 
@@ -155,17 +183,27 @@ export default function NewCaseStudyForm() {
         : null,
     ].filter(Boolean) as CaseStudyInput["sections"];
 
+    const finalTitle = (draft.title ?? "").trim();
+    const finalSlug = emptyToUndefined(draft.slug) ?? slugify(finalTitle);
+
     const candidate: CaseStudyInput = {
       id: draft.id ?? `draft-${Date.now()}`,
-      title: draft.title ?? "",
-      slug: draft.slug ?? "",
-      client: draft.client ?? undefined,
-      sector: draft.sector ?? "GovContracting",
+      //title: draft.title ?? "",
+      title: finalTitle,
+      //slug: draft.slug ?? "",
+      slug: finalSlug,
+
+      //client: draft.client ?? undefined,
+      client: emptyToUndefined(draft.client),
+      //sector: draft.sector ?? "GovContracting",
+      sector: (draft.sector ?? "GovContracting") as CaseStudyType["sector"],
       year: draft.year,
   
       tags,
-      summaryShort: draft.summaryShort ?? "",
-      brief: draft.brief ?? undefined,
+      summaryShort: (draft.summaryShort ?? "").trim(),
+      //brief: draft.brief ?? undefined,
+      brief: emptyToUndefined(draft.brief),
+
       heroImageUrl: draft.heroImageUrl ?? "/img/temp.svg", // must be valid PathOrUrl
   
       mechanisms: draft.mechanisms ?? [],
@@ -178,6 +216,9 @@ export default function NewCaseStudyForm() {
   
       attachments: draft.attachments ?? [],
       links: draft.links ?? [],
+
+      status: (draft.status ?? "Draft") as CaseStudyType["status"],
+      visibility: (draft.visibility ?? "Internal") as CaseStudyType["visibility"],
   
       isFeaturedHome: draft.isFeaturedHome ?? false,
       isPublic: draft.isPublic ?? true,
@@ -189,11 +230,16 @@ export default function NewCaseStudyForm() {
     if (!result.success) {
       const issue = result.error.issues[0];
       const path = issue?.path?.length ? issue.path.join(".") : "(root)";
-      setError(`${path}: ${issue?.message ?? "Validation failed. Please validate the case study before saving."}`);
+      setError(
+        `${path}: ${
+          issue?.message ?? 
+          "Validation failed. Please validate the case study before saving."
+        }`
+      );
       // ... setError
       setPreview(null);
       //setValidated(null);
-      setValidated(false);
+      //setValidated(false);
       setValidatedCaseStudy(null);
       return;
     }
@@ -201,8 +247,9 @@ export default function NewCaseStudyForm() {
     const parsed: CaseStudyType = result.data;
   
     setError(null);
-    setPreview(result.data);
-    setValidated(true);
+    //setPreview(result.data);
+    setPreview(parsed);
+    //setValidated(true);
     setValidatedCaseStudy(parsed);
     //setValidated(result.data);
   }
@@ -294,9 +341,8 @@ export default function NewCaseStudyForm() {
             <h1 className="type-h1">Create a mock case study</h1>
             <p className="type-body type-muted">
               This mirrors the real data model: sectors, tags, mechanisms,
-              summary, and structured MDX sections. Nothing is saved to a
-              backend&mdash;it&apos;s just for clicking through how the CMS
-              could feel.
+              summary, and structured MDX sections. Saving writes to a local mock
+              database in this browser via localStorage.
             </p>
           </div>
           <Link href="/admin" className="cms-button cms-button--secondary">
@@ -333,7 +379,7 @@ export default function NewCaseStudyForm() {
                 Slug <span className="admin-label-required">*</span>
               </span>
               <span className="admin-hint">
-                Used in URLs (lowercase, dashes).
+                Used in URLs (lowercase, dashes). If left blank, it will be derived from the title.
               </span>
             </div>
             <input
@@ -373,13 +419,18 @@ export default function NewCaseStudyForm() {
                   update("sector", e.target.value as CaseStudyType["sector"])
                 }
               >
-                <option value="Defense">Defense</option>
+                {sectorOptions.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+{/*                 <option value="Defense">Defense</option>
                 <option value="Health">Health</option>
                 <option value="FinTech">FinTech</option>
                 <option value="Education">Education</option>
                 <option value="Nonprofit">Nonprofit</option>
                 <option value="GovContracting">GovContracting</option>
-                <option value="EmergencyMgmt">EmergencyMgmt</option>
+                <option value="EmergencyMgmt">EmergencyMgmt</option> */}
               </select>
             </div>
 
@@ -403,9 +454,52 @@ export default function NewCaseStudyForm() {
               />
             </div>
           </div>
+
+          <div className="admin-grid-2">
+            <div className="admin-field">
+              <div className="admin-label-row">
+                <span className="admin-label">Status</span>
+              </div>
+              <select
+                className="admin-select"
+                value={(draft.status as string) || "Draft"}
+                onChange={(e) =>
+                  update("status", e.target.value as CaseStudyType["status"])
+                }
+                >
+                  {statusOptions.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            <div className="admin-field">
+              <div className="admin-label-row">
+                <span className="admin-label">Visibility</span>
+              </div>
+              <select
+                className="admin-select"
+                value={(draft.visibility as string) || "Internal"}
+                onChange={(e) =>
+                  update(
+                    "visibility",
+                    e.target.value as CaseStudyType["visibility"],
+                  )
+                }
+              >
+                {visibilityOptions.map((v) => ( 
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </section>
 
-        {/* DISPLAY */}
+        {/* ----DISPLAY----- */}
         <section className="admin-form-section">
           <h2 className="admin-section-title">Display</h2>
 
@@ -413,15 +507,16 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Hero image URL</span>
-              <span className="admin-hint">Full-width banner image.</span>
+              <span className="admin-hint">Full-width banner image. Use root-relative path (/img/...) or absolute URL.</span>
             </div>
             <input
               className="admin-input"
-              placeholder="https://example.com/hero.jpg"
+              placeholder="/img/case1.webp"
               value={draft.heroImageUrl || ""}
               onChange={(e) => update("heroImageUrl", e.target.value)}
             />
-            {draft.heroImageUrl && (
+            {/* {draft.heroImageUrl && ( */}
+            {emptyToUndefined(draft.heroImageUrl) && (
               <div className="admin-image-preview">
                 <p className="admin-hint">Hero image preview</p>
                 <img src={draft.heroImageUrl} alt="Hero preview" />
@@ -572,7 +667,7 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Approach</span>
-              <span className="admin-hint">What ERA actually did.</span>
+              <span className="admin-hint">What ERA actually did</span>
             </div>
             <textarea
               className="admin-textarea"
@@ -585,7 +680,7 @@ export default function NewCaseStudyForm() {
           <div className="admin-field">
             <div className="admin-label-row">
               <span className="admin-label">Impact</span>
-              <span className="admin-hint">Outcomes, numbers, changes.</span>
+              <span className="admin-hint">Outcomes, numbers, changes</span>
             </div>
             <textarea
               className="admin-textarea"

@@ -7,7 +7,8 @@ import "@styles/admin-cms.css";
 import { useState } from "react";
 import Link from "next/link";
 import { CMSLogin, CMSDashboard } from "@kit/blocks";
-import { useMockCMS } from "./mockCMS";
+//import { useMockCMS } from "./mockCMS";
+import { useAdminCaseStudies } from "./AdminCaseStudyStore";
 
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 

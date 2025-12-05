@@ -18,8 +18,7 @@ export default function MockCaseStudyPage() {
         <div className="c-container c-stack">
           <h1 className="type-h2">Mock case study not found</h1>
           <p className="type-body type-muted">
-            This mock entry only lives in your current browser session. If you
-            refresh or open a new browser, it disappears.
+            This entry isn’t in your current local mock database (localStorage).
           </p>
           <Link href="/admin/case-studies/list" className="c-link">
             Back to mock database
@@ -33,15 +32,21 @@ export default function MockCaseStudyPage() {
     <main className="c-section">
       <div className="c-container c-stack">
         <header className="c-stack">
-          <p className="type-small type-muted">Mock preview only</p>
+          <p className="type-small type-muted">Mock case study preview (local)</p>
           <h1 className="type-hero">{cs.title}</h1>
           <p className="type-body type-muted">{cs.summaryShort}</p>
+
+          <div className="type-small type-muted">
+            <strong>Status:</strong> {cs.status}{" "}
+            <strong style={{ marginLeft: 12 }}>Visibility:</strong> {cs.visibility}{" "}
+            <strong style={{ marginLeft: 12 }}>Sector:</strong> {cs.sector}
+          </div>
         </header>
 
         <section className="c-stack">
           {cs.heroImageUrl && (
             <div className="hero-image-container">
-              {/* For demo only – in real CMS we’d use Next/Image */}
+              {/* For demo only – in real CMS, use Next/Image */}
               <img
                 src={cs.heroImageUrl}
                 alt={cs.title}
@@ -52,8 +57,7 @@ export default function MockCaseStudyPage() {
 
           {cs.bodyMDX && (
             <article className="type-body">
-              {/* For now, treat bodyMDX as plain text. Later this will go
-                 through your MDX renderer pipeline. */}
+              {/* Later: MDX renderer pipeline */}
               <p style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</p>
             </article>
           )}
