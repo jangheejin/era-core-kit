@@ -55,7 +55,9 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
     if (!res.success) {
       const issue = res.error.issues[0];
       const path = issue?.path?.length ? issue.path.join(".") : "(root)";
-      setError(`${path}: ${issue.message}`);
+      const msg = issue?.message ?? "Validation failed";
+      setError(`${path}): ${msg}`);
+//      setError(`${path}: ${issue.message}`);
       return;
     }
 
