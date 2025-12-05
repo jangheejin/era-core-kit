@@ -15,6 +15,7 @@ import React, {
 
 import {
   CaseStudy as CaseStudySchema,
+  CaseStudyInput,
   CASE_STUDIES_FIXTURE,
   type CaseStudyType,
 } from "@kit/schema";
@@ -29,8 +30,8 @@ type AdminCaseStudyContextValue = {
   upsertCaseStudy: (cs: CaseStudyType) => void;
 
   removeCaseStudy: (slug: string) => void;
-//  getBySlug: (slug: string) => CaseStudyType | undefined;
-  findBySlug: (slug: string) => CaseStudyType | undefined;
+  getBySlug: (slug: string) => CaseStudyType | undefined;
+//  findBySlug: (slug: string) => CaseStudyType | undefined;
 
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
@@ -73,19 +74,23 @@ function saveLocal(items: CaseStudyType[]) {
 }
 
 
-function buildInitialItems(): CaseStudyType[] {
-  const stored = loadLocalValidated();
+//function buildInitialItems(): CaseStudyType[] {
+function buildBaselineItems(): CaseStudyType[] {
+//  const stored = loadLocalValidated();
+  // baseline = fixture baseline (+ optional seed baseline), no window/localStorage
   const bySlug = new Map<string, CaseStudyType>();
 
   // baseline → overrides
   for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-  for (const cs of stored) bySlug.set(cs.slug, cs);
+  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs); // optional (keeps RAW_SEEDS)
+  //for (const cs of stored) bySlug.set(cs.slug, cs);
 
   // deterministic order: fixture order then stored-only
   const order: string[] = [];
   const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
   for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  for (const cs of stored) push(cs.slug);
+  for (const cs of SEED_CASE_STUDIES) push(cs.slug);
+  //for (const cs of stored) push(cs.slug);
 
   return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
 }
@@ -122,9 +127,26 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+const BASELINE = buildBaselineItems();
+
+function mergeBaselineWithStored(baseline: CaseStudyType[], stored: CaseStudyType[]) {
+  const bySlug = new Map<string, CaseStudyType>();
+  for (const cs of baseline) bySlug.set(cs.slug, cs);
+  for (const cs of stored) bySlug.set(cs.slug, cs);
+
+  const order: string[] = [];
+  const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
+
+  for (const cs of baseline) push(cs.slug);
+  for (const cs of stored) push(cs.slug);
+
+  return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
+}
+
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   // Start from fixtures only to avoid SSR/CSR mismatch.
-  const [items, setItems] = useState<CaseStudyType[]>(() => buildInitialItems());
+  const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
+  //const [items, setItems] = useState<CaseStudyType[]>(() => buildInitialItems());
   //const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
 
   const getBySlug = useCallback(
@@ -136,7 +158,8 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = loadLocalValidated();
     if (stored.length === 0) return;
-    setItems(mergeFixtureWithStored(stored));
+    setItems(mergeBaselineWithStored(BASELINE, stored));
+    //setItems(mergeFixtureWithStored(stored));
   }, []);
 
   // Persist any changes (this will store fixtures too but that’s OK for toy mode)
@@ -182,7 +205,6 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((p) => p.slug !== slug));
   }, []);
 
-//  const getBySlug = (slug: string) => items.find(x => x.slug === slug);
 //  const findBySlug = (slug: string) => items.find(x => x.slug === slug);
 
 /*   const resetToBaseline = useCallback(() => {
@@ -251,13 +273,6 @@ export function useAdminCaseStudies() {
   }
   return ctx;
 }
-
-
-/* const AdminCaseStudyContext =
-  createContext<AdminCaseStudyContextValue | null>(null);
-
-const STORAGE_KEY = "era_admin_case_studies_v1";
-
 const RAW_SEEDS: CaseStudyInput[] = [
   {
     id: "seed-sanborn-appgeo",
@@ -313,6 +328,13 @@ const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
   const res = CaseStudySchema.safeParse(item);
   return res.success ? [res.data] : [];
 });
+
+/* const AdminCaseStudyContext =
+  createContext<AdminCaseStudyContextValue | null>(null);
+
+const STORAGE_KEY = "era_admin_case_studies_v1";
+
+
 
 function loadLocal(): CaseStudyType[] {
   if (typeof window === "undefined") return [];

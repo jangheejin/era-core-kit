@@ -51,7 +51,7 @@ const [preview, setPreview] = useState<CaseStudyType | null>(null);
 const [validated, setValidated] = useState(false);
 const [validatedCaseStudy, setValidatedCaseStudy] = useState<CaseStudyType | null>(null);
 
-const sectorOptions: CaseStudyType["sector"][] = [
+/* const sectorOptions: CaseStudyType["sector"][] = [
   "Defense",
   "Health",
   "FinTech",
@@ -90,7 +90,7 @@ const visibilityOptions: CaseStudyType["visibility"][] = [
   "Internal",
   "ClientSafe",
 ];
-
+ */
 
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;
@@ -98,8 +98,8 @@ function emptyToUndefined(s: unknown): string | undefined {
   return t ? t : undefined;
 }
 
-export default function NewCaseStudyForm() {
-  /*implementing the hook & router for the advanced builder*/
+/* export default function NewCaseStudyForm() {
+  //implementing the hook & router for the advanced builder
   const router = useRouter();
   const { addCaseStudy } = useAdminCaseStudies();
 
@@ -143,8 +143,8 @@ export default function NewCaseStudyForm() {
 
   function update<K extends keyof Draft>(field: K, value: Draft[K]) {
     setDraft((d) => ({ ...d, [field]: value }));
-    /*setError(null);
-    setPreview(null);*/
+    //setError(null);
+    //setPreview(null);
     resetValidation();
   }
 
@@ -157,23 +157,23 @@ export default function NewCaseStudyForm() {
         : [...current, mech];
       return { ...d, mechanisms: next };
     });
-    /*setError(null);
-    setPreview(null);*/
+    //setError(null);
+    //setPreview(null);
     resetValidation();
   }
 
   function toggleJurisdiction(j: CaseStudyType["jurisdictions"][number]) {
     setDraft((d) => {
       const current = d.jurisdictions ?? [];
-/*       const exists = current.includes(j);
-      const next = exists ? current.filter((v) => v !== j) : [...current, j]; */
+//       const exists = current.includes(j);
+//      const next = exists ? current.filter((v) => v !== j) : [...current, j]; 
       const next = current.includes(j)
         ? current.filter((v) => v !== j)
         : [...current, j];
       return { ...d, jurisdictions: next };
     });
-/*     setError(null);
-    setPreview(null); */
+//     setError(null);
+//    setPreview(null); 
     resetValidation();
   }
 
@@ -265,7 +265,7 @@ export default function NewCaseStudyForm() {
     //setValidated(true);
     setValidatedCaseStudy(parsed);
     //setValidated(result.data);
-  }
+  } */
 
 /*   function validate() {
     const tags = tagsInput
@@ -334,402 +334,258 @@ export default function NewCaseStudyForm() {
     // DO NOT ADD OR PUSH YET!
   } */
 
+
+export default function NewCaseStudyPage() {
+  const router = useRouter();
+  const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [client, setClient] = useState("");
+  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+  const [year, setYear] = useState<string>("2024");
+  const [tags, setTags] = useState("");
+  const [summaryShort, setSummaryShort] = useState("");
+  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
+  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");
+  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
+  const [visibility, setVisibility] =
+    useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
+  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+
+  const candidateInput: CaseStudyInput = useMemo(
+    () => ({
+      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+      title: title.trim(),
+      slug: slugify(slug || title),
+      client: client.trim() || undefined,
+      sector,
+      year: year ? Number(year) : undefined,
+
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .slice(0, 10),
+
+      summaryShort: summaryShort.trim(),
+      brief: undefined,
+
+      heroImageUrl: heroImageUrl.trim(),
+
+      mechanisms: [],
+      jurisdictions: [],
+      outcomes: [],
+      evidence: [],
+      bodyMDX: bodyMDX || "",
+      sections: [],
+      attachments: [],
+      links: [],
+
+      status,
+      visibility,
+      isFeaturedHome,
+      isPublic,
+    }),
+    [
+      title,
+      slug,
+      client,
+      sector,
+      year,
+      tags,
+      summaryShort,
+      heroImageUrl,
+      bodyMDX,
+      status,
+      visibility,
+      isFeaturedHome,
+      isPublic,
+    ],
+  );
+
+  const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
+
   function save() {
-    if (!validatedCaseStudy) {
+    // Make slug collision-safe right at the save boundary
+    const desired = candidateInput.slug;
+    const unique = ensureUniqueSlug(desired, candidateInput.id);
+
+    const next: CaseStudyInput = { ...candidateInput, slug: unique };
+    const res = CaseStudySchema.safeParse(next);
+    if (!res.success) return;
+
+    const out: CaseStudyType = res.data;
+    upsertCaseStudy(out);
+    router.push(`/admin/case-studies/mock/${out.slug}`);
+  }
+/*     if (!validatedCaseStudy) {
       setError("Please validate the case study before saving.");
       return;
     }
 
     addCaseStudy(validatedCaseStudy);
     router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
-  }
+  } */
+   return (
+    <main className="c-admin">
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h1>New Case Study</h1>
+        <div className="row">
+          <a href="/admin">Admin</a>
+          <a href="/admin/case-studies/list">All case studies</a>
+        </div>
+      </div>
 
-  return (
-    <main className="c-page c-page-admin">
-      <div className="c-container c-section admin-form">
-        {/* Header row */}
-        <header className="admin-form-header">
-          <div className="admin-form-header-main">
-            <p className="admin-kicker">CMS demo</p>
-            <h1 className="type-h1">Create a mock case study</h1>
-            <p className="type-body type-muted">
-              This mirrors the real data model: sectors, tags, mechanisms,
-              summary, and structured MDX sections. Saving writes to a local mock
-              database in this browser via localStorage.
-            </p>
-          </div>
-          <Link href="/admin" className="cms-button cms-button--secondary">
-            ← Back to admin dashboard
-          </Link>
-        </header>
+      <p className="muted">
+        This is the demo builder: input → Zod validation → stored as parsed output → preview page.
+      </p>
 
-        {/* BASICS */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Basics</h2>
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <div className="row">
+          <button
+            className="btn"
+            type="button"
+            onClick={() => setSlug(slugify(slug || title))}
+            title="Generate slug from title"
+          >
+            Slugify
+          </button>
 
-          {/* Title */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">
-                Title <span className="admin-label-required">*</span>
-              </span>
-              <span className="admin-hint">
-                Public-facing case study title.
-              </span>
-            </div>
-            <input
-              className="admin-input"
-              placeholder="Ex: Sanborn + AppGeo statewide mapping modernization"
-              value={draft.title || ""}
-              onChange={(e) => update("title", e.target.value)}
-            />
-          </div>
+          <button
+            className="btnPrimary"
+            type="button"
+            onClick={save}
+            disabled={!validation.success}
+            title={!validation.success ? "Fix validation errors first" : "Save"}
+          >
+            Save + Preview
+          </button>
+        </div>
 
-          {/* Slug */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">
-                Slug <span className="admin-label-required">*</span>
-              </span>
-              <span className="admin-hint">
-                Used in URLs (lowercase, dashes). If left blank, it will be derived from the title.
-              </span>
-            </div>
-            <input
-              className="admin-input"
-              placeholder="ex: sanborn-appgeo"
-              value={draft.slug || ""}
-              onChange={(e) => update("slug", e.target.value)}
-            />
+        <div style={{ marginTop: "1rem" }}>
+          <label>Title</label>
+          <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <label>Slug</label>
+          <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+        </div>
+
+        <div className="row" style={{ marginTop: "1rem" }}>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <label>Client</label>
+            <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
           </div>
 
-          {/* Client */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Client</span>
-              <span className="admin-hint">
-                Who you did the work for (optional).
-              </span>
-            </div>
-            <input
-              className="admin-input"
-              placeholder="Ex: Sanborn"
-              value={draft.client || ""}
-              onChange={(e) => update("client", e.target.value)}
-            />
-          </div>
-
-          {/* Sector + year */}
-          <div className="admin-grid-2">
-            <div className="admin-field">
-              <div className="admin-label-row">
-                <span className="admin-label">Sector</span>
-              </div>
-              <select
-                className="admin-select"
-                value={draft.sector || "GovContracting"}
-                onChange={(e) =>
-                  update("sector", e.target.value as CaseStudyType["sector"])
-                }
-              >
-                {sectorOptions.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-{/*                 <option value="Defense">Defense</option>
-                <option value="Health">Health</option>
-                <option value="FinTech">FinTech</option>
-                <option value="Education">Education</option>
-                <option value="Nonprofit">Nonprofit</option>
-                <option value="GovContracting">GovContracting</option>
-                <option value="EmergencyMgmt">EmergencyMgmt</option> */}
-              </select>
-            </div>
-
-            <div className="admin-field">
-              <div className="admin-label-row">
-                <span className="admin-label">Year</span>
-                <span className="admin-hint">Optional</span>
-              </div>
-              <input
-                className="admin-input"
-                type="number"
-                min={1990}
-                max={2100}
-                value={draft.year ?? ""}
-                onChange={(e) =>
-                  update(
-                    "year",
-                    e.target.value ? Number(e.target.value) : undefined,
-                  )
-                }
-              />
-            </div>
-          </div>
-
-          <div className="admin-grid-2">
-            <div className="admin-field">
-              <div className="admin-label-row">
-                <span className="admin-label">Status</span>
-              </div>
-              <select
-                className="admin-select"
-                value={(draft.status as string) || "Draft"}
-                onChange={(e) =>
-                  update("status", e.target.value as CaseStudyType["status"])
-                }
-                >
-                  {statusOptions.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-              </select>
-            </div>
-
-            <div className="admin-field">
-              <div className="admin-label-row">
-                <span className="admin-label">Visibility</span>
-              </div>
-              <select
-                className="admin-select"
-                value={(draft.visibility as string) || "Internal"}
-                onChange={(e) =>
-                  update(
-                    "visibility",
-                    e.target.value as CaseStudyType["visibility"],
-                  )
-                }
-              >
-                {visibilityOptions.map((v) => ( 
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </section>
-
-        {/* ----DISPLAY----- */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Display</h2>
-
-          {/* Hero image */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Hero image URL</span>
-              <span className="admin-hint">Full-width banner image. Use root-relative path (/img/...) or absolute URL.</span>
-            </div>
-            <input
-              className="admin-input"
-              placeholder="/img/case1.webp"
-              value={draft.heroImageUrl || ""}
-              onChange={(e) => update("heroImageUrl", e.target.value)}
-            />
-            {/* {draft.heroImageUrl && ( */}
-            {emptyToUndefined(draft.heroImageUrl) && (
-              <div className="admin-image-preview">
-                <p className="admin-hint">Hero image preview</p>
-                <img src={draft.heroImageUrl} alt="Hero preview" />
-              </div>
-            )}
-          </div>
-
-          {/* Tags */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Tags</span>
-              <span className="admin-hint">
-                Comma-separated; used for search and filters.
-              </span>
-            </div>
-            <input
-              className="admin-input"
-              placeholder="GIS, Modernization, Data integration"
-              value={tagsInput}
-              onChange={(e) => setTagsInput(e.target.value)}
-            />
-            <p className="admin-chip-hint">
-              Example: <code>GIS, Modernization, Data integration</code>
-            </p>
-          </div>
-        </section>
-
-        {/* SUMMARY */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Summary</h2>
-
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Summary (short)</span>
-              <span className="admin-hint">
-                1–2 sentences for listing cards.
-              </span>
-            </div>
-            <textarea
-              className="admin-textarea"
-              placeholder="Short summary used on listing cards."
-              value={draft.summaryShort || ""}
-              onChange={(e) => update("summaryShort", e.target.value)}
-            />
-          </div>
-
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Brief (optional)</span>
-              <span className="admin-hint">Up to ~280 characters.</span>
-            </div>
-            <textarea
-              className="admin-textarea"
-              placeholder="Optional slightly longer teaser for briefs or social."
-              value={draft.brief || ""}
-              onChange={(e) => update("brief", e.target.value)}
-            />
-          </div>
-        </section>
-
-        {/* MECHANICS */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Mechanics</h2>
-
-          {/* Mechanisms */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Mechanisms</span>
-            </div>
-            <div className="admin-checkbox-row">
-              {mechanismOptions.map((m) => (
-                <label key={m}>
-                  <input
-                    type="checkbox"
-                    checked={(draft.mechanisms ?? []).includes(m)}
-                    onChange={() => toggleMechanism(m)}
-                  />
-                  <span>{m}</span>
-                </label>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <label>Sector</label>
+            <select className="input" value={sector} onChange={(e) => setSector(e.target.value as any)}>
+              {SECTOR_VALUES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
-          {/* Jurisdictions */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Jurisdictions</span>
-            </div>
-            <div className="admin-checkbox-row">
-              {jurisdictionOptions.map((j) => (
-                <label key={j}>
-                  <input
-                    type="checkbox"
-                    checked={(draft.jurisdictions ?? []).includes(j)}
-                    onChange={() => toggleJurisdiction(j)}
-                  />
-                  <span>{j}</span>
-                </label>
+          <div style={{ width: 160 }}>
+            <label>Year</label>
+            <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
+          </div>
+        </div>
+
+        <div className="row" style={{ marginTop: "1rem" }}>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <label>Status</label>
+            <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
+              {CASE_STUDY_STATUS_VALUES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
-          {/* Flags */}
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Flags</span>
-            </div>
-            <div className="admin-checkbox-row">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={draft.isFeaturedHome ?? false}
-                  onChange={(e) => update("isFeaturedHome", e.target.checked)}
-                />
-                <span>Feature on home</span>
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={draft.isPublic ?? true}
-                  onChange={(e) => update("isPublic", e.target.checked)}
-                />
-                <span>Public</span>
-              </label>
-            </div>
-          </div>
-        </section>
-
-        {/* STRUCTURED SECTIONS */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Structured sections (MDX)</h2>
-
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Context</span>
-              <span className="admin-hint">
-                Problem framing / starting point.
-              </span>
-            </div>
-            <textarea
-              className="admin-textarea"
-              value={contextBody}
-              onChange={(e) => setContextBody(e.target.value)}
-              placeholder="Context / problem framing..."
-            />
-          </div>
-
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Approach</span>
-              <span className="admin-hint">What ERA actually did</span>
-            </div>
-            <textarea
-              className="admin-textarea"
-              value={approachBody}
-              onChange={(e) => setApproachBody(e.target.value)}
-              placeholder="What ERA did / strategy..."
-            />
-          </div>
-
-          <div className="admin-field">
-            <div className="admin-label-row">
-              <span className="admin-label">Impact</span>
-              <span className="admin-hint">Outcomes, numbers, changes</span>
-            </div>
-            <textarea
-              className="admin-textarea"
-              value={impactBody}
-              onChange={(e) => setImpactBody(e.target.value)}
-              placeholder="Outcomes, impact, results..."
-            />
-          </div>
-        </section>
-
-        {/* VALIDATE + PREVIEW */}
-        <section className="admin-form-section">
-          <h2 className="admin-section-title">Validate &amp; preview</h2>
-
-          <div className="admin-field admin-button-row">
-            <button type="button" onClick={validate} className="cms-button">
-              Validate + preview payload
-            </button>
-
-            <button type="button" onClick={save} className="cms-button cms-button--secondary"
-              disabled={!validated} aria-disabled={!validated} 
-              title={!validated ? "Please validate before saving." : "Save into mock case study database"}
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <label>Visibility</label>
+            <select
+              className="input"
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as any)}
             >
-              Save to mock database
-            </button>
+              {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
           </div>
+        </div>
 
-          {error && <p className="admin-error">{error}</p>}
+        <div style={{ marginTop: "1rem" }}>
+          <label>Tags (comma-separated)</label>
+          <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
+        </div>
 
-          {preview && (
-            <div className="admin-json-preview">
-              <div className="admin-json-preview-header">Validated payload</div>
-              <pre>{JSON.stringify(preview, null, 2)}</pre>
-            </div>
-          )}
-        </section>
+        <div style={{ marginTop: "1rem" }}>
+          <label>Summary short (required)</label>
+          <input
+            className="input"
+            value={summaryShort}
+            onChange={(e) => setSummaryShort(e.target.value)}
+          />
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <label>Hero image URL (required; /img/... or https://...)</label>
+          <input
+            className="input"
+            value={heroImageUrl}
+            onChange={(e) => setHeroImageUrl(e.target.value)}
+          />
+        </div>
+
+        <div className="row" style={{ marginTop: "1rem" }}>
+          <label className="row" style={{ gap: ".5rem" }}>
+            <input
+              type="checkbox"
+              checked={isFeaturedHome}
+              onChange={(e) => setIsFeaturedHome(e.target.checked)}
+            />
+            Featured on home
+          </label>
+
+          <label className="row" style={{ gap: ".5rem" }}>
+            <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+            isPublic
+          </label>
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <label>Body (MDX) — optional</label>
+          <textarea
+            className="input"
+            style={{ minHeight: 160 }}
+            value={bodyMDX}
+            onChange={(e) => setBodyMDX(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <h3 style={{ marginBottom: ".5rem" }}>Validation</h3>
+        {validation.success ? (
+          <p className="muted">✅ Valid (ready to save)</p>
+        ) : (
+          <pre style={{ whiteSpace: "pre-wrap" }}>
+            ❌ Invalid
+            {"\n\n"}
+            {JSON.stringify(validation.error.format(), null, 2)}
+          </pre>
+        )}
       </div>
     </main>
   );
