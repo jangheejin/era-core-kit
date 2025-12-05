@@ -3,7 +3,7 @@
 
 "use client";
 
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -14,60 +14,94 @@ import {
 } from "react";
 
 import {
-  CASE_STUDIES_FIXTURE,
   CaseStudy as CaseStudySchema,
+  CASE_STUDIES_FIXTURE,
+  type CaseStudyInput,
   type CaseStudyType,
-//  type CaseStudyInput,
 } from "@kit/schema";
 
-/* type AdminCaseStudyContextValue = {
-  items: CaseStudyType[];
-  addCaseStudy: (cs: CaseStudyType) => void;
-}; */
-type AdminCaseStudyStore = {
+type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
 
-  /** Create or replace an item (by slug, with id fallback). */
+  /** Back-compat name (your original API). Newest-first semantics. */
+  addCaseStudy: (cs: CaseStudyType) => void;
+
+  /** Preferred name (same semantics as addCaseStudy). */
   upsertCaseStudy: (cs: CaseStudyType) => void;
 
-  /** Remove by slug. (Useful later; doesn’t complicate anything.) */
   removeCaseStudy: (slug: string) => void;
-
-  /** Read helper. */
   getBySlug: (slug: string) => CaseStudyType | undefined;
 
-  /** Collision-safe slug helper for “create” workflows. */
+  /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
 
-  /** Hard reset (optional but handy in demos). */
-  resetToFixtures: () => void;
+  /** Optional: wipe local overrides and return to fixtures+seeds. */
+  resetToBaseline: () => void;
 };
 
-const Ctx = createContext<AdminCaseStudyStore | null>(null);
+const AdminCaseStudyContext =
+  createContext<AdminCaseStudyContextValue | null>(null);
 
-function mergeFixturesWithSaved(
-  fixtures: CaseStudyType[],
-  saved: CaseStudyType[],
-): CaseStudyType[] {
-  // Saved wins by slug; preserve fixture ordering; append saved-only items at end.
-  const savedBySlug = new Map(saved.map((x) => [x.slug, x]));
-  const out: CaseStudyType[] = [];
-  const seen = new Set<string>();
+const STORAGE_KEY = "era_admin_case_studies_v1";
 
-  for (const f of fixtures) {
-    const winner = savedBySlug.get(f.slug) ?? f;
-    out.push(winner);
-    seen.add(winner.slug);
-  }
+/** Keep your explicit seed layer (separate from fixtures). */
+const RAW_SEEDS: CaseStudyInput[] = [
+  {
+    id: "seed-sanborn-appgeo",
+    title: "Geospatial Solutions",
+    slug: "sanborn-appgeo",
+    client: "Sanborn + AppGeo",
+    sector: "GovContracting",
+    year: 2024,
+    tags: ["seed"],
+    summaryShort: "Demo entry seeded into the toy CMS store.",
+    brief: "Another short description",
+    heroImageUrl: "/img/case1.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content.",
+    sections: [],
+    attachments: [],
+    links: [],
+    status: "Draft",
+    visibility: "Internal",
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+  {
+    id: "seed-napsg-foundation",
+    title: "Nonprofit Organizations",
+    slug: "napsg-foundation",
+    client: "NAPSG Foundation",
+    sector: "Nonprofit",
+    year: 2024,
+    tags: ["seed"],
+    summaryShort: "Another demo entry seeded into the toy CMS store.",
+    brief: "Another short description",
+    heroImageUrl: "/img/case2.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content for NAPSG Foundation.",
+    sections: [],
+    attachments: [],
+    links: [],
+    status: "Draft",
+    visibility: "Internal",
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+];
 
-  for (const s of saved) {
-    if (!seen.has(s.slug)) out.push(s);
-  }
+const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
+  const res = CaseStudySchema.safeParse(item);
+  return res.success ? [res.data] : [];
+});
 
-  return out;
-}
-
-function safeLoadSaved(): CaseStudyType[] {
+function loadLocal(): CaseStudyType[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -76,8 +110,8 @@ function safeLoadSaved(): CaseStudyType[] {
     if (!Array.isArray(parsed)) return [];
 
     const ok: CaseStudyType[] = [];
-    for (const maybe of parsed) {
-      const res = CaseStudySchema.safeParse(maybe);
+    for (const item of parsed) {
+      const res = CaseStudySchema.safeParse(item);
       if (res.success) ok.push(res.data);
     }
     return ok;
@@ -86,15 +120,44 @@ function safeLoadSaved(): CaseStudyType[] {
   }
 }
 
-function safeSave(items: CaseStudyType[]) {
+function saveLocal(items: CaseStudyType[]) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch {
-    // ignore quota/errors in demo mode
+    // ignore
   }
 }
 
+/**
+ * Merge rules: fixture baseline → seeds baseline → stored overrides
+ * Ordering: fixture order, then seed-only, then stored-only (deterministic)
+ */
+function buildItemsWithStored(stored: CaseStudyType[]): CaseStudyType[] {
+  const bySlug = new Map<string, CaseStudyType>();
+
+  for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
+  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs);
+  for (const cs of stored) bySlug.set(cs.slug, cs);
+
+  const order: string[] = [];
+  const push = (slug: string) => {
+    if (!order.includes(slug)) order.push(slug);
+  };
+
+  for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
+  for (const cs of SEED_CASE_STUDIES) push(cs.slug);
+  for (const cs of stored) push(cs.slug);
+
+  return order
+    .map((slug) => bySlug.get(slug))
+    .filter((x): x is CaseStudyType => Boolean(x));
+}
+
+/** Baseline items without reading window/localStorage (avoids SSR/CSR mismatch risk). */
+function buildBaselineItems(): CaseStudyType[] {
+  return buildItemsWithStored([]);
+}
 
 function slugify(s: string) {
   return s
@@ -106,21 +169,19 @@ function slugify(s: string) {
 }
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
-  const fixtures = CASE_STUDIES_FIXTURE;
+  // Start from baseline to keep server/client consistent.
+  const [items, setItems] = useState<CaseStudyType[]>(() => buildBaselineItems());
 
-  const [items, setItems] = useState<CaseStudyType[]>(fixtures);
-
-  // Hydrate once on mount: fixtures + saved overlay
+  // Hydrate local overrides after mount.
   useEffect(() => {
-    const saved = safeLoadSaved();
-    if (saved.length === 0) return;
-    setItems(mergeFixturesWithSaved(fixtures, saved));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const stored = loadLocal();
+    if (stored.length === 0) return;
+    setItems(buildItemsWithStored(stored));
   }, []);
 
-  // Persist on change (demo durability)
+  // Persist changes
   useEffect(() => {
-    safeSave(items);
+    saveLocal(items);
   }, [items]);
 
   const ensureUniqueSlug = useCallback(
@@ -140,15 +201,15 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
-  const upsertCaseStudy = useCallback((cs: CaseStudyType) => {
+  const addCaseStudy = useCallback((cs: CaseStudyType) => {
+    // Your original semantics: newest first, replace by slug.
     setItems((prev) => {
-      const idx = prev.findIndex((x) => x.slug === cs.slug || x.id === cs.id);
-      if (idx === -1) return [cs, ...prev];
-      const next = prev.slice();
-      next[idx] = cs;
-      return next;
+      const filtered = prev.filter((p) => p.slug !== cs.slug);
+      return [cs, ...filtered];
     });
   }, []);
+
+  const upsertCaseStudy = addCaseStudy;
 
   const removeCaseStudy = useCallback((slug: string) => {
     setItems((prev) => prev.filter((x) => x.slug !== slug));
@@ -159,37 +220,45 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
-  const resetToFixtures = useCallback(() => {
-    setItems(fixtures);
+  const resetToBaseline = useCallback(() => {
+    setItems(buildBaselineItems());
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
       } catch {}
     }
-  }, [fixtures]);
+  }, []);
 
-  const value = useMemo<AdminCaseStudyStore>(
+  const value = useMemo<AdminCaseStudyContextValue>(
     () => ({
       items,
+      addCaseStudy,
       upsertCaseStudy,
       removeCaseStudy,
       getBySlug,
       ensureUniqueSlug,
-      resetToFixtures,
+      resetToBaseline,
     }),
-    [items, upsertCaseStudy, removeCaseStudy, getBySlug, ensureUniqueSlug, resetToFixtures],
+    [items, addCaseStudy, upsertCaseStudy, removeCaseStudy, getBySlug, ensureUniqueSlug, resetToBaseline],
   );
 
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  return (
+    <AdminCaseStudyContext.Provider value={value}>
+      {children}
+    </AdminCaseStudyContext.Provider>
+  );
 }
 
 export function useAdminCaseStudies() {
-  const ctx = useContext(Ctx);
+  const ctx = useContext(AdminCaseStudyContext);
   if (!ctx) {
-    throw new Error("useAdminCaseStudies must be used within <AdminCaseStudyProvider>");
+    throw new Error(
+      "useAdminCaseStudies must be used within <AdminCaseStudyProvider>",
+    );
   }
   return ctx;
 }
+
 /* const AdminCaseStudyContext =
   createContext<AdminCaseStudyContextValue | null>(null);
 
