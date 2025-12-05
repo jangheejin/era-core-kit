@@ -11,7 +11,7 @@ import Link from "next/link";
 import { AdminCaseStudyProvider } from "./AdminCaseStudyStore";
 import AdminProviders from "./AdminProviders";
 //import "@styles/admin.css";
-import "@styles/admin-css"
+import "@styles/admin-cms.css"
 
 //import { MockCMSProvider } from "@/cms/mockCmsStore";
 //import { AdminShell } from "@/cms/AdminShell";

@@ -15,6 +15,7 @@ import { useAdminCaseStudies } from "./AdminCaseStudyStore";
 const LOGIN_KEY = "era_admin_logged_in_v1";
 
 export default function AdminPage() {
+  console.log("AdminPage mounted");
 //  const { items, addCaseStudy } = useAdminCaseStudies();
   const { items } = useAdminCaseStudies();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,7 +45,9 @@ export default function AdminPage() {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1>Admin (Demo CMS)</h1>
         <div className="row">
-          <Link href="/">Public site</Link>
+          <span className="btnPrimary"> 
+            <Link href="/">Public site</Link>
+          </span>
           {isLoggedIn ? (
             <button className="btn" type="button" onClick={logout}>
               Log out

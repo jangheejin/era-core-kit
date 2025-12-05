@@ -40,6 +40,9 @@ the user fills out)
   border: 1px solid rgba(0,0,0,.18);
   background: transparent;
   cursor: pointer;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: var(--fs-h4);
 }
 .c-admin .btnPrimary {
   padding: .6rem .9rem;
@@ -47,6 +50,19 @@ the user fills out)
   border: 1px solid rgba(0,0,0,.18);
   background: rgba(0,0,0,.06);
   cursor: pointer;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: var(--fs-h4);
+}
+.c-admin .btnTwo {
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.18);
+  background: #b91c1c;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: var(--fs-h4);
 }
 .c-admin a { text-decoration: underline; }
 
