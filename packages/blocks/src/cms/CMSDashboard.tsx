@@ -146,6 +146,33 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
   }
 
   return (
+    <section className="c-stack">
+      <h2 className="type-h2">CMS dashboard (mock)</h2>
+      <p className="type-body type-muted">
+        Demo admin navigation. (The real demo CMS store now lives in <code>apps/site/app/admin</code>.)
+      </p>
+
+      <div className="buttonRow">
+        <div className="c-stack c-stack--row c-stack--gap">
+          <Link href="/admin/case-studies/new" className="buttonLink-2">
+            Create new case study
+          </Link>
+        </div>
+        <div className="c-stack c-stack--row c-stack--gap">
+          <Link href="/admin/case-studies/list" className="buttonLink-2">
+            View case study list
+          </Link>
+        </div>
+      </div>
+
+      <p className="type-small type-muted" style={{ marginTop: "1rem" }}>
+        Items in store: <strong>{items?.length ?? 0}</strong>
+      </p>
+    </section>
+  );
+}
+
+/*   return (
     <div className="c-container c-section c-stack">
       <h2 className="type-h2">CMS Content Editor (Mock)</h2>
 
@@ -262,9 +289,6 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
                 {cs.visibility}
               </div>
 
-{/*                 <code className="type-small type-muted">/{cs.slug}</code>
-              </div> */}
-
               <p className="type-body type-muted">
                 <strong>Summary:</strong> {cs.summaryShort}
               </p>
@@ -288,3 +312,4 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
     </div>
   );
 }
+ */

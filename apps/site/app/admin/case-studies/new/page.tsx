@@ -46,10 +46,10 @@ function slugify(s: string) {
 
 type Draft = Partial<CaseStudyInput>;
 
-const [preview, setPreview] = useState<CaseStudyType | null>(null);
+//const [preview, setPreview] = useState<CaseStudyType | null>(null);
 //const [validated, setValidated] = useState<CaseStudyType | null>(null);
-const [validated, setValidated] = useState(false);
-const [validatedCaseStudy, setValidatedCaseStudy] = useState<CaseStudyType | null>(null);
+//const [validated, setValidated] = useState(false);
+//const [validatedCaseStudy, setValidatedCaseStudy] = useState<CaseStudyType | null>(null);
 
 /* const sectorOptions: CaseStudyType["sector"][] = [
   "Defense",

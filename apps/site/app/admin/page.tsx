@@ -4,7 +4,7 @@
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CMSLogin, CMSDashboard } from "@kit/blocks";
 //import { useMockCMS } from "./mockCMS";
@@ -12,18 +12,82 @@ import { useAdminCaseStudies } from "./AdminCaseStudyStore";
 
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 
+const LOGIN_KEY = "era_admin_logged_in_v1";
+
 export default function AdminPage() {
-  const { items, addCaseStudy } = useAdminCaseStudies();
+//  const { items, addCaseStudy } = useAdminCaseStudies();
+  const { items } = useAdminCaseStudies();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    try {
+      setIsLoggedIn(window.localStorage.getItem(LOGIN_KEY) === "1");
+    } catch {}
+  }, []);
+
+  function login() {
+    setIsLoggedIn(true);
+    try {
+      window.localStorage.setItem(LOGIN_KEY, "1");
+    } catch {}
+  }
+
+  function logout() {
+    setIsLoggedIn(false);
+    try {
+      window.localStorage.setItem(LOGIN_KEY, "0");
+    } catch {}
+  }
+
+  return (
+    <main className="c-admin">
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h1>Admin (Demo CMS)</h1>
+        <div className="row">
+          <Link href="/">Public site</Link>
+          {isLoggedIn ? (
+            <button className="btn" type="button" onClick={logout}>
+              Log out
+            </button>
+          ) : (
+            <button className="btnPrimary" type="button" onClick={login}>
+              Demo login
+            </button>
+          )}
+        </div>
+      </div>
+
+      <p className="muted">
+        Store contains <strong>{items.length}</strong> case studies (fixtures + any local edits).
+      </p>
+
+      {isLoggedIn ? (
+        <div className="card" style={{ marginTop: "1rem" }}>
+          <h2>Actions</h2>
+          <div className="row" style={{ marginTop: ".75rem" }}>
+            <Link href="/admin/case-studies/new">Create new case study</Link>
+            <Link href="/admin/case-studies/list">Browse case studies</Link>
+          </div>
+        </div>
+      ) : (
+        <div className="card" style={{ marginTop: "1rem" }}>
+          <h2>Locked</h2>
+          <p className="muted">Click “Demo login” to access editor routes.</p>
+        </div>
+      )}
+    </main>
+  );
+}
+
+/* 
   return (
     <main className="c-page c-page-admin">
       <div className="c-container c-section c-stack">
-        {/* HEADER */}
+
         <header className="c-stack">
           <div className="c-stack c-stack--row c-stack--between c-stack--center">
             <h1 className="type-h1">ERA CMS admin demo</h1>
-            {/*<p className="type-body-large">ERA CMS Admin Demo</p>*/}
+
           </div>
           <div className="richtext">
             <p className="type-body type-muted">
@@ -49,7 +113,6 @@ export default function AdminPage() {
           <hr />
         </header>
 
-        {/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
             <p className="type-body-semibold">Step 1 — Enter the CMS demo</p>
@@ -60,7 +123,6 @@ export default function AdminPage() {
               accounts.
             </p>
 
-            {/* CMSLogin: Fake login button from the shared blocks package */}
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
             <p className="type-body">
@@ -80,45 +142,19 @@ export default function AdminPage() {
           </section>
         )}
 
-        {/* LOGGED IN -------------------------------------------------------- */}
         {isLoggedIn && (
           <section className="c-stack">
-            {/* Top row: title + “log out” */}
             <div className="c-stack c-stack--row c-stack--between c-stack--center">
-              {/*<h2 className="type-h3">Content dashboard (mock)</h2>*/}
             </div>
 
-            {/* QUICK INLINE EDITOR */}
             <section className="c-stack">
-              {/*              <h3 className="type-h4">Quick add (inline)</h3>
-              <p className="type-body type-muted">
-                Lightweight inline editor — type a title, slug, and body, then save to see how
-                “create → preview” feels without touching the full CMS.
-              </p>*/}
 
               <CMSDashboard items={items} onCreate={addCaseStudy} />
             </section>
-
-            {/* LINKS TO OTHER FLOWS */}
-            {/**             <section className="c-stack">
-              <h3 className="type-h3">Explore the mock CMS flows</h3>
-              <p className="type-body type-muted">
-                Use these links to jump into the more structured views that mirror a real CMS.
-              </p>
-
-              <div className="c-stack c-stack--row c-stack--wrap c-stack--gap">
-                <Link href="/admin/case-studies/list" className="c-button">
-                  View mock case study database
-                </Link>
-
-                <Link href="/admin/case-studies/new" className="c-button">
-                  Open detailed case study builder
-                </Link>
-              </div>
-            </section>*/}
           </section>
         )}
       </div>
     </main>
   );
 }
+ */
