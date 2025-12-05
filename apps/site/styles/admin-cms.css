@@ -19,15 +19,30 @@ the user fills out)
 }
 
 .c-admin {
-  max-width: 72rem;
+  /* max-width: 72rem; */
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 1.25rem;
+  /* padding-block: var(
+    --space-2
+  ); */
 }
 
+/* .c-section {
+  padding-block: var(
+    --space-2
+  );
+  background: var(--bg);
+} 
+.c-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}*/
 .c-admin .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
 .c-section .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
 .c-admin .card { border: 1px solid rgba(0,0,0,.12); border-radius: 12px; padding: 1rem; }
-/* .c-section .card { border: 1px solid rgba(0,0,0,.12); border-radius: 12px; padding: 1rem; } */
+.c-section .card { border: 1px solid rgba(0,0,0,.12); border-radius: 12px; padding: 1rem; }
 .c-admin .input, .c-admin select, .c-admin textarea {
   width: 100%;
   padding: .6rem .7rem;

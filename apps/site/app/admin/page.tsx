@@ -43,7 +43,7 @@ export default function AdminPage() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1>Admin (Demo CMS)</h1>
+        <h1>Demo CMS Dashboard</h1>
         <div className="row">
           <span className="btnPrimary"> 
             <Link href="/">Public site</Link>
