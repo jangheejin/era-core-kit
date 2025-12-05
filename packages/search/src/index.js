@@ -8,8 +8,8 @@
  * - or do in-memory filtering over a static list
  */
 export async function searchCaseStudies(_filters) {
-  return {
-    items: [],
-    total: 0,
-  };
+    return {
+        items: [],
+        total: 0,
+    };
 }

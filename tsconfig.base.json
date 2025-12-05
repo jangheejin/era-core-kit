@@ -15,6 +15,7 @@
       "@kit/adapters/*": ["packages/adapters/*/src"],
       //      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
       "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
+      "@kit/search": ["packages/search/src"],
       "@/*": ["apps/site/src/*"]
     },
     "target": "ES2020",

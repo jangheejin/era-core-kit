@@ -6,7 +6,9 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import {
   CASE_STUDIES_FIXTURE,
   CaseStudy as CaseStudySchema,
-  type CaseStudy as CaseStudyType,
+  type CaseStudyType,
+  type CaseStudyInput,
+//  type CaseStudy as CaseStudyType,
 } from "@kit/schema";
 
 type AdminCaseStudyContextValue = {
@@ -20,15 +22,17 @@ const AdminCaseStudyContext = createContext<AdminCaseStudyContextValue | null>(
 
 const STORAGE_KEY = "era_admin_case_studies_v1";
 
-const SEED_CASE_STUDIES: CaseStudyType[] = [
+const RAW_SEEDS: CaseStudyInput[] = [
   {
     id: "seed-sanborn-appgeo",
     title: "Geospatial Solutions",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     sector: "GovContracting",
+    year: 2024,
     tags: ["seed"],
     summaryShort: "Demo entry seeded into the toy CMS store.",
+    brief: "Another short description",
     heroImageUrl: "/img/case1.webp",
     mechanisms: [],
     jurisdictions: [],
@@ -38,11 +42,70 @@ const SEED_CASE_STUDIES: CaseStudyType[] = [
     sections: [],
     attachments: [],
     links: [],
+    status: "Draft",
+    visibility: "Internal",
     isFeaturedHome: false,
     isPublic: true,
   },
-
   {
+    id: "seed-napsg-foundation",
+    title: "Nonprofit Organizations",
+    slug: "napsg-foundation",
+    client: "NAPSG Foundation",
+    sector: "Nonprofit",
+    year: 2024,
+    tags: ["seed"],
+    summaryShort: "Another demo entry seeded into the toy CMS store.",
+    brief: "Another short description",
+    heroImageUrl: "/img/case2.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content for NAPSG Foundation.",
+    sections: [],
+    attachments: [],
+    links: [],
+    status: "Draft",
+    visibility: "Internal",
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+];
+
+const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.map((item) =>
+  CaseStudySchema.parse(item),
+);
+
+
+/* const SEED_CASE_STUDIES: CaseStudyType[] = [
+    CaseStudySchema.parse({
+    id: "seed-sanborn-appgeo",
+    title: "Geospatial Solutions",
+    slug: "sanborn-appgeo",
+    client: "Sanborn + AppGeo",
+    sector: "GovContracting",
+    year: 2024,
+    tags: ["seed"],
+    summaryShort: "Demo entry seeded into the toy CMS store.",
+    brief: "Another short description",
+    heroImageUrl: "/img/case1.webp",
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+    bodyMDX: "Seed body content.",
+    sections: [],
+    attachments: [],
+    links: [],
+
+    status: "Draft",
+    visibility: "Internal",
+    isFeaturedHome: false,
+    isPublic: true,
+    }),
+
+  CaseStudySchema.parse({
     id: "seed-napsg-foundation",
     title: "Nonprofit Organizations",
     slug: "napsg-foundation",
@@ -61,8 +124,8 @@ const SEED_CASE_STUDIES: CaseStudyType[] = [
     links: [],
     isFeaturedHome: false,
     isPublic: true,
-  }
-];
+  }),
+]; */
 
 
 function loadLocal(): CaseStudyType[] {

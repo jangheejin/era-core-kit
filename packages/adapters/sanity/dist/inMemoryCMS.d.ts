@@ -1,18 +1,18 @@
-import type { CMS } from '@kit/cms-contract';
-import { type CaseStudy, type FilterAST, type Person } from '@kit/schema';
+import type { CMS } from "@kit/cms-contract";
+import { type FilterAST, type Person, type CaseStudyType as CaseStudy } from "@kit/schema";
 interface GetCaseStudiesArgs {
     filter?: FilterAST;
     limit?: number;
     cursor?: string;
-    sort?: 'newest' | 'alpha';
+    sort?: "newest" | "alpha";
 }
 export declare class InMemoryCMS implements CMS {
-    getCaseStudies({ filter, limit, cursor, sort }: GetCaseStudiesArgs): Promise<{
+    getCaseStudies({ filter, limit, cursor, sort, }: GetCaseStudiesArgs): Promise<{
         items: {
             id: string;
             title: string;
             slug: string;
-            sector: "Defense" | "Health" | "FinTech" | "Education" | "Nonprofit" | "GovContracting" | "EmergencyMgmt";
+            sector: "Defense" | "Health" | "FinTech" | "Education" | "Nonprofit" | "GovContracting" | "EmergencyMgmt" | "Geospatial" | "CivicTech" | "Infrastructure";
             tags: string[];
             summaryShort: string;
             heroImageUrl: string;
@@ -20,6 +20,7 @@ export declare class InMemoryCMS implements CMS {
             jurisdictions: ("Federal" | "State" | "Local")[];
             outcomes: {
                 label: string;
+                kind?: "Grant" | "Contract" | "Policy" | "Visibility" | "Relationship" | "Savings" | "Efficiency" | "Engagement" | "Operational" | "RiskReduction" | undefined;
                 description?: string | undefined;
                 evidenceUrl?: string | undefined;
             }[];
@@ -44,6 +45,8 @@ export declare class InMemoryCMS implements CMS {
                 category: "client" | "other" | "impact" | "legislation" | "press";
                 internalOnly: boolean;
             }[];
+            status: "Draft" | "InProgress" | "NeedsReview" | "Approved" | "Published" | "Archived";
+            visibility: "Public" | "Internal" | "ClientSafe";
             isFeaturedHome: boolean;
             isPublic: boolean;
             client?: string | undefined;

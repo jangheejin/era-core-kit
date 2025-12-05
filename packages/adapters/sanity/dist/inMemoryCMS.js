@@ -1,4 +1,4 @@
-import { CASE_STUDIES_FIXTURE } from '@kit/schema';
+import { CASE_STUDIES_FIXTURE } from "@kit/schema";
 // Helper function signature (fixes TS7006/TS7031 inside the function)
 // Goal: "Only keep items (case studies) whose tags and mechanisms match what the user has selected"
 function matchesFilter(item, filter) {
@@ -26,26 +26,34 @@ function matchesFilter(item, filter) {
 }
 export class InMemoryCMS {
     // FIX for 'filter' and 'cursor' implicit any (TS7031)
-    async getCaseStudies({ filter, limit = 20, cursor, sort = 'newest' }) {
+    async getCaseStudies({ filter, limit = 20, cursor, sort = "newest", }) {
         // FIX for 'cs' implicit any (TS7006)
         let items = CASE_STUDIES_FIXTURE.filter((cs) => filter ? matchesFilter(cs, filter) : true).filter((cs) => cs.isPublic);
         // Sort logic (Fixes 'a' and 'b' implicit any (TS7006))
-        if (sort === 'newest') {
-            items = items.slice().sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+        if (sort === "newest") {
+            items = items
+                .slice()
+                .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
             /*} else if (sort === 'oldest') {
                 items = items.slice().sort((a: CaseStudy, b: CaseStudy) => (a.year ?? 0) - (b.year ?? 0));
             } else if (sort === 'title') {
                 items = items.slice().sort((a: CaseStudy, b: CaseStudy) => a.title.localeCompare(b.title));
             }*/
         }
-        else if (sort === 'alpha') {
+        else if (sort === "alpha") {
             // Sort by title alphabetically (mapping 'alpha' to 'title')
-            items = items.slice().sort((a, b) => a.title.localeCompare(b.title));
+            items = items
+                .slice()
+                .sort((a, b) => a.title.localeCompare(b.title));
         }
-        const start = cursor ? items.findIndex(item => item.slug === cursor) + 1 : 0;
+        const start = cursor
+            ? items.findIndex((item) => item.slug === cursor) + 1
+            : 0;
         const end = start + limit;
         const pagedItems = items.slice(start, end);
-        const nextCursor = pagedItems.length === limit ? pagedItems[pagedItems.length - 1]?.slug : undefined;
+        const nextCursor = pagedItems.length === limit
+            ? pagedItems[pagedItems.length - 1]?.slug
+            : undefined;
         return {
             items: pagedItems,
             nextCursor,
@@ -176,4 +184,4 @@ export function createInMemoryCMS(): CMS {
     },
   };
 }
-*/ 
+*/

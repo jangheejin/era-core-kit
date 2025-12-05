@@ -1,5 +1,5 @@
 //apps/site/src/components/mdx-client.tsx
-'use client';
+"use client";
 import { jsx as _jsx } from "react/jsx-runtime";
 /*
 const components = {

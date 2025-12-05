@@ -15,14 +15,21 @@ import {
 import Link from "next/link";
 import {
   CaseStudy as CaseStudySchema,
-  type CaseStudy as CaseStudyType,
+//  type CaseStudy as CaseStudyType,
+  type CaseStudyInput,
+  type CaseStudyType,
 } from "@kit/schema";
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
 import { useRouter } from "next/navigation";
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
-type Draft = Partial<CaseStudyType>;
+type Draft = Partial<CaseStudyInput>;
+
+const [preview, setPreview] = useState<CaseStudyType | null>(null);
+//const [validated, setValidated] = useState<CaseStudyType | null>(null);
+const [validated, setValidated] = useState(false);
+const [validatedCaseStudy, setValidatedCaseStudy] = useState<CaseStudyType | null>(null);
 
 const sectorOptions: CaseStudyType["sector"][] = [
   "Defense",
@@ -47,7 +54,6 @@ const jurisdictionOptions: CaseStudyType["jurisdictions"][number][] = [
   "Local",
 ];
 
-
 function slugify(raw: string): string {
   return raw
     .trim()
@@ -55,8 +61,6 @@ function slugify(raw: string): string {
     .replace(/[^a-z0-9-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-
-
 
 export default function NewCaseStudyForm() {
   /*implementing the hook & router for the advanced builder*/
@@ -72,7 +76,7 @@ export default function NewCaseStudyForm() {
     brief: "",
     heroImageUrl: "",
     isFeaturedHome: false,
-    isPublic: true,
+    isPublic: false,
   });
 
   const [tagsInput, setTagsInput] = useState("");
@@ -82,13 +86,18 @@ export default function NewCaseStudyForm() {
 
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<CaseStudyType | null>(null);
+  const [validatedCase, setValidatedCase] = useState<CaseStudyType | null>(null);
+  const isValidated = !!validatedCase;
 //  const [validated, setValidated] = useState<boolean>(false);
-  const [validated, setValidated] = useState<CaseStudyType | null>(null);
+//  const [validated, setValidated] = useState<CaseStudyType | null>(null);
 
   function resetValidation() {
     setError(null);
     setPreview(null);
-    setValidated(null);
+//    setValidatedCase(null);
+//    setValidated(null);
+    setValidated(false);
+    setValidatedCaseStudy(null);
   }
 
   function update<K extends keyof Draft>(field: K, value: Draft[K]) {
@@ -128,6 +137,77 @@ export default function NewCaseStudyForm() {
   }
 
   function validate() {
+    // ... build candidate as CaseStudyInput, not CaseStudyType
+    const tags = tagsInput
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const sections: CaseStudyInput["sections"] = [
+      contextBody.trim()
+        ? { id: "context", title: "Context", bodyMDX: contextBody }
+        : null,
+      approachBody.trim()
+        ? { id: "approach", title: "Approach", bodyMDX: approachBody }
+        : null,
+      impactBody.trim()
+        ? { id: "impact", title: "Impact", bodyMDX: impactBody }
+        : null,
+    ].filter(Boolean) as CaseStudyInput["sections"];
+
+    const candidate: CaseStudyInput = {
+      id: draft.id ?? `draft-${Date.now()}`,
+      title: draft.title ?? "",
+      slug: draft.slug ?? "",
+      client: draft.client ?? undefined,
+      sector: draft.sector ?? "GovContracting",
+      year: draft.year,
+  
+      tags,
+      summaryShort: draft.summaryShort ?? "",
+      brief: draft.brief ?? undefined,
+      heroImageUrl: draft.heroImageUrl ?? "/img/temp.svg", // must be valid PathOrUrl
+  
+      mechanisms: draft.mechanisms ?? [],
+      jurisdictions: draft.jurisdictions ?? [],
+      outcomes: draft.outcomes ?? [],
+      evidence: draft.evidence ?? [],
+  
+      bodyMDX: draft.bodyMDX ?? "",
+      sections,
+  
+      attachments: draft.attachments ?? [],
+      links: draft.links ?? [],
+  
+      isFeaturedHome: draft.isFeaturedHome ?? false,
+      isPublic: draft.isPublic ?? true,
+      // status/visibility will default
+    };
+  
+    const result = CaseStudySchema.safeParse(candidate);
+
+    if (!result.success) {
+      const issue = result.error.issues[0];
+      const path = issue?.path?.length ? issue.path.join(".") : "(root)";
+      setError(`${path}: ${issue?.message ?? "Validation failed. Please validate the case study before saving."}`);
+      // ... setError
+      setPreview(null);
+      //setValidated(null);
+      setValidated(false);
+      setValidatedCaseStudy(null);
+      return;
+    }
+
+    const parsed: CaseStudyType = result.data;
+  
+    setError(null);
+    setPreview(result.data);
+    setValidated(true);
+    setValidatedCaseStudy(parsed);
+    //setValidated(result.data);
+  }
+
+/*   function validate() {
     const tags = tagsInput
       .split(",")
       .map((t) => t.trim())
@@ -184,7 +264,7 @@ export default function NewCaseStudyForm() {
       return;
     }
 
-    /*now we have result.data (it's only real after the result.success check)*/    
+    //now we have result.data (it's only real after the result.success check)    
     // however, some Zod typings make data possibly-undefined even on success:
     const parsed = result.data ?? candidate;
 
@@ -192,16 +272,16 @@ export default function NewCaseStudyForm() {
     setPreview(parsed);
     setValidated(parsed);
     // DO NOT ADD OR PUSH YET!
-  }
+  } */
 
   function save() {
-    if (!validated) {
+    if (!validatedCaseStudy) {
       setError("Please validate the case study before saving.");
       return;
     }
 
-    addCaseStudy(validated);
-    router.push(`/admin/case-studies/mock/${validated.slug}`);
+    addCaseStudy(validatedCaseStudy);
+    router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
   }
 
   return (

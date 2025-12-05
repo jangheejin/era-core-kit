@@ -1,162 +1,34 @@
 // packages/schema/src/index.ts
-// Export the core data types
-//export * from './CaseStudy';
-//export * from './Filter';
-/*
-export type { 
-  // Types needed by adapters/contracts
-  CaseStudy, 
-  CaseStudySort, 
-  FilterAST 
-} from './fixtures'; // Assuming CaseStudySort is defined in CaseStudy.ts
-*/
+// THIS IS NOW JUST A BARREL EXPORT
+
 import { z } from "zod";
 
-import {
+export * from "./enums";
+export * from "./schemas";
+export * from "./seeds";
+export * from "./fixtures";
+
+/* export type {
+  // inferred union types (from schema)
   CaseStudySort,
   Sector,
   Mechanism,
   Jurisdiction,
   AttachmentKind,
   LinkCategory,
+  CaseStudyStatus,
+  CaseStudyVisibility,
+  OutcomeKind,
+
+  // “pure TS” from arrays (same union, but doesn’t require Zod usage)
+  CaseStudySortValue,
+  SectorValue,
+  MechanismValue,
+  JurisdictionValue,
+  AttachmentKindValue,
+  LinkCategoryValue,
+  CaseStudyStatusValue,
+  CaseStudyVisibilityValue,
+  OutcomeKindValue,
 } from "./enums";
-
-//export type CaseStudySort = "Newest" | "ClientName" | "Sector" | "Year";
-/* 
-export const Sector = z.enum([
-  "Defense",
-  "Health",
-  "FinTech",
-  "Education",
-  "Nonprofit",
-  "GovContracting",
-  "EmergencyMgmt",
-]);
-
-export const Mechanism = z.enum([
-  "Appropriation",
-  "Earmark",
-  "Grant",
-  "TaxCredit",
-]);
-
-export const Jurisdiction = z.enum(["Federal", "State", "Local"]); */
-
-export const Outcome = z.object({
-  label: z.string().max(80),
-  description: z.string().max(240).optional(),
-  evidenceUrl: z.string().url().optional(),
-});
-
-//NEW: structured sections
-export const CaseStudySection = z.object({
-  id: z.string(), // stable key, e.g. "context", "approach"
-  title: z.string().max(80), // section title
-  bodyMDX: z.string().optional(), // markdown/MDX for that section
-});
-
-//NEW: attachments (downloads)
-export const CaseStudyAttachment = z.object({
-  label: z.string().max(120), // "Full report (PDF)"
-  url: z.string().url(),
-//  kind: z.enum(["pdf", "ppt", "doc", "sheet", "zip", "other"]).default("other"),
-  kind: AttachmentKind.default("other"),//use AttachmentKind enum
-  internalOnly: z.boolean().default(false),
-});
-
-//NEW: extra links
-export const CaseStudyLink = z.object({
-  label: z.string().max(120), // "Client website", "Legislation text"
-  url: z.string().url(),
-//  category: z
-//    .enum(["client", "impact", "legislation", "press", "other"])
-//    .default("other"),
-  category: LinkCategory.default("other"), //use LinkCategory enum
-  internalOnly: z.boolean().default(false),
-});
-
-export const CaseStudy = z.object({
-  id: z.string(),
-  title: z.string().max(120),
-  slug: z.string().regex(/^[a-z0-9-]+$/),
-  client: z.string().max(80).optional(),
-  sector: Sector,
-  year: z.number().int().min(1990).max(2100).optional(),
-
-  tags: z.array(z.string()).max(10).default([]),
-
-  summaryShort: z.string().max(180),
-  brief: z.string().max(280).optional(),
-  //heroImageUrl: z.string().url(),
-  heroImageUrl: z
-  .string()
-  .refine((s) => {
-    if (!s) return true; // OPTIONAL hero images: allow empty for now if you want
-    if (s.startsWith("/")) return true; // allow public/ paths like /img/case1.webp
-    try {
-      new URL(s);
-      return true; // absolute URL ok
-    } catch {
-      return false;
-    }
-  }, "heroImageUrl must be an absolute URL or a root-relative path like /img/..."),
-
-  mechanisms: z.array(Mechanism).default([]),
-  jurisdictions: z.array(Jurisdiction).default([]),
-  outcomes: z.array(Outcome).default([]),
-
-  evidence: z
-    .array(
-      z.object({
-        label: z.string(),
-        url: z.string().url(),
-      }),
-    )
-    .default([]),
-
-  bodyMDX: z.string().optional(),
-  sections: z.array(CaseStudySection).default([]),
-
-  attachments: z.array(CaseStudyAttachment).default([]),
-  links: z.array(CaseStudyLink).default([]),
-
-  isFeaturedHome: z.boolean().default(false),
-  isPublic: z.boolean().default(true),
-});
-
-export const Person = z.object({
-  id: z.string(),
-  name: z.string(),
-  role: z.string(),
-  headshotUrl: z.string().url().optional(),
-  bioMDX: z.string().optional(),
-  email: z.string().email().optional(),
-  linkedin: z.string().url().optional(),
-  sortOrder: z.number().int().default(0),
-});
-
-// Types
-export type CaseStudy = z.infer<typeof CaseStudy>;
-export type Person = z.infer<typeof Person>;
-export type CaseStudySection = z.infer<typeof CaseStudySection>;
-export type CaseStudyAttachment = z.infer<typeof CaseStudyAttachment>;
-export type CaseStudyLink = z.infer<typeof CaseStudyLink>;
-
-// Filter AST (for search / filtering)
-export type FilterAST = {
-  sector?: z.infer<typeof Sector>;
-  tags?: string[];
-  mechanisms?: z.infer<typeof Mechanism>[];
-  yearRange?: { min?: number; max?: number };
-  text?: string;
-};
-
-export { CASE_STUDIES_FIXTURE } from "./fixtures";
-
-export type { CaseStudySeed } from "./seeds";
-export { CaseStudySeedSchema } from "./seeds"; // optional
-
-/*enums*/
-
-export { CaseStudySort, Sector, Mechanism, Jurisdiction, AttachmentKind, LinkCategory };
-export type { CaseStudySort, Sector, Mechanism, Jurisdiction, AttachmentKind, LinkCategory };
+ */

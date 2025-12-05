@@ -1,12 +1,23 @@
 // packages/schema/src/fixtures.ts
-import type { CaseStudy } from "./index";
+/* import type { CaseStudy } from "./index"; */
 //normalize seeds (shorter-form case studies meant for landing cards, etc) into full CaseStudy entries at import time
-import { CaseStudySeedSchema, type CaseStudySeed } from "./seeds";
+import {
+  CaseStudy as CaseStudySchema,
+  type CaseStudyType,
+  type CaseStudyInput,
+} from "./schemas";
 
-/**
- * Full, richly-populated fixtures 
- * To be used later */
-export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
+import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
+// --------------------
+
+// --------------------
+// Full raw entries (authorable input shape)→ parsed into canonical CaseStudyType (output)
+// These were already written earlier (author as INPUT, parse to OUTPUT)
+// To be used later. Avoids TS complaining about defaulted fields like status/visibility/etc.
+// --------------------
+
+//export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
+  const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
     title: "Geospatial modernization and federal engagement",
@@ -304,8 +315,12 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
     isFeaturedHome: false,
     isPublic: true,
   },
-];
+] satisfies CaseStudyInput[];
+//];
 
+/** Parsed canonical “full” fixtures (full schema output, defaults filled). */
+export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
+  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) => CaseStudySchema.parse(x));
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {
@@ -448,14 +463,18 @@ function seedToCaseStudy(seed: CaseStudySeed): CaseStudy {
 
 
 /* INFLATE SEEDS (very bare bones case studies) TO FULL CASESTUDIES */ 
-
-function normalize(seed: CaseStudySeed): CaseStudy {
-  const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
-  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
-
+/* 
+function normalize(seedInput: CaseStudySeed): CaseStudy {
+  const seed = CaseStudySeedSchema.parse(seedInput);
+  const summaryShort = seed.summaryShort ?? seed.teaser;
+  const heroImageUrl = seed.heroImageUrl ?? seed.imageUrl ?? ""; */
+/*   const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
+  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim(); */
+/* 
   return {
     id: `cs-${seed.slug}`,
-    title: seed.title ?? (seed.client ? seed.client : seed.slug),
+    title: seed.title ?? seed.client ?? seed.slug,
+//    title: seed.title ?? (seed.client ? seed.client : seed.slug),
     slug: seed.slug,
     client: seed.client,
     sector: seed.sector,
@@ -484,9 +503,60 @@ function normalize(seed: CaseStudySeed): CaseStudy {
     isPublic: seed.isPublic ?? true,
   };
 }
+ */
+//-------------------------
+/**
+ * Normalize a seed (minimal authoring) into a full CaseStudy object.
+ * Returns the *parsed output* (defaults filled, status/visibility present).
+ */
+function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
+  const seed = CaseStudySeedSchema.parse(seedInput);
 
+  const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
+  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
 
-const SEEDS: CaseStudySeed[] = [
+  // These should never trigger because seeds schema superRefine enforces them,
+  // but this makes TS and runtime robust.
+  if (!summaryShort) throw new Error(`Seed ${seed.slug} missing summaryShort/teaser`);
+  if (!heroImageUrl) throw new Error(`Seed ${seed.slug} missing heroImageUrl/imageUrl`);
+
+  const candidate: CaseStudyInput = {
+    id: `cs-${seed.slug}`,
+    title: seed.title ?? seed.client ?? seed.slug,
+    slug: seed.slug,
+    client: seed.client,
+    sector: seed.sector,
+    year: seed.year,
+
+    tags: seed.tags ?? [],
+
+    summaryShort,
+    brief: seed.brief,
+    heroImageUrl,
+
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+
+    bodyMDX: "",
+    sections: [],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: seed.isFeaturedHome ?? seed.featured ?? false,
+    isPublic: seed.isPublic ?? false,
+
+    // status/visibility intentionally omitted: defaults apply at parse-time
+  };
+
+  return CaseStudySchema.parse(candidate);
+}
+
+  
+//const SEEDS: CaseStudySeed[] = [
+const SEEDS: CaseStudySeedInput[] = [
   {
     slug: "sanborn-appgeo",
     title: "Geospatial modernization and federal engagement",
@@ -565,9 +635,10 @@ const SEEDS: CaseStudySeed[] = [
 ];
 
 // Validate + inflate seeds into full CaseStudy entries
-const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
+/* const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
   normalize(CaseStudySeedSchema.parse(s)),
-);
+); */
+const FULL_FROM_SEEDS: CaseStudyType[] = SEEDS.map((s) => normalize(s));
 
 /**
  * Canonical full set with deterministic dedupe-by-slug:
@@ -576,11 +647,11 @@ const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
  * - preserve the manual FULL ordering, then append any seed-only cases
  */
 
-const bySlug = new Map<string, CaseStudy>();
+const bySlug = new Map<string, CaseStudyType>();
 for (const cs of FULL_FROM_SEEDS) bySlug.set(cs.slug, cs);
 for (const cs of CASE_STUDIES_FIXTURE_FULL) bySlug.set(cs.slug, cs);
 
-const orderedFull: CaseStudy[] = [];
+const orderedFull: CaseStudyType[] = [];
 const seen = new Set<string>();
 
 for (const cs of CASE_STUDIES_FIXTURE_FULL) {
@@ -599,7 +670,7 @@ for (const cs of FULL_FROM_SEEDS) {
  * This is the fixture that the app should use "for now" during demo phase:
  * it intentionally strips detail while keeping the *schema shape* intact.
  */
-export const CASE_STUDIES_FIXTURE: CaseStudy[] = orderedFull.map((cs) => ({
+export const CASE_STUDIES_FIXTURE: CaseStudyType[] = orderedFull.map((cs) => ({
   ...cs,
   // "less info" for now:
   brief: undefined,
@@ -610,17 +681,3 @@ export const CASE_STUDIES_FIXTURE: CaseStudy[] = orderedFull.map((cs) => ({
   attachments: [],
   links: [],
 }));
-
-/* export const CASE_STUDIES_FIXTURE: CaseStudy[] =
-  CASE_STUDIES_FIXTURE_FULL.map((cs) => ({
-    ...cs,
-    // "less info" for now:
-    brief: undefined,
-    outcomes: [],     // or keep outcomes if you want
-    bodyMDX: "",
-    sections: [],
-    evidence: [],
-    attachments: [],
-    links: [],
-  }));
- */

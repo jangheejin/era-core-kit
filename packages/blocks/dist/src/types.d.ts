@@ -5,31 +5,41 @@ export type GenericBlock<T extends keyof BlockComponentProps> = {
 };
 export type HeroProps = {
     heading: string;
-    subhead: string;
+    text?: string;
+    text2?: string;
+    text3?: string;
     imageUrl: string;
+    subhead?: string;
 };
 export type IntroWithImageProps = {
     heading: string;
-    text: string;
+    text?: string;
+    text2?: string;
     imageUrl: string;
 };
 export type MissionTextProps = {
     heading: string;
     text: string;
-    imageUrl: string;
+    text2?: string;
+    imageUrl?: string;
 };
 export type WorkTextProps = {
     heading: string;
     text: string;
+    text2?: string;
+};
+export type CaseGridItem = {
+    title?: string;
+    sector?: string;
+    client: string;
+    summary?: string;
+    brief?: string;
+    imageUrl: string;
+    slug: string;
 };
 export type CaseGridProps = {
     layout?: string;
-    items: {
-        title: string;
-        summary: string;
-        imageUrl: string;
-        slug: string;
-    }[];
+    items: CaseGridItem[];
 };
 export type TeamStripProps = {
     people: {
@@ -37,6 +47,21 @@ export type TeamStripProps = {
         role: string;
         imageUrl: string;
     }[];
+};
+export type WorkWithCaseGridProps = {
+    heading: string;
+    text: string;
+    text2?: string;
+    layout: "4col" | "2col" | "2x2";
+    items: Array<{
+        title?: string;
+        sector?: string;
+        client: string;
+        summary?: string;
+        brief?: string;
+        imageUrl: string;
+        slug: string;
+    }>;
 };
 export type CalloutProps = {
     content: string;
@@ -55,6 +80,8 @@ export type ImageFigureProps = {
     src: string;
     alt: string;
     caption?: string;
+    aspect?: string;
+    fill?: boolean;
 };
 export type BlockComponentProps = {
     Callout: CalloutProps;
@@ -73,9 +100,10 @@ export type BlockComponentProps = {
     CaseGrid: CaseGridProps;
     TeamStrip: TeamStripProps;
     IntroWithImage: IntroWithImageProps;
+    WorkWithCaseGrid: WorkWithCaseGridProps;
 };
 export type LayoutBlock = {
     [K in keyof BlockComponentProps]: GenericBlock<K>;
 }[keyof BlockComponentProps];
-export type BlockType = LayoutBlock['type'];
+export type BlockType = LayoutBlock["type"];
 //# sourceMappingURL=types.d.ts.map

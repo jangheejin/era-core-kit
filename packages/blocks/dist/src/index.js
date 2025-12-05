@@ -2,10 +2,16 @@
 // Re-export layout components for use in apps
 // This is the one typescript actually sees
 //ONLY EXPORT TYPES AND UTILITIES HERE
-export * from './cms';
+export * from "./cms";
 //export { Callout } from './components/Callout';
-export { Hero, IntroWithImage, MissionText, WorkText, CaseGrid, TeamStrip, 
+export { Hero, IntroWithImage, MissionText, 
+//  WorkText,
+//  CaseGrid,
+TeamStrip, 
 //  ContactForm,
 // Case Study components
-Callout, PullQuote, DocLink, OutcomeList, ImageFigure } from './components';
-export { blockRegistry } from './dynamicRegistry';
+Callout, PullQuote, DocLink, OutcomeList, ImageFigure, } from "./components";
+export { blockRegistry } from "./dynamicRegistry";
+export { WorkText } from "./components/WorkText";
+export { CaseGrid } from "./components/CaseGrid";
+export { WorkWithCaseGrid } from "./components/WorkWithCaseGrid";

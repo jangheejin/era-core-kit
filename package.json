@@ -52,5 +52,9 @@
     "@fontsource/oswald": "^5.2.8",
     "react": "18.3.1",
     "react-dom": "18.3.1"
-  }
+  },  
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }

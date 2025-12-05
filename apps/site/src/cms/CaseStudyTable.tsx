@@ -1,10 +1,12 @@
 // apps/site/src/cms/CaseStudyTable.tsx
 "use client";
 
-import type { CaseStudy } from "@kit/schema";
+//import type { CaseStudy } from "@kit/schema";
+import type { CaseStudyType } from "@kit/schema";
 
 type Props = {
-  items: CaseStudy[];
+//  items: CaseStudy[];
+  items: CaseStudyType[];
 };
 
 export function CaseStudyTable({ items }: Props) {

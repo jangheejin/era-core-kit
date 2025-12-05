@@ -3,10 +3,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import type { CaseStudy } from "@kit/schema";
+//import type { CaseStudy } from "@kit/schema";
+import { CaseStudy as CaseStudySchema } from "@kit/schema";
+import type { CaseStudyInput, CaseStudyType } from "@kit/schema";
 
 export interface CMSDashboardProps {
-  onCreate?: (cs: CaseStudy) => void;
+  onCreate?: (cs: CaseStudyType) => void;
 }
 
 /*export function CMSDashboard() {
@@ -34,13 +36,14 @@ export interface CMSDashboardProps {
 }
 */
 export function CMSDashboard({ onCreate }: CMSDashboardProps) {
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudyType[]>([]);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [content, setContent] = useState("");
 
   function addCaseStudy() {
-    const newCaseStudy: CaseStudy = {
+    //const newCaseStudy: CaseStudy = {
+    const newCaseStudyInput: CaseStudyInput = {// 1. Create RAW INPUT (this is allowed to be incomplete)
       // User-provided fields:
       title,
       slug,
@@ -65,11 +68,17 @@ export function CMSDashboard({ onCreate }: CMSDashboardProps) {
       isPublic: true,
     };
 
-    setCaseStudies((cs) => [...cs, newCaseStudy]);
+    // 2. VALIDATE / CREATE FINAL OUTPUT
+    const newCaseStudy: CaseStudyType = CaseStudySchema.parse(newCaseStudyInput);
 
-    // Also push into the shared mock CMS, if provided
+    // 3. Store in component state
+    setCaseStudies((prev) => [...prev, newCaseStudy]);
+//    setCaseStudies((cs) => [...cs, newCaseStudy]);
+
+    // 4. Also push upward into the shared mock CMS, if provided
     if (onCreate) onCreate(newCaseStudy);
 
+    // 5. Reset form
     setTitle("");
     setSlug("");
     setContent("");

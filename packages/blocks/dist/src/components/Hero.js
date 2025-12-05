@@ -1,5 +1,14 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { ClientAnimations } from './ClientAnimations';
-export function Hero({ heading, subhead, imageUrl }) {
-    return (_jsx("section", { className: "c-section", id: "hero", children: _jsxs("div", { className: "c-container c-grid", style: { alignItems: 'center' }, children: [_jsx("div", { className: "hero-image-container", children: _jsx("img", { src: imageUrl, alt: "ERA logo", className: "heroimage" }) }), _jsxs("div", { children: [_jsx("h1", { className: "type-hero", children: heading }), _jsx(ClientAnimations, {}), _jsx("p", { className: "type-body", children: "ERA Government Affairs, LLC is a premier government affairs, consulting and public affairs firm. We solve problems, enhance your brand, offer strategic advice and leverage robust relationships to advance your interests in Washington D.C." }), _jsx("p", { className: "type-body", children: "With years of experience working both in Congress and as government affairs professionals, we have a proud track record of getting legislation signed into law by working across the aisle with Congress, the Administration and their staff." })] })] }) }));
+// packages/blocks/src/components/Hero.tsx
+// SERVER COMPONENT
+//'use client';
+import "@styles/hero.css";
+import { ClientAnimations } from "./ClientAnimations";
+//export function Hero({ heading, text, text2, text3, imageUrl }: HeroProps) {
+export function Hero(props) {
+    // DEBUGGING / CAN REMOVE LATER!!!!!!!!
+    //  console.log('HERO props at runtime:', props);
+    const { heading, text, text2, text3, imageUrl } = props;
+    const paragraphs = [text, text2, text3].filter(Boolean);
+    return (_jsx("section", { className: "c-section c-section--hero", id: "hero", children: _jsx("div", { className: "c-container", children: _jsxs("div", { className: "hero-grid", children: [_jsx("div", { className: "hero-logo", children: _jsx("div", { className: "hero-image-container", children: _jsx("img", { src: imageUrl, alt: "ERA Government Affairs logo", className: "heroimage" }) }) }), _jsxs("div", { className: "hero-copy", children: [_jsx("h1", { className: "type-hero", children: heading }), _jsx(ClientAnimations, {}), paragraphs.map((p, i) => (_jsx("p", { className: "type-body", children: p }, i)))] })] }) }) }));
 }

@@ -13,7 +13,8 @@ What it does do:
 
 import { createContext, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import type { CaseStudy as CaseStudyType } from "@kit/schema";
+//import type { CaseStudy as CaseStudyType } from "@kit/schema";
+import type { CaseStudyType } from "@kit/schema";
 import { CASE_STUDIES_FIXTURE } from "@kit/schema";
 
 type MockCMSState = {
