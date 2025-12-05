@@ -13,6 +13,7 @@ import { useAdminCaseStudies } from "./AdminCaseStudyStore";
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 
 export default function AdminPage() {
+  const { items, addCaseStudy } = useAdminCaseStudies();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
@@ -52,6 +53,7 @@ export default function AdminPage() {
         {!isLoggedIn && (
           <section className="c-stack">
             <p className="type-body-semibold">Step 1 — Enter the CMS demo</p>
+            
             <p className="type-body type-muted">
               This is a fake login. Clicking the button below just switches the
               view into the admin demo — it doesn&apos;t touch any real data or
@@ -64,8 +66,8 @@ export default function AdminPage() {
             <p className="type-body">
               <hr />
               <br />
-              Or, if you only want to see the detailed case study editor, you
-              can skip straight to it: <br />
+              Or jump straight to the detailed case study editor: 
+              <br />
               <br />
               <Link href="/admin/case-studies/new" className="c-button">
                 Open detailed case study builder
@@ -94,7 +96,7 @@ export default function AdminPage() {
                 “create → preview” feels without touching the full CMS.
               </p>*/}
 
-              <CMSDashboard />
+              <CMSDashboard items={items} onCreate={addCaseStudy} />
             </section>
 
             {/* LINKS TO OTHER FLOWS */}

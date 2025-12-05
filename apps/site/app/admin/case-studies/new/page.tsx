@@ -18,11 +18,31 @@ import {
 //  type CaseStudy as CaseStudyType,
   type CaseStudyInput,
   type CaseStudyType,
+  SECTOR_VALUES,
+  CASE_STUDY_STATUS_VALUES,
+  CASE_STUDY_VISIBILITY_VALUES,
 } from "@kit/schema";
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
 import { useRouter } from "next/navigation";
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+
+/* function slugify(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+} */
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 type Draft = Partial<CaseStudyInput>;
 
@@ -71,13 +91,6 @@ const visibilityOptions: CaseStudyType["visibility"][] = [
   "ClientSafe",
 ];
 
-function slugify(raw: string): string {
-  return raw
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;

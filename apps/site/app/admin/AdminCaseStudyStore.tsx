@@ -29,7 +29,8 @@ type AdminCaseStudyContextValue = {
   upsertCaseStudy: (cs: CaseStudyType) => void;
 
   removeCaseStudy: (slug: string) => void;
-  getBySlug: (slug: string) => CaseStudyType | undefined;
+//  getBySlug: (slug: string) => CaseStudyType | undefined;
+  findBySlug: (slug: string) => CaseStudyType | undefined;
 
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
@@ -71,6 +72,24 @@ function saveLocal(items: CaseStudyType[]) {
   }
 }
 
+
+function buildInitialItems(): CaseStudyType[] {
+  const stored = loadLocalValidated();
+  const bySlug = new Map<string, CaseStudyType>();
+
+  // baseline → overrides
+  for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
+  for (const cs of stored) bySlug.set(cs.slug, cs);
+
+  // deterministic order: fixture order then stored-only
+  const order: string[] = [];
+  const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
+  for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
+  for (const cs of stored) push(cs.slug);
+
+  return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
+}
+
 /**
  * Merge rules: fixture baseline → stored overrides
  * Ordering: fixture order first, then any stored-only slugs appended (deterministic)
@@ -105,16 +124,22 @@ function slugify(s: string) {
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   // Start from fixtures only to avoid SSR/CSR mismatch.
-  const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
+  const [items, setItems] = useState<CaseStudyType[]>(() => buildInitialItems());
+  //const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
 
-  // Hydrate stored overrides on mount.
+  const getBySlug = useCallback(
+    (slug: string) => items.find((x) => x.slug === slug),
+    [items],
+  );
+
+  // Hydrate stored overrides on mount (client-only)
   useEffect(() => {
     const stored = loadLocalValidated();
     if (stored.length === 0) return;
     setItems(mergeFixtureWithStored(stored));
   }, []);
 
-  // Persist any changes (yes, this will store fixtures too; that’s OK for toy mode).
+  // Persist any changes (this will store fixtures too but that’s OK for toy mode)
   useEffect(() => {
     saveLocal(items);
   }, [items]);
@@ -137,31 +162,53 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   );
 
   const addCaseStudy = useCallback((cs: CaseStudyType) => {
-    // Keep your existing behavior: newest first, replace by slug.
+    // Keep existing behavior: newest first, replace by slug.
     setItems((prev) => {
       const filtered = prev.filter((p) => p.slug !== cs.slug);
       return [cs, ...filtered];
     });
   }, []);
 
+/*   const addCaseStudy = (cs: CaseStudyType) => {
+    setItems((prev) => {
+      const filtered = prev.filter((p) => p.slug !== cs.slug);
+      return [cs, ...filtered];
+    });
+  }; */
+
   const upsertCaseStudy = addCaseStudy;
 
   const removeCaseStudy = useCallback((slug: string) => {
-    setItems((prev) => prev.filter((x) => x.slug !== slug));
+    setItems((prev) => prev.filter((p) => p.slug !== slug));
   }, []);
 
-  const getBySlug = useCallback(
-    (slug: string) => items.find((x) => x.slug === slug),
-    [items],
-  );
+//  const getBySlug = (slug: string) => items.find(x => x.slug === slug);
+//  const findBySlug = (slug: string) => items.find(x => x.slug === slug);
 
-  const resetToBaseline = useCallback(() => {
+/*   const resetToBaseline = useCallback(() => {
     setItems(CASE_STUDIES_FIXTURE);
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
       } catch {}
     }
+  }, []); */
+
+/*   const resetToBaseline = () => {
+    if (typeof window !== "undefined") {
+      try { window.localStorage.removeItem(STORAGE_KEY);
+      } catch {}
+    }
+    setItems(CASE_STUDIES_FIXTURE);
+  }; */
+
+  const resetToBaseline = useCallback(() => {
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch {}
+    }
+    setItems(CASE_STUDIES_FIXTURE);
   }, []);
 
   const value = useMemo<AdminCaseStudyContextValue>(
@@ -174,7 +221,12 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       ensureUniqueSlug,
       resetToBaseline,
     }),
-    [items, addCaseStudy, upsertCaseStudy, removeCaseStudy, getBySlug, ensureUniqueSlug, resetToBaseline],
+    [
+      items, 
+      addCaseStudy, 
+      upsertCaseStudy, 
+      removeCaseStudy, getBySlug, ensureUniqueSlug, resetToBaseline
+    ],
   );
 
   return (
@@ -182,6 +234,12 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       {children}
     </AdminCaseStudyContext.Provider>
   );
+
+/*   return (
+    <AdminCaseStudyContext.Provider value={{ items, addCaseStudy, getBySlug }}>
+      {children}
+    </AdminCaseStudyContext.Provider>
+  ); */
 }
 
 export function useAdminCaseStudies() {

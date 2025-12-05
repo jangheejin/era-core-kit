@@ -9,6 +9,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { AdminCaseStudyProvider } from "./AdminCaseStudyStore";
+import AdminProviders from "./AdminProviders";
 //import { MockCMSProvider } from "@/cms/mockCmsStore";
 //import { AdminShell } from "@/cms/AdminShell";
 
@@ -44,11 +45,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     </AdminCaseStudyProvider>
   );
 }*/
-export default function AdminLayout({ children }: { children: ReactNode }) {
+/* export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <AdminCaseStudyProvider>
       {children}
     </AdminCaseStudyProvider>
+  );
+} */
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return (
+    <AdminProviders>
+      {children}
+    </AdminProviders>
   );
 }
 /* THE TREE RENDERED BY THIS IS:
