@@ -10,7 +10,8 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { AdminCaseStudyProvider } from "./AdminCaseStudyStore";
 import AdminProviders from "./AdminProviders";
-import "./admin.css";
+//import "@styles/admin.css";
+import "@styles/admin-css"
 
 //import { MockCMSProvider } from "@/cms/mockCmsStore";
 //import { AdminShell } from "@/cms/AdminShell";
