@@ -9,6 +9,8 @@ build/
 out/
 apps/*/.next/
 packages/*/dist/
+**/dist
+**/dist/**
 
 # Ignore everything in dist except built files
 **/dist/*.tsbuildinfo
