@@ -38,17 +38,24 @@ export default function MockCaseStudyPage() {
           <Link href="/admin/case-studies/new">New</Link>
         </div>
       </div>
-        <h3>{cs.client ?? "—"}</h3>
-      <div>
+        <h3><strong>Client:</strong> {cs.client ?? "—"}</h3>
 
-
+      
+      {/* Metadata summary */}
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <h3>Metadata</h3>
+        <p className="muted">
+          <strong>Sectors:</strong> {(cs.sectors ?? []).join(", ") || "—"} <br />
+          {cs.tags?.length ? (
+            <>
+              <strong>Tags:</strong> {cs.tags.join(", ")} <br />
+            </>
+          ) : null}
+          <strong>Status:</strong> {cs.status ?? "—"} <br />
+          <strong>Visibility:</strong> {cs.visibility ?? "—"} <br />
+          <strong>Slug:</strong> <code>/{cs.slug}</code>
+        </p>
       </div>
-
-{/* Metadata summary */}
-      <p className="muted">
-        <strong>{cs.client ?? "—"}</strong> • {cs.sectors} • {cs.status} • {cs.visibility} •{" "}
-        <code>/{cs.slug}</code>
-      </p>
 
       <div className="card" style={{ marginTop: "1rem" }}>
         <div className="muted" style={{ marginBottom: ".5rem" }}>
@@ -104,6 +111,7 @@ export default function MockCaseStudyPage() {
           <pre style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</pre>
         </div>
       ) : null}
+
 
 {/* Raw object (debug info) */}
       <div className="card" style={{ marginTop: "1rem" }}>
