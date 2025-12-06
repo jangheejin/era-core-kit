@@ -298,7 +298,21 @@ the user fills out)
   font-size: 0.9rem;
 }
 
+/*prevent layout mishaps when there is no hero image for a case study*/
+.heroMedia {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06); /* visible placeholder vibe */
+}
 
+.heroMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 /* ---------- ADMIN FORM LAYOUT ---------- */
 
 .admin-form {

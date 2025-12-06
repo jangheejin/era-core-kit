@@ -14,6 +14,7 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+import { ContextBanner } from "@/admin/components/ContextBanner";
 
 export default function CaseStudyListPage() {
   
@@ -62,6 +63,14 @@ export default function CaseStudyListPage() {
   //const [sectors, setSectors] = useState<SectorValue[]>([SECTOR_VALUES[0]]);
   return (
     <main className="c-admin">
+      <ContextBanner view="preview">This is a temporary demo CMS database. 
+        You can filter by client type using the dropdown menu, "All sectors". You can also filter by tag, client name, etc, by typing in the "Search" box <br/><br/>
+        After you <Link href="/admin/case-studies/new">create your own mock case studies</Link>, you can preview them here as if they're part of this 
+        database, but changes are stored only in your browser. They will remain viewable by you as long as you don't clear 
+        your cache/use incognito mode<br/><br/> 
+        The database currently contains (<strong>{items.length}</strong>) total case studies, 5 of 
+        which are mock entries created to populate the database with something.
+      </ContextBanner>
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1 className = "type-h2">Mock CMS Database</h1>
         <div className="row">

@@ -20,11 +20,26 @@ import {
   type CaseStudyType,
 } from "@kit/schema";
 
+import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
+
 function migrateLegacySector(input: any) {
   if (!input || typeof input !== "object") return input;
   if (input.sectors == null && input.sector != null) {
     input = { ...input, sectors: [input.sector] };
     delete input.sector;
+  }
+  return input;
+}
+
+function migrateHeroUrl(input: any) {
+  if (!input || typeof input !== "object") return input;
+  const raw = input.heroImageUrl ?? input.imageUrl;
+  if (typeof raw !== "string" || raw.trim() === "") {
+    return { ...input, heroImageUrl: DEFAULT_HERO_IMAGE_URL };
+  }
+  // only normalize when heroImageUrl  is missing AND raw is a string
+  if (!input.heroImageUrl && typeof raw === "string") {
+    return { ...input, heroImageUrl: raw };
   }
   return input;
 }
@@ -128,7 +143,8 @@ function loadLocalValidated(): CaseStudyType[] {
       //ignore any entries with seed tag (outdated, oversimplified mock case studies)
       if (item.tags?.includes("seed")) continue;
 
-      const migrated = migrateLegacySector(item);
+      //const migrated = migrateLegacySector(item);
+      const migrated = migrateHeroUrl(migrateLegacySector(item));
       const res = CaseStudySchema.safeParse(migrated);
       if (res.success) ok.push(res.data);
     }

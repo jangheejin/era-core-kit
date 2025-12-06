@@ -119,20 +119,15 @@ export default function MockCaseStudyPage() {
         <div className="muted" style={{ marginBottom: ".5rem" }}>
           Hero image
         </div>
-        <img
-          src={cs.heroImageUrl}
-          alt=""
-          style={{
-            width: "100%",
-            height: "auto",
-            aspectRatio: "16 / 9",
-            objectFit: "cover",
-            borderRadius: 12,
-            border: "1px solid rgba(0,0,0,.12)",
-          }}
-        />
+{/* now using aspect-ratio wrapper so the layout remains stable in the case that there is no hero image */}
+        <div className="heroMedia">
+          <img src={cs.heroImageUrl}
+            alt=""
+          />
+        </div>
       </div>
 
+{/* SUMMARY */}      
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3>Summary</h3>
           <div className="muted">
