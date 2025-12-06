@@ -176,9 +176,10 @@ export default function NewCaseStudyPage() {
         your cache/use incognito mode, but they are not connected to any persistent backend.
       </ContextBanner>
 
-      <div className="row mt1">
-        <h1>New Case Study</h1>
-        <div className="row">
+      {/* <div className="row mt1"> */}
+      <div className="form-header">
+        <h1 className="form-title">New Case Study</h1>
+        <div className="form-nav">
           <a href="/admin">Admin</a>
           <a href="/admin/case-studies/list">All case studies</a>
         </div>
