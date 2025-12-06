@@ -339,6 +339,7 @@ export default function NewCaseStudyPage() {
 
       <div className="card card-new mt">
         <h3>Validation</h3>
+        <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
         {validation.success ? (
           <p className="muted">✅ Valid (ready to save)</p>
         ) : (
