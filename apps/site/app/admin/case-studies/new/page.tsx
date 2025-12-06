@@ -30,6 +30,8 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
+import { ContextBanner } from "@/admin/components/ContextBanner";
+
 /* function slugify(raw: string): string {
   return raw
     .trim()
@@ -49,57 +51,308 @@ function slugify(s: string) {
 
 type Draft = Partial<CaseStudyInput>;
 
-//const [preview, setPreview] = useState<CaseStudyType | null>(null);
-//const [validated, setValidated] = useState<CaseStudyType | null>(null);
-//const [validated, setValidated] = useState(false);
-//const [validatedCaseStudy, setValidatedCaseStudy] = useState<CaseStudyType | null>(null);
-
-/* const sectorOptions: CaseStudyType["sector"][] = [
-  "Defense",
-  "Health",
-  "FinTech",
-  "Education",
-  "Nonprofit",
-  "GovContracting",
-  "EmergencyMgmt",
-];
-
-const mechanismOptions: CaseStudyType["mechanisms"][number][] = [
-  "Appropriation",
-  "Earmark",
-  "Grant",
-  "TaxCredit",
-];
-
-const jurisdictionOptions: CaseStudyType["jurisdictions"][number][] = [
-  "Federal",
-  "State",
-  "Local",
-];
-
-// keep in sync with schema enums here for now
-// (if later we export CASE_STUDY_STATUS_VALUES etc, we can import them instead.)
-const statusOptions: CaseStudyType["status"][] = [
-  "Draft",
-  "InProgress",
-  "NeedsReview",
-  "Approved",
-  "Published",
-  "Archived",
-];
-
-const visibilityOptions: CaseStudyType["visibility"][] = [
-  "Public",
-  "Internal",
-  "ClientSafe",
-];
- */
-
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;
   const t = s.trim();
   return t ? t : undefined;
 }
+
+export default function NewCaseStudyPage() {
+  const router = useRouter();
+  const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+
+  const [id] = useState(() =>
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+  );
+
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [client, setClient] = useState("");
+//  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+//  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+
+  function toggleSector(v: SectorValue) {
+    setSectors((prev) =>
+      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
+    );
+  }
+  const [year, setYear] = useState<string>("2024");
+  const [tags, setTags] = useState("");
+  const [summaryShort, setSummaryShort] = useState("");
+//  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
+  const [heroImageUrl, setHeroImageUrl] = useState<string>("");
+  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");
+  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
+  const [visibility, setVisibility] =
+    useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
+  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+
+  const candidateInput: CaseStudyInput = useMemo(
+    () => ({
+      id,
+//      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+      title: title.trim(),
+      slug: slugify(slug || title),
+      client: client.trim() || undefined,
+      sectors,
+      year: year ? Number(year) : undefined,
+
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+        //.slice(0, 10),//limits the number of tags
+
+      summaryShort: summaryShort.trim(),
+      brief: undefined,
+
+      //heroImageUrl: heroImageUrl.trim(),
+      heroImageUrl: heroImageUrl.trim() || undefined,
+
+      mechanisms: [],
+      jurisdictions: [],
+      outcomes: [],
+      evidence: [],
+      bodyMDX: bodyMDX || "",
+      sections: [],
+      attachments: [],
+      links: [],
+
+      status,
+      visibility,
+      isFeaturedHome,
+      isPublic,
+    }),
+    [
+      title,
+      slug,
+      client,
+      sectors,
+      year,
+      tags,
+      summaryShort,
+      heroImageUrl,
+      bodyMDX,
+      status,
+      visibility,
+      isFeaturedHome,
+      isPublic,
+    ],
+  );
+
+  const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
+
+  function save() {
+    // Make slug collision-safe right at the save boundary
+    const desired = candidateInput.slug;
+    const unique = ensureUniqueSlug(desired, candidateInput.id);
+
+    const next: CaseStudyInput = { ...candidateInput, slug: unique };
+    const res = CaseStudySchema.safeParse(next);
+    if (!res.success) return;
+
+    const out: CaseStudyType = res.data;
+    upsertCaseStudy(out);
+    router.push(`/admin/case-studies/mock/${out.slug}`);
+  }
+/*     if (!validatedCaseStudy) {
+      setError("Please validate the case study before saving.");
+      return;
+    }
+
+    addCaseStudy(validatedCaseStudy);
+    router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
+  } */
+   return (
+    <main className="c-admin">
+      <ContextBanner view="preview">
+        This is a demo template for creating/editing case studies. After creating a new case study,
+        you can preview them individually or as part of a mock database of case studies, where you can 
+        filter by client type, tags, etc. <br/><br/>
+        The case study objects you create in this demo are stored only in your browser. 
+        They will remain viewable by you as long as you don't clear 
+        your cache/use incognito mode, but they are not connected to any persistent backend.
+      </ContextBanner>
+
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h1>New Case Study</h1>
+        <div className="row">
+          <a href="/admin">Admin</a>
+          <a href="/admin/case-studies/list">All case studies</a>
+        </div>
+      </div>
+
+{/*       <p className="muted">
+        This is the demo builder: input → Zod validation → stored as parsed output → preview page.
+      </p> */}
+
+      <div className="card card-new" style={{ marginTop: "1rem" }}>
+        <div className="form-actions">
+          <button
+            className="btn"
+            type="button"
+            onClick={() => setSlug(slugify(slug || title))}
+            title="Generate slug from title"
+          >
+            Slugify
+          </button>
+
+          <button
+            className="btnPrimary"
+            type="button"
+            onClick={save}
+            disabled={!validation.success}
+            title={!validation.success ? "Fix validation errors first" : "Save"}
+          >
+            Save + Preview
+          </button>
+        </div>
+
+        <div className = "form-group">
+          <label className="form-label">Title</label>
+          <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Slug</label>
+          <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+        </div>
+
+        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+        <div className="form-row form-group">
+          <div className="form-field">
+            <label className="form-label">Client</label>
+            <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
+          </div>
+
+          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+          <div className="form-field">
+            <label className="form-label">Sectors</label>
+            <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
+              {SECTOR_VALUES.map((v) => (
+                <label key={v}>
+                  <input
+                    type="checkbox"
+                    checked={sectors.includes(v)}
+                    onChange={() => toggleSector(v)}
+                  />
+                  {v}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-field form-field--small">
+            <label className="form-label">Year</label>
+            <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
+          </div>
+        </div>
+
+        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+        <div className="form-row form-group">
+          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+          <div className="form-field">
+            <label className="form-label">Status</label>
+            <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
+              {CASE_STUDY_STATUS_VALUES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+          <div className="form-field">
+            <label className="form-label">Visibility</label>
+            <select
+              className="input"
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as any)}
+            >
+              {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* <div style={{ marginTop: "1rem" }}> */}
+        <div className="form-group">
+          <label className="form-label">Tags (comma-separated)</label>
+          <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
+        </div>
+
+        {/* <div style={{ marginTop: "1rem" }}> */}
+        <div className="form-group">
+          <label className="form-label">Summary short (required)</label>
+          <input
+            className="input"
+            value={summaryShort}
+            onChange={(e) => setSummaryShort(e.target.value)}
+          />
+        </div>
+
+        {/* <div style={{ marginTop: "1rem" }}> */}
+        <div className="form-group">
+          <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
+          <input
+            className="input"
+            placeholder={DEFAULT_HERO_IMAGE_URL}
+            value={heroImageUrl}
+            onChange={(e) => setHeroImageUrl(e.target.value)}
+          />
+        </div>
+
+        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+        <div className="form-row form-group">
+          <label className="row" style={{ gap: ".5rem" }}>
+            <input
+              type="checkbox"
+              checked={isFeaturedHome}
+              onChange={(e) => setIsFeaturedHome(e.target.checked)}
+            />
+            Featured on homepage
+          </label>
+
+          <label className="row" style={{ gap: ".5rem" }}>
+            <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+            isPublic
+          </label>
+        </div>
+
+        {/* <div style={{ marginTop: "1rem" }}> */}
+        <div className="form-group">
+          <label className="form-label">Body (MDX) — optional</label>
+          <textarea
+            className="input"
+            style={{ minHeight: 160 }}
+            value={bodyMDX}
+            onChange={(e) => setBodyMDX(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <h3 style={{ marginBottom: ".5rem" }}>Validation</h3>
+        {validation.success ? (
+          <p className="muted">✅ Valid (ready to save)</p>
+        ) : (
+          <pre className="error">
+            ❌ Invalid
+            {"\n\n"}
+            {JSON.stringify(validation.error.format(), null, 2)}
+          </pre>
+        )}
+      </div>
+    </main>
+  );
+}
+
 
 /* export default function NewCaseStudyForm() {
   //implementing the hook & router for the advanced builder
@@ -337,280 +590,3 @@ function emptyToUndefined(s: unknown): string | undefined {
     // DO NOT ADD OR PUSH YET!
   } */
 
-
-export default function NewCaseStudyPage() {
-  const router = useRouter();
-  const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
-
-  const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
-  );
-
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [client, setClient] = useState("");
-//  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
-//  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
-  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
-
-  function toggleSector(v: SectorValue) {
-    setSectors((prev) =>
-      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
-    );
-  }
-  const [year, setYear] = useState<string>("2024");
-  const [tags, setTags] = useState("");
-  const [summaryShort, setSummaryShort] = useState("");
-//  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
-  const [heroImageUrl, setHeroImageUrl] = useState<string>("");
-  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");
-  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
-  const [visibility, setVisibility] =
-    useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
-  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
-  const [isPublic, setIsPublic] = useState(true);
-
-  const candidateInput: CaseStudyInput = useMemo(
-    () => ({
-      id,
-//      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
-      title: title.trim(),
-      slug: slugify(slug || title),
-      client: client.trim() || undefined,
-      sectors,
-      year: year ? Number(year) : undefined,
-
-      tags: tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
-        //.slice(0, 10),//limits the number of tags
-
-      summaryShort: summaryShort.trim(),
-      brief: undefined,
-
-      //heroImageUrl: heroImageUrl.trim(),
-      heroImageUrl: heroImageUrl.trim() || undefined,
-
-      mechanisms: [],
-      jurisdictions: [],
-      outcomes: [],
-      evidence: [],
-      bodyMDX: bodyMDX || "",
-      sections: [],
-      attachments: [],
-      links: [],
-
-      status,
-      visibility,
-      isFeaturedHome,
-      isPublic,
-    }),
-    [
-      title,
-      slug,
-      client,
-      sectors,
-      year,
-      tags,
-      summaryShort,
-      heroImageUrl,
-      bodyMDX,
-      status,
-      visibility,
-      isFeaturedHome,
-      isPublic,
-    ],
-  );
-
-  const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
-
-  function save() {
-    // Make slug collision-safe right at the save boundary
-    const desired = candidateInput.slug;
-    const unique = ensureUniqueSlug(desired, candidateInput.id);
-
-    const next: CaseStudyInput = { ...candidateInput, slug: unique };
-    const res = CaseStudySchema.safeParse(next);
-    if (!res.success) return;
-
-    const out: CaseStudyType = res.data;
-    upsertCaseStudy(out);
-    router.push(`/admin/case-studies/mock/${out.slug}`);
-  }
-/*     if (!validatedCaseStudy) {
-      setError("Please validate the case study before saving.");
-      return;
-    }
-
-    addCaseStudy(validatedCaseStudy);
-    router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
-  } */
-   return (
-    <main className="c-admin">
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1>New Case Study</h1>
-        <div className="row">
-          <a href="/admin">Admin</a>
-          <a href="/admin/case-studies/list">All case studies</a>
-        </div>
-      </div>
-
-      <p className="muted">
-        This is the demo builder: input → Zod validation → stored as parsed output → preview page.
-      </p>
-
-      <div className="card" style={{ marginTop: "1rem" }}>
-        <div className="row">
-          <button
-            className="btn"
-            type="button"
-            onClick={() => setSlug(slugify(slug || title))}
-            title="Generate slug from title"
-          >
-            Slugify
-          </button>
-
-          <button
-            className="btnPrimary"
-            type="button"
-            onClick={save}
-            disabled={!validation.success}
-            title={!validation.success ? "Fix validation errors first" : "Save"}
-          >
-            Save + Preview
-          </button>
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Title</label>
-          <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Slug</label>
-          <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
-        </div>
-
-        <div className="row" style={{ marginTop: "1rem" }}>
-          <div style={{ flex: 1, minWidth: 220 }}>
-            <label>Client</label>
-            <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
-          </div>
-
-          <div style={{ flex: 1, minWidth: 220 }}>
-            <label>Sectors</label>
-            <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
-              {SECTOR_VALUES.map((v) => (
-                <label key={v}>
-                  <input
-                    type="checkbox"
-                    checked={sectors.includes(v)}
-                    onChange={() => toggleSector(v)}
-                  />
-                  {v}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ width: 160 }}>
-            <label>Year</label>
-            <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
-          </div>
-        </div>
-
-        <div className="row" style={{ marginTop: "1rem" }}>
-          <div style={{ flex: 1, minWidth: 220 }}>
-            <label>Status</label>
-            <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
-              {CASE_STUDY_STATUS_VALUES.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div style={{ flex: 1, minWidth: 220 }}>
-            <label>Visibility</label>
-            <select
-              className="input"
-              value={visibility}
-              onChange={(e) => setVisibility(e.target.value as any)}
-            >
-              {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Tags (comma-separated)</label>
-          <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Summary short (required)</label>
-          <input
-            className="input"
-            value={summaryShort}
-            onChange={(e) => setSummaryShort(e.target.value)}
-          />
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Hero image URL (required; default used if blank) (/img/... or https://...)</label>
-          <input
-            className="input"
-            placeholder={DEFAULT_HERO_IMAGE_URL}
-            value={heroImageUrl}
-            onChange={(e) => setHeroImageUrl(e.target.value)}
-          />
-        </div>
-
-        <div className="row" style={{ marginTop: "1rem" }}>
-          <label className="row" style={{ gap: ".5rem" }}>
-            <input
-              type="checkbox"
-              checked={isFeaturedHome}
-              onChange={(e) => setIsFeaturedHome(e.target.checked)}
-            />
-            Featured on home
-          </label>
-
-          <label className="row" style={{ gap: ".5rem" }}>
-            <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
-            isPublic
-          </label>
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label>Body (MDX) — optional</label>
-          <textarea
-            className="input"
-            style={{ minHeight: 160 }}
-            value={bodyMDX}
-            onChange={(e) => setBodyMDX(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="card" style={{ marginTop: "1rem" }}>
-        <h3 style={{ marginBottom: ".5rem" }}>Validation</h3>
-        {validation.success ? (
-          <p className="muted">✅ Valid (ready to save)</p>
-        ) : (
-          <pre style={{ whiteSpace: "pre-wrap" }}>
-            ❌ Invalid
-            {"\n\n"}
-            {JSON.stringify(validation.error.format(), null, 2)}
-          </pre>
-        )}
-      </div>
-    </main>
-  );
-}
