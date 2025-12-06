@@ -86,6 +86,25 @@ the user fills out)
 .c-admin h4 {font-weight:400;}
 .c-admin .muted { opacity: 0.7; }
 
+.cms-console {
+  background: #F3F4F6;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: #374151; 
+}
+.alertBanner {
+  background-color: #fff7e0; /* soft yellow */
+  border: 1px solid #f4c430; /* gold tone */
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
 /* ---------- ADMIN FORM LAYOUT ---------- */
 
 .admin-form {
