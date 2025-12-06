@@ -176,7 +176,7 @@ export default function NewCaseStudyPage() {
         your cache/use incognito mode, but they are not connected to any persistent backend.
       </ContextBanner>
 
-      <div className="row" style={{ justifyContent: "space-between" }}>
+      <div className="row mt1">
         <h1>New Case Study</h1>
         <div className="row">
           <a href="/admin">Admin</a>
@@ -188,7 +188,7 @@ export default function NewCaseStudyPage() {
         This is the demo builder: input → Zod validation → stored as parsed output → preview page.
       </p> */}
 
-      <div className="card card-new" style={{ marginTop: "1rem" }}>
+      <div className="card card-new mt1">
         <div className="form-actions">
           <button
             className="btn"
@@ -209,136 +209,136 @@ export default function NewCaseStudyPage() {
             Save + Preview
           </button>
         </div>
-
-        <div className = "form-group">
-          <label className="form-label">Title</label>
-          <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Slug</label>
-          <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
-        </div>
-
-        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
-        <div className="form-row form-group">
-          <div className="form-field">
-            <label className="form-label">Client</label>
-            <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
+        <div className="card card-new">
+          <div className = "form-group">
+            <label className="form-label">Title</label>
+            <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
-          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-          <div className="form-field">
-            <label className="form-label">Sectors</label>
-            <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
-              {SECTOR_VALUES.map((v) => (
-                <label key={v}>
-                  <input
-                    type="checkbox"
-                    checked={sectors.includes(v)}
-                    onChange={() => toggleSector(v)}
-                  />
-                  {v}
-                </label>
-              ))}
+          <div className="form-group">
+            <label className="form-label">Slug</label>
+            <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+          </div>
+
+          <div className="form-row form-group">
+            <div className="form-field">
+              <label className="form-label">Client</label>
+              <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
+            </div>
+
+            {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+            <div className="form-field">
+              <label className="form-label">Sectors</label>
+              <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
+                {SECTOR_VALUES.map((v) => (
+                  <label key={v}>
+                    <input
+                      type="checkbox"
+                      checked={sectors.includes(v)}
+                      onChange={() => toggleSector(v)}
+                    />
+                    {v}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-field form-field--small">
+              <label className="form-label">Year</label>
+              <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
             </div>
           </div>
 
-          <div className="form-field form-field--small">
-            <label className="form-label">Year</label>
-            <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
+          {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+          <div className="form-row form-group">
+            {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+            <div className="form-field">
+              <label className="form-label">Status</label>
+              <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
+                {CASE_STUDY_STATUS_VALUES.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+            <div className="form-field">
+              <label className="form-label">Visibility</label>
+              <select
+                className="input"
+                value={visibility}
+                onChange={(e) => setVisibility(e.target.value as any)}
+              >
+                {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        </div>
 
-        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
-        <div className="form-row form-group">
-          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-          <div className="form-field">
-            <label className="form-label">Status</label>
-            <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
-              {CASE_STUDY_STATUS_VALUES.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
+          {/* <div style={{ marginTop: "1rem" }}> */}
+          <div className="form-group">
+            <label className="form-label">Tags (comma-separated)</label>
+            <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
           </div>
 
-          {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-          <div className="form-field">
-            <label className="form-label">Visibility</label>
-            <select
-              className="input"
-              value={visibility}
-              onChange={(e) => setVisibility(e.target.value as any)}
-            >
-              {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* <div style={{ marginTop: "1rem" }}> */}
-        <div className="form-group">
-          <label className="form-label">Tags (comma-separated)</label>
-          <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
-        </div>
-
-        {/* <div style={{ marginTop: "1rem" }}> */}
-        <div className="form-group">
-          <label className="form-label">Summary short (required)</label>
-          <input
-            className="input"
-            value={summaryShort}
-            onChange={(e) => setSummaryShort(e.target.value)}
-          />
-        </div>
-
-        {/* <div style={{ marginTop: "1rem" }}> */}
-        <div className="form-group">
-          <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
-          <input
-            className="input"
-            placeholder={DEFAULT_HERO_IMAGE_URL}
-            value={heroImageUrl}
-            onChange={(e) => setHeroImageUrl(e.target.value)}
-          />
-        </div>
-
-        {/* <div className="row" style={{ marginTop: "1rem" }}> */}
-        <div className="form-row form-group">
-          <label className="row" style={{ gap: ".5rem" }}>
+          {/* <div style={{ marginTop: "1rem" }}> */}
+          <div className="form-group">
+            <label className="form-label">Summary short (required)</label>
             <input
-              type="checkbox"
-              checked={isFeaturedHome}
-              onChange={(e) => setIsFeaturedHome(e.target.checked)}
+              className="input"
+              value={summaryShort}
+              onChange={(e) => setSummaryShort(e.target.value)}
             />
-            Featured on homepage
-          </label>
+          </div>
 
-          <label className="row" style={{ gap: ".5rem" }}>
-            <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
-            isPublic
-          </label>
-        </div>
+          {/* <div style={{ marginTop: "1rem" }}> */}
+          <div className="form-group">
+            <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
+            <input
+              className="input"
+              placeholder={DEFAULT_HERO_IMAGE_URL}
+              value={heroImageUrl}
+              onChange={(e) => setHeroImageUrl(e.target.value)}
+            />
+          </div>
 
-        {/* <div style={{ marginTop: "1rem" }}> */}
-        <div className="form-group">
-          <label className="form-label">Body (MDX) — optional</label>
-          <textarea
-            className="input"
-            style={{ minHeight: 160 }}
-            value={bodyMDX}
-            onChange={(e) => setBodyMDX(e.target.value)}
-          />
+          {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+          <div className="form-row form-group">
+            <label className="row" style={{ gap: ".5rem" }}>
+              <input
+                type="checkbox"
+                checked={isFeaturedHome}
+                onChange={(e) => setIsFeaturedHome(e.target.checked)}
+              />
+              Featured on homepage
+            </label>
+
+            <label className="row" style={{ gap: ".5rem" }}>
+              <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+              isPublic
+            </label>
+          </div>
+
+          {/* <div style={{ marginTop: "1rem" }}> */}
+          <div className="form-group">
+            <label className="form-label">Body (MDX) — optional</label>
+            <textarea
+              className="input"
+              style={{ minHeight: 160 }}
+              value={bodyMDX}
+              onChange={(e) => setBodyMDX(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="card" style={{ marginTop: "1rem" }}>
-        <h3 style={{ marginBottom: ".5rem" }}>Validation</h3>
+      <div className="card card-new mt">
+        <h3>Validation</h3>
         {validation.success ? (
           <p className="muted">✅ Valid (ready to save)</p>
         ) : (
