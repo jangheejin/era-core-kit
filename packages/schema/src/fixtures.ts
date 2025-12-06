@@ -562,9 +562,12 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
 
     // status/visibility intentionally omitted: defaults apply at parse-time
   };
-  if (candidate.tags?.includes("seed")) {
+//  if (candidate.tags?.includes("seed")) {
+    const tagsArr = Array.isArray(candidate.tags) ? candidate.tags : [];
+    if (tagsArr.indexOf("seed") !== -1) {
     console.error("❌ STILL FINDING A 'seed' TAG: ", candidate);
-    process.exit(1); // if in Node
+    throw new Error("Seed tag found where it should not exist");
+    //process.exit(1);
   }
 
   return CaseStudySchema.parse(candidate);

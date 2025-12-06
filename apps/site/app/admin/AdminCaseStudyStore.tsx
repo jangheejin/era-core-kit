@@ -52,7 +52,7 @@ type AdminCaseStudyContextValue = {
 const AdminCaseStudyContext =
   createContext<AdminCaseStudyContextValue | null>(null);
 
-const STORAGE_KEY = "era_admin_case_studies_v1";
+const STORAGE_KEY = "era_admin_case_studies_v2";
 
 /*
 const RAW_SEEDS: CaseStudyInput[] = [
@@ -177,24 +177,25 @@ function buildBaselineItems(): CaseStudyType[] {
  * Merge rules: fixture baseline → stored overrides
  * Ordering: fixture order first, then any stored-only slugs appended (deterministic)
  */
-function mergeFixtureWithStored(stored: CaseStudyType[]): CaseStudyType[] {
-  const bySlug = new Map<string, CaseStudyType>();
+function mergeFixtureWithStored(
+  stored: CaseStudyType[]): CaseStudyType[] {
+    const bySlug = new Map<string, CaseStudyType>();
 
-  for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-  for (const cs of stored) bySlug.set(cs.slug, cs); // overrides baseline
+    for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
+    for (const cs of stored) bySlug.set(cs.slug, cs); // overrides baseline
 
-  const order: string[] = [];
-  const push = (slug: string) => {
-    if (!order.includes(slug)) order.push(slug);
-  };
+    const order: string[] = [];
+    const push = (slug: string) => {
+      if (!order.includes(slug)) order.push(slug);
+    };
 
-  for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  for (const cs of stored) push(cs.slug); // adds stored-only slugs
+    for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
+    for (const cs of stored) push(cs.slug); // adds stored-only slugs
 
-  return order
-    .map((slug) => bySlug.get(slug))
-    .filter((x): x is CaseStudyType => Boolean(x));
-}
+    return order
+      .map((slug) => bySlug.get(slug))
+      .filter((x): x is CaseStudyType => Boolean(x));
+  }
 
 function slugify(s: string) {
   return s

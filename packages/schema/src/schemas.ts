@@ -22,6 +22,9 @@ import {
   OutcomeKindSchema,
 } from "./enums";
 
+import { DEFAULT_HERO_IMAGE_URL } from "./constants";
+
+// ----------HELPERS-------------
 const PathOrUrl = z.string().refine((s) => {
   if (!s) return false;
   if (s.startsWith("/")) return true; // "/img/..."
@@ -32,9 +35,28 @@ const PathOrUrl = z.string().refine((s) => {
     return false;
   }
 }, "Must be an absolute URL or a root-relative path like /img/file.webp");
+const SlugSchema = z.string().regex(/^[a-z0-9-]+$/, "Slug must be lowercase a-z, 0-9, hyphen");
 
+const TagSchema = z.string().trim().min(1).max(32);
+const TagsSchema = z.array(TagSchema).max(10).default([]);
+
+const TagsInputSchema = z.preprocess((v) => {
+  // allow tags to be authored as:
+  // - ["a","b"]
+  // - "a, b"
+  // - undefined
+  if (v == null) return undefined;
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string")
+    return v
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  return v;
+//}, z.array(z.string()).max(10).default([]));
+}, z.array(z.string()).default([]));
 // --------------------
-// Core object schemas
+// Core object schemas (nested objects)
 // --------------------
 // Outcome (optionally categorizable)
 export const Outcome = z.object({
@@ -68,6 +90,13 @@ export const CaseStudyLink = z.object({
   internalOnly: z.boolean().default(false),
 });
 
+//NEW: evidence (sources, docs, references)
+export const EvidenceItem = z.object({
+  label: z.string().max(120),
+  url: z.string().url(),
+  internalOnly: z.boolean().default(false),
+});
+
 /** Accepts "Health" OR ["Health","Defense"] and produces a validated array */
 const SectorsInputSchema = z.preprocess((v) => {
   if (Array.isArray(v)) return v;
@@ -87,33 +116,43 @@ function migrateSectorToSectors(raw: unknown) {
 // ------------------
 const CaseStudyCanonicalSchema = z.object({
   id: z.string(),
-  title: z.string(),
-  slug: z.string(),
+  title: z.string().trim().min(1).max(120),
+  slug: SlugSchema,
 
-  // ✅ canonical multi-sector field
+  // canonical multi-sector field
   sectors: SectorsSchema,
 
-  client: z.string().optional(),
-  year: z.number().optional(),
+  client: z.string().trim().max(100).optional(),
+  year: z.number().int().min(1990).max(2100).optional(),
 
-  tags: z.array(z.string()).default([]),
-  summaryShort: z.string(),
+//  tags: TagSchema,
+  tags: TagsInputSchema,
+  //summaryShort: z.string(),
+  summaryShort: z.string(),//should this be optional?
   brief: z.string().optional(),
-  heroImageUrl: z.string().optional(),
+  //heroImageUrl: PathOrUrl.optional(),
+  heroImageUrl: PathOrUrl.default(DEFAULT_HERO_IMAGE_URL),
+  //heroImageUrl: z.string().optional(),
 
-  mechanisms: z.array(z.any()).default([]),     // adjust to your real schemas
-  jurisdictions: z.array(z.string()).default([]),
-  outcomes: z.array(z.any()).default([]),
-  evidence: z.array(z.any()).default([]),
+//  mechanisms: z.array(z.any()).default([]),
+  mechanisms: z.array(MechanismSchema).default([]),
+  //jurisdictions: z.array(z.string()).default([]),
+  jurisdictions: z.array(JurisdictionSchema).default([]),
+  //outcomes: z.array(z.any()).default([]),
+  outcomes: z.array(Outcome).default([]),
+  evidence: z.array(EvidenceItem).default([]),
 
-  bodyMDX: z.string().optional(),
-  sections: z.array(z.any()).default([]),
+  //bodyMDX: z.string().optional(),
+  bodyMDX: z.string().default(""),
+  sections: z.array(CaseStudySection).default([]),
 
-  attachments: z.array(z.any()).default([]),
-  links: z.array(z.any()).default([]),
+  //attachments: z.array(z.any()).default([]),
+  attachments: z.array(CaseStudyAttachment).default([]),
+  //links: z.array(z.any()).default([]),
+  links: z.array(CaseStudyLink).default([]),
 
-  status: z.string().default("Draft"),          // or your enum schema
-  visibility: z.string().default("Internal"),   // or your enum schema
+  status: CaseStudyStatusSchema.default("Draft"),
+  visibility: CaseStudyVisibilitySchema.default("Internal"),
   isFeaturedHome: z.boolean().default(false),
   isPublic: z.boolean().default(true),
 });
@@ -142,7 +181,10 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
   })
   .transform((val) => {
     const sectors =
-      (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
+      val.sectors?.length ? val.sectors :
+      val.sector ? [val.sector] :
+      [];
+      //(val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
 
     // remove legacy `sector` from the canonical output
     const { sector, ...rest } = val as any;
@@ -261,6 +303,7 @@ export type Person = z.infer<typeof Person>;
 export type CaseStudySection = z.infer<typeof CaseStudySection>;
 export type CaseStudyAttachment = z.infer<typeof CaseStudyAttachment>;
 export type CaseStudyLink = z.infer<typeof CaseStudyLink>;
+export type EvidenceItem = z.infer<typeof EvidenceItem>;
 
 export type FilterAST = {
   sector?: z.infer<typeof SectorSchema>;

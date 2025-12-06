@@ -68,7 +68,7 @@ export const CaseStudySeedSchema = z
     // optional upgrade-later fields:
     brief: z.string().max(280).optional(),
     year: z.number().int().min(1990).max(2100).optional(),
-    tags: z.array(z.string()).max(10).optional(),
+    tags: z.array(z.string()).optional(),
 
     // visibility: accepts either/both (temporarily while we transition from demo to full):
     featured: z.boolean().optional(),

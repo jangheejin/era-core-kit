@@ -28,7 +28,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
-
+import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 /* function slugify(raw: string): string {
   return raw
@@ -352,6 +352,7 @@ export default function NewCaseStudyPage() {
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
 //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
   const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+
   function toggleSector(v: SectorValue) {
     setSectors((prev) =>
       prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
@@ -360,7 +361,8 @@ export default function NewCaseStudyPage() {
   const [year, setYear] = useState<string>("2024");
   const [tags, setTags] = useState("");
   const [summaryShort, setSummaryShort] = useState("");
-  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
+//  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
+  const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");
   const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
@@ -381,13 +383,14 @@ export default function NewCaseStudyPage() {
       tags: tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean)
-        .slice(0, 10),
+        .filter(Boolean),
+        //.slice(0, 10),//limits the number of tags
 
       summaryShort: summaryShort.trim(),
       brief: undefined,
 
-      heroImageUrl: heroImageUrl.trim(),
+      //heroImageUrl: heroImageUrl.trim(),
+      heroImageUrl: heroImageUrl.trim() || undefined,
 
       mechanisms: [],
       jurisdictions: [],
@@ -560,9 +563,10 @@ export default function NewCaseStudyPage() {
         </div>
 
         <div style={{ marginTop: "1rem" }}>
-          <label>Hero image URL (required; /img/... or https://...)</label>
+          <label>Hero image URL (required; default used if blank) (/img/... or https://...)</label>
           <input
             className="input"
+            placeholder={DEFAULT_HERO_IMAGE_URL}
             value={heroImageUrl}
             onChange={(e) => setHeroImageUrl(e.target.value)}
           />
