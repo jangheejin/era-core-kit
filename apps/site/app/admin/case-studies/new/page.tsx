@@ -77,7 +77,7 @@ export default function NewCaseStudyPage() {
       prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
     );
   }
-  const [year, setYear] = useState<string>("2024");
+  const [year, setYear] = useState<string>("2025");
   const [tags, setTags] = useState("");
   const [summaryShort, setSummaryShort] = useState("");
 //  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
