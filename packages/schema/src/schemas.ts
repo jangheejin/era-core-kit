@@ -9,6 +9,7 @@ import { z } from "zod";
 // RUNTIME SCHEMAS
 import {
   SectorSchema,
+  SectorsSchema,
   MechanismSchema,
   JurisdictionSchema,
   AttachmentKindSchema,
@@ -67,53 +68,139 @@ export const CaseStudyLink = z.object({
   internalOnly: z.boolean().default(false),
 });
 
+/** Accepts "Health" OR ["Health","Defense"] and produces a validated array */
+const SectorsInputSchema = z.preprocess((v) => {
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string") return [v];
+  return v;
+}, SectorsSchema);
+
+/** Migrates legacy `{ sector: "X" }` into `{ sectors: ["X"] }` */
+function migrateSectorToSectors(raw: unknown) {
+  if (!raw || typeof raw !== "object") return raw;
+  const r = raw as Record<string, any>;
+  if (r.sectors == null && r.sector != null) r.sectors = r.sector;
+  return r;
+}
 // ------------------
 // main CaseStudy schema
 // ------------------
-export const CaseStudy = z.object({
+const CaseStudyCanonicalSchema = z.object({
   id: z.string(),
-  title: z.string().max(120),
-  slug: z.string().regex(/^[a-z0-9-]+$/),
+  title: z.string(),
+  slug: z.string(),
 
-  client: z.string().max(80).optional(),
-  sector: SectorSchema,
-  year: z.number().int().min(1990).max(2100).optional(),
+  // ✅ canonical multi-sector field
+  sectors: SectorsSchema,
 
-  tags: z.array(z.string()).max(10).default([]),
+  client: z.string().optional(),
+  year: z.number().optional(),
 
-  summaryShort: z.string().max(180),
-  brief: z.string().max(280).optional(),
+  tags: z.array(z.string()).default([]),
+  summaryShort: z.string(),
+  brief: z.string().optional(),
+  heroImageUrl: z.string().optional(),
 
-  // Keep this flexible: allow "/img/..." or full URL
-  heroImageUrl: PathOrUrl,
-
-  mechanisms: z.array(MechanismSchema).default([]),
-  jurisdictions: z.array(JurisdictionSchema).default([]),
-  outcomes: z.array(Outcome).default([]),
-
-  evidence: z
-    .array(
-      z.object({
-        label: z.string(),
-        url: z.string().url(),
-      }),
-    )
-    .default([]),
+  mechanisms: z.array(z.any()).default([]),     // adjust to your real schemas
+  jurisdictions: z.array(z.string()).default([]),
+  outcomes: z.array(z.any()).default([]),
+  evidence: z.array(z.any()).default([]),
 
   bodyMDX: z.string().optional(),
-  sections: z.array(CaseStudySection).default([]),
+  sections: z.array(z.any()).default([]),
 
-  attachments: z.array(CaseStudyAttachment).default([]),
-  links: z.array(CaseStudyLink).default([]),
+  attachments: z.array(z.any()).default([]),
+  links: z.array(z.any()).default([]),
 
-  // “Working tool” fields:
-  status: CaseStudyStatusSchema.default("Draft"),
-  visibility: CaseStudyVisibilitySchema.default("Internal"),
-
-  // legacy/simple flags still allowed:
+  status: z.string().default("Draft"),          // or your enum schema
+  visibility: z.string().default("Internal"),   // or your enum schema
   isFeaturedHome: z.boolean().default(false),
   isPublic: z.boolean().default(true),
 });
+
+// 2) Authoring/back-compat input: allow sector OR sectors
+const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
+  .omit({ sectors: true })
+  .extend({
+    // legacy single-sector input (optional)
+    sector: SectorSchema.optional(),
+
+    // new multi-sector input (optional at input time)
+    sectors: z.array(SectorSchema).optional(),
+  })
+  .superRefine((val, ctx) => {
+    const hasSectors = Array.isArray(val.sectors) && val.sectors.length > 0;
+    const hasSector = !!val.sector;
+
+    if (!hasSectors && !hasSector) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sectors"],
+        message: "Provide either `sectors` (array) or legacy `sector` (single).",
+      });
+    }
+  })
+  .transform((val) => {
+    const sectors =
+      (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
+
+    // remove legacy `sector` from the canonical output
+    const { sector, ...rest } = val as any;
+    return { ...rest, sectors };
+  })
+  .pipe(CaseStudyCanonicalSchema);
+
+
+//export const CaseStudy = z.object({
+/* export const CaseStudy = z.preprocess(
+  migrateSectorToSectors,
+  z.object ({
+    id: z.string(),
+    title: z.string().max(120),
+    slug: z.string().regex(/^[a-z0-9-]+$/),
+
+    client: z.string().max(80).optional(),
+    sectors: SectorSchema,
+  //  sector: SectorSchema,
+    year: z.number().int().min(1990).max(2100).optional(),
+
+    tags: z.array(z.string()).max(10).default([]),
+
+    summaryShort: z.string().max(180),
+    brief: z.string().max(280).optional(),
+
+    // Keep this flexible: allow "/img/..." or full URL
+    heroImageUrl: PathOrUrl,
+
+    mechanisms: z.array(MechanismSchema).default([]),
+    jurisdictions: z.array(JurisdictionSchema).default([]),
+    outcomes: z.array(Outcome).default([]),
+
+    evidence: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string().url(),
+        }),
+      )
+      .default([]),
+
+    bodyMDX: z.string().optional(),
+    sections: z.array(CaseStudySection).default([]),
+
+    attachments: z.array(CaseStudyAttachment).default([]),
+    links: z.array(CaseStudyLink).default([]),
+
+    // “Working tool” fields:
+    status: CaseStudyStatusSchema.default("Draft"),
+    visibility: CaseStudyVisibilitySchema.default("Internal"),
+
+    // legacy/simple flags still allowed:
+    isFeaturedHome: z.boolean().default(false),
+    isPublic: z.boolean().default(true),
+  })
+);
+//}); */
 
 //People schema
 export const Person = z.object({
@@ -131,6 +218,10 @@ export const Person = z.object({
 // Types (public API)
 // --------------------
 // --- (input vs output) ---
+
+// Export the one schema the app uses everywhere
+export const CaseStudy = CaseStudyAuthorSchema;
+
 type _CaseStudySchema = typeof CaseStudy;
 //CaseStudyInput is a TypeScript type, representing raw input (before parsing). Use when you want to manually create data (write an object by hand rather than getting it from a user form, API response, database, or a Zod parse result)
 export type CaseStudyInput = z.input<_CaseStudySchema>;//what the user provides (some fields optional/defaulted)

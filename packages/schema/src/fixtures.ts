@@ -23,7 +23,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "Geospatial modernization and federal engagement",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting", "Geospatial", "EmergencyMgmt"],
     year: 2024,
 
     mechanisms: [],
@@ -87,7 +88,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "Policy-facing storytelling for a technical nonprofit",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
-    sector: "Nonprofit",
+//    sector: "Nonprofit",
+    sectors: ["Nonprofit", "GovContracting", "Geospatial"],
     year: 2024,
 
     mechanisms: [],
@@ -151,7 +153,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "Federal procurement strategy for a growing contractor",
     slug: "crucis",
     client: "Crucis",
-    sector: "GovContracting",
+//    sector: "GovContracting",
+    sectors: ["GovContracting", "Industry", "Manufacturing"],
     year: 2024,
 
     mechanisms: [],
@@ -215,7 +218,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "Emergency response manufacturing alignment",
     slug: "mkr-fabricators",
     client: "MKR Fabricators",
-    sector: "EmergencyMgmt",
+    //sector: "EmergencyMgmt",
+    sectors: ["EmergencyMgmt", "Manufacturing", "Industry"],
     year: 2024,
 
     mechanisms: [],
@@ -279,7 +283,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "STEMheads (draft sample)",
     slug: "stemheads",
     client: "STEMheads",
-    sector: "Education",
+//    sector: "Education",
+    sectors: ["Education", "Nonprofit"],
     year: 2024,
 
     mechanisms: [],
@@ -512,6 +517,13 @@ function normalize(seedInput: CaseStudySeed): CaseStudy {
 function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
   const seed = CaseStudySeedSchema.parse(seedInput);
 
+  const sectors =
+  Array.isArray((seed as any).sectors) && (seed as any).sectors.length
+    ? (seed as any).sectors
+    : (seed as any).sector
+      ? [(seed as any).sector]
+      : [];
+
   const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
   const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
 
@@ -525,11 +537,11 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
     title: seed.title ?? seed.client ?? seed.slug,
     slug: seed.slug,
     client: seed.client,
-    sector: seed.sector,
+//    sectors: seed.sectors,
+    sectors,
+
     year: seed.year,
-
     tags: seed.tags ?? [],
-
     summaryShort,
     brief: seed.brief,
     heroImageUrl,
@@ -670,9 +682,11 @@ for (const cs of FULL_FROM_SEEDS) {
  * This is the fixture that the app should use "for now" during demo phase:
  * it intentionally strips detail while keeping the *schema shape* intact.
  */
-export const CASE_STUDIES_FIXTURE: CaseStudyType[] = orderedFull.map((cs) => ({
+export const CASE_STUDIES_FIXTURE: CaseStudyType[] = orderedFull;
+
+//lightweight “cards” version for the homepage later
+export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map((cs) => ({
   ...cs,
-  // "less info" for now:
   brief: undefined,
   outcomes: [],
   bodyMDX: "",

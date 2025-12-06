@@ -32,15 +32,21 @@ export default function MockCaseStudyPage() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1>{cs.title}</h1>
+        <h1>{cs.title || "Untitled case study"}</h1>
         <div className="row">
           <Link href="/admin/case-studies/list">List</Link>
           <Link href="/admin/case-studies/new">New</Link>
         </div>
       </div>
+        <h3>{cs.client ?? "—"}</h3>
+      <div>
 
+
+      </div>
+
+{/* Metadata summary */}
       <p className="muted">
-        <strong>{cs.client ?? "—"}</strong> • {cs.sector} • {cs.status} • {cs.visibility} •{" "}
+        <strong>{cs.client ?? "—"}</strong> • {cs.sectors} • {cs.status} • {cs.visibility} •{" "}
         <code>/{cs.slug}</code>
       </p>
 
@@ -64,7 +70,10 @@ export default function MockCaseStudyPage() {
 
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3>Summary</h3>
-        <p className="muted">{cs.summaryShort}</p>
+        <p className="muted">
+          {cs.summaryShort && <p>{cs.summaryShort}</p>}
+          {cs.brief && <p className="muted">{cs.brief}</p>}
+        </p>
 
         {cs.tags?.length ? (
           <p className="muted">
@@ -73,13 +82,30 @@ export default function MockCaseStudyPage() {
         ) : null}
       </div>
 
+      {/* Sections */}
+      {cs.sections?.length > 0 && (
+        <div className="card" style={{ marginTop: "1rem" }}>
+          <h3>Sections</h3>
+          <div className="c-stack">
+            {cs.sections.map((section) => (
+              <div key={section.id}>
+                <h4>{section.title}</h4>
+                <p className="muted">{section.bodyMDX}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+ {/* Body MDX (raw display for now) */}
       {cs.bodyMDX ? (
         <div className="card" style={{ marginTop: "1rem" }}>
-          <h3>Body (MDX raw)</h3>
+          <h3>Full Body (Raw text)</h3>
           <pre style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</pre>
         </div>
       ) : null}
 
+{/* Raw object (debug info) */}
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3>Raw object (debug)</h3>
         <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(cs, null, 2)}</pre>

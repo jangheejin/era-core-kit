@@ -5,6 +5,8 @@ import { z } from "zod";
 //import { Sector } from "./index"; 
 import { SectorSchema } from "./enums";
 
+type Sector = z.infer<typeof SectorSchema>;
+
 const PathOrUrlSchema = z.string().refine(
   (s) => {
     if (!s) return false;
@@ -51,7 +53,9 @@ export const CaseStudySeedSchema = z
     // optional “upgrade later” fields:
     title: z.string().max(120).optional(), // can default from client/slug later
     sectorLabel: z.string().optional(), // purely display/help text
-    sector: SectorSchema,
+
+    sector: SectorSchema.optional(),
+    sectors: z.array(SectorSchema).min(1).optional(),
 
     // allow either naming (temporarily while we transition from demo to full)
     imageUrl: PathOrUrlSchema.optional(),
@@ -89,10 +93,79 @@ export const CaseStudySeedSchema = z
         message: "Provide either heroImageUrl or imageUrl (at least one is required).",
       });
     }
-  });
+    
+/*     const hasSectors = Array.isArray(v.sectors) && v.sectors.length > 0;
+    const hasSector = !!v.sector; */
 
-export type CaseStudySeedInput = z.input<typeof CaseStudySeedSchema>;
-export type CaseStudySeed = z.infer<typeof CaseStudySeedSchema>;
+    const sectorsArr = Array.isArray(v.sectors) && v.sectors.length > 0 ? v.sectors : null;
+    const sectorOne = v.sector ?? null;
+
+    if (!sectorsArr && !sectorOne) {
+    //if (hasSectors && hasSector) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sectors"],
+        message: "Provide either `sectors` (array) or legacy `sector` (single), not both.",
+      });
+      return;
+    }
+
+/*     if (!hasSectors && !hasSector) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sectors"],  
+        message: "Provide either `sectors` (array) or legacy `sector` (single).",
+      });
+    }
+  }) */
+
+/*   .transform((val) => {
+    const sectors =
+      (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as any;
+
+    const { sector, ...rest } = val as any;
+    return { ...rest, sectors }; */
+
+    // If both are provided, require consistency
+    if (sectorsArr && sectorOne && !sectorsArr.includes(sectorOne)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sector"],
+        message: "`sector` must be one of the values in `sectors`.",
+      });
+    }
+  })
+  .transform((val) => {
+    const sectors: Sector[] =
+      val.sectors?.length ? val.sectors
+      : val.sector ? [val.sector]
+      : [];
+    //superRefine guarantees sectors.length >= 1
+    const sector: Sector = val.sector ?? sectors[0]!;
+
+    return { ...val, sector, sectors };
+  });
+/*   .transform((val) => {
+    const sectors =
+      (val.sectors?.length ? val.sectors : val.sector ? [val.sector] : []) as Sector[];
+
+    const sector = (val.sector ?? sectors[0]) as Sector;
+
+    // IMPORTANT: do NOT delete `sector`. Keep both.
+    return { ...val, sector, sectors };
+  }); */
+/*   .transform((v) => {
+    const sectors =
+      (v.sectors && v.sectors.length ? v.sectors : v.sector ? [v.sector] : []) as any;
+
+    const { sector, ...rest } = v as any;
+    return { ...rest, sectors };
+
+  }); */
+
+export type CaseStudySeedInput = z.input<typeof CaseStudySeedSchema>;// BEFORE parse (raw authoring)
+export type CaseStudySeed      = z.output<typeof CaseStudySeedSchema>;  // AFTER parse (post-transform)
+//export type CaseStudySeed = z.infer<typeof CaseStudySeedSchema>;
 
 /* 
 export const CaseStudySeedSchema = z.object({

@@ -27,7 +27,8 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
       title: title.trim(),
       slug: slug.trim(),
       client: undefined,
-      sector: "GovContracting",
+      //sector: "GovContracting",
+      sectors: ["GovContracting"],
       year: undefined,
 
       tags: ["mock"],

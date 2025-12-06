@@ -39,7 +39,7 @@ export function CaseStudyTable({ items }: Props) {
                 <tr key={cs.id}>
                   <td>{cs.title}</td>
                   <td>{cs.client ?? "—"}</td>
-                  <td>{cs.sector}</td>
+                  <td>{cs.sectors}</td>
                   <td>{cs.year ?? "—"}</td>
                   <td>{cs.isFeaturedHome ? "Yes" : "No"}</td>
                   <td>{cs.isPublic ? "Public" : "Internal"}</td>

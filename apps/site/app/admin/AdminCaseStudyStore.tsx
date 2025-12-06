@@ -20,6 +20,15 @@ import {
   type CaseStudyType,
 } from "@kit/schema";
 
+function migrateLegacySector(input: any) {
+  if (!input || typeof input !== "object") return input;
+  if (input.sectors == null && input.sector != null) {
+    input = { ...input, sectors: [input.sector] };
+    delete input.sector;
+  }
+  return input;
+}
+
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
 
@@ -52,7 +61,8 @@ const RAW_SEEDS: CaseStudyInput[] = [
     title: "Geospatial Solutions",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting", "Geospatial",],
     year: 2024,
     tags: ["seed"],
     summaryShort: "Demo entry seeded into the toy CMS store.",
@@ -76,7 +86,8 @@ const RAW_SEEDS: CaseStudyInput[] = [
     title: "Nonprofit Organizations",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
-    sector: "Nonprofit",
+//    sector: "Nonprofit",
+    sectors: ["Nonprofit", "Geospatial",],
     year: 2024,
     tags: ["seed"],
     summaryShort: "Another demo entry seeded into the toy CMS store.",
@@ -98,7 +109,8 @@ const RAW_SEEDS: CaseStudyInput[] = [
 ];
 
 const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
-  const res = CaseStudySchema.safeParse(item);
+  const migrated = migrateLegacySector(item);
+  const res = CaseStudySchema.safeParse(migrated);
   return res.success ? [res.data] : [];
 });
 
@@ -112,7 +124,8 @@ function loadLocalValidated(): CaseStudyType[] {
 
     const ok: CaseStudyType[] = [];
     for (const item of parsed) {
-      const res = CaseStudySchema.safeParse(item);
+      const migrated = migrateLegacySector(item);
+      const res = CaseStudySchema.safeParse(migrated);
       if (res.success) ok.push(res.data);
     }
     return ok;

@@ -18,6 +18,7 @@ import {
 //  type CaseStudy as CaseStudyType,
   type CaseStudyInput,
   type CaseStudyType,
+  type SectorValue,
   SECTOR_VALUES,
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
@@ -26,6 +27,8 @@ import {
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
 import { useRouter } from "next/navigation";
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+
+
 
 /* function slugify(raw: string): string {
   return raw
@@ -339,10 +342,21 @@ export default function NewCaseStudyPage() {
   const router = useRouter();
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
+  const [id] = useState(() =>
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+  );
+
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
-  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+//  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+//  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  function toggleSector(v: SectorValue) {
+    setSectors((prev) =>
+      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
+    );
+  }
   const [year, setYear] = useState<string>("2024");
   const [tags, setTags] = useState("");
   const [summaryShort, setSummaryShort] = useState("");
@@ -356,11 +370,12 @@ export default function NewCaseStudyPage() {
 
   const candidateInput: CaseStudyInput = useMemo(
     () => ({
-      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+      id,
+//      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
       title: title.trim(),
       slug: slugify(slug || title),
       client: client.trim() || undefined,
-      sector,
+      sectors,
       year: year ? Number(year) : undefined,
 
       tags: tags
@@ -392,7 +407,7 @@ export default function NewCaseStudyPage() {
       title,
       slug,
       client,
-      sector,
+      sectors,
       year,
       tags,
       summaryShort,
@@ -481,14 +496,19 @@ export default function NewCaseStudyPage() {
           </div>
 
           <div style={{ flex: 1, minWidth: 220 }}>
-            <label>Sector</label>
-            <select className="input" value={sector} onChange={(e) => setSector(e.target.value as any)}>
+            <label>Sectors</label>
+            <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
               {SECTOR_VALUES.map((v) => (
-                <option key={v} value={v}>
+                <label key={v}>
+                  <input
+                    type="checkbox"
+                    checked={sectors.includes(v)}
+                    onChange={() => toggleSector(v)}
+                  />
                   {v}
-                </option>
+                </label>
               ))}
-            </select>
+            </div>
           </div>
 
           <div style={{ width: 160 }}>

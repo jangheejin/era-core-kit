@@ -56,14 +56,16 @@ export type CaseStudySort = z.infer<typeof CaseStudySortSchema>;
 */
 //export const Sector = z.enum([
 export const SECTOR_VALUES = [
+  "GovContracting",
+  "Nonprofit",
+  "EmergencyMgmt",
+  "Education",
+  "Geospatial",
+  "Manufacturing",
+  "Industry",
   "Defense",
   "Health",
   "FinTech",
-  "Education",
-  "Nonprofit",
-  "GovContracting",
-  "EmergencyMgmt",
-  "Geospatial",
   "CivicTech",
   "Infrastructure",
 //]);
@@ -71,6 +73,18 @@ export const SECTOR_VALUES = [
 export type SectorValue = (typeof SECTOR_VALUES)[number];
 export const SectorSchema = z.enum(SECTOR_VALUES);
 export type Sector = z.infer<typeof SectorSchema>;
+
+// NEW: multi-sector, normalized to an array
+/* export const SectorsSchema = z.preprocess(
+  (v) => {
+    if (Array.isArray(v)) return v;
+    if (typeof v === "string") return [v]; // back-compat
+    return v;
+  },
+  z.array(SectorSchema).min(1),
+); */
+export const SectorsSchema = z.array(SectorSchema).min(1);
+export type Sectors = z.infer<typeof SectorsSchema>;
 /* 
 export type Sector = (typeof SECTOR_VALUES)[number];
 export const SectorSchema = z.enum(SECTOR_VALUES); */

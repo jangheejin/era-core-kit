@@ -5,6 +5,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { type SectorValue } from "@kit/schema";
 
 import {
   CASE_STUDY_STATUS_VALUES,
@@ -15,18 +16,23 @@ import {
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 export default function CaseStudyListPage() {
+  
   //const { items } = useAdminCaseStudies();
   const { items, resetToBaseline } = useAdminCaseStudies();
 
   const [q, setQ] = useState("");
-  const [sector, setSector] = useState<string>("");
+  //const [sector, setSector] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [visibility, setVisibility] = useState<string>("")
+
+//  const [sector, setSector] = useState<SectorValue | "">("");
+  const [sectorFilter, setSectorFilter] = useState<SectorValue | "">("");
 
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
     return items.filter((cs) => {
-      if (sector && cs.sector !== sector) return false;
+      if (sectorFilter && !(cs.sectors ?? []).includes(sectorFilter)) return false;
+//      if (sector && !cs.sectors?.includes(sector)) return false;
       if (status && cs.status !== status) return false;
       if (visibility && cs.visibility !== visibility) return false;
 
@@ -43,10 +49,17 @@ export default function CaseStudyListPage() {
 
       return hay.includes(qq);
     });
-  }, [items, q, sector, status, visibility]);
+  }, [//DEPENDENCIES
+    items, 
+    q, 
+    sectorFilter,
+    //sector, 
+    status, 
+    visibility
+  ]);
 
   /*TO DO: MAYBE CHANGE CLASSNAME FROM  C-ADMIN BACK TO C-SECTION, ETC? and similarly throughout*/
-
+  //const [sectors, setSectors] = useState<SectorValue[]>([SECTOR_VALUES[0]]);
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
@@ -70,7 +83,12 @@ export default function CaseStudyListPage() {
             style={{ flex: 1, minWidth: 240 }}
           />
 
-          <select className="input" value={sector} onChange={(e) => setSector(e.target.value)}>
+          <select
+            className="input"
+            value={sectorFilter}
+            onChange={(e) => setSectorFilter(e.target.value as SectorValue | "")}
+          >
+{/*           <select className="input" value={sector} onChange={(e) => setSector(e.target.value)}> */}
             <option value="">All sectors</option>
             {SECTOR_VALUES.map((v) => (
               <option key={v} value={v}>
@@ -115,8 +133,9 @@ export default function CaseStudyListPage() {
                     <strong>{cs.title}</strong>{" "}
                     <span className="muted">({cs.client ?? "—"})</span>
                   </div>
+
                   <div className="muted" style={{ fontSize: ".9rem" }}>
-                    /{cs.slug} • {cs.sector} • {cs.status} • {cs.visibility}
+                    /{cs.slug} • {(cs.sectors ?? []).join(", ")}• {cs.status} •{" "} {cs.visibility}
                   </div>
                 </div>
 

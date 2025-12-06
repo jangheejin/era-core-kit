@@ -82,6 +82,8 @@ the user fills out)
 .c-admin a { text-decoration: underline; }
 
 .c-admin h1, .c-admin h2, .c-admin h3 { margin: 0; }
+.c-admin h3, .c-admin h4 {text-transform: uppercase; letter-spacing: .05rem;}
+.c-admin h4 {font-weight:400;}
 .c-admin .muted { opacity: 0.7; }
 
 /* ---------- ADMIN FORM LAYOUT ---------- */
