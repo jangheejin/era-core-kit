@@ -16,7 +16,8 @@ const CASE_STUDIES_FIXTURE_FULL_RAW = [
         title: "Geospatial modernization and federal engagement",
         slug: "sanborn-appgeo",
         client: "Sanborn + AppGeo",
-        sector: "GovContracting",
+        //sector: "GovContracting",
+        sectors: ["GovContracting", "Geospatial", "EmergencyMgmt"],
         year: 2024,
         mechanisms: [],
         jurisdictions: ["Federal"],
@@ -62,7 +63,8 @@ const CASE_STUDIES_FIXTURE_FULL_RAW = [
         title: "Policy-facing storytelling for a technical nonprofit",
         slug: "napsg-foundation",
         client: "NAPSG Foundation",
-        sector: "Nonprofit",
+        //    sector: "Nonprofit",
+        sectors: ["Nonprofit", "GovContracting", "Geospatial"],
         year: 2024,
         mechanisms: [],
         jurisdictions: ["Federal"],
@@ -108,7 +110,8 @@ const CASE_STUDIES_FIXTURE_FULL_RAW = [
         title: "Federal procurement strategy for a growing contractor",
         slug: "crucis",
         client: "Crucis",
-        sector: "GovContracting",
+        //    sector: "GovContracting",
+        sectors: ["GovContracting", "Industry", "Manufacturing"],
         year: 2024,
         mechanisms: [],
         jurisdictions: ["Federal"],
@@ -154,7 +157,8 @@ const CASE_STUDIES_FIXTURE_FULL_RAW = [
         title: "Emergency response manufacturing alignment",
         slug: "mkr-fabricators",
         client: "MKR Fabricators",
-        sector: "EmergencyMgmt",
+        //sector: "EmergencyMgmt",
+        sectors: ["EmergencyMgmt", "Manufacturing", "Industry"],
         year: 2024,
         mechanisms: [],
         jurisdictions: ["Federal"],
@@ -200,7 +204,8 @@ const CASE_STUDIES_FIXTURE_FULL_RAW = [
         title: "STEMheads (draft sample)",
         slug: "stemheads",
         client: "STEMheads",
-        sector: "Education",
+        //    sector: "Education",
+        sectors: ["Education", "Nonprofit"],
         year: 2024,
         mechanisms: [],
         jurisdictions: ["Federal"],
@@ -413,6 +418,11 @@ function normalize(seedInput: CaseStudySeed): CaseStudy {
  */
 function normalize(seedInput) {
     const seed = CaseStudySeedSchema.parse(seedInput);
+    const sectors = Array.isArray(seed.sectors) && seed.sectors.length
+        ? seed.sectors
+        : seed.sector
+            ? [seed.sector]
+            : [];
     const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
     const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
     // These should never trigger because seeds schema superRefine enforces them,
@@ -426,7 +436,8 @@ function normalize(seedInput) {
         title: seed.title ?? seed.client ?? seed.slug,
         slug: seed.slug,
         client: seed.client,
-        sector: seed.sector,
+        //    sectors: seed.sectors,
+        sectors,
         year: seed.year,
         tags: seed.tags ?? [],
         summaryShort,
@@ -547,9 +558,10 @@ for (const cs of FULL_FROM_SEEDS) {
  * This is the fixture that the app should use "for now" during demo phase:
  * it intentionally strips detail while keeping the *schema shape* intact.
  */
-export const CASE_STUDIES_FIXTURE = orderedFull.map((cs) => ({
+export const CASE_STUDIES_FIXTURE = orderedFull;
+//lightweight “cards” version for the homepage later
+export const CASE_STUDIES_FIXTURE_CARDS = orderedFull.map((cs) => ({
     ...cs,
-    // "less info" for now:
     brief: undefined,
     outcomes: [],
     bodyMDX: "",

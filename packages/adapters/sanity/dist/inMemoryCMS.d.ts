@@ -12,46 +12,24 @@ export declare class InMemoryCMS implements CMS {
             id: string;
             title: string;
             slug: string;
-            sector: "Defense" | "Health" | "FinTech" | "Education" | "Nonprofit" | "GovContracting" | "EmergencyMgmt" | "Geospatial" | "CivicTech" | "Infrastructure";
+            sectors: ("GovContracting" | "Nonprofit" | "EmergencyMgmt" | "Education" | "Geospatial" | "Manufacturing" | "Industry" | "Defense" | "Health" | "FinTech" | "CivicTech" | "Infrastructure")[];
             tags: string[];
             summaryShort: string;
-            heroImageUrl: string;
-            mechanisms: ("Appropriation" | "Earmark" | "Grant" | "TaxCredit")[];
-            jurisdictions: ("Federal" | "State" | "Local")[];
-            outcomes: {
-                label: string;
-                kind?: "Grant" | "Contract" | "Policy" | "Visibility" | "Relationship" | "Savings" | "Efficiency" | "Engagement" | "Operational" | "RiskReduction" | undefined;
-                description?: string | undefined;
-                evidenceUrl?: string | undefined;
-            }[];
-            evidence: {
-                label: string;
-                url: string;
-            }[];
-            sections: {
-                id: string;
-                title: string;
-                bodyMDX?: string | undefined;
-            }[];
-            attachments: {
-                label: string;
-                url: string;
-                kind: "pdf" | "ppt" | "doc" | "sheet" | "zip" | "other";
-                internalOnly: boolean;
-            }[];
-            links: {
-                label: string;
-                url: string;
-                category: "client" | "other" | "impact" | "legislation" | "press";
-                internalOnly: boolean;
-            }[];
-            status: "Draft" | "InProgress" | "NeedsReview" | "Approved" | "Published" | "Archived";
-            visibility: "Public" | "Internal" | "ClientSafe";
+            mechanisms: any[];
+            jurisdictions: string[];
+            outcomes: any[];
+            evidence: any[];
+            sections: any[];
+            attachments: any[];
+            links: any[];
+            status: string;
+            visibility: string;
             isFeaturedHome: boolean;
             isPublic: boolean;
             client?: string | undefined;
             year?: number | undefined;
             brief?: string | undefined;
+            heroImageUrl?: string | undefined;
             bodyMDX?: string | undefined;
         }[];
         nextCursor: string | undefined;

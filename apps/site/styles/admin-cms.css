@@ -95,15 +95,50 @@ the user fills out)
   font-size: 0.875rem;
   color: #374151; 
 }
-.alertBanner {
-  background-color: #fff7e0; /* soft yellow */
-  border: 1px solid #f4c430; /* gold tone */
+
+/* Base alert banner */
+/* .alertBanner {
+  background-color: #fff7e0; 
+  border: 1px solid #f4c430; 
   border-radius: 6px;
   padding: 1rem;
   margin: 1rem 0;
   font-size: 0.95rem;
   color: #333;
   font-weight: 500;
+} */
+
+.alert-banner {
+  padding: 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+}
+
+/* Variants */
+.alert-info {
+  background-color: #eaf4ff;
+  color: #0b3d91;
+  border-color: #b3d4fc;
+}
+
+.alert-success {
+  background-color: #e8f5e9;
+  color: #256029;
+  border-color: #c8e6c9;
+}
+
+.alert-warning {
+  background-color: #fff8e1;
+  color: #8a6d1d;
+  border-color: #ffe082;
+}
+
+.alert-error {
+  background-color: #ffebee;
+  color: #b71c1c;
+  border-color: #f44336;
 }
 /* ---------- ADMIN FORM LAYOUT ---------- */
 

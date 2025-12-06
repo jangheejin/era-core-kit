@@ -6,4 +6,5 @@ export declare const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[];
  * it intentionally strips detail while keeping the *schema shape* intact.
  */
 export declare const CASE_STUDIES_FIXTURE: CaseStudyType[];
+export declare const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[];
 //# sourceMappingURL=fixtures.d.ts.map
