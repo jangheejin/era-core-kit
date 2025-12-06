@@ -20,7 +20,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
   const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "Geospatial modernization and federal engagement",
+    title: "Temporary Title: Sanborn + AppGeo",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
@@ -85,7 +85,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-napsg-foundation",
-    title: "Policy-facing storytelling for a technical nonprofit",
+    title: "Temporary Title: NAPSG Foundation",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
 //    sector: "Nonprofit",
@@ -150,7 +150,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-crucis",
-    title: "Federal procurement strategy for a growing contractor",
+    title: "Temporary Title: Crucis",
     slug: "crucis",
     client: "Crucis",
 //    sector: "GovContracting",
@@ -215,7 +215,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-mkr-fabricators",
-    title: "Emergency response manufacturing alignment",
+    title: "Temporary Title: MKR Fabricators",
     slug: "mkr-fabricators",
     client: "MKR Fabricators",
     //sector: "EmergencyMgmt",

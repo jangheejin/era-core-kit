@@ -43,16 +43,18 @@ export default function MockCaseStudyPage() {
       <ContextBanner view="preview">
         This is a local-only preview of a mock case study. Changes are not saved permanently.
       </ContextBanner>
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1>{cs.title || "Untitled case study"}</h1>
-        <div className="row">
-          <Link href="/admin/case-studies/list">List</Link>
-          <Link href="/admin/case-studies/new">New</Link>
-        </div>
+
+      {/* Title + Client */}
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <h1><strong>Title:</strong> {cs.title || "Untitled case study"}</h1>
+            <div className="row">
+              <Link href="/admin/case-studies/list">List</Link>
+              <Link href="/admin/case-studies/new">New</Link>
+            </div>
+          </div>
+        <h3><strong>Client:</strong> {cs.client ?? "—"}</h3>
       </div>
-
-      <h3><strong>Client:</strong> {cs.client ?? "—"}</h3>
-
       
       {/* Metadata summary */}
       <div className="card metadata-card">
