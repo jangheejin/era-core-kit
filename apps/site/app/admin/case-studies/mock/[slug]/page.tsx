@@ -5,7 +5,9 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 
-import { AlertBanner } from "../../../components/AlertBanner";
+//import { AlertBanner } from "../../../components/AlertBanner";
+//import { AlertBanner } from "@/components/AlertBanner";
+import { ContextBanner } from "../../../components/ContextBanner";
 
 export default function MockCaseStudyPage() {
   const params = useParams<{ slug: string }>();
@@ -33,9 +35,12 @@ export default function MockCaseStudyPage() {
 
   return (
     <main className="c-admin">
-      <div className="cms-console">
+{/*       <div className="cms-console">
         <strong>Preview mode:</strong> This is a local-only preview of a mock case study. Changes are not saved permanently.
-      </div>
+      </div> */}
+      <ContextBanner view="preview">
+        This is a local-only preview of a mock case study. Changes are not saved permanently.
+      </ContextBanner>
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1>{cs.title || "Untitled case study"}</h1>
         <div className="row">

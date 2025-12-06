@@ -95,8 +95,45 @@ the user fills out)
   font-size: 0.875rem;
   color: #374151; 
 }
+.context-banner {
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid transparent;
+  background-color: #f9fafb;
+  color: #1f2937;
+}
 
-/* Base alert banner */
+.context-banner__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.context-banner__body {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+/* View-specific variants */
+.context-banner--preview {
+  background-color: #f0f4ff;
+  border-left-color: #3b82f6;
+  color: #1e3a8a;
+}
+
+.context-banner--editor {
+  background-color: #ecfdf5;
+  border-left-color: #10b981;
+  color: #065f46;
+}
+
+.context-banner--list {
+  background-color: #fefce8;
+  border-left-color: #facc15;
+  color: #78350f;
+}
+
 /* .alertBanner {
   background-color: #fff7e0; 
   border: 1px solid #f4c430; 
@@ -107,7 +144,7 @@ the user fills out)
   color: #333;
   font-weight: 500;
 } */
-
+/* Base alert banner */
 .alert-banner {
   padding: 1rem;
   border-radius: 6px;
