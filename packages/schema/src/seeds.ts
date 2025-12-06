@@ -4,6 +4,7 @@
 import { z } from "zod";
 //import { Sector } from "./index"; 
 import { SectorSchema } from "./enums";
+import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema"
 
 type Sector = z.infer<typeof SectorSchema>;
 
@@ -85,14 +86,14 @@ export const CaseStudySeedSchema = z
       });
     }
 
-    const hasImage = Boolean(v.heroImageUrl?.trim() || v.imageUrl?.trim());
+/*     const hasImage = Boolean(v.heroImageUrl?.trim() || v.imageUrl?.trim());
     if (!hasImage) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["heroImageUrl"],
         message: "Provide either heroImageUrl or imageUrl (at least one is required).",
       });
-    }
+    } */
     
 /*     const hasSectors = Array.isArray(v.sectors) && v.sectors.length > 0;
     const hasSector = !!v.sector; */
@@ -143,7 +144,10 @@ export const CaseStudySeedSchema = z
     //superRefine guarantees sectors.length >= 1
     const sector: Sector = val.sector ?? sectors[0]!;
 
-    return { ...val, sector, sectors };
+    const heroImageUrl = 
+      (val.heroImageUrl ?? val.imageUrl ?? DEFAULT_HERO_IMAGE_URL).trim();
+
+    return { ...val, sector, sectors, heroImageUrl };
   });
 /*   .transform((val) => {
     const sectors =
