@@ -596,6 +596,7 @@ the user fills out)
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: flex-start;
+  width: 100%;
 }
 
 .form-field {
@@ -614,6 +615,7 @@ the user fills out)
   gap: 0.5rem 1.25rem;
   margin-top: 0.5rem;
   max-width: 100%; /* prevent overflow */
+  align-items:center;
 }
 
 .form-actions {
