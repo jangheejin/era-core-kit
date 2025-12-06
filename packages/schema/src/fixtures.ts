@@ -562,6 +562,10 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
 
     // status/visibility intentionally omitted: defaults apply at parse-time
   };
+  if (candidate.tags?.includes("seed")) {
+    console.error("❌ STILL FINDING A 'seed' TAG: ", candidate);
+    process.exit(1); // if in Node
+  }
 
   return CaseStudySchema.parse(candidate);
 }

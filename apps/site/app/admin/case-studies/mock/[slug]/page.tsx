@@ -8,6 +8,8 @@ import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 //import { AlertBanner } from "../../../components/AlertBanner";
 //import { AlertBanner } from "@/components/AlertBanner";
 import { ContextBanner } from "../../../components/ContextBanner";
+import { CaseStudyMetadata } from "../../../components/CaseStudyMetadata";
+
 
 export default function MockCaseStudyPage() {
   const params = useParams<{ slug: string }>();
@@ -53,6 +55,49 @@ export default function MockCaseStudyPage() {
 
       
       {/* Metadata summary */}
+      <div className="card metadata-card">
+        {/* <h3>Metadata</h3> */}
+        <CaseStudyMetadata caseStudy={cs} />
+{/*         <dl className="metadata-list">
+          <div>
+            <dt>Client</dt>
+            <dd>{cs.client || "—"}</dd>
+          </div>
+          <div>
+            <dt>Sectors</dt>
+            <dd>{(cs.sectors ?? []).join(", ") || "—"}</dd>
+          </div>
+          {cs.tags?.length ? (
+            <div>
+              <dt>Tags</dt>
+              <dd>
+                <div className="tag-list">
+                  {cs.tags.map((tag) => (
+                    <span className="tag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </dd>
+            </div>
+          ) : null}
+          <div>
+            <dt>Status</dt>
+            <dd>{cs.status || "—"}</dd>
+          </div>
+          <div>
+            <dt>Visibility</dt>
+            <dd>{cs.visibility || "—"}</dd>
+          </div>
+          <div>
+            <dt>Slug</dt>
+            <dd>
+              <code>/{cs.slug}</code>
+            </dd>
+          </div>
+        </dl>*/}
+      </div> 
+{/* 
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3>Metadata</h3>
         <p className="muted">
@@ -66,7 +111,7 @@ export default function MockCaseStudyPage() {
           <strong>Visibility:</strong> {cs.visibility ?? "—"} <br />
           <strong>Slug:</strong> <code>/{cs.slug}</code>
         </p>
-      </div>
+      </div> */}
 
       <div className="card" style={{ marginTop: "1rem" }}>
         <div className="muted" style={{ marginBottom: ".5rem" }}>
@@ -88,10 +133,10 @@ export default function MockCaseStudyPage() {
 
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3>Summary</h3>
-        <p className="muted">
-          {cs.summaryShort && <p>{cs.summaryShort}</p>}
-          {cs.brief && <p className="muted">{cs.brief}</p>}
-        </p>
+          <div className="muted">
+            {cs.summaryShort && <p>{cs.summaryShort}</p>}
+            {cs.brief && <p>{cs.brief}</p>}
+          </div>
 
         {cs.tags?.length ? (
           <p className="muted">
@@ -122,6 +167,83 @@ export default function MockCaseStudyPage() {
           <pre style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</pre>
         </div>
       ) : null}
+
+      <div className="card" style={{ marginTop: "1rem" }}>
+        <h3>Debug view</h3>
+        {cs.outcomes?.length > 0 && (
+            <div>
+              <dt>Outcomes</dt>
+              <dd>
+                <ul>
+                  {cs.outcomes.map((o, i) => (
+                    <li key={i}><strong>{o.label}:</strong> {o.description}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+
+          {cs.sections?.length > 0 && (
+            <div>
+              <dt>Sections</dt>
+              <dd>
+                <ul>
+                  {cs.sections.map((s) => (
+                    <li key={s.id}><strong>{s.title}</strong>: {s.bodyMDX}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+        <dl className="c-stack" style={{ fontFamily: "monospace", fontSize: ".9rem", gap: ".5rem" }}>
+          <div>
+            <dt>ID</dt>
+            <dd>{cs.id}</dd>
+          </div>
+
+          <div>
+            <dt>Title</dt>
+            <dd>{cs.title}</dd>
+          </div>
+
+          <div>
+            <dt>Slug</dt>
+            <dd><code>{cs.slug}</code></dd>
+          </div>
+
+          <div>
+            <dt>Client</dt>
+            <dd>{cs.client}</dd>
+          </div>
+
+          <div>
+            <dt>Sectors</dt>
+            <dd>{cs.sectors?.join(", ") || "—"}</dd>
+          </div>
+
+          <div>
+            <dt>Tags</dt>
+            <dd>{cs.tags?.join(", ") || "—"}</dd>
+          </div>
+
+          <div>
+            <dt>Year</dt>
+            <dd>{cs.year || "—"}</dd>
+          </div>
+
+          <div>
+            <dt>Status</dt>
+            <dd>{cs.status}</dd>
+          </div>
+
+          <div>
+            <dt>Visibility</dt>
+            <dd>{cs.visibility}</dd>
+          </div>
+
+
+        </dl>
+      </div>
 
 
 {/* Raw object (debug info) */}

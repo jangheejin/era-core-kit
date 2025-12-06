@@ -54,9 +54,9 @@ const AdminCaseStudyContext =
 
 const STORAGE_KEY = "era_admin_case_studies_v1";
 
-
+/*
 const RAW_SEEDS: CaseStudyInput[] = [
-  {
+   {
     id: "seed-sanborn-appgeo",
     title: "Geospatial Solutions",
     slug: "sanborn-appgeo",
@@ -80,7 +80,7 @@ const RAW_SEEDS: CaseStudyInput[] = [
     visibility: "Internal",
     isFeaturedHome: false,
     isPublic: true,
-  },
+  }, 
   {
     id: "seed-napsg-foundation",
     title: "Nonprofit Organizations",
@@ -112,9 +112,10 @@ const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
   const migrated = migrateLegacySector(item);
   const res = CaseStudySchema.safeParse(migrated);
   return res.success ? [res.data] : [];
-});
+});*/
 
 function loadLocalValidated(): CaseStudyType[] {
+  console.log("LocalStorage contents after load:", JSON.stringify(localStorage.getItem(STORAGE_KEY), null, 2));
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -124,6 +125,9 @@ function loadLocalValidated(): CaseStudyType[] {
 
     const ok: CaseStudyType[] = [];
     for (const item of parsed) {
+      //ignore any entries with seed tag (outdated, oversimplified mock case studies)
+      if (item.tags?.includes("seed")) continue;
+
       const migrated = migrateLegacySector(item);
       const res = CaseStudySchema.safeParse(migrated);
       if (res.success) ok.push(res.data);
@@ -151,14 +155,19 @@ function buildBaselineItems(): CaseStudyType[] {
 
   // baseline → overrides
   for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs); // optional (keeps RAW_SEEDS)
+/*   for (const cs of SEED_CASE_STUDIES) {
+    if (!bySlug.has(cs.slug)) {
+      bySlug.set(cs.slug, cs);
+    }
+  } */
+//  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs); // optional (keeps RAW_SEEDS)
   //for (const cs of stored) bySlug.set(cs.slug, cs);
 
   // deterministic order: fixture order then stored-only
   const order: string[] = [];
   const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
   for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  for (const cs of SEED_CASE_STUDIES) push(cs.slug);
+  //for (const cs of SEED_CASE_STUDIES) push(cs.slug);
   //for (const cs of stored) push(cs.slug);
 
   return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
@@ -226,9 +235,18 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   // Hydrate stored overrides on mount (client-only)
   useEffect(() => {
     const stored = loadLocalValidated();
+
+    //guardrail against seeds
+    for (const item of stored) {
+      if (item.tags?.includes("seed")) {
+        console.error("❌ Found seed tag in localStorage:", item);
+      }
+    }
+
     if (stored.length === 0) return;
     setItems(mergeBaselineWithStored(BASELINE, stored));
     //setItems(mergeFixtureWithStored(stored));
+    console.log("!!!!Final loaded case studies:", items);
   }, []);
 
   // Persist any changes (this will store fixtures too but that’s OK for toy mode)

@@ -177,6 +177,128 @@ the user fills out)
   color: #b71c1c;
   border-color: #f44336;
 }
+
+.metadata-list {
+  display: grid;
+  row-gap: 0.75rem;
+}
+
+.metadata-list dt {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.metadata-list dd {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.tag {
+  background-color: #eef2f7;
+  color: #333;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.case-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  font-size: 0.9rem;
+  color: var(--gray-text, #555);
+}
+
+.case-metadata > div {
+  min-width: 160px;
+}
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.metadata-entry {
+  line-height: 1.4;
+}
+
+.metadata-entry .label {
+  font-weight: 600;
+  color: #fff;
+}
+
+.metadata-card {
+  background-color: #1c1c1c;
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #f0f0f0;
+  margin-bottom: 1rem;
+}
+
+.metadata-heading {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.metadata-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.metadata-item {
+  flex: 1 1 220px;
+}
+
+.metadata-item dt {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.metadata-item dd {
+  margin: 0;
+  color: #ccc;
+}
+
+.metadata-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.tag-pill {
+  background-color: #2e2e2e;
+  border-radius: 12px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  color: #ddd;
+  white-space: nowrap;
+}
+
+.metadata-slug code {
+  color: #77b3f8;
+  font-size: 0.9rem;
+}
+
+
 /* ---------- ADMIN FORM LAYOUT ---------- */
 
 .admin-form {
