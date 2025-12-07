@@ -5,14 +5,22 @@ import { SECTOR_VALUES, type SectorValue } from "@kit/schema";
 import { getCaseStudies } from "@/lib/caseStudies"; //TO DO: UPDATE LATER
 //import { CASE_STUDIES_FIXTURE, type CaseStudyType } from "@kit/schema";//for now, since we don't have the real CMS, we will use fixtures from the demo CMS
 import { CaseStudyCard } from "@/components/CaseStudyCard";
+import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
+import { SECTOR_ROUTE_SLUG } from "@kit/schema";
+
+export async function generateStaticParams() {
+  // prebuild all sector archive pages
+  return Object.values(SECTOR_ROUTE_SLUG).map((sector) => ({ sector }));
+}
 
 export default async function SectorArchivePage({ params, }: { params: { sector: string };}) {
   //const sector = sectorSlugToValue(params.sector);
-  const sector = sectorFromRouteSlug(params.sector);
+  //const sector = sectorFromRouteSlug(params.sector);
+  const { sector, items } = await getCaseStudiesBySectorRouteSlug(params.sector);
   if (!sector) return notFound();
 
   const all = await getCaseStudies(); // TO DO: UPDATE later
-  const items = all.filter((cs) => cs.isPublic && cs.sectors?.includes(sector));
+  //const items = all.filter((cs) => cs.isPublic && cs.sectors?.includes(sector));
 
   return (
     <main className="c-page">

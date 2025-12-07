@@ -2,7 +2,6 @@
 
 import { CaseStudyType } from "@kit/schema";
 
-
 type Props = {
   caseStudy: CaseStudyType;
 };

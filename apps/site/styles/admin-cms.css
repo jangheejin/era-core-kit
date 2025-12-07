@@ -707,3 +707,214 @@ pre.error {
 
 .mt2 { margin-top: 2rem; }
 .mb { margin-bottom: 1rem; }
+
+/*wrapping flex layout, prevents long vertical lists*/
+.case-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  font-size: 0.9rem;
+  color: var(--gray-text, #555);
+}
+
+.case-metadata > div {
+  min-width: 160px;
+}
+
+.metadata-card {
+  background-color: #1c1c1c;
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #f0f0f0;
+  margin-bottom: 1rem;
+}
+
+.metadata-heading {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.metadata-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.metadata-item {
+  flex: 1 1 220px;
+}
+
+.metadata-item dt {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.metadata-item dd {
+  margin: 0;
+  color: #ccc;
+}
+
+.metadata-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.tag-pill {
+  background-color: #2e2e2e;
+  border-radius: 12px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  color: #ddd;
+  white-space: nowrap;
+}
+
+.metadata-slug code {
+  color: #77b3f8;
+  font-size: 0.9rem;
+}
+
+/* Tag filter */
+.tag-filter {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.tag-filter label {font-family:var(--font-heading); text-transform:uppercase;}
+
+.tag-filter__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag-filter__modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tag-filter__search {
+  min-width: 220px;
+  flex: 1 1 260px;
+}
+
+/* chip cloud container */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* tag chips get count badge */
+.tag-chip {
+  padding: 0.35rem 0.55rem;
+}
+
+.tag-chip__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.85em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* active state */
+.chip--active {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.tag-filter__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tag-filter__label {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.tag-filter__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Chip button */
+.chip {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+.chip:active {
+  transform: translateY(1px);
+}
+
+.chip:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.chip.is-active {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.chip__count {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Optional: a “clear” control styled like a link */
+.tag-filter__clear {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  opacity: 0.75;
+  cursor: pointer;
+  padding: 0.25rem 0.25rem;
+  text-decoration: underline;
+}
+
+.tag-filter__clear:hover {
+  opacity: 1;
+}
+

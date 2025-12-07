@@ -16,7 +16,7 @@ import React, {
 import {
   CaseStudy as CaseStudySchema,
   CaseStudyInput,
-  CASE_STUDIES_FIXTURE,
+  CASE_STUDIES_FIXTURE,//the dummy entries for the demo cms database
   type CaseStudyType,
 } from "@kit/schema";
 

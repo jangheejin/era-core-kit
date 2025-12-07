@@ -1,4 +1,7 @@
 // packages/schema/src/fixtures.ts
+
+// The mock case study entries created to populate the mock database
+
 /* import type { CaseStudy } from "./index"; */
 //normalize seeds (shorter-form case studies meant for landing cards, etc) into full CaseStudy entries at import time
 import {

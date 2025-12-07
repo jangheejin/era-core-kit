@@ -16,6 +16,8 @@ import {
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
+import { normalizeTagList, tagSlug } from "@kit/schema";
+
 export default function CaseStudyListPage() {
   
   //const { items } = useAdminCaseStudies();
@@ -29,13 +31,61 @@ export default function CaseStudyListPage() {
 //  const [sector, setSector] = useState<SectorValue | "">("");
   const [sectorFilter, setSectorFilter] = useState<SectorValue | "">("");
 
+  type TagMode = "any" | "all";
+  const [selectedTagSlugs, setSelectedTagSlugs] = useState<string[]>([]);
+  const [tagMode, setTagMode] = useState<"any" | "all">("any");
+  const [tagSearch, setTagSearch] = useState("");
+
+  const tagOptions = useMemo(() => {
+    const counts = new Map<string, { label: string; slug: string; count: number }>();
+    for (const cs of items) {
+      for (const t of normalizeTagList(cs.tags ?? [])) {
+        const slug = tagSlug(t);
+        const prev = counts.get(slug);
+        if (prev) prev.count += 1;
+        else counts.set(slug, { label: t, slug, count: 1 });
+      }
+    }
+    return Array.from(counts.values()).sort((a, b) => b.count - a.count);
+  }, [items]);
+
+  const visibleTagOptions = useMemo(() => {
+    const q = tagSearch.trim().toLowerCase();
+    if (!q) return tagOptions;
+    return tagOptions.filter((t) => t.label.toLowerCase().includes(q));
+  }, [tagOptions, tagSearch]);
+
+  function toggleTag(slug:string) {
+      setSelectedTagSlugs((prev) =>
+      prev.includes(slug) ? prev.filter((x) => x !== slug): [...prev, slug],
+    );
+  }
+
+  //now adding tag filters into existing filtered useMemo
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
+    
     return items.filter((cs) => {
-      if (sectorFilter && !(cs.sectors ?? []).includes(sectorFilter)) return false;
+//      if (sectorFilter && !(cs.sectors ?? []).includes(sectorFilter)) return false;
+      if (sectorFilter && !cs.sectors?.includes(sectorFilter)) return false;
 //      if (sector && !cs.sectors?.includes(sector)) return false;
       if (status && cs.status !== status) return false;
       if (visibility && cs.visibility !== visibility) return false;
+
+      //tag CHIPS filtering
+      if (selectedTagSlugs.length > 0) {
+        const csTagSlugs = new Set(normalizeTagList(cs.tags ?? []).map(tagSlug));
+
+        const ok =
+          tagMode === "any"
+            ? selectedTagSlugs.some((t) => csTagSlugs.has(t))
+            : selectedTagSlugs.every((t) => csTagSlugs.has(t));
+        
+        if (!ok) return false;
+      }
+/*         const hits = selectedTagSlugs.filter((t) => csTagSlugs.includes(t)).length;
+        if (tagMode === "any" && hits === 0) return false;
+        if (tagMode === "all" && hits !== selectedTagSlugs.length) return false; */
 
       if (!qq) return true;
       const hay = [
@@ -56,7 +106,9 @@ export default function CaseStudyListPage() {
     sectorFilter,
     //sector, 
     status, 
-    visibility
+    visibility,
+    selectedTagSlugs,
+    tagMode
   ]);
 
   /*TO DO: MAYBE CHANGE CLASSNAME FROM  C-ADMIN BACK TO C-SECTION, ETC? and similarly throughout*/
@@ -128,7 +180,71 @@ export default function CaseStudyListPage() {
             ))}
           </select>
         </div>
+
+        {/* tag filtering */}
+        
+        <div className="tag-filter">
+          <div className="tag-filter__top">
+            <div className="tag-filter__modes">
+              <label>Filter by tag</label>
+              <button
+                type="button"
+                className={`chip ${tagMode === "any" ? "chip--active" : ""}`}
+                onClick={() => setTagMode("any")}
+                aria-pressed={tagMode === "any"}
+              >
+                Match any
+              </button>
+
+              <button
+                type="button"
+                className={`chip ${tagMode === "all" ? "chip--active" : ""}`}
+                onClick={() => setTagMode("all")}
+                aria-pressed={tagMode === "all"}
+              >
+                Match all
+              </button>
+
+              {selectedTagSlugs.length > 0 && (
+                <button className="btn" type="button" onClick={() => setSelectedTagSlugs([])}>
+                  Clear tags
+                </button>
+              )}
+            </div>
+
+            <input
+              className="input tag-filter__search"
+              placeholder="Filter tags…"
+              value={tagSearch}
+              onChange={(e) => setTagSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="tag-cloud" role="list">
+            {visibleTagOptions.map((t) => {
+              const active = selectedTagSlugs.includes(t.slug);
+              return (
+                <button
+                  key={t.slug}
+                  type="button"
+                  className={`chip tag-chip ${active ? "chip--active" : ""}`}
+                  onClick={() => toggleTag(t.slug)}
+                  aria-pressed={active}
+                  title={`${t.label} (${t.count})`}
+                >
+                  <span className="tag-chip__label">{t.label}</span>
+                  <span className="tag-chip__count">{t.count}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+
+{/* END OF CASE STUDY FILTER SECTION */}
       </div>
+
+        
 
       <div className="card" style={{ marginTop: "1rem" }}>
         <p className="muted">Showing {filtered.length} / {items.length}</p>
