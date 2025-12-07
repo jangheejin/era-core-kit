@@ -580,7 +580,8 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "sanborn-appgeo",
     title: "Geospatial modernization and federal engagement",
     client: "Sanborn + AppGeo",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting", "Geospatial"],
     heroImageUrl: "/img/case1.webp",
     summaryShort:
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
@@ -595,7 +596,8 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "napsg-foundation",
     title: "Policy-facing storytelling for a technical nonprofit",
     client: "NAPSG Foundation",
-    sector: "Nonprofit",
+    //sector: "Nonprofit",
+    sectors: ["Nonprofit", "Geospatial"],
     heroImageUrl: "/img/case2.webp",
     summaryShort:
       "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
@@ -610,7 +612,8 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "crucis",
     title: "Federal procurement strategy for a growing contractor",
     client: "Crucis",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting"],
     heroImageUrl: "/img/case3.webp",
     summaryShort:
       "Guiding a growing government contractor through the realities of federal procurement and engagement.",
@@ -625,7 +628,7 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "mkr-fabricators",
     title: "Emergency response manufacturing alignment",
     client: "MKR Fabricators",
-    sector: "EmergencyMgmt",
+    sectors: ["EmergencyMgmt", "Manufacturing"],
     heroImageUrl: "/img/temp.svg",
     summaryShort:
       "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
@@ -640,7 +643,7 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "stemheads",
     title: "STEMheads (draft sample)",
     client: "STEMheads",
-    sector: "Education",
+    sectors: ["Education", "Nonprofit"],
     heroImageUrl: "/img/temp2.svg",
     summaryShort:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

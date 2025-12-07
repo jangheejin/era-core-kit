@@ -32,6 +32,8 @@ import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
+import { normalizeTagList } from "@kit/schema";
+
 /* function slugify(raw: string): string {
   return raw
     .trim()
