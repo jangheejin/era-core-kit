@@ -9,6 +9,7 @@ export * from "./seeds";
 export * from "./fixtures";
 export * from "./constants";
 export * from "./routing";
+export * from "./authoring";
 
 /* export type {
   // inferred union types (from schema)

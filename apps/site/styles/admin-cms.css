@@ -263,15 +263,6 @@ the user fills out)
   color: #fff;
 }
 
-.metadata-card {
-  background-color: #1c1c1c;
-  border: 1px solid #333;
-  padding: 1rem;
-  border-radius: 8px;
-  color: #f0f0f0;
-  margin-bottom: 1rem;
-}
-
 .metadata-heading {
   font-size: 1.25rem;
   font-weight: bold;
@@ -721,15 +712,22 @@ pre.error {
   min-width: 160px;
 }
 
-.metadata-card {
-  background-color: #1c1c1c;
-  border: 1px solid #333;
-  padding: 1rem;
-  border-radius: 8px;
-  color: #f0f0f0;
+.card.metadata-card {
   margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.metadata-card {
+/*   background-color: #1c1c1c; */
+/*   border: 1px solid #333; */
+  /* padding: .5rem; */
+  border-radius: 8px;
+/*   color: #f0f0f0; */
+
 }
 
+.metadata-card .metadata-item dd, .metadata-card dt {
+  color: #000;
+}
 .metadata-heading {
   font-size: 1.25rem;
   font-weight: bold;

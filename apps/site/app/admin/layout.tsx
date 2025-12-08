@@ -22,13 +22,22 @@ import "@styles/admin-cms.css"
   );
 }
  */
-export default function AdminLayout({ children }: { children: ReactNode }) {
+/* export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <AdminProviders>
       {children}
     </AdminProviders>
   );
+} */
+
+//CLIENT-SIDE DEMO-ONLY INTEGRATION OF DEMO CMS WITH PUBLIC SITE
+// root layout is wrapped with AdminProviders
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
+
+//-------------------------------------------------------
 
 //import { MockCMSProvider } from "@/cms/mockCmsStore";
 //import { AdminShell } from "@/cms/AdminShell";

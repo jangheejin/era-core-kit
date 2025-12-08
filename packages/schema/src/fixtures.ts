@@ -23,7 +23,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
   const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "FAKE TITLE HERE",
+    title: "FAKETEMPORARYTITLE",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
@@ -320,7 +320,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     links: [],
 
     // If you ONLY want 4 featured cards on home, set this one false.
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
 ] satisfies CaseStudyInput[];

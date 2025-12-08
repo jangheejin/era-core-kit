@@ -23,6 +23,7 @@ import {
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
 } from "@kit/schema";
+import { plainTextToMdxPreservingLineBreaks, deriveSummaryFromWriteUp } from "@kit/schema";
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
 import { useRouter } from "next/navigation";
@@ -81,68 +82,120 @@ export default function NewCaseStudyPage() {
   }
   const [year, setYear] = useState<string>("2025");
   const [tags, setTags] = useState("");
-  const [summaryShort, setSummaryShort] = useState("");
+//  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this 
 //  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
-  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");
+//  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");//no longer let users see this
   const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
     useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
+  
+  // form state
+  const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
+  const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
 
-  const candidateInput: CaseStudyInput = useMemo(
-    () => ({
+  const bodyMDX = useMemo(() => {
+    // IMPORTANT: if you're using the toolbar (markdown tokens),
+    // prefer `return writeUp;` unless your helper is known-safe for markdown.
+    return writeUp;
+    // or: return plainTextToMdxPreservingLineBreaks(writeUp);
+  }, [writeUp]);
+
+  //const preview = brief.trim() || undefined;
+  const preview = useMemo(() => brief.trim() || undefined, [brief]);
+  //const summaryShort = preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
+  const computedSummaryShort = useMemo(() => {
+    return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
+  }, [preview, bodyMDX]);
+
+  const candidateInput: CaseStudyInput = useMemo(() => {
+    //const bodyMDX = plainTextToMdxPreservingLineBreaks(writeUp);
+    //const bodyMDX = writeUp; // writeUp is now “markdown with a toolbar”
+  
+    return {
       id,
-//      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
       title: title.trim(),
-      slug: slugify(slug || title),
+      slug: slugify(slug || client || title),
       client: client.trim() || undefined,
       sectors,
       year: year ? Number(year) : undefined,
-
-      tags: tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
-        //.slice(0, 10),//limits the number of tags
-
-      summaryShort: summaryShort.trim(),
-      brief: undefined,
-
-      //heroImageUrl: heroImageUrl.trim(),
+      tags: tags.split(",").map(t => t.trim()).filter(Boolean),
+  
+      brief: preview,
+      summaryShort: computedSummaryShort,
+      bodyMDX,
+  
       heroImageUrl: heroImageUrl.trim() || undefined,
-
+  
       mechanisms: [],
       jurisdictions: [],
       outcomes: [],
       evidence: [],
-      bodyMDX: bodyMDX || "",
       sections: [],
       attachments: [],
       links: [],
+  
+      status,
+      visibility,
+      isFeaturedHome,
+      isPublic,
+    };
+  }, [id, title, slug, client, sectors, year, tags, brief, writeUp, heroImageUrl, status, visibility, isFeaturedHome, isPublic]);
 
-      status,
-      visibility,
-      isFeaturedHome,
-      isPublic,
-    }),
-    [
-      title,
-      slug,
-      client,
-      sectors,
-      year,
-      tags,
-      summaryShort,
-      heroImageUrl,
-      bodyMDX,
-      status,
-      visibility,
-      isFeaturedHome,
-      isPublic,
-    ],
-  );
+//  const candidateInput: CaseStudyInput = useMemo(
+//    () => ({
+//      id,
+////      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+//      title: title.trim(),
+//      slug: slugify(slug || title),
+//      client: client.trim() || undefined,
+//      sectors,
+//      year: year ? Number(year) : undefined,
+//
+//      tags: tags
+//        .split(",")
+//        .map((t) => t.trim())
+//        .filter(Boolean),
+//        //.slice(0, 10),//limits the number of tags
+//
+//      summaryShort: summaryShort.trim(),
+//      brief: undefined,
+//
+//      //heroImageUrl: heroImageUrl.trim(),
+//      heroImageUrl: heroImageUrl.trim() || undefined,
+//
+//      mechanisms: [],
+//      jurisdictions: [],
+//      outcomes: [],
+//      evidence: [],
+//      bodyMDX: bodyMDX || "",
+//      sections: [],
+//      attachments: [],
+//      links: [],
+//
+//      status,
+//      visibility,
+//      isFeaturedHome,
+//      isPublic,
+//    }),
+//    [
+//      title,
+//      slug,
+//      client,
+//      sectors,
+//      year,
+//      tags,
+//      summaryShort,
+//      heroImageUrl,
+//      bodyMDX,
+//      status,
+//      visibility,
+//      isFeaturedHome,
+//      isPublic,
+//    ],
+//  );
 
   const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
 
