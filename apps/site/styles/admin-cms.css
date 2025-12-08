@@ -962,4 +962,95 @@ pre.error {
   opacity: 0.85;
 }
 
+/*expand/collapse case study cards*/
+.cs-accordion {
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  overflow: hidden;
+}
 
+.cs-accordion__summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.cs-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* affordance: hover + focus */
+.cs-accordion__summary:hover {
+  background: rgba(255,255,255,0.04);
+}
+.cs-accordion__summary:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 2px;
+}
+
+.cs-accordion__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.cs-accordion__title {
+  margin: 0;
+}
+
+.cs-accordion__actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.cs-accordion__cta {
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: .15rem .55rem;
+  font-size: .9rem;
+  opacity: .85;
+  color: var(--brand);
+}
+
+.cs-accordion__cta--open { display: none; }
+.cs-accordion[open] .cs-accordion__cta--closed { display: none; }
+.cs-accordion[open] .cs-accordion__cta--open { display: inline; }
+
+.cs-accordion__toggle {
+  transform: rotate(0deg);
+  transition: transform 160ms ease;
+  opacity: 0.85;
+}
+.cs-accordion[open] .cs-accordion__toggle {
+  transform: rotate(90deg);
+}
+
+.cs-accordion__meta {
+  margin-top: .25rem;
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.cs-accordion__summaryText {
+  margin-top: .5rem;
+  margin-bottom: 0; /* removes the “dead space” under the preview */
+}
+
+.cs-accordion__body {
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding: 1rem;
+}
+
+/* kill the common “first child top margin = awkward gap” problem */
+.cs-accordion__body .case-study-full {
+  margin: 0;
+}
+.cs-accordion__body .case-study-full__section:first-child {
+  margin-top: 0;
+}
+.cs-accordion__body .case-study-full__subsection:first-child {
+  margin-top: 0;
+}
