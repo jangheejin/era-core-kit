@@ -38,6 +38,11 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
         <div className="mb">
           <h1 className="type-h2">Sector: {sector}</h1>
         </div>
+        <div className="mb">
+          <p className="muted" style={{ marginTop: ".25rem" }}>
+            Click a case study preview card to expand the full write-up.
+          </p>
+        </div>
 
         {items.length === 0 ? (
           <p className="muted">No public case studies in this sector yet.</p>
