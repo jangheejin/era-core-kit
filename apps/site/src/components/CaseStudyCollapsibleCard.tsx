@@ -10,8 +10,8 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
 
           <div className="cs-accordion__actions">
             <span className="cs-accordion__cta" aria-hidden="true">
-              <span className="cs-accordion__cta--closed">Expand</span>
-              <span className="cs-accordion__cta--open">Collapse</span>
+              <span className="cs-accordion__cta--closed"><strong>Expand</strong></span>
+              <span className="cs-accordion__cta--open"><strong>Collapse</strong></span>
             </span>
             <span className="cs-accordion__toggle" aria-hidden="true">
               ▸
