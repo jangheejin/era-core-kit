@@ -40,9 +40,9 @@ export function Header() {
           <a href="/our-work" className="site-header__link">
             Our Work
           </a>
-          <a href="/#mission" className="site-header__link">
+{/*           <a href="/#mission" className="site-header__link">
             Our Mission
-          </a>
+          </a> */}
           <a href="/our-team" className="site-header__link">
             Our Team
           </a>
