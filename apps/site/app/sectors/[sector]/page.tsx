@@ -7,6 +7,11 @@ import { getCaseStudies } from "@/lib/caseStudies"; //TO DO: UPDATE LATER
 import { CaseStudyCard } from "@/components/CaseStudyCard";
 import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
 import { SECTOR_ROUTE_SLUG } from "@kit/schema";
+import { ContextBanner } from "@/admin/components/ContextBanner";
+import Link from "next/link";
+
+import "@styles/admin-cms-buttons.css";
+import "@styles/admin-cms.css";
 
 export async function generateStaticParams() {
   // prebuild all sector archive pages
@@ -23,19 +28,23 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
   //const items = all.filter((cs) => cs.isPublic && cs.sectors?.includes(sector));
 
   return (
-    <main className="c-page">
-      <h1 className="type-h2">Sector: {sector}</h1>
+    <main className="c-admin">
+      <ContextBanner view="preview">You are now viewing all of the case studies in the <strong>{sector}</strong> category
+      </ContextBanner>
+      <div className="card card-new mt1">
+        <h1 className="type-h2">Sector: {sector}</h1>
 
-      {items.length === 0 ? (
-        <p className="muted">No public case studies in this sector yet.</p>
-      ) : (
-        
-        <div className="case-grid">
-          {items.map((cs) => (
-            <CaseStudyCard key={cs.id} cs={cs} />
-          ))}
-        </div>
-      )}
+        {items.length === 0 ? (
+          <p className="muted">No public case studies in this sector yet.</p>
+        ) : (
+          
+          <div className="case-grid">
+            {items.map((cs) => (
+              <CaseStudyCard key={cs.id} cs={cs} />
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }
