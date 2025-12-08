@@ -1,4 +1,7 @@
 //apps/site/src/components/CaseStudyFullRender.tsx
+// “full case study renderer” component 
+// (so that instead of having case study cards on the filter-by-tag or filter-by-category 
+// pages, you can have full case studies)
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { CaseStudyType } from "@kit/schema";

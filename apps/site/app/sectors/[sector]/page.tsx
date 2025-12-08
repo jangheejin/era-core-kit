@@ -9,6 +9,7 @@ import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
 import { SECTOR_ROUTE_SLUG } from "@kit/schema";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 import Link from "next/link";
+import { CaseStudyFull } from "@/components/CaseStudyFullRender";
 
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";
@@ -40,7 +41,7 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
           
           <div className="case-grid">
             {items.map((cs) => (
-              <CaseStudyCard key={cs.id} cs={cs} />
+              <CaseStudyFull key={cs.id} cs={cs} />
             ))}
           </div>
         )}

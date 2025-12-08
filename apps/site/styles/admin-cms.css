@@ -921,3 +921,45 @@ pre.error {
   opacity: 1;
 }
 
+.case-study-full__meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.case-study-full__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.case-study-full__hero {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 0.75rem 0;
+  display: block;
+}
+
+.case-study-full__section {
+  margin-top: 1.25rem;
+}
+
+.case-study-full__subsection {
+  margin-top: 1rem;
+}
+
+.chip {
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.chip--soft {
+  opacity: 0.85;
+}
+
+
