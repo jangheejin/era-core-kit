@@ -15,7 +15,7 @@ const mdComponents: Components = {
   // To do: potentially refine this
   h1: (props) => <h2 className="type-h3" {...props} />,
   h2: (props) => <h3 className="type-h3" {...props} />, // makes "## Summary" look like type-h3
-  h3: (props) => <h3 className="type-h4" {...props} />,
+  h3: (props) => <h4 className="type-h4" {...props} />,
 };
 
 export function Markdown({ children }: { children: string }) {

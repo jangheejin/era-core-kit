@@ -23,7 +23,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
   const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "Temporary Title: Sanborn + AppGeo",
+    title: "FAKE TITLE HERE",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
@@ -62,7 +62,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     evidence: [],
 
     bodyMDX:
-      "## Summary\n\nERA Government Affairs partnered with Sanborn and AppGeo to strengthen their federal profile, align geospatial capabilities with agency program needs, and position them for long-term contract and grant opportunities across emergency management, transportation, and homeland security.\n",
+      "## Summary\n\nERA Government Affairs partnered with Sanborn and AppGeo to strengthen their federal profile, align geospatial capabilities with agency program needs, and position them for long-term contract and grant opportunities across emergency management, transportation, and homeland security.\n Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n",
 
     sections: [
       {
@@ -88,7 +88,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-napsg-foundation",
-    title: "Temporary Title: NAPSG Foundation",
+    title: "(Temporary Title) NAPSG Foundation",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
 //    sector: "Nonprofit",
