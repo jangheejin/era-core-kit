@@ -13,6 +13,15 @@ export function CaseStudyFull({
   cs: CaseStudyType;
   hideHeader?: boolean;
 }) {
+  const sections = (cs.sections ?? []).filter((s) => {
+    if (cs.outcomes?.length) {
+      const title = (s.title ?? "").trim().toLowerCase();
+      const id = (s.id ?? "").trim().toLowerCase();
+      if (title === "outcomes" || id === "impact" || id === "outcomes") return false;
+    }
+    return true;
+  });
+
   return (
     <article className="case-study-full">
       {!hideHeader && (
@@ -63,7 +72,7 @@ export function CaseStudyFull({
 
       {!!cs.outcomes?.length && (
         <section className="case-study-full__section">
-          <h3 className="type-h4">Outcomes</h3>
+          <h3 className="type-h3">Outcomes</h3>
           <ul>
             {cs.outcomes.map((o, idx) => (
               <li key={(o as any).label ?? idx}>
@@ -77,20 +86,38 @@ export function CaseStudyFull({
 
       {cs.bodyMDX ? (
         <section className="case-study-full__section">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{cs.bodyMDX}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h1: (props) => <h2 className="type-h3" {...props} />,
+              h2: (props) => <h3 className="type-h4" {...props} />,
+              h3: (props) => <h4 className="type-h4" {...props} />,
+            }}
+          >
+            {cs.bodyMDX}
+          </ReactMarkdown>
         </section>
       ) : null}
 
       {!!cs.sections?.length && (
+
         <section className="case-study-full__section">
-          {cs.sections.map((s: any) => (
+          {sections.map((s, idx) => (
+            <div key={s.id ?? s.title ?? idx} className="case-study-full__subsection">
+              {s.title ? <h3 className="type-h3">{s.title}</h3> : null}
+              {s.bodyMDX ? (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{s.bodyMDX}</ReactMarkdown>
+              ) : null}
+            </div>
+          ))}
+{/*           {cs.sections.map((s: any) => (
             <div key={s.id} className="case-study-full__subsection">
               <h3 className="type-h3">{s.title}</h3>
               {s.bodyMDX ? (
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{s.bodyMDX}</ReactMarkdown>
               ) : null}
             </div>
-          ))}
+          ))} */}
         </section>
       )}
 

@@ -28,7 +28,9 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
       </summary>
 
       <div className="cs-accordion__body">
-        <CaseStudyFull cs={cs} hideHeader />
+        <div className="prose">
+          <CaseStudyFull cs={cs} hideHeader />
+        </div>
       </div>
     </details>
   );

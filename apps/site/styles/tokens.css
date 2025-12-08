@@ -73,6 +73,10 @@
   --brand-lightest: #cedfff;
   --ink: #0b0f14;
   --ink-2: #374151;
+  --ink-3: #72839f;
+  --ink-4: #7e8ea7;
+  --ink-5: #a1acbf;
+  --mid-gray: #7d7f7c;
   --bg: #ffffff;
   --bg-2: #f7f7f9;
   --color-accent: var(--brand);

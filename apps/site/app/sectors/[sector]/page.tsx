@@ -36,7 +36,7 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
       </ContextBanner>
       <div className="card card-new mt1">
         <div className="mb">
-          <h1 className="type-h2">Sector: {sector}</h1>
+          <h1 className="type-h1-over type-gray">Sector: {sector}</h1>
         </div>
         <div className="mb">
           <p className="muted" style={{ marginTop: ".25rem" }}>

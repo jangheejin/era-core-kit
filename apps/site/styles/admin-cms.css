@@ -1056,3 +1056,92 @@ pre.error {
 .cs-accordion__body .case-study-full__subsection:first-child {
   margin-top: 0;
 }
+
+/* A predictable typography container for longform content */
+.prose {
+  line-height: 1.55;
+}
+
+/* Headings */
+.prose :where(h1, h2, h3, h4) {
+  margin: 1.25rem 0 0.5rem;
+}
+.prose :where(h1) { margin-top: 0; }
+
+/* Paragraphs + lists */
+.prose :where(p) {
+  margin: 0.75rem 0;
+}
+
+.prose :where(ul, ol) {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose :where(li) {
+  margin: 0.25rem 0;
+}
+
+/* Links */
+.prose :where(a) {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Section separators if you want them */
+.prose :where(hr) {
+  margin: 1.25rem 0;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+
+/* Kill the “mystery top gap” that comes from first-child margins */
+.prose > :first-child {
+  margin-top: 0 !important;
+}
+.prose > :last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Heading scale + spacing is defined here — NOT scattered across components */
+.prose :where(h1, h2, h3, h4) {
+  font-weight: 650;
+  line-height: 1.15;
+  margin: 1.25rem 0 0.5rem;
+}
+
+/* If you're rendering “full content” inside a card accordion,
+   you almost never want an h1 inside the body. Treat it like h2. */
+.prose :where(h1) {
+  font-size: 1.6rem;
+}
+
+.prose :where(h2) {
+  font-size: 1.35rem;
+}
+
+.prose :where(h3) {
+  font-size: 1.15rem;
+}
+
+.prose :where(h4) {
+  font-size: 1.0rem;
+  opacity: 0.92;
+}
+
+/* Reduce chaos from margin collapse / first-child weirdness */
+.prose > :first-child {
+  margin-top: 0 !important;
+}
+.prose > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.type-h3.cs-accordion__title {
+  font-size:1.5rem;
+}
+
+h1 .filter-category-title {
+  font-size:1.6rem;
+  text-transform: uppercase;
+}
