@@ -35,7 +35,9 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
       <ContextBanner view="preview">You are now viewing all of the case studies in the <strong>{sector}</strong> category
       </ContextBanner>
       <div className="card card-new mt1">
-        <h1 className="type-h2">Sector: {sector}</h1>
+        <div className="mb">
+          <h1 className="type-h2">Sector: {sector}</h1>
+        </div>
 
         {items.length === 0 ? (
           <p className="muted">No public case studies in this sector yet.</p>

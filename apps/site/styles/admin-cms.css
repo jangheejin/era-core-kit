@@ -973,6 +973,8 @@ pre.error {
   list-style: none;
   cursor: pointer;
   padding: 1rem;
+  background-color: #ededed;
+  margin-bottom:1rem;
 }
 
 .cs-accordion__summary::-webkit-details-marker {
