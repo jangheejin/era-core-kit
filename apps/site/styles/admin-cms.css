@@ -784,7 +784,10 @@ pre.error {
   margin-top: 0.75rem;
 }
 
-.tag-filter label {font-family:var(--font-heading); text-transform:uppercase;}
+.tag-filter label {
+  font-family:var(--font-heading); 
+  text-transform:uppercase;
+}
 
 .tag-filter__top {
   display: flex;

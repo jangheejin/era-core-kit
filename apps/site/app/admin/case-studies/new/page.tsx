@@ -199,7 +199,7 @@ export default function NewCaseStudyPage() {
             onClick={() => setSlug(slugify(slug || title))}
             title="Generate slug from title"
           >
-            Slugify
+            Turn title into URL slug
           </button>
 
           <button
