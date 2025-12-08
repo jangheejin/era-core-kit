@@ -5,6 +5,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { CaseStudyType } from "@kit/schema";
+import { Markdown } from "./Markdown";
 
 export function CaseStudyFull({
   cs,
@@ -86,17 +87,19 @@ export function CaseStudyFull({
 
       {cs.bodyMDX ? (
         <section className="case-study-full__section">
-          <ReactMarkdown
+{/*           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h1: (props) => <h2 className="type-h3" {...props} />,
               h2: (props) => <h3 className="type-h4" {...props} />,
               h3: (props) => <h4 className="type-h4" {...props} />,
             }}
-          >
+          > */}
+          <Markdown>
             {cs.bodyMDX}
-          </ReactMarkdown>
-        </section>
+          </Markdown>
+{/*           </ReactMarkdown>
+ */}        </section>
       ) : null}
 
       {!!cs.sections?.length && (
