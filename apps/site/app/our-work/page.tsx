@@ -9,7 +9,7 @@ import '@styles/work.css';
 
 import { OurWorkClient, type WorkCase } from "./OurWorkClient";
 import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server";
-import { DemoGate } from "./_demo/DemoGate"
+//import { DemoGate } from "./_demo/DemoGate"
 
 function isDemoOn(v: unknown) {
   if (typeof v === "string") return v === "1";
@@ -43,7 +43,7 @@ export default async function OurWorkPage({
         <OurWorkClient cases={items} basePath="/our-work" demo={false} />
       </div>
 
-      <DemoGate enabled={demo} />
+      {/* <DemoGate enabled={demo} /> */}
     </>
   );
 }

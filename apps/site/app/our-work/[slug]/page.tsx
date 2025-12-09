@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { getPublicCaseStudyBySlug } from "@/features/caseStudies/publicRepo.server";
-import { DemoGate } from "../_demo/DemoGate";
+//import { DemoGate } from "../_demo/DemoGate";
 
 function isDemoOn(v: unknown) {
   if (typeof v === "string") return v === "1";
@@ -52,7 +52,7 @@ export default async function OurWorkDetailPage({
           )}
         </div>
 
-        <DemoGate enabled={demo} slug={params.slug} />
+        {/* <DemoGate enabled={demo} slug={params.slug} /> */}
       </div>
     </main>
   );

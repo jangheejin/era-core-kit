@@ -56,6 +56,20 @@ export type CaseStudySort = z.infer<typeof CaseStudySortSchema>;
 */
 //export const Sector = z.enum([
 export const SECTOR_VALUES = [
+  "PublicSector",
+  "Environment",
+  "NaturalResources",
+  "Energy",
+  "Agriculture",
+  "Transportation",
+  "InfrastructurePublicWorks",
+//  "GeospatialGIS",
+  "Appropriations",
+  "GrantFunding",
+  "StateGovernment",
+  "LocalGovernment",
+  "TribalGovernment",
+  "PrivateSector",
   "GovContracting",
   "Nonprofit",
   "EmergencyMgmt",
