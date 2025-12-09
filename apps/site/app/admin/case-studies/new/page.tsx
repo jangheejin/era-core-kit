@@ -60,6 +60,15 @@ function emptyToUndefined(s: unknown): string | undefined {
   return t ? t : undefined;
 }
 
+function autoSummaryFromText(text: string, max = 180) {
+  const t = text.trim().replace(/\s+/g, " ");
+  if (!t) return "";
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trim() + "…";
+}
+
 export default function NewCaseStudyPage() {
   const router = useRouter();
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
@@ -96,24 +105,26 @@ export default function NewCaseStudyPage() {
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
   const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
 
-  const bodyMDX = useMemo(() => {
-    // IMPORTANT: if you're using the toolbar (markdown tokens),
-    // prefer `return writeUp;` unless your helper is known-safe for markdown.
-    return writeUp;
-    // or: return plainTextToMdxPreservingLineBreaks(writeUp);
-  }, [writeUp]);
+  const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from your toolbar
 
-  //const preview = brief.trim() || undefined;
-  const preview = useMemo(() => brief.trim() || undefined, [brief]);
-  //const summaryShort = preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
-  const computedSummaryShort = useMemo(() => {
+  const preview = useMemo(() => emptyToUndefined(brief), [brief]);
+  //    const preview = useMemo(() => brief.trim() || undefined, [brief]);
+
+  const summaryShortAuto = useMemo(() => {
+    // prefer author-written brief; otherwise derive from the write-up
     return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [preview, bodyMDX]);
 
-  const candidateInput: CaseStudyInput = useMemo(() => {
+  const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
     //const bodyMDX = plainTextToMdxPreservingLineBreaks(writeUp);
     //const bodyMDX = writeUp; // writeUp is now “markdown with a toolbar”
   
+    //const preview = brief.trim() || undefined;
+
+    //const summaryShort = preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
+//    const computedSummaryShort = useMemo(() => {
+//      return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
+//    }, [preview, bodyMDX]);
     return {
       id,
       title: title.trim(),
@@ -123,8 +134,9 @@ export default function NewCaseStudyPage() {
       year: year ? Number(year) : undefined,
       tags: tags.split(",").map(t => t.trim()).filter(Boolean),
   
-      brief: preview,
-      summaryShort: computedSummaryShort,
+      brief: preview,//optional blurb
+      summaryShort: summaryShortAuto, // ALWAYS a string (may be "" if nothing typed)
+      //summaryShort: summaryShort.trim() || undefined,
       bodyMDX,
   
       heroImageUrl: heroImageUrl.trim() || undefined,
@@ -142,7 +154,14 @@ export default function NewCaseStudyPage() {
       isFeaturedHome,
       isPublic,
     };
-  }, [id, title, slug, client, sectors, year, tags, brief, writeUp, heroImageUrl, status, visibility, isFeaturedHome, isPublic]);
+  }, [
+      id, title, slug, client, 
+      sectors, year, tags, 
+      //brief, writeUp, 
+      preview, summaryShortAuto, bodyMDX,
+      heroImageUrl, 
+      status, visibility, isFeaturedHome, isPublic
+    ]);
 
 //  const candidateInput: CaseStudyInput = useMemo(
 //    () => ({
@@ -343,14 +362,21 @@ export default function NewCaseStudyPage() {
           </div>
 
           {/* <div style={{ marginTop: "1rem" }}> */}
-          <div className="form-group">
+{/*           <div className="form-group">
             <label className="form-label">Summary short (required)</label>
             <input
               className="input"
               value={summaryShort}
               onChange={(e) => setSummaryShort(e.target.value)}
             />
-          </div>
+          </div> */}
+
+{/*           OPTION: SHOW THE AUTO-GENERATED summaryShort
+          for now I'm removing it to reduce confusion */}
+{/*           <div className="form-group">
+            <label className="form-label">Summary short (auto)</label>
+            <input className="input" value={summaryShortAuto} readOnly />
+          </div> */}
 
           {/* <div style={{ marginTop: "1rem" }}> */}
           <div className="form-group">
@@ -380,14 +406,19 @@ export default function NewCaseStudyPage() {
             </label>
           </div>
 
-          {/* <div style={{ marginTop: "1rem" }}> */}
           <div className="form-group">
-            <label className="form-label">Body (MDX) — optional</label>
-            <textarea
+            <label className="form-label">Full write-up of the case study</label>
+{/*             <textarea
               className="input"
               style={{ minHeight: 160 }}
               value={bodyMDX}
               onChange={(e) => setBodyMDX(e.target.value)}
+            /> */}
+            <textarea
+              className="input"
+              style={{ minHeight: 160 }}
+              value={writeUp}
+              onChange={(e) => setWriteUp(e.target.value)}
             />
           </div>
         </div>

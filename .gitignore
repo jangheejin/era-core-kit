@@ -38,5 +38,14 @@ yarn-error.log*
 # Ignore runtime caches
 node-compile-cache/
 
+#stop committing compiled output into source folders
 apps/site/**/*.js
 apps/site/**/*.js.map
+apps/site/app/**/*.js
+apps/site/app/**/*.js.map
+apps/site/src/**/*.js
+apps/site/src/**/*.js.map
+apps/site/app/**/*.d.ts
+apps/site/app/**/*.d.ts.map
+apps/site/src/**/*.d.ts
+apps/site/src/**/*.d.ts.map

@@ -24,6 +24,8 @@ import {
 
 import { DEFAULT_HERO_IMAGE_URL } from "./constants";
 
+import { deriveSummaryFromWriteUp } from "./authoring";
+
 // ----------HELPERS-------------
 const PathOrUrl = z.string().refine((s) => {
   if (!s) return false;
@@ -159,13 +161,17 @@ const CaseStudyCanonicalSchema = z.object({
 
 // 2) Authoring/back-compat input: allow sector OR sectors
 const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
-  .omit({ sectors: true })
+  //.omit({ sectors: true })
+  .omit({ sectors: true, summaryShort: true })
   .extend({
     // legacy single-sector input (optional)
     sector: SectorSchema.optional(),
 
     // new multi-sector input (optional at input time)
     sectors: z.array(SectorSchema).optional(),
+
+    //allow authoring without summaryShort
+    summaryShort: z.string().optional(),
   })
   .superRefine((val, ctx) => {
     const hasSectors = Array.isArray(val.sectors) && val.sectors.length > 0;
@@ -178,15 +184,36 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
         message: "Provide either `sectors` (array) or legacy `sector` (single).",
       });
     }
+    //require some content
+    const hasBrief = typeof val.brief === "string" && val.brief.trim() !== "";
+    const hasBody = typeof val.bodyMDX === "string" && val.bodyMDX.trim() !== "";
+    const hasSummary = typeof val.summaryShort === "string" && val.summaryShort.trim() !== "";
+
+    if (!hasBrief && !hasBody && !hasSummary) {
+      ctx.addIssue ({
+        code: z.ZodIssueCode.custom,
+        path: ["brief"],
+        message: "Provide either `brief` (preview blurb) or `bodyMDX` (full write-up)",
+      });
+    }
   })
+
   .transform((val) => {
     const sectors =
-      val.sectors?.length ? val.sectors :
+      (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []);
+/*       val.sectors?.length ? val.sectors :
       val.sector ? [val.sector] :
-      [];
+      []; */
       //(val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
 
     // remove legacy `sector` from the canonical output
+
+    //derive summaryShort (author never needs to fill it in)
+    const summaryShort = 
+      val.summaryShort?.trim() ||
+      val.brief?.trim() ||
+      deriveSummaryFromWriteUp(val.bodyMDX ?? "", 180);
+
     const { sector, ...rest } = val as any;
     return { ...rest, sectors };
   })

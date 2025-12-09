@@ -1143,3 +1143,7 @@ h1 .filter-category-title {
   font-size:1.6rem;
   text-transform: uppercase;
 }
+
+/* CSS to hide SSR when demo overlay mounts */
+html[data-cms-demo="1"] [data-cms-ssr="1"] { display: none !important; }
+html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !important; }
