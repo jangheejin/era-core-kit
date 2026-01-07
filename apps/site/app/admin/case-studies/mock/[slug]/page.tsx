@@ -16,6 +16,7 @@ export default function MockCaseStudyPage() {
   const slug = params?.slug ?? "";
   const { getBySlug } = useAdminCaseStudies();
   const cs = getBySlug(slug);
+  const SECTOR_SEPARATOR = ", "; // or " · "
 
 //  const { items } = useAdminCaseStudies();
 
@@ -215,7 +216,7 @@ export default function MockCaseStudyPage() {
 
           <div>
             <dt>Sectors</dt>
-            <dd>{cs.sectors?.join(", ") || "—"}</dd>
+            <dd>{cs.sectors?.join(SECTOR_SEPARATOR) || "—"}</dd>
           </div>
 
           <div>

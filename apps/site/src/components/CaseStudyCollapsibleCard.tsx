@@ -2,6 +2,7 @@ import type { CaseStudyType } from "@kit/schema";
 import { CaseStudyFull } from "./CaseStudyFullRender";
 
 export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
+  const SECTOR_SEPARATOR = ", "; // or " · "
   return (
     <details className="cs-accordion">
       <summary className="cs-accordion__summary">
@@ -21,7 +22,7 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
 
         <div className="muted cs-accordion__meta">
           {cs.client ? <span>{cs.client}</span> : null}
-          {!!cs.sectors?.length ? <span>• {cs.sectors.join(", ")}</span> : null}
+          {!!cs.sectors?.length ? <span>• {cs.sectors.join(SECTOR_SEPARATOR)}</span> : null}
         </div>
 
         {cs.summaryShort ? <p className="muted cs-accordion__summaryText">{cs.summaryShort}</p> : null}

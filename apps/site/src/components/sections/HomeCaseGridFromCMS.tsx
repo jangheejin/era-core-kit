@@ -9,6 +9,7 @@ import type { CaseGridProps } from "@kit/blocks";
 export function HomeCaseGridFromCMS() {
   //const { caseStudies } = useMockCMS();
   const { caseStudies, addCaseStudy } = useMockCMS();
+  const SECTOR_SEPARATOR = ", "; // or " · "
 
   // If there are zero items, you can fall back to nothing or a gentle message
   //if (!items.length) return null;
@@ -27,7 +28,11 @@ export function HomeCaseGridFromCMS() {
     slug: cs.slug,
     client: cs.client ?? undefined,
     brief: cs.brief ?? undefined,
-    sector: cs.sectors?.[0],
+    //sector: cs.sectors?.join(SECTOR_SEPARATOR) ?? "",
+    sectors: cs.sectors ?? [],
+    sectorsReadable: (cs.sectors ?? []).join(SECTOR_SEPARATOR) ?? "",
+//    sectorsReadable: cs.sectors?.join(SECTOR_SEPARATOR) ?? "",
+    //sector: cs.sectors?.[0] ?? "",//only returns the first or primary sector
   }));
 
   return (

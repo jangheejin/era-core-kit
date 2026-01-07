@@ -50,8 +50,10 @@ export type WorkTextProps = {
 
 export type CaseGridItem = {
   title?: string;
-  sector?: string;
-  client: string;
+//  sector?: string;
+  sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
+  sectorsReadable?: string;//human-readable display label, e.g. "Health · Defense"
+  client?: string;
   summary?: string;
   brief?: string;
   imageUrl: string;

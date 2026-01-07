@@ -18,11 +18,13 @@ function isDemoOn(v: unknown) {
 }
 
 function toWorkCase(cs: any): WorkCase {
+  const SECTOR_SEPARATOR = ", "; // or " · "
   return {
     slug: cs.slug,
-    sector: cs.sectors?.[0] ?? "Case Study",
+    //sector: cs.sectors?.[0] ?? "Case Study",
+    sector: cs.sectors?.join(SECTOR_SEPARATOR) || "",
     client: cs.client?.trim() || cs.title?.trim() || cs.slug,
-    featured: !!cs.isFeaturedHome || true, // pick your rule
+    featured: !!cs.isFeaturedHome || true, // pick a default rule
     summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
     outcomes: cs.outcomes,
     imageUrl: cs.heroImageUrl,

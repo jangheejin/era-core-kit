@@ -7,13 +7,15 @@ import type { CaseGridProps } from "../types";
 //import { ClientAnimations } from './ClientAnimations';
 
 export function CaseGrid({ items, layout }: CaseGridProps) {
+  const SECTOR_SEPARATOR = ", "; // or " · "
   return (
     <section id="case-studies">
       {/* <section className="c-section" id="case-studies"> */}
       {/* <div className="c-container"> */}
       {/* <h2 className="type-h2">Our Work</h2> */}
 
-      <div className="casegrid layout-2x2" id="case-studies">
+      <div className={`casegrid ${layout ?? "layout-2x2"}`} id="case-studies">
+      {/* <div className="casegrid layout-2x2" id="case-studies"> */}
         {items.map((item) => (
           <a
             key={item.slug}
@@ -27,7 +29,7 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
             </div>
 
             <div className="case-card__body">
-              <h3 className="card-h3">{item.sector}</h3>
+              <h3 className="card-h3">{item.sectorsReadable ?? item.sectors?.join(SECTOR_SEPARATOR) ?? ""}</h3>
               <h2 className="card-h2">{item.client}</h2>
               {item.summary && (
                 <p className="type-body case-card__summary">{item.summary}</p>
@@ -40,3 +42,4 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
     </section>
   );
 }
+//note: used to be item.sectors
