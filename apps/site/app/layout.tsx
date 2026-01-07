@@ -28,9 +28,8 @@ import "@styles/tokens.css";
 import "@styles/primitives.css";
 import "@styles/casegrid.css";
 import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */ 
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { type Metadata } from "next";
+import "@styles/primitives.css";
+import "@styles/casegrid.css";
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
 import "@fontsource/inter/300.css";
@@ -41,8 +40,11 @@ import "@fontsource/oswald/300.css";
 import "@fontsource/oswald/400.css";
 import "@fontsource/oswald/500.css";
 import "@fontsource/oswald/600.css";
-import "@styles/primitives.css";
-import "@styles/casegrid.css";
+
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { type Metadata } from "next";
+import { Providers } from "./Providers";
 
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
@@ -98,9 +100,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="font-setup">
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

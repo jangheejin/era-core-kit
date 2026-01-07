@@ -1,20 +1,54 @@
-'use client';
+//apps/site/app/our-work/page.tsx
 
-import { useState, useRef } from 'react';
+// THIS IS NOW A SERVER PAGE that supplies data
+// - data comes from fixtures for now (demo version)
+// - later when the real CMS is finished, data will come from there
+//'use client';
+
 import '@styles/work.css';
 
-type WorkCase = {
-  slug: string;
-  sector: string;
-  client: string;
-  teaser?: string;
-  featured: boolean;
-  summary: string;
-  outcomes?: string[];
-  imageUrl?: string;
-};
+import { OurWorkClient, type WorkCase } from "./OurWorkClient";
+import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server";
+//import { DemoGate } from "./_demo/DemoGate"
 
-const ALL_CASES: WorkCase[] = [
+function isDemoOn(v: unknown) {
+  if (typeof v === "string") return v === "1";
+  if (Array.isArray(v)) return v.includes("1");
+  return false;
+}
+
+function toWorkCase(cs: any): WorkCase {
+  return {
+    slug: cs.slug,
+    sector: cs.sectors?.[0] ?? "Case Study",
+    client: cs.client?.trim() || cs.title?.trim() || cs.slug,
+    featured: !!cs.isFeaturedHome || true, // pick your rule
+    summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
+    outcomes: cs.outcomes,
+    imageUrl: cs.heroImageUrl,
+  };
+}
+
+export default async function OurWorkPage({
+  searchParams,
+}: {
+  searchParams?: { demo?: string | string[] };
+}) {
+  const demo = isDemoOn(searchParams?.demo);
+  const items = (await listPublicCaseStudies()).map(toWorkCase);
+
+  return (
+    <>
+      <div data-cms-ssr="1">
+        <OurWorkClient cases={items} basePath="/our-work" demo={false} />
+      </div>
+
+      {/* <DemoGate enabled={demo} /> */}
+    </>
+  );
+}
+
+/* const ALL_CASES: WorkCase[] = [
   {
     slug: 'sanborn-appgeo',
     sector: 'Geospatial Solutions',
@@ -95,10 +129,10 @@ const ALL_CASES: WorkCase[] = [
     ],
   },
 ];
+ */
+/* const FEATURED_CASES = ALL_CASES.filter((c) => c.featured); */
 
-const FEATURED_CASES = ALL_CASES.filter((c) => c.featured);
-
-export default function OurWorkPage() {
+/* export default function OurWorkPage() {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
     FEATURED_CASES[0]?.slug ?? null,
   );
@@ -139,14 +173,14 @@ export default function OurWorkPage() {
         </section>
       </main>
     );
-  }
+  } */
 
-  return (
+/*   return (
     <main>
       <section className="c-section work-section">
-        <div className="c-container work-layout">
+        <div className="c-container work-layout"> */
           {/* Page header */}
-          <header className="work-header">
+{/*           <header className="work-header">
             <h1 className="type-h1">Our Work</h1>
             <p className="type-body work-header__intro">
               We work with clients across geospatial, emergency management,
@@ -154,15 +188,15 @@ export default function OurWorkPage() {
               technical capabilities into real traction in Washington. Explore a
               sample of featured engagements below.
             </p>
-          </header>
+          </header> */}
 
           {/* Small label above the strip */}
-          <p className="type-body work-grid__label">
+{/*           <p className="type-body work-grid__label">
             Select a case study to view its story below
-          </p>
+          </p> */}
 
           {/**NEW preview strip! shell: nav buttons + scrollable strip */}
-
+{/* 
           <div className="work-grid-shell">
             <button
               type="button"
@@ -214,7 +248,7 @@ export default function OurWorkPage() {
             >
               ›
             </button>
-          </div>
+          </div> */}
 
           {/* OLD Preview strip – horizontal, scrolls when there are many cards */}
 {/*           <section aria-label="Featured case studies" className="work-grid">
@@ -252,15 +286,15 @@ export default function OurWorkPage() {
           </section> */}
 
           {/* Detail panel below grid */}
-          <section
+{/*           <section
             className="work-detail"
             aria-label={`Case study detail: ${selected.client}`}
           >
             <p className="type-small work-detail__label">Currently viewing</p>
 
-            <div className="work-detail__top">
+            <div className="work-detail__top"> */}
               {/* TEXT COLUMN: sector → title → summary → outcomes */}
-              <div className="work-detail__text">
+{/*               <div className="work-detail__text">
                 <h5 className="type-h5 work-detail__sector">
                   {selected.sector}
                 </h5>
@@ -286,10 +320,10 @@ export default function OurWorkPage() {
                     </ul>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* IMAGE COLUMN */}
-              {selected.imageUrl && (
+{/*               {selected.imageUrl && (
                 <div className="work-detail__media">
                   <img
                     src={selected.imageUrl}
@@ -299,9 +333,9 @@ export default function OurWorkPage() {
                 </div>
               )}
             </div>
-
+ */}
             {/* CTA */}
-            <a
+{/*             <a
               href={`/case-studies/${selected.slug}`}
               className="c-button c-button--alt2 work-detail__link"
             >
@@ -313,3 +347,4 @@ export default function OurWorkPage() {
     </main>
   );
 }
+ */}

@@ -313,6 +313,14 @@ a:hover {
   text-transform: uppercase;
 }
 
+.type-h1-over {
+    font-size:1.7rem;
+    text-transform: uppercase;
+}
+
+.type-gray {
+  color: var(--mid-gray);
+}
 .type-h2 {
   font-size: var(--fs-h2);
   line-height: 1.2;

@@ -3,21 +3,25 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "watch": "tsc -b -w",
+    "watch": "tsc -b tsconfig.build.json -w",
     "dev:all": "concurrently -n BUILD,SITE -c yellow,cyan \"pnpm run watch\" \"pnpm --filter site dev\"",
     "dev:stop": "taskkill /F /IM node.exe /T",
+
     "fix": "pnpm run dev:stop && pnpm run deepclean && pnpm install && pnpm run dev:all",
     "fix2": "pnpm run deepclean && pnpm install && pnpm run dev:all",
-    "build": "pnpm -w run build:all",
-    "build:all": "tsc -b",
+
+    "build:all": "tsc -b tsconfig.build.json",
+    "build": "pnpm -w run build:all && pnpm --filter site build",
+    
     "build:check": "next build && echo 'Passed dry build!'",
+
     "build:preview": "vercel build && vercel deploy --prebuilt",
     "dev": "pnpm --filter site dev",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "format": "prettier --write .",
-    "postinstall": "pnpm build",
+
     "clean:build": "rimraf --glob \"packages/**/dist\" \"packages/**/*.tsbuildinfo\"",
     "build:site": "pnpm --filter @kit/adapters-sanity... --filter @kit/blocks... --filter @kit/schema... --filter @kit/search... --filter site... run build",
     "clean": "pnpm exec rimraf packages/*/dist apps/*/dist packages/*/*.tsbuildinfo",
@@ -45,12 +49,17 @@
     }
   },
   "engines": {
-    "node": ">=20.x"
+    "node": "20.x"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@fontsource/oswald": "^5.2.8",
+    "clsx": "^2.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
-  }
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }

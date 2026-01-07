@@ -15,7 +15,11 @@
       "@kit/adapters/*": ["packages/adapters/*/src"],
       //      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
       "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
-      "@/*": ["apps/site/src/*"]
+      "@kit/search": ["packages/search/src"],
+      "@/*": ["apps/site/src/*"],
+      "@app/*": ["apps/site/app/*"],
+      "@app-components/*": ["apps/site/src/components/*"],
+      "@admin-components/*": ["apps/site/app/admin/components/*"],
     },
     "target": "ES2020",
     "module": "ESNext",

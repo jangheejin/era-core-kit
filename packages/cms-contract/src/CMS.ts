@@ -1,5 +1,6 @@
 // packages/cms-contract/src/CMS.ts
-import type { CaseStudy, FilterAST, Person } from "@kit/schema";
+//import type { CaseStudy, FilterAST, Person } from "@kit/schema";
+import type { CaseStudyType, FilterAST, Person } from "@kit/schema";
 
 // TEMP DEBUG:
 import { CASE_STUDIES_FIXTURE } from "@kit/schema";
@@ -12,13 +13,13 @@ export interface CMS {
     limit?: number;
     cursor?: string;
     sort?: "newest" | "alpha";
-  }): Promise<{ items: CaseStudy[]; nextCursor?: string }>;
+  }): Promise<{ items: CaseStudyType[]; nextCursor?: string }>;
 
-  getCaseStudyBySlug(slug: string): Promise<CaseStudy | null>;
+  getCaseStudyBySlug(slug: string): Promise<CaseStudyType | null>;
 
   getPeople(): Promise<Person[]>;
 
   getPersonBySlug?(slug: string): Promise<Person | null>;
 
-  getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudy[]>;
+  getHomeFeaturedCaseStudies(limit: number): Promise<CaseStudyType[]>;
 }

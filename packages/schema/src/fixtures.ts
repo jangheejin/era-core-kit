@@ -1,18 +1,33 @@
 // packages/schema/src/fixtures.ts
-import type { CaseStudy } from "./index";
-//normalize seeds (shorter-form case studies meant for landing cards, etc) into full CaseStudy entries at import time
-import { CaseStudySeedSchema, type CaseStudySeed } from "./seeds";
 
-/**
- * Full, richly-populated fixtures 
- * To be used later */
-export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
+// The mock case study entries created to populate the mock database
+
+/* import type { CaseStudy } from "./index"; */
+//normalize seeds (shorter-form case studies meant for landing cards, etc) into full CaseStudy entries at import time
+import {
+  CaseStudy as CaseStudySchema,
+  type CaseStudyType,
+  type CaseStudyInput,
+} from "./schemas";
+
+import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
+// --------------------
+
+// --------------------
+// Full raw entries (authorable input shape)→ parsed into canonical CaseStudyType (output)
+// These were already written earlier (author as INPUT, parse to OUTPUT)
+// To be used later. Avoids TS complaining about defaulted fields like status/visibility/etc.
+// --------------------
+
+//export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
+  const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "Geospatial modernization and federal engagement",
+    title: "FAKETEMPORARYTITLE",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting", "Geospatial", "EmergencyMgmt"],
     year: 2024,
 
     mechanisms: [],
@@ -47,7 +62,7 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
     evidence: [],
 
     bodyMDX:
-      "## Summary\n\nERA Government Affairs partnered with Sanborn and AppGeo to strengthen their federal profile, align geospatial capabilities with agency program needs, and position them for long-term contract and grant opportunities across emergency management, transportation, and homeland security.\n",
+      "## Summary\n\nERA Government Affairs partnered with Sanborn and AppGeo to strengthen their federal profile, align geospatial capabilities with agency program needs, and position them for long-term contract and grant opportunities across emergency management, transportation, and homeland security.\n Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n",
 
     sections: [
       {
@@ -73,10 +88,11 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
 
   {
     id: "cs-napsg-foundation",
-    title: "Policy-facing storytelling for a technical nonprofit",
+    title: "(Temporary Title) NAPSG Foundation",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
-    sector: "Nonprofit",
+//    sector: "Nonprofit",
+    sectors: ["Nonprofit", "GovContracting", "Geospatial"],
     year: 2024,
 
     mechanisms: [],
@@ -137,10 +153,11 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
 
   {
     id: "cs-crucis",
-    title: "Federal procurement strategy for a growing contractor",
+    title: "Temporary Title: Crucis",
     slug: "crucis",
     client: "Crucis",
-    sector: "GovContracting",
+//    sector: "GovContracting",
+    sectors: ["GovContracting", "Industry", "Manufacturing"],
     year: 2024,
 
     mechanisms: [],
@@ -201,10 +218,11 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
 
   {
     id: "cs-mkr-fabricators",
-    title: "Emergency response manufacturing alignment",
+    title: "Temporary Title: MKR Fabricators",
     slug: "mkr-fabricators",
     client: "MKR Fabricators",
-    sector: "EmergencyMgmt",
+    //sector: "EmergencyMgmt",
+    sectors: ["EmergencyMgmt", "Manufacturing", "Industry"],
     year: 2024,
 
     mechanisms: [],
@@ -268,7 +286,8 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
     title: "STEMheads (draft sample)",
     slug: "stemheads",
     client: "STEMheads",
-    sector: "Education",
+//    sector: "Education",
+    sectors: ["Education", "Nonprofit"],
     year: 2024,
 
     mechanisms: [],
@@ -301,11 +320,15 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
     links: [],
 
     // If you ONLY want 4 featured cards on home, set this one false.
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
-];
+] satisfies CaseStudyInput[];
+//];
 
+/** Parsed canonical “full” fixtures (full schema output, defaults filled). */
+export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
+  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) => CaseStudySchema.parse(x));
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {
@@ -448,14 +471,18 @@ function seedToCaseStudy(seed: CaseStudySeed): CaseStudy {
 
 
 /* INFLATE SEEDS (very bare bones case studies) TO FULL CASESTUDIES */ 
-
-function normalize(seed: CaseStudySeed): CaseStudy {
-  const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
-  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
-
+/* 
+function normalize(seedInput: CaseStudySeed): CaseStudy {
+  const seed = CaseStudySeedSchema.parse(seedInput);
+  const summaryShort = seed.summaryShort ?? seed.teaser;
+  const heroImageUrl = seed.heroImageUrl ?? seed.imageUrl ?? ""; */
+/*   const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
+  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim(); */
+/* 
   return {
     id: `cs-${seed.slug}`,
-    title: seed.title ?? (seed.client ? seed.client : seed.slug),
+    title: seed.title ?? seed.client ?? seed.slug,
+//    title: seed.title ?? (seed.client ? seed.client : seed.slug),
     slug: seed.slug,
     client: seed.client,
     sector: seed.sector,
@@ -484,14 +511,80 @@ function normalize(seed: CaseStudySeed): CaseStudy {
     isPublic: seed.isPublic ?? true,
   };
 }
+ */
+//-------------------------
+/**
+ * Normalize a seed (minimal authoring) into a full CaseStudy object.
+ * Returns the *parsed output* (defaults filled, status/visibility present).
+ */
+function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
+  const seed = CaseStudySeedSchema.parse(seedInput);
 
+  const sectors =
+  Array.isArray((seed as any).sectors) && (seed as any).sectors.length
+    ? (seed as any).sectors
+    : (seed as any).sector
+      ? [(seed as any).sector]
+      : [];
 
-const SEEDS: CaseStudySeed[] = [
+  const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
+  const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
+
+  // These should never trigger because seeds schema superRefine enforces them,
+  // but this makes TS and runtime robust.
+  if (!summaryShort) throw new Error(`Seed ${seed.slug} missing summaryShort/teaser`);
+  if (!heroImageUrl) throw new Error(`Seed ${seed.slug} missing heroImageUrl/imageUrl`);
+
+  const candidate: CaseStudyInput = {
+    id: `cs-${seed.slug}`,
+    title: seed.title ?? seed.client ?? seed.slug,
+    slug: seed.slug,
+    client: seed.client,
+//    sectors: seed.sectors,
+    sectors,
+
+    year: seed.year,
+    tags: seed.tags ?? [],
+    summaryShort,
+    brief: seed.brief,
+    heroImageUrl,
+
+    mechanisms: [],
+    jurisdictions: [],
+    outcomes: [],
+    evidence: [],
+
+    bodyMDX: "",
+    sections: [],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: seed.isFeaturedHome ?? seed.featured ?? false,
+    isPublic: seed.isPublic ?? false,
+
+    // status/visibility intentionally omitted: defaults apply at parse-time
+  };
+//  if (candidate.tags?.includes("seed")) {
+    const tagsArr = Array.isArray(candidate.tags) ? candidate.tags : [];
+    if (tagsArr.indexOf("seed") !== -1) {
+    console.error("❌ STILL FINDING A 'seed' TAG: ", candidate);
+    throw new Error("Seed tag found where it should not exist");
+    //process.exit(1);
+  }
+
+  return CaseStudySchema.parse(candidate);
+}
+
+  
+//const SEEDS: CaseStudySeed[] = [
+const SEEDS: CaseStudySeedInput[] = [
   {
     slug: "sanborn-appgeo",
     title: "Geospatial modernization and federal engagement",
     client: "Sanborn + AppGeo",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting", "Geospatial"],
     heroImageUrl: "/img/case1.webp",
     summaryShort:
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
@@ -506,7 +599,8 @@ const SEEDS: CaseStudySeed[] = [
     slug: "napsg-foundation",
     title: "Policy-facing storytelling for a technical nonprofit",
     client: "NAPSG Foundation",
-    sector: "Nonprofit",
+    //sector: "Nonprofit",
+    sectors: ["Nonprofit", "Geospatial"],
     heroImageUrl: "/img/case2.webp",
     summaryShort:
       "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
@@ -521,7 +615,8 @@ const SEEDS: CaseStudySeed[] = [
     slug: "crucis",
     title: "Federal procurement strategy for a growing contractor",
     client: "Crucis",
-    sector: "GovContracting",
+    //sector: "GovContracting",
+    sectors: ["GovContracting"],
     heroImageUrl: "/img/case3.webp",
     summaryShort:
       "Guiding a growing government contractor through the realities of federal procurement and engagement.",
@@ -536,7 +631,7 @@ const SEEDS: CaseStudySeed[] = [
     slug: "mkr-fabricators",
     title: "Emergency response manufacturing alignment",
     client: "MKR Fabricators",
-    sector: "EmergencyMgmt",
+    sectors: ["EmergencyMgmt", "Manufacturing"],
     heroImageUrl: "/img/temp.svg",
     summaryShort:
       "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
@@ -551,7 +646,7 @@ const SEEDS: CaseStudySeed[] = [
     slug: "stemheads",
     title: "STEMheads (draft sample)",
     client: "STEMheads",
-    sector: "Education",
+    sectors: ["Education", "Nonprofit"],
     heroImageUrl: "/img/temp2.svg",
     summaryShort:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -565,9 +660,10 @@ const SEEDS: CaseStudySeed[] = [
 ];
 
 // Validate + inflate seeds into full CaseStudy entries
-const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
+/* const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
   normalize(CaseStudySeedSchema.parse(s)),
-);
+); */
+const FULL_FROM_SEEDS: CaseStudyType[] = SEEDS.map((s) => normalize(s));
 
 /**
  * Canonical full set with deterministic dedupe-by-slug:
@@ -576,11 +672,11 @@ const FULL_FROM_SEEDS: CaseStudy[] = SEEDS.map((s) =>
  * - preserve the manual FULL ordering, then append any seed-only cases
  */
 
-const bySlug = new Map<string, CaseStudy>();
+const bySlug = new Map<string, CaseStudyType>();
 for (const cs of FULL_FROM_SEEDS) bySlug.set(cs.slug, cs);
 for (const cs of CASE_STUDIES_FIXTURE_FULL) bySlug.set(cs.slug, cs);
 
-const orderedFull: CaseStudy[] = [];
+const orderedFull: CaseStudyType[] = [];
 const seen = new Set<string>();
 
 for (const cs of CASE_STUDIES_FIXTURE_FULL) {
@@ -599,9 +695,11 @@ for (const cs of FULL_FROM_SEEDS) {
  * This is the fixture that the app should use "for now" during demo phase:
  * it intentionally strips detail while keeping the *schema shape* intact.
  */
-export const CASE_STUDIES_FIXTURE: CaseStudy[] = orderedFull.map((cs) => ({
+export const CASE_STUDIES_FIXTURE: CaseStudyType[] = orderedFull;
+
+//lightweight “cards” version for the homepage later
+export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map((cs) => ({
   ...cs,
-  // "less info" for now:
   brief: undefined,
   outcomes: [],
   bodyMDX: "",
@@ -610,17 +708,3 @@ export const CASE_STUDIES_FIXTURE: CaseStudy[] = orderedFull.map((cs) => ({
   attachments: [],
   links: [],
 }));
-
-/* export const CASE_STUDIES_FIXTURE: CaseStudy[] =
-  CASE_STUDIES_FIXTURE_FULL.map((cs) => ({
-    ...cs,
-    // "less info" for now:
-    brief: undefined,
-    outcomes: [],     // or keep outcomes if you want
-    bodyMDX: "",
-    sections: [],
-    evidence: [],
-    attachments: [],
-    links: [],
-  }));
- */

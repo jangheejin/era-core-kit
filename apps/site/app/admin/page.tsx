@@ -4,24 +4,96 @@
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CMSLogin, CMSDashboard } from "@kit/blocks";
-import { useMockCMS } from "./mockCMS";
+//import { useMockCMS } from "./mockCMS";
+import { useAdminCaseStudies } from "./AdminCaseStudyStore";
 
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 
+const LOGIN_KEY = "era_admin_logged_in_v1";
+
 export default function AdminPage() {
+  console.log("AdminPage mounted");
+//  const { items, addCaseStudy } = useAdminCaseStudies();
+  const { items } = useAdminCaseStudies();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    try {
+      setIsLoggedIn(window.localStorage.getItem(LOGIN_KEY) === "1");
+    } catch {}
+  }, []);
+
+  function login() {
+    setIsLoggedIn(true);
+    try {
+      window.localStorage.setItem(LOGIN_KEY, "1");
+    } catch {}
+  }
+
+  function logout() {
+    setIsLoggedIn(false);
+    try {
+      window.localStorage.setItem(LOGIN_KEY, "0");
+    } catch {}
+  }
+
+  return (
+    <main className="c-admin">
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h1>Demo CMS Dashboard</h1>
+        <div className="row">
+          <span className="btnPrimary"> 
+            <Link href="/">Public site</Link>
+          </span>
+          {isLoggedIn ? (
+            <button className="btn" type="button" onClick={logout}>
+              Log out
+            </button>
+          ) : (
+            <button className="btnPrimary" type="button" onClick={login}>
+              Demo login
+            </button>
+          )}
+        </div>
+      </div>
+
+      <p className="muted">
+        This is a temporary demo CMS so you can click around and see how content editing might feel.<br/><br/>
+        You can create and edit case studies (and preview them, both individually and as if they're part of a database), but changes are stored only in your browser. Nothing persists to a server backend yet.<br/><br/>
+        This is for preview purposes only. Your edits are saved in your browser and will stay there as long as you don't clear your cache/use incognito mode.<br/><br/> 
+        The demo case study database currently contains <strong>{items.length}</strong> total case studies, 5 of which are mock entries created to populate the database with something. After creating a fake case study of your own, upon viewing the database, you will see your creations along with the existing mock entries.<br/>
+      </p>
+
+      {isLoggedIn ? (
+        <div className="card" style={{ marginTop: "1rem" }}>
+          <h2>Actions</h2>
+          <div className="row" style={{ marginTop: ".75rem" }}>
+            <Link href="/admin/case-studies/new">Create new case study</Link>
+            <Link href="/admin/case-studies/list">Browse case studies</Link>
+          </div>
+        </div>
+      ) : (
+        <div className="card" style={{ marginTop: "1rem" }}>
+          <h2>Locked</h2>
+          <p className="muted">Click “Demo login” to access editor routes.</p>
+        </div>
+      )}
+    </main>
+  );
+}
+
+/* 
   return (
     <main className="c-page c-page-admin">
       <div className="c-container c-section c-stack">
-        {/* HEADER */}
+
         <header className="c-stack">
           <div className="c-stack c-stack--row c-stack--between c-stack--center">
             <h1 className="type-h1">ERA CMS admin demo</h1>
-            {/*<p className="type-body-large">ERA CMS Admin Demo</p>*/}
+
           </div>
           <div className="richtext">
             <p className="type-body type-muted">
@@ -47,24 +119,23 @@ export default function AdminPage() {
           <hr />
         </header>
 
-        {/* NOT LOGGED IN ---------------------------------------------------- */}
         {!isLoggedIn && (
           <section className="c-stack">
             <p className="type-body-semibold">Step 1 — Enter the CMS demo</p>
+            
             <p className="type-body type-muted">
               This is a fake login. Clicking the button below just switches the
               view into the admin demo — it doesn&apos;t touch any real data or
               accounts.
             </p>
 
-            {/* CMSLogin: Fake login button from the shared blocks package */}
             <CMSLogin onLogin={() => setIsLoggedIn(true)} />
 
             <p className="type-body">
               <hr />
               <br />
-              Or, if you only want to see the detailed case study editor, you
-              can skip straight to it: <br />
+              Or jump straight to the detailed case study editor: 
+              <br />
               <br />
               <Link href="/admin/case-studies/new" className="c-button">
                 Open detailed case study builder
@@ -77,45 +148,19 @@ export default function AdminPage() {
           </section>
         )}
 
-        {/* LOGGED IN -------------------------------------------------------- */}
         {isLoggedIn && (
           <section className="c-stack">
-            {/* Top row: title + “log out” */}
             <div className="c-stack c-stack--row c-stack--between c-stack--center">
-              {/*<h2 className="type-h3">Content dashboard (mock)</h2>*/}
             </div>
 
-            {/* QUICK INLINE EDITOR */}
             <section className="c-stack">
-              {/*              <h3 className="type-h4">Quick add (inline)</h3>
-              <p className="type-body type-muted">
-                Lightweight inline editor — type a title, slug, and body, then save to see how
-                “create → preview” feels without touching the full CMS.
-              </p>*/}
 
-              <CMSDashboard />
+              <CMSDashboard items={items} onCreate={addCaseStudy} />
             </section>
-
-            {/* LINKS TO OTHER FLOWS */}
-            {/**             <section className="c-stack">
-              <h3 className="type-h3">Explore the mock CMS flows</h3>
-              <p className="type-body type-muted">
-                Use these links to jump into the more structured views that mirror a real CMS.
-              </p>
-
-              <div className="c-stack c-stack--row c-stack--wrap c-stack--gap">
-                <Link href="/admin/case-studies/list" className="c-button">
-                  View mock case study database
-                </Link>
-
-                <Link href="/admin/case-studies/new" className="c-button">
-                  Open detailed case study builder
-                </Link>
-              </div>
-            </section>*/}
           </section>
         )}
       </div>
     </main>
   );
 }
+ */

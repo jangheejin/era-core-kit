@@ -1,144 +1,106 @@
 // packages/blocks/src/cms/CMSDashboard.tsx
 "use client";
 
-import Link from "next/link";
+
 import { useState } from "react";
-import type { CaseStudy } from "@kit/schema";
+import { CaseStudy as CaseStudySchema, type CaseStudyInput, type CaseStudyType } from "@kit/schema";
 
-export interface CMSDashboardProps {
-  onCreate?: (cs: CaseStudy) => void;
-}
+export type CMSDashboardProps = {
+  items?: CaseStudyType[];
+  onCreate?: (cs: CaseStudyType) => void;
+};
 
-/*export function CMSDashboard() {
-  return (
-    <section className="c-stack">
-      <h2 className="type-h2">CMS dashboard (mock)</h2>
-      <p className="type-body type-muted">
-        This is a demo admin view. Users can create a new case study using the
-        full schema-aware builder, or browse the current mock library.
-      </p>
-      <div className="buttonRow">
-        <div className="c-stack c-stack--row c-stack--gap">
-          <Link href="/admin/case-studies/new" className="buttonLink-2">
-            Create new case study (detailed)
-          </Link>
-        </div>
-        <div className="c-stack c-stack--row c-stack--gap">
-          <Link href="/admin/case-studies/list" className="buttonLink-2">
-            View case study list
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-*/
-export function CMSDashboard({ onCreate }: CMSDashboardProps) {
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
+  const [localItems, setLocalItems] = useState<CaseStudyType[]>([]);
+  const displayItems = items ?? localItems;
+
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
-  const [content, setContent] = useState("");
+  const [body, setBody] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  function addCaseStudy() {
-    const newCaseStudy: CaseStudy = {
-      // User-provided fields:
-      title,
-      slug,
-      bodyMDX: content,
+  function add() {
+    setError(null);
 
-      // REQUIRED fields from the schema, given placeholder data:
-      id: String(Date.now()),
-      sector: "GovContracting",
-      tags: ["mock", "admin-entry"],
-      summaryShort: `Mock summary for ${title || "Untitled case study"}`,
-      heroImageUrl: "https://placehold.co/1200x600",
+    const input: CaseStudyInput = {
+      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+      title: title.trim(),
+      slug: slug.trim(),
+      client: undefined,
+      //sector: "GovContracting",
+      sectors: ["GovContracting"],
+      year: undefined,
+
+      tags: ["mock"],
+      summaryShort: `Mock summary for ${title.trim() || "Untitled"}`,
+      brief: undefined,
+      heroImageUrl: "/img/case1.webp",
 
       mechanisms: [],
       jurisdictions: [],
       outcomes: [],
       evidence: [],
+
+      bodyMDX: body,
       sections: [],
+
       attachments: [],
       links: [],
 
       isFeaturedHome: false,
       isPublic: true,
+      // status/visibility can be omitted if your schema defaults them
     };
 
-    setCaseStudies((cs) => [...cs, newCaseStudy]);
+    const res = CaseStudySchema.safeParse(input);
+    if (!res.success) {
+      const issue = res.error.issues[0];
+      const path = issue?.path?.length ? issue.path.join(".") : "(root)";
+      const msg = issue?.message ?? "Validation failed";
+      setError(`${path}): ${msg}`);
+//      setError(`${path}: ${issue.message}`);
+      return;
+    }
 
-    // Also push into the shared mock CMS, if provided
-    if (onCreate) onCreate(newCaseStudy);
+    const out = res.data;
+
+    if (onCreate) {
+      onCreate(out);
+    } else {
+      setLocalItems((prev) => [out, ...prev.filter((p) => p.slug !== out.slug)]);
+    }
 
     setTitle("");
     setSlug("");
-    setContent("");
+    setBody("");
   }
 
   return (
-    <div className="c-container c-section c-stack">
-      <h2 className="type-h2">CMS Content Editor (Mock)</h2>
+    <section className="c-stack">
+      <h2 className="type-h2">CMS dashboard (mock)</h2>
+
+      {error && <p className="type-body" style={{ color: "var(--red-600)" }}>{error}</p>}
 
       <div className="c-stack">
-        <h3 className="type-h3">Add New Case Study (quick inline)</h3>
-
-        <input
-          className="input"
-          placeholder="Case Study Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          className="input"
-          placeholder="Slug (e.g., my-case-study)"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-        />
-        <textarea
-          className="input"
-          placeholder="Body Content (MDX)"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <button onClick={addCaseStudy} className="button">
-          Save Case Study (mock)
-        </button>
+        <input className="input" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input className="input" placeholder="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
+        <textarea className="input" placeholder="Body (MDX)" value={body} onChange={(e) => setBody(e.target.value)} />
+        <button className="button" onClick={add}>Save (mock)</button>
       </div>
 
       <hr />
 
-      <h3 className="type-h3">
-        Content Preview ({caseStudies.length} mock items in this panel)
-      </h3>
       <div className="c-stack">
-        {caseStudies.map((cs, idx) => (
-          <div key={idx} className="card">
+        {displayItems.map((cs) => (
+          <div key={cs.id} className="card">
             <div className="card-body c-stack">
-              <div className="flex justify-between items-center">
-                <strong className="type-small type-muted">{cs.title}</strong> —{" "}
-                <code className="type-small type-muted">/{cs.slug}</code>
-              </div>
-
-              <p className="type-body type-muted">
-                <strong>Summary:</strong> {cs.summaryShort}
-              </p>
-
-              <div
-                className="pad-2"
-                style={{
-                  border: "1px solid var(--gray-300)",
-                  borderRadius: "4px",
-                }}
-              >
-                <span className="type-small type-muted">bodyMDX:</span>
-                <pre className="whitespace-pre-wrap">
-                  {cs.bodyMDX || "(No MDX Content)"}
-                </pre>
-              </div>
+              <strong>{cs.title}</strong>
+              <code className="type-small">/{cs.slug}</code>
+              <p className="type-body type-muted">{cs.summaryShort}</p>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

@@ -3,10 +3,11 @@ import type { CMS } from "@kit/cms-contract";
 import { z } from "zod"; // Need Zod for z.infer
 import {
   CASE_STUDIES_FIXTURE,
-  type CaseStudy,
+//  type CaseStudy,
   type FilterAST,
   Mechanism,
   type Person,
+  type CaseStudyType as CaseStudy
 } from "@kit/schema";
 
 // Helper function signature (fixes TS7006/TS7031 inside the function)

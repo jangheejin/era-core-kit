@@ -56,7 +56,7 @@
         "../../packages/adapters/sanity/src",
         "../../packages/adapters/sanity/dist"
       ],
-      "@/*": ["src/*"],
+      "@/*": ["src/*", "app/*"],
       "*": ["./*", "../../packages/*"]
       //      "@kit/*": ["../../packages/*"]
     },

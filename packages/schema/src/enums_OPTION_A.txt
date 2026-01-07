@@ -1,0 +1,210 @@
+// packages/schema/src/enums.ts
+import { z } from "zod";
+import { Outcome } from ".";
+/* PURPOSE: Centralized controlled vocabularies (enums) for use across the schema.
+ GOAL: prevent circular dependencies by isolating enums here.
+ 
+ EXPLANATION: “enums” should contain only the fields that are genuinely a finite, controlled vocabulary 
+ (stuff that validation-before-saving + UI filters will depend on)
+*/
+
+/**
+ * Zod's z.enum wants a *mutable* tuple type.
+ * `as const` creates a *readonly* tuple, so we centralize the one coercion here
+ * instead of sprinkling casts everywhere.
+ */
+const zEnum = <T extends readonly [string, ...string[]]>(values: T) =>
+  z.enum(values as unknown as [T[number], ...T[number][]]);
+
+/**
+ * even though Sort is UI state and not stored in the CaseStudy object,
+ * it’s still a finite set you want as runtime values for a dropdown.
+ */
+
+/** 
+1) export const {ENUM_NAME}_SORTS
+    Values array = canonical truth (drives UI + stable strings)
+2) export type {EnumName}Sort = (typeof {ENUM_NAME}_SORTS)[number];
+    Union type = compile-time help
+3) export const {EnumName}SortSchema = z.enum({ENUM_NAME}_SORTS);
+    Zod enum schema = runtime validation at boundaries */
+export const CASE_STUDY_SORTS = [ "Newest", "ClientName", "Sector", "Year", ] as const;//UI uses CASE_STUDY_SORTS
+export type CaseStudySort = (typeof CASE_STUDY_SORTS)[number];//types use CaseStudySort
+//export const CaseStudySortSchema = z.enum(CASE_STUDY_SORTS);//validation uses CaseStudySortSchema
+export const CaseStudySortSchema = zEnum(CASE_STUDY_SORTS);
+
+//export const CaseStudySort = z.enum(["Newest", "ClientName", "Sector", "Year"]);//ensures the dropdown options can only be these values
+//export const CASE_STUDY_SORTS = ["Newest", "ClientName", "Sector", "Year"] as const;
+//export type CaseStudySortValue = (typeof CASE_STUDY_SORTS)[number];
+//export const CaseStudySortSchema = z.enum(CASE_STUDY_SORTS);
+
+/* 
+* Sectors are a controlled taxonomy (filters/navigation/IA). 
+* This list needs to be kept small and controlled. It can easily be expanded later, but 
+*/
+// DEFINE THE ENUM ONCE IN ZOD, then derive both the TS type and the values from it
+export const SectorSchema = z.enum([
+  "Defense",
+  "Health",
+  "FinTech",
+  "Education",
+  "Nonprofit",
+  "GovContracting",
+  "EmergencyMgmt",
+  "Geospatial",
+  "CivicTech",
+  "Infrastructure",
+] as const);
+export type Sector = z.infer<typeof SectorSchema>;
+export const SECTOR_VALUES = SectorSchema.options; // runtime list, always synced
+//export const Sector = z.enum([
+/* export const SECTOR_VALUES = [
+  "Defense",
+  "Health",
+  "FinTech",
+  "Education",
+  "Nonprofit",
+  "GovContracting",
+  "EmergencyMgmt",
+  "Geospatial",
+  "CivicTech",
+  "Infrastructure",
+//]);
+] as const;
+export type Sector = (typeof SECTOR_VALUES)[number];
+export const SectorSchema = z.enum(SECTOR_VALUES); */
+/* export const SectorSchema = z.enum(SECTOR_VALUES);
+export type Sector = z.infer<typeof SectorSchema>;
+export type SectorValue = (typeof SECTOR_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)
+//TypeScript types are compile-time only (they disappear at runtime) */
+
+/**
+ * Mechanism is an explicit controlled list (filter pills, validation)
+ * (filter pills are the little clickable toggles that let you filter by things like Mechanism)
+ */
+export const MechanismSchema = z.enum ([
+  "Appropriation",
+  "Earmark",
+  "Grant",
+  "TaxCredit",
+] as const);
+export type Mechanism = z.infer<typeof MechanismSchema>;
+export const MECHANISM_VALUES = MechanismSchema.options; // runtime list, always synced
+//export const Mechanism = z.enum([
+/* export const MECHANISM_VALUES = [
+  "Appropriation",
+  "Earmark",
+  "Grant",
+  "TaxCredit",
+//]);
+] as const;
+//Zod enums (schemas)
+export type Mechanism = (typeof MECHANISM_VALUES)[number];
+export const MechanismSchema = z.enum(MECHANISM_VALUES); */
+/* export const MechanismSchema = z.enum(MECHANISM_VALUES);
+export type Mechanism = z.infer<typeof MechanismSchema>;
+export type MechanismValue = (typeof MECHANISM_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)
+ */
+/**
+ * Jurisdiction is a finite controlled list. 
+ */
+export const JurisdictionSchema = z.enum([
+  "Federal",
+  "State",
+  "Local",
+] as const);
+export type Jurisdiction = z.infer<typeof JurisdictionSchema>;
+export const JURISDICTION_VALUES = JurisdictionSchema.options;
+//export const Jurisdiction = z.enum(["Federal", "State", "Local"]);
+/* export const JURISDICTION_VALUES = [
+  "Federal", 
+  "State", 
+  "Local",
+] as const;
+//Zod enums (schemas)
+export const JurisdictionSchema = z.enum(JURISDICTION_VALUES);
+export type Jurisdiction = z.infer<typeof JurisdictionSchema>;
+export type JurisdictionValue = (typeof JURISDICTION_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)
+ */
+/**
+ * These are enums already embedded in schema objects
+ * Pulling them out prevents “random string drift” across the repo.
+ */
+export const AttachmentKindSchema = z.enum([//"pdf", "ppt", "doc", "sheet", "zip", "other"]);
+//export const ATTACHMENT_KIND_VALUES = [
+  "pdf",
+  "ppt",
+  "doc",
+  "sheet",
+  "zip",
+  "other",
+] as const);
+export type AttachmentKind = z.infer<typeof AttachmentKindSchema>;
+export const ATTACHMENT_KIND_VALUES = AttachmentKindSchema.options;
+//Zod enums (schemas)
+/* export const AttachmentKindSchema = z.enum(ATTACHMENT_KIND_VALUES);
+export type AttachmentKind = z.infer<typeof AttachmentKindSchema>;
+export type AttachmentKindValue = (typeof ATTACHMENT_KIND_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)export type OutcomeKindValue = (typeof OUTCOME_KIND_VALUES)[number];
+ */
+export const LinkCategorySchema = z.enum([//"client", "impact", "legislation", "press", "other"]);
+//export const LINK_CATEGORY_VALUES = [
+  "client",
+  "impact",
+  "legislation",
+  "press",
+  "other",
+//] as const;
+] as const);
+export type LinkCategory = z.infer<typeof LinkCategorySchema>;
+export const LINK_CATEGORY_VALUES = LinkCategorySchema.options;
+//Zod enums (schemas)
+/* export const LinkCategorySchema = z.enum(LINK_CATEGORY_VALUES);
+export type LinkCategory = z.infer<typeof LinkCategorySchema>;
+export type LinkCategoryValue = (typeof LINK_CATEGORY_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)
+ */
+export const CaseStudyStatusSchema = z.enum([
+//export const CASE_STUDY_STATUS_VALUES = [
+  "Draft",//not ready to show to anyone
+  "InProgress",//being worked on, but can be viewed by internal team
+  "NeedsReview",
+  "Approved",//content is done but waiting for publication
+  "Published",//possible now to be publicly visible (still depends on Visibility flags)
+  "Archived",
+] as const);
+export type CaseStudyStatus = z.infer<typeof CaseStudyStatusSchema>;
+export const CASE_STUDY_STATUS_VALUES = CaseStudyStatusSchema.options;
+/* export const CaseStudyStatusSchema = z.enum(CASE_STUDY_STATUS_VALUES);
+export type CaseStudyStatus = z.infer<typeof CaseStudyStatusSchema>;
+export type CaseStudyStatusValue = (typeof CASE_STUDY_STATUS_VALUES)[number];//for when you just need the string values without usding Zod (pure TS) */
+
+//export const CASE_STUDY_VISIBILITY_VALUES = [
+export const CaseStudyVisibilitySchema = z.enum([
+  "Public",
+  "Internal",
+  "ClientSafe",//ok to send to clients/prospects but not necessarily public
+] as const);
+export type CaseStudyVisibility = z.infer<typeof CaseStudyVisibilitySchema>;
+export const CASE_STUDY_VISIBILITY_VALUES = CaseStudyVisibilitySchema.options;
+/* export const CaseStudyVisibilitySchema = z.enum(CASE_STUDY_VISIBILITY_VALUES);
+export type CaseStudyVisibility = z.infer<typeof CaseStudyVisibilitySchema>;
+export type CaseStudyVisibilityValue = (typeof CASE_STUDY_VISIBILITY_VALUES)[number];//for when you just need the string values without usding Zod (pure TS */
+
+//export const OUTCOME_KIND_VALUES = [
+export const OutcomeKindSchema = z.enum([
+  "Contract",
+  "Grant",
+  "Policy",//language added, bill movement, rule change
+  "Visibility",//media mentions, awareness raised
+  "Relationship",//new agency relationships, Hill contacts
+
+  "Savings",
+  "Efficiency",//time saved, process improved
+  "Engagement",//people reached
+  "Operational", //process improvements, internal capacity built
+  "RiskReduction",
+] as const);
+export type OutcomeKind = z.infer<typeof OutcomeKindSchema>;
+export const OUTCOME_KIND_VALUES = OutcomeKindSchema.options;
+/* export const OutcomeKindSchema = z.enum(OUTCOME_KIND_VALUES);
+export type OutcomeKind = z.infer<typeof OutcomeKindSchema>;
+export type OutcomeKindValue = (typeof OUTCOME_KIND_VALUES)[number];//for when you just need the string values without usding Zod (pure TS) */
