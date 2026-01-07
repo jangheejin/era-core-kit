@@ -72,6 +72,7 @@ function autoSummaryFromText(text: string, max = 180) {
 export default function NewCaseStudyPage() {
   const router = useRouter();
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const showAdvanced = process.env.NEXT_PUBLIC_SHOW_OUTCOMES === "0";//set to 1 to see the advanced controls
 
   const [id] = useState(() =>
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
@@ -269,7 +270,7 @@ export default function NewCaseStudyPage() {
       <div className="form-header">
         <h1 className="form-title">New Case Study</h1>
         <div className="form-nav">
-          <a href="/admin">Admin</a>
+          <a href="/admin">Admin</a> | 
           <a href="/admin/case-studies/list">All case studies</a>
         </div>
       </div>
@@ -279,62 +280,7 @@ export default function NewCaseStudyPage() {
       </p> */}
 
       <div className="card card-new mt1">
-        {/* <div className="form-actions"> */}
-        <div className="form-actions form-actions--top">
-        <div className="form-actions__cluster" aria-label="Publishing + save">
-        <div className="form-actions__toggles" aria-label="Publishing settings">
-{/*           <button className="btn" type="button"
-            onClick={() => setSlug(slugify(slug || title))}
-            title="Turn title into URL path"
-          >
-          {/*           <button className="btn" type="button"
-            onClick={() => setSlug(slugify(slug || client))}
-            title="Turn title into URL path"
-          >
-            Turn title into URL path
-          </button> */}
 
-          <div className="form-actions__left">
-            {/* optional: keep empty, or put other tools here */}
-          </div>
-
-          <div className="form-actions__toggles" aria-label="Publishing settings">
-            <label className="toggle-pill">
-              <input
-                type="checkbox"
-                checked={isFeaturedHome}
-                onChange={(e) => setIsFeaturedHome(e.target.checked)}
-              />
-              <span>Featured on homepage</span>
-            </label>
-
-            <label className="toggle-pill">
-              <input
-                type="checkbox"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-              />
-              <span>Public (not on homepage, but viewable by clients)</span>
-            </label>
-          </div>
-
-          <div className="form-actions__right">
-{/*             <button className="btnPrimary" type="button" onClick={save}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save"}
-            > */}
-            <button
-              className="btnPrimary"
-              type="button"
-              onClick={save}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save"}
-            >
-              Save + Preview
-            </button>
-          </div>
-        </div>
-        </div>
 
       
 
@@ -351,7 +297,7 @@ export default function NewCaseStudyPage() {
               <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
           </div>
 
-          <div className="form-group">
+          <div className="form-group" id="write-up-section">
             <label className="form-label">Full write-up of the case study</label>
 {/*             <textarea
               className="input"
@@ -367,9 +313,69 @@ export default function NewCaseStudyPage() {
             />
           </div>
 
-          <div className="form-row form-group">
-          
+                  {/* <div className="form-actions"> */}
+        <div className="form-actions form-actions--top">
+          <div className="form-actions__left">
+          {/* <div className="form-actions__right"> */}
+{/*             <button className="btnPrimary" type="button" onClick={save}
+              disabled={!validation.success}
+              title={!validation.success ? "Fix validation errors first" : "Save"}
+            > */}
+            <button
+              className="btnPrimary"
+              type="button"
+              onClick={save}
+              disabled={!validation.success}
+              title={!validation.success ? "Fix validation errors first" : "Save"}
+            >
+              Save + Preview
+            </button>
+          </div>
+{/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
+        <div className="form-actions__toggles" aria-label="Publishing settings">
+{/*           <button className="btn" type="button"
+            onClick={() => setSlug(slugify(slug || title))}
+            title="Turn title into URL path"
+          >
+          {/*           <button className="btn" type="button"
+            onClick={() => setSlug(slugify(slug || client))}
+            title="Turn title into URL path"
+          >
+            Turn title into URL path
+          </button> */}
 
+          {/* <div className="form-actions__left"> */}
+            {/* optional: keep empty, or put other tools here */}
+          {/* </div> */}
+
+{/* ************************************************************************* */}
+{/* TEMPORARILY HIDDEN FOR CLEANER DEMO UI: RE-ENABLE LATER, ESSENTIAL FEATURES */}
+{/*           <div className="form-actions__toggles" aria-label="Publishing settings">
+              <label className="toggle-pill">
+                <input
+                  type="checkbox"
+                  checked={isFeaturedHome}
+                  onChange={(e) => setIsFeaturedHome(e.target.checked)}
+                />
+                <span>Featured on Public Website</span>
+              </label>
+
+              <label className="toggle-pill">
+                <input
+                  type="checkbox"
+                  checked={isPublic}
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                />
+                <span>Client Viewable (not on homepage, but viewable by clients)</span>
+              </label>
+            </div> */}
+{/* ************************************************************************* */}
+        {/* </div> */}
+
+          </div>
+        </div>
+
+          <div className="form-row form-group" id="sectors-checkboxes">
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
             <div className="form-field">
               <label className="form-label">Sectors</label>
@@ -490,9 +496,22 @@ export default function NewCaseStudyPage() {
           </div>
 </div>
 
-        </div>
+
       </div>
 
+{/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
+
+      {showAdvanced && (
+        
+        <fieldset className="form-group">
+          <legend className="form-label">Outcomes (advanced)</legend>
+          {/* outcomes editing UI here */}
+        </fieldset>
+
+        
+      )}
+
+{/* END OF ADVANCED UI. */}
       <div className="card card-new mt">
         <h3>Validation</h3>
         <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
