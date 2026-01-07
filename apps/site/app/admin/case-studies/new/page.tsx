@@ -488,7 +488,7 @@ export default function NewCaseStudyPage() {
               }}
             />
           </div>
-
+</div>
 
         </div>
       </div>
