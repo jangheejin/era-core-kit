@@ -135,8 +135,8 @@ export function OurWorkClient({
                 <h2 className="type-h2 work-detail__title">{selected.client}</h2>
 
                 <p className="type-body work-detail__summary">{selected.summary}</p>
-
-                {selected.outcomes?.length ? (
+{/* hiding this for now to simplify creation -> publishing flow for client */}
+{/*                 {selected.outcomes?.length ? (
                   <div className="work-detail__outcomes">
                     <h3 className="type-h3">What we helped our client achieve</h3>
                     <ul>
@@ -148,7 +148,7 @@ export function OurWorkClient({
                       ))}
                     </ul>
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
 
               {selected.imageUrl && (

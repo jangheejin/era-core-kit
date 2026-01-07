@@ -27,10 +27,10 @@ function toWorkCase(cs: any): WorkCase {
     featured: !!cs.isFeaturedHome || true, // pick a default rule
     summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
     //outcomes: cs.outcomes,
-    outcomes: (cs.outcomes ?? []).map((o: any) => ({
+/*     outcomes: (cs.outcomes ?? []).map((o: any) => ({
       label: o.label,
       description: o.description,
-    })),
+    })), */ //hiding for now in order to simplify creation->publishing flow for client demo
     imageUrl: cs.heroImageUrl,
   };
 }
