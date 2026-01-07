@@ -21,7 +21,9 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
             className="case-card"
           >
             <div className="case-card__image">
-              <ImageFigure src={item.imageUrl} alt={item.client} aspect="4/3" />
+              <ImageFigure src={item.imageUrl} alt={item.title ?? ""} aspect="4/3" />
+              {/* <ImageFigure src={item.imageUrl} alt={item.client ?? ""} aspect="4/3" /> */}
+              {/* <ImageFigure src={item.imageUrl} alt={item.client} aspect="4/3" /> */}
             </div>
 
             <div className="case-card__body">

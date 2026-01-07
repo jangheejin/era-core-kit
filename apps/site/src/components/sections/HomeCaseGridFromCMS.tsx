@@ -3,22 +3,32 @@
 
 import { useMockCMS } from "@/cms/mockCmsStore";
 import { CaseGrid, WorkText } from "@kit/blocks";
-import { title } from "process";
+//import type { CaseGridItem } from "@kit/blocks"; 
+import type { CaseGridProps } from "@kit/blocks";
 
 export function HomeCaseGridFromCMS() {
   //const { caseStudies } = useMockCMS();
   const { caseStudies, addCaseStudy } = useMockCMS();
 
+  // If there are zero items, you can fall back to nothing or a gentle message
+  //if (!items.length) return null;
+
+  if (!caseStudies || caseStudies.length === 0) {
+    // No CMS items → nothing to preview
+    return null;
+  }
+
   // Map the case studies in the store to the card props your CaseGrid expects
-  const items = caseStudies.map((cs) => ({
+  const items: CaseGridProps["items"] = caseStudies.map((cs) => ({
+  //const items = caseStudies.map((cs) => ({
     title: cs.title,
-    summary: cs.summaryShort ?? "",   // adjust to your schema
+    summary: cs.summaryShort ?? "", 
     imageUrl: cs.heroImageUrl ?? "/img/temp.svg", // fallback if you don’t have one
     slug: cs.slug,
+    client: cs.client ?? undefined,
+    brief: cs.brief ?? undefined,
+    sector: cs.sectors?.[0],
   }));
-
-  // If there are zero items, you can fall back to nothing or a gentle message
-  if (!items.length) return null;
 
   return (
     <section className="c-section">
@@ -27,12 +37,7 @@ export function HomeCaseGridFromCMS() {
           heading="Our Work"
           text="This grid is pulling directly from the CMS demo. Any case study you add in the admin UI (this session) shows up here."
         />
-        <CaseGrid layout="4col" items={caseStudies.map((cs) => ({
-          title: cs.title,
-          summary: cs.summaryShort ?? "",   // adjust to the schema
-          imageUrl: cs.heroImageUrl ?? "/img/temp.svg", // fallback if there is no image
-          slug: cs.slug,
-        }))} />
+        <CaseGrid layout="4col" items={items} />
       </div>
     </section>
   );
