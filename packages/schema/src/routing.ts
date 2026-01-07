@@ -53,6 +53,19 @@ export function normalizeTagList(tags: string[]): string[] {
  * map to nicer public slugs (e.g. "government-contracting").
  */
 export const SECTOR_ROUTE_SLUG: Record<SectorValue, string> = {
+  PublicSector: "public-sector",
+  Environment: "environment",
+  NaturalResources: "natural-resources",
+  Energy: "energy",
+  Agriculture: "agriculture",
+  Transportation: "transportation",
+  InfrastructurePublicWorks: "infrastructure-public-works",
+  Appropriations: "appropriations",
+  GrantFunding: "grant-funding",
+  StateGovernment: "state-government",
+  LocalGovernment: "local-government",
+  TribalGovernment: "tribal-government",
+  PrivateSector: "private-sector",
   GovContracting: "government-contracting",
   Nonprofit: "nonprofit",
   EmergencyMgmt: "emergency-management",
