@@ -281,6 +281,8 @@ export default function NewCaseStudyPage() {
       <div className="card card-new mt1">
         {/* <div className="form-actions"> */}
         <div className="form-actions form-actions--top">
+        <div className="form-actions__cluster" aria-label="Publishing + save">
+        <div className="form-actions__toggles" aria-label="Publishing settings">
 {/*           <button className="btn" type="button"
             onClick={() => setSlug(slugify(slug || title))}
             title="Turn title into URL path"
@@ -312,7 +314,7 @@ export default function NewCaseStudyPage() {
                 checked={isPublic}
                 onChange={(e) => setIsPublic(e.target.checked)}
               />
-              <span>Public</span>
+              <span>Public (not on homepage, but viewable by clients)</span>
             </label>
           </div>
 
@@ -332,9 +334,11 @@ export default function NewCaseStudyPage() {
             </button>
           </div>
         </div>
+        </div>
+
+      
 
         <div className="card card-new">
-
 {/*           <div className = "form-group">
             <label className="form-label">Title</label>
             <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
