@@ -82,13 +82,14 @@ export default function NewCaseStudyPage() {
   const [client, setClient] = useState("");
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
 //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
-  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  const [sectors, setSectors] = useState<SectorValue[]>(["PublicSector"]);
 
   function toggleSector(v: SectorValue) {
     setSectors((prev) =>
       prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
     );
   }
+
   const [year, setYear] = useState<string>("2025");
   const [tags, setTags] = useState("");
 //  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this 
@@ -105,15 +106,20 @@ export default function NewCaseStudyPage() {
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
   const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
 
+  // Derived fields (DO NOT put hooks inside other hooks)
   const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from your toolbar
-
   const preview = useMemo(() => emptyToUndefined(brief), [brief]);
   //    const preview = useMemo(() => brief.trim() || undefined, [brief]);
 
+  // summaryShort is required by schema -> always compute it
   const summaryShortAuto = useMemo(() => {
-    // prefer author-written brief; otherwise derive from the write-up
+    // prefer author-written brief (aka social blurb); otherwise derive from the write-up
     return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [preview, bodyMDX]);
+
+  const slugBase = (client || title).trim(); // or just title if you're unifying them
+  const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
+  const effectiveSlug = useMemo(() => slugify(slug.trim() || autoSlug), [slug, autoSlug]);
 
   const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
     //const bodyMDX = plainTextToMdxPreservingLineBreaks(writeUp);
@@ -125,21 +131,26 @@ export default function NewCaseStudyPage() {
 //    const computedSummaryShort = useMemo(() => {
 //      return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
 //    }, [preview, bodyMDX]);
+    const displayName = client.trim(); // the one true field
     return {
       id,
-      title: title.trim(),
-      slug: slugify(slug || client || title),
-      client: client.trim() || undefined,
+      //title: title.trim(),
+      //slug: slugify(slug || client || title),
+      //client: client.trim() || undefined,
+      title: displayName,
+      client: emptyToUndefined(displayName),
+      slug: slugify(slug || displayName),
       sectors,
       year: year ? Number(year) : undefined,
       tags: tags.split(",").map(t => t.trim()).filter(Boolean),
   
       brief: preview,//optional blurb
-      summaryShort: summaryShortAuto, // ALWAYS a string (may be "" if nothing typed)
+      summaryShort: summaryShortAuto, // required, auto-filled, ALWAYS a string (may be "" if nothing typed)
       //summaryShort: summaryShort.trim() || undefined,
       bodyMDX,
   
-      heroImageUrl: heroImageUrl.trim() || undefined,
+      //heroImageUrl: heroImageUrl.trim() || undefined,
+      heroImageUrl: emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL,
   
       mechanisms: [],
       jurisdictions: [],
@@ -155,7 +166,8 @@ export default function NewCaseStudyPage() {
       isPublic,
     };
   }, [
-      id, title, slug, client, 
+      //id, title, slug, client, 
+      id, client, slug,
       sectors, year, tags, 
       //brief, writeUp, 
       preview, summaryShortAuto, bodyMDX,
@@ -216,7 +228,10 @@ export default function NewCaseStudyPage() {
 //    ],
 //  );
 
-  const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
+  const validation = useMemo(
+    () => CaseStudySchema.safeParse(candidateInput), 
+    [candidateInput]
+  );
 
   function save() {
     // Make slug collision-safe right at the save boundary
@@ -264,42 +279,92 @@ export default function NewCaseStudyPage() {
       </p> */}
 
       <div className="card card-new mt1">
-        <div className="form-actions">
-          <button
-            className="btn"
-            type="button"
+        {/* <div className="form-actions"> */}
+        <div className="form-actions form-actions--top">
+{/*           <button className="btn" type="button"
             onClick={() => setSlug(slugify(slug || title))}
-            title="Generate slug from title"
+            title="Turn title into URL path"
           >
-            Turn title into URL slug
-          </button>
+          {/*           <button className="btn" type="button"
+            onClick={() => setSlug(slugify(slug || client))}
+            title="Turn title into URL path"
+          >
+            Turn title into URL path
+          </button> */}
 
-          <button
-            className="btnPrimary"
-            type="button"
-            onClick={save}
-            disabled={!validation.success}
-            title={!validation.success ? "Fix validation errors first" : "Save"}
-          >
-            Save + Preview
-          </button>
+          <div className="form-actions__left">
+            {/* optional: keep empty, or put other tools here */}
+          </div>
+
+          <div className="form-actions__toggles" aria-label="Publishing settings">
+            <label className="toggle-pill">
+              <input
+                type="checkbox"
+                checked={isFeaturedHome}
+                onChange={(e) => setIsFeaturedHome(e.target.checked)}
+              />
+              <span>Featured on homepage</span>
+            </label>
+
+            <label className="toggle-pill">
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <span>Public</span>
+            </label>
+          </div>
+
+          <div className="form-actions__right">
+{/*             <button className="btnPrimary" type="button" onClick={save}
+              disabled={!validation.success}
+              title={!validation.success ? "Fix validation errors first" : "Save"}
+            > */}
+            <button
+              className="btnPrimary"
+              type="button"
+              onClick={save}
+              disabled={!validation.success}
+              title={!validation.success ? "Fix validation errors first" : "Save"}
+            >
+              Save + Preview
+            </button>
+          </div>
         </div>
+
         <div className="card card-new">
-          <div className = "form-group">
+
+{/*           <div className = "form-group">
             <label className="form-label">Title</label>
             <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
+          </div> */}
+
+          {/* <div className="form-field"> */}
+          <div className="form-group">
+{/*               <label className="form-label">Client Name (used as title)</label> */}
+              <label className="form-label">Client Name</label>
+              <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Slug</label>
-            <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+            <label className="form-label">Full write-up of the case study</label>
+{/*             <textarea
+              className="input"
+              style={{ minHeight: 160 }}
+              value={bodyMDX}
+              onChange={(e) => setBodyMDX(e.target.value)}
+            /> */}
+            <textarea
+              className="input"
+              style={{ minHeight: 160 }}
+              value={writeUp}
+              onChange={(e) => setWriteUp(e.target.value)}
+            />
           </div>
 
           <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Client</label>
-              <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
-            </div>
+          
 
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
             <div className="form-field">
@@ -389,8 +454,7 @@ export default function NewCaseStudyPage() {
             />
           </div>
 
-          {/* <div className="row" style={{ marginTop: "1rem" }}> */}
-          <div className="form-row form-group">
+{/*           <div className="form-row">
             <label className="row" style={{ gap: ".5rem" }}>
               <input
                 type="checkbox"
@@ -399,28 +463,29 @@ export default function NewCaseStudyPage() {
               />
               Featured on homepage
             </label>
-
+          </div>
+          <div className="form-row">
             <label className="row" style={{ gap: ".5rem" }}>
               <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
               isPublic
             </label>
           </div>
-
+ */}
           <div className="form-group">
-            <label className="form-label">Full write-up of the case study</label>
-{/*             <textarea
+            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
+{/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+ */}            <input
               className="input"
-              style={{ minHeight: 160 }}
-              value={bodyMDX}
-              onChange={(e) => setBodyMDX(e.target.value)}
-            /> */}
-            <textarea
-              className="input"
-              style={{ minHeight: 160 }}
-              value={writeUp}
-              onChange={(e) => setWriteUp(e.target.value)}
+              value={slug}
+              placeholder={autoSlug}
+              onChange={(e) => setSlug(e.target.value)}
+              onBlur={() => {
+                if (!slug.trim() && autoSlug) setSlug(autoSlug);
+              }}
             />
           </div>
+
+
         </div>
       </div>
 
