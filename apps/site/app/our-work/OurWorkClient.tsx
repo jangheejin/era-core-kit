@@ -9,13 +9,19 @@ import { useMemo, useRef, useState } from "react";
 //import { deriveSummaryFromWriteUp, type CaseStudyType } from "@kit/schema";
 //import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 
+export type WorkOutcome = {
+  label: string;
+  description?: string;
+};
+
 export type WorkCase = {
   slug: string;
   sector: string;
   client: string;
   featured: boolean;
   summary: string;
-  outcomes?: string[];
+  //outcomes?: string[];
+  outcomes?: WorkOutcome[];
   imageUrl?: string;
 };
 
@@ -134,8 +140,11 @@ export function OurWorkClient({
                   <div className="work-detail__outcomes">
                     <h3 className="type-h3">What we helped our client achieve</h3>
                     <ul>
-                      {selected.outcomes.map((item, idx) => (
-                        <li key={idx} className="type-body">{item}</li>
+                      {selected.outcomes.map((o, idx) => (
+                        <li key={idx} className="type-body">
+                          <strong>{o.label}:</strong> 
+                          {o.description ? <> — {o.description}</> : null}
+                        </li>
                       ))}
                     </ul>
                   </div>

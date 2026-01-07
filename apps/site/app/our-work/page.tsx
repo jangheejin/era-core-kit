@@ -26,7 +26,11 @@ function toWorkCase(cs: any): WorkCase {
     client: cs.client?.trim() || cs.title?.trim() || cs.slug,
     featured: !!cs.isFeaturedHome || true, // pick a default rule
     summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
-    outcomes: cs.outcomes,
+    //outcomes: cs.outcomes,
+    outcomes: (cs.outcomes ?? []).map((o: any) => ({
+      label: o.label,
+      description: o.description,
+    })),
     imageUrl: cs.heroImageUrl,
   };
 }
