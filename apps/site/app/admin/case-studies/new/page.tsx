@@ -35,6 +35,8 @@ import { ContextBanner } from "@/admin/components/ContextBanner";
 
 import { normalizeTagList } from "@kit/schema";
 
+const showAdvanced = process.env.NEXT_PUBLIC_SHOW_OUTCOMES === "0";//set to 1 to see the advanced controls
+
 /* function slugify(raw: string): string {
   return raw
     .trim()
@@ -72,7 +74,6 @@ function autoSummaryFromText(text: string, max = 180) {
 export default function NewCaseStudyPage() {
   const router = useRouter();
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
-  const showAdvanced = process.env.NEXT_PUBLIC_SHOW_OUTCOMES === "0";//set to 1 to see the advanced controls
 
   const [id] = useState(() =>
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
@@ -375,7 +376,21 @@ export default function NewCaseStudyPage() {
           </div>
         </div>
 
-          <div className="form-row form-group" id="sectors-checkboxes">
+
+</div>
+
+
+      </div>
+
+{/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
+      {showAdvanced && (
+        <>
+        <fieldset className="form-group">
+          <legend className="form-label">Outcomes (advanced)</legend>
+          {/* outcomes editing UI here */}
+        </fieldset>
+
+        <div className="form-row form-group" id="sectors-checkboxes">
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
             <div className="form-field">
               <label className="form-label">Sectors</label>
@@ -494,37 +509,25 @@ export default function NewCaseStudyPage() {
               }}
             />
           </div>
-</div>
 
-
-      </div>
-
-{/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
-
-      {showAdvanced && (
-        
-        <fieldset className="form-group">
-          <legend className="form-label">Outcomes (advanced)</legend>
-          {/* outcomes editing UI here */}
-        </fieldset>
-
-        
+        <div className="card card-new mt">
+          <h3>Validation</h3>
+          <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
+          {validation.success ? (
+            <p className="muted">✅ Valid (ready to save)</p>
+          ) : (
+            <pre className="error">
+              ❌ Invalid
+              {"\n\n"}
+              {JSON.stringify(validation.error.format(), null, 2)}
+            </pre>
+          )}
+        </div>
+        </>
       )}
 
 {/* END OF ADVANCED UI. */}
-      <div className="card card-new mt">
-        <h3>Validation</h3>
-        <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
-        {validation.success ? (
-          <p className="muted">✅ Valid (ready to save)</p>
-        ) : (
-          <pre className="error">
-            ❌ Invalid
-            {"\n\n"}
-            {JSON.stringify(validation.error.format(), null, 2)}
-          </pre>
-        )}
-      </div>
+
     </main>
   );
 }
