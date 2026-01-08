@@ -269,7 +269,7 @@ export default function NewCaseStudyPage() {
 
       {/* <div className="row mt1"> */}
       <div className="form-header">
-        <h1 className="form-title">New Case Study</h1>
+        <h1 className="form-title">NEW CASE STUDY</h1>
         <div className="form-nav">
           <a href="/admin">Admin</a> | 
           <a href="/admin/case-studies/list">All case studies</a>
@@ -333,7 +333,7 @@ export default function NewCaseStudyPage() {
             </button>
           </div>
 {/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
-        <div className="form-actions__toggles" aria-label="Publishing settings">
+{/*         <div className="form-actions__toggles" aria-label="Publishing settings"> */}
 {/*           <button className="btn" type="button"
             onClick={() => setSlug(slugify(slug || title))}
             title="Turn title into URL path"
@@ -373,7 +373,7 @@ export default function NewCaseStudyPage() {
 {/* ************************************************************************* */}
         {/* </div> */}
 
-          </div>
+          {/* </div> */}
         </div>
 
 
