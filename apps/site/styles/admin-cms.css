@@ -633,7 +633,7 @@ the user fills out)
 
 .form-label {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.45rem;
   display: block;
   font-size: 0.95rem;
 }
@@ -1192,4 +1192,10 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
 
 .toggle-pill input {
   margin: 0;
+}
+
+.admin-hint {
+  margin-top:0;
+  margin-bottom:1rem;
+  font-size:14px;
 }

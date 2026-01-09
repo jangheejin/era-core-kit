@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
   type ReactNode,
+  type ChangeEvent,
 } from "react";
 
 import Link from "next/link";
@@ -35,7 +36,17 @@ import { ContextBanner } from "@/admin/components/ContextBanner";
 
 import { normalizeTagList } from "@kit/schema";
 
-const showAdvanced = process.env.NEXT_PUBLIC_SHOW_OUTCOMES === "0";//set to 1 to see the advanced controls
+// env: "1", "true", "yes", "on" => true
+// env: "0", "false", "no", "off", undefined => false
+function envFlag(name: string, defaultValue = false) {
+  const v = process.env[name]?.trim().toLowerCase();
+  if (v == null || v === "") return defaultValue;
+  if (["1", "true", "yes", "y", "on"].includes(v)) return true;
+  if (["0", "false", "no", "n", "off"].includes(v)) return false;
+  return defaultValue; 
+}
+
+export const showAdvanced = envFlag("NEXT_PUBLIC_SHOW_OUTCOMES", false);//change to true to show advanced controls
 
 /* function slugify(raw: string): string {
   return raw
@@ -97,6 +108,26 @@ export default function NewCaseStudyPage() {
 //  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this 
 //  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
+
+  //adding a change handler so users can upload an image
+  function handleHeroImageFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setHeroImageUrl("");
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result;
+      if (typeof result === "string") {
+        // result is a data: URL like "data:image/png;base64,...."
+        setHeroImageUrl(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+  
 //  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");//no longer let users see this
   const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
@@ -107,6 +138,9 @@ export default function NewCaseStudyPage() {
   // form state
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
   const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
+
+  // Flag to signal that core required fields have been completed (unlocks enhancements once the basics are there)
+  const hasCore = client.trim().length > 0 && writeUp.trim().length > 0;
 
   // Derived fields (DO NOT put hooks inside other hooks)
   const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from your toolbar
@@ -256,6 +290,8 @@ export default function NewCaseStudyPage() {
     addCaseStudy(validatedCaseStudy);
     router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
   } */
+
+    // INPUT -> ZOD VALIDATION -> STORED AS PARSED OUTPUT -> PREVIEW PAGE
    return (
     <main className="c-admin">
       <ContextBanner view="preview">
@@ -269,22 +305,20 @@ export default function NewCaseStudyPage() {
 
       {/* <div className="row mt1"> */}
       <div className="form-header">
-        <h1 className="form-title">NEW CASE STUDY</h1>
+        <h1 className="form-title">CREATE A NEW CASE STUDY</h1>
         <div className="form-nav">
-          <a href="/admin">Admin</a> | 
+          <a href="/admin">Admin</a> |{" "}
           <a href="/admin/case-studies/list">All case studies</a>
         </div>
       </div>
 
-{/*       <p className="muted">
-        This is the demo builder: input → Zod validation → stored as parsed output → preview page.
-      </p> */}
+{/* --------------------------------------------------------------------------------- */}
+{/* CORE (REQUIRED) CONTENT */}
+{/* --------------------------------------------------------------------------------- */}
 
-      <div className="card card-new mt1">
-
-
-      
-
+{/*       <div className="card card-new mt1"> */}
+      <section className="card card-new mt1"> 
+        {/* STEP 1 – BASIC DETAILS (always visible, minimum path) */}
         <div className="card card-new">
 {/*           <div className = "form-group">
             <label className="form-label">Title</label>
@@ -293,19 +327,26 @@ export default function NewCaseStudyPage() {
 
           {/* <div className="form-field"> */}
           <div className="form-group">
-{/*               <label className="form-label">Client Name (used as title)</label> */}
-              <label className="form-label">Client Name</label>
-              <input className="input" value={client} onChange={(e) => setClient(e.target.value)} />
+            {/* Client name (used as title) */}
+            <label className="form-label">
+              Client Name{" "}
+              <span className="admin-label-required">(required)</span>
+            </label>
+            <input className="input" 
+              value={client} 
+              onChange={(e) => setClient(e.target.value)} 
+            />
           </div>
 
+          {/* Case study write-up */}
           <div className="form-group" id="write-up-section">
-            <label className="form-label">Full write-up of the case study</label>
-{/*             <textarea
-              className="input"
-              style={{ minHeight: 160 }}
-              value={bodyMDX}
-              onChange={(e) => setBodyMDX(e.target.value)}
-            /> */}
+            <label className="form-label">
+              Describe the case study{" "}
+              <span className="admin-label-required">(required)</span>
+            </label>
+            <p className="admin-hint">
+              Write something about the case study here. Any format is OK (it can be notes or a full write-up)
+            </p>
             <textarea
               className="input"
               style={{ minHeight: 160 }}
@@ -314,24 +355,57 @@ export default function NewCaseStudyPage() {
             />
           </div>
 
-                  {/* <div className="form-actions"> */}
-        <div className="form-actions form-actions--top">
-          <div className="form-actions__left">
-          {/* <div className="form-actions__right"> */}
-{/*             <button className="btnPrimary" type="button" onClick={save}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save"}
-            > */}
-            <button
-              className="btnPrimary"
-              type="button"
-              onClick={save}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save"}
-            >
-              Save + Preview
-            </button>
+          <div className="form-group">
+            {/* OLD form for hero image. allowed URL input only. */}
+            {/* <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
+            <input
+              className="input"
+              placeholder={DEFAULT_HERO_IMAGE_URL}
+              value={heroImageUrl}
+              onChange={(e) => setHeroImageUrl(e.target.value)}
+            /> */}
+            <label className="form-label" htmlFor="heroImage">
+              Upload an image (optional)
+            </label>
+            <p className="admin-hint">
+              Provide an image for this case study. If you don’t add one, a default image default image will be used.
+            </p>
+            <input
+              id="heroImage"
+              type="file"
+              accept="image/*"
+              onChange={handleHeroImageFileChange}
+            />
+
+            {heroImageUrl && (
+              <div style={{ marginTop: "0.75rem" }}>
+                <p className="muted type-small">Preview</p>
+                <img
+                  src={heroImageUrl}
+                  alt="Hero preview"
+                  style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+                />
+              </div>
+            )}
           </div>
+
+          <div className="form-actions form-actions--top">
+            <div className="form-actions__left">
+            {/* <div className="form-actions__right"> */}
+  {/*             <button className="btnPrimary" type="button" onClick={save}
+                disabled={!validation.success}
+                title={!validation.success ? "Fix validation errors first" : "Save"}
+              > */}
+              <button
+                className="btnPrimary"
+                type="button"
+                onClick={save}
+                disabled={!validation.success}
+                title={!validation.success ? "Fix validation errors first" : "Save"}
+              >
+                Save + Preview
+              </button>
+            </div>
 {/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
 {/*         <div className="form-actions__toggles" aria-label="Publishing settings"> */}
 {/*           <button className="btn" type="button"
@@ -374,13 +448,12 @@ export default function NewCaseStudyPage() {
         {/* </div> */}
 
           {/* </div> */}
-        </div>
+          </div>
 
 
-</div>
-
-
-      </div>
+        </div>{/* end of card card-new div */}
+      </section> 
+{/*       </div> */}
 
 {/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
       {showAdvanced && (
@@ -468,16 +541,7 @@ export default function NewCaseStudyPage() {
             <input className="input" value={summaryShortAuto} readOnly />
           </div> */}
 
-          {/* <div style={{ marginTop: "1rem" }}> */}
-          <div className="form-group">
-            <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
-            <input
-              className="input"
-              placeholder={DEFAULT_HERO_IMAGE_URL}
-              value={heroImageUrl}
-              onChange={(e) => setHeroImageUrl(e.target.value)}
-            />
-          </div>
+
 
 {/*           <div className="form-row">
             <label className="row" style={{ gap: ".5rem" }}>
