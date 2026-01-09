@@ -341,7 +341,8 @@ export default function NewCaseStudyPage() {
           {/* Case study write-up */}
           <div className="form-group" id="write-up-section">
             <label className="form-label">
-              Describe the case study{" "}
+              {/* Describe the case study */}
+              Description{" "}
               <span className="admin-label-required">(required)</span>
             </label>
             <p className="admin-hint">
@@ -365,7 +366,8 @@ export default function NewCaseStudyPage() {
               onChange={(e) => setHeroImageUrl(e.target.value)}
             /> */}
             <label className="form-label" htmlFor="heroImage">
-              Upload an image (optional)
+              Upload an image{" "}
+              <span className="admin-label-optional">(optional)</span>
             </label>
             <p className="admin-hint">
               Provide an image for this case study. If you don’t add one, a default image default image will be used.

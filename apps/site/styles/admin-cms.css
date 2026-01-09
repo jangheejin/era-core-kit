@@ -400,11 +400,21 @@ the user fills out)
 .admin-label-required {
   color: #b91c1c;
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.admin-hint {
-  font-size: 0.75rem;
+.admin-label-optional {
   color: #6b7280;
+  font-size: 0.8rem;
+/*   font-style: italic; */
+  font-weight:500;
+}
+.admin-hint {
+  /* font-size: 0.75rem; */
+  margin-top:0;
+  margin-bottom:1rem;
+  color: #4e4e4e;
+  font-size:0.95rem;
 }
 
 /* Controls */
@@ -635,7 +645,8 @@ the user fills out)
   font-weight: 600;
   margin-bottom: 0.45rem;
   display: block;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  color: #000;
 }
 
 .form-row {
@@ -1194,8 +1205,3 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   margin: 0;
 }
 
-.admin-hint {
-  margin-top:0;
-  margin-bottom:1rem;
-  font-size:14px;
-}
