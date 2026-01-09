@@ -403,6 +403,18 @@ the user fills out)
   font-weight: 500;
 }
 
+.save-status {
+  color: #6b7280;
+/*   font-size: 0.9rem;
+  font-weight: 400; */
+  font-size: 0.8rem;
+  font-weight: 500;
+  /*   font-size: 0.85rem;
+  opacity: 0.75; */
+  margin-bottom:.5rem;
+  margin-top: .5rem;
+}
+
 .admin-label-optional {
   color: #6b7280;
   font-size: 0.8rem;
@@ -1205,3 +1217,237 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   margin: 0;
 }
 
+/* Collapsible admin sections (Option B) */
+.admin-collapse {
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.admin-collapse__summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.admin-collapse__summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-collapse__summary h2 {
+  margin: 0;
+}
+
+.admin-collapse__summary .admin-hint {
+  margin: 0.15rem 0 0;
+}
+
+.admin-collapse__chevron {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  transform: rotate(0deg);
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.admin-collapse[open] .admin-collapse__chevron {
+  transform: rotate(90deg);
+  opacity: 0.9;
+}
+
+.admin-collapse__body {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Client Views / Collections callout */
+.client-views-callout {
+  margin-top: 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px dashed rgba(0,0,0,0.18);
+  background: #f9fafb;
+}
+
+.client-views-callout h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.client-views-callout ul {
+  margin: 0.5rem 0 0.4rem;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+}
+
+.client-views-callout li {
+  margin: 0.15rem 0;
+}
+
+.client-views-callout code {
+  font-size: 0.8rem;
+}
+
+/* Sticky save bar: visible while scrolling, but not visually loud */
+.form-actions--top {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 50;
+
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+
+  margin-bottom: 1.25rem; /* creates separation from first fields */
+}
+
+/* Make your section titles read like a process */
+.section-title {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+}
+
+.section-title-step {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.section-kicker {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* Collapsible "Organize" area */
+.admin-disclosure {
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+}
+
+.admin-disclosure > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.admin-disclosure > summary::-webkit-details-marker { display: none; }
+
+.admin-disclosure__hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* “Client Views” links */
+.client-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* ---------- Write-up editor (toolbar + textarea as one unit) ---------- */
+
+.editor {
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* focus ring when the textarea is focused */
+.editor:focus-within {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 1px rgba(15, 118, 110, 0.55);
+}
+
+/* toolbar “chrome” */
+.editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+
+  padding: 0.45rem 0.55rem;
+  background: rgba(0,0,0,0.03);
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+}
+
+/* toolbar buttons: smaller + less loud than your .btn */
+.editor {
+  --editor-pad-x: 0.8rem; /* one source of truth */
+
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.editor:focus-within {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 1px rgba(15, 118, 110, 0.55);
+}
+
+.editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+
+  padding: 0.45rem var(--editor-pad-x); /* ✅ matches textarea */
+  background: rgba(0,0,0,0.03);
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+}
+
+.editor__btn {
+  appearance: none;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+  padding: 0.28rem 0.55rem;
+  cursor: pointer;
+
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.editor__textarea {
+  width: 100%;
+  min-height: 160px;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: none;
+
+  padding: 0.75rem var(--editor-pad-x) !important; /* ✅ matches toolbar */
+  background: transparent;
+
+  font-size: 0.95rem;
+  line-height: 1.45;
+  resize: vertical;
+
+  box-sizing: border-box;
+}
