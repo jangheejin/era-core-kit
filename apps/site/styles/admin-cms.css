@@ -80,7 +80,7 @@ the user fills out)
   text-transform: uppercase;
   font-size: var(--fs-h4);
 }
-.c-admin .btnPrimary {
+.c-admin .btnPrimary, .btnSave {
   padding: .6rem .9rem;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,.18);
@@ -91,6 +91,39 @@ the user fills out)
   text-transform: uppercase;
   font-size: var(--fs-h4);
 }
+.btnSave {
+  background: var(--brand-lighter-2);
+  /* color: #d6d6d6; */
+}
+/* .c-admin .btnSave:hover {
+  background: var(--brand-lighter);
+  color: #e7e7e7;
+}
+ */
+/* Default (not ready) */
+.btnSave--notReady { 
+  opacity: 0.9;
+}
+
+/* Ready state: change background + text */
+.btnSave--ready {
+  background: var(--brand);   /* green */
+  color: #ffffff;
+  border-color: var(--brand);
+}
+
+/* Keep hover consistent */
+.btnSave--ready:hover {
+  background: #15803d;
+  border-color: #15803d;
+}
+
+/* Disabled still looks disabled even if class is present */
+.btnSave:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .c-admin .btnTwo {
   padding: .6rem .9rem;
   border-radius: 10px;

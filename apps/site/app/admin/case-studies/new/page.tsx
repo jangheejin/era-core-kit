@@ -109,10 +109,12 @@ export default function NewCaseStudyPage() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
+  const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
+  const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR);
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
 //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
   /* const [sectors, setSectors] = useState<SectorValue[]>(["PublicSector"]); */
-  const [sector, setSector] = useState<string>(""); // empty = none selected
+  /* const [sector, setSector] = useState<string>(""); */ // empty = none selected
 
 
 /*   function toggleSector(v: SectorValue) {
@@ -168,15 +170,20 @@ export default function NewCaseStudyPage() {
     return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [preview, bodyMDX]);
 
-  const slugBase = (client || title).trim(); // or just title if you're unifying them
+  const effectiveTitle = title.trim() || client.trim();
+  const slugBase = effectiveTitle;
+  /* const slugBase = (client || title).trim(); */ // or just title if you're unifying them
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
   const effectiveSlug = useMemo(() => slugify(slug.trim() || autoSlug), [slug, autoSlug]);
 
   const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
-    const displayName = client.trim(); // the one true field
+    const displayName = client.trim(); // client name (required field)
+    const effectiveTitle = title.trim() || displayName; // title falls back to client name if not set
+    
     return {
       id,
-      title: displayName,
+      /* title: displayName, */
+      title: effectiveTitle,
       client: emptyToUndefined(displayName),
       slug: slugify(slug || displayName),
       sectors: sector ? [sector as SectorValue] : [],
@@ -206,6 +213,7 @@ export default function NewCaseStudyPage() {
   }, [
       //id, title, slug, client, 
       id, client, slug,
+      title,
       //sectors, year, tags, 
       sector, year, tags,
       //brief, writeUp, 
@@ -237,7 +245,8 @@ export default function NewCaseStudyPage() {
   const canSave = validation.success; //reusable save button state
   const SaveButton = (
     <button
-      className="btnPrimary"
+      /* className="btnPrimary" */
+      className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
       type="button"
       onClick={save}
       disabled={!canSave}
@@ -252,7 +261,8 @@ export default function NewCaseStudyPage() {
       <div className={className}>
         <div className="form-actions__left">
           <button
-            className="btnPrimary"
+            /* className="btnPrimary" */
+            className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
             type="button"
             onClick={save}
             disabled={!canSave}
@@ -266,6 +276,8 @@ export default function NewCaseStudyPage() {
               ? "Ready to save."
               : "Can't save yet: Missing required fields (Client Name + Description)"}
           </div>
+
+
         </div>
       </div>
     );
@@ -441,6 +453,15 @@ export default function NewCaseStudyPage() {
 
           {/* STICKY SAVE BAR */}
           <SaveBar className="form-actions" />
+          <div className="muted type-small" style={{ marginTop: 6 }}>
+            hasCore={String(hasCore)} | titleLen={title.trim().length} | clientLen={client.trim().length} | writeUpLen={writeUp.trim().length} | canSave={String(validation.success)}
+          </div>
+
+          {!validation.success && (
+            <pre className="error" style={{ marginTop: 8 }}>
+              {JSON.stringify(validation.error.format(), null, 2)}
+            </pre>
+          )}
 {/*           <div className="form-actions form-actions--underEditor">
               <div className="form-actions__left">
                 <button
@@ -507,7 +528,8 @@ export default function NewCaseStudyPage() {
                   id="sector"
                   className="input"
                   value={sector}
-                  onChange={(e) => setSector(e.target.value)}
+                  /* onChange={(e) => setSector(e.target.value)} */
+                  onChange={(e) => setSector(e.target.value as SectorValue)}
                 >
                   <option value="">Select a client type (sector)</option>
                     {SECTOR_VALUES.map((opt) => (
@@ -704,6 +726,8 @@ export default function NewCaseStudyPage() {
               }}
             />
           </div>
+
+
 
         <div className="card card-new mt">
           <h3>Validation</h3>
