@@ -24,6 +24,8 @@ import {
   type CaseStudyType,
   type SectorValue,
   SECTOR_VALUES,
+  SECTOR_LABELS,
+  sectorLabel,
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
   DEFAULT_HERO_IMAGE_URL,
@@ -512,8 +514,9 @@ export default function NewCaseStudyPage() {
                   Tags and categories act like filters. */}
                   You can choose to add categories to this case study. <br /><br />
 
-                  Categories are used to filter the case study database and create custom websites for specific clients. 
-                  For example, you can view all case studies categorized as <code>Local Government</code> <a href="https://era-core-kit-site.vercel.app/local-government">here</a>
+                  Categories are used to filter the case study database and create custom websites for specific clients.{" "}
+                  For example, you can view all case studies categorized as <code>Local Government</code>{" "}
+                  <a href="https://era-core-kit-site.vercel.app/local-government">here</a>
 
 {/*                   Adding a tag to a case study is what will enable it to be used in the custom websites created exclusively for specific clients. 
                   <br /><br />                  
@@ -531,11 +534,13 @@ export default function NewCaseStudyPage() {
               <div className="form-field">          
                 {/* <h2 className="cms-h3">Client type</h2> */}
                 <label className="form-label" htmlFor="sector">
-                  Client Type / Sector
+                  Category
+                  {/* Client Type / Sector */}
                   {/* Sectors */}
                 </label>
                 <p className="admin-hint">
-                  Select the primary client type (a.k.a. sector) for this case study.
+                  Choose a category that best describes the client in this case study. 
+                  {/* Select the primary client type (a.k.a. sector) for this case study. */}
                 </p>                
                 <select
                   id="sector"
@@ -544,12 +549,20 @@ export default function NewCaseStudyPage() {
                   /* onChange={(e) => setSector(e.target.value)} */
                   onChange={(e) => setSector(e.target.value as SectorValue)}
                 >
-                  <option value="">Select a client type (sector)</option>
+{/*                   <option value="">Select a client type (sector)</option>
                     {SECTOR_VALUES.map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
                       </option>
-                    ))}
+                    ))} */}
+
+                <option value="">Select a category</option>
+                {SECTOR_VALUES.map((v) => (
+                  <option key={v} value={v}>
+                    {sectorLabel(v)}
+                  </option>
+                ))}
+
                 </select>
 {/*                 <p className="muted type-small">
                   For now, pick one sector; in the final version, you'll be able to pick multiple.
@@ -557,26 +570,29 @@ export default function NewCaseStudyPage() {
               </div>
           </div>
 
-          <div className="form-row form-group" id="tags">
+{/*           <div className="form-row form-group" id="tags">
               <div className="form-field">
-                {/* <h2 className="cms-h3">Tags</h2> */}
                 <label className="form-label" htmlFor="tags">
                   Tags
                 </label>
                 <p className="admin-hint">
-                  Short keywords that describe the work (e.g. <code>environment</code>,{" "}
-                  <code>local government</code>, <code>appropriations</code>).
+                  You can also add short keywords that describe the case study, e.g.{" "}
+                  <code>environment</code>, <code>appropriations</code>).<br /><br />
+                  Tags are another way to create filter pages and “collections” for specific clients.{" "}
+                  Separate tags with commas. */}
+                  {/* Short keywords that describe the work (e.g. <code>environment</code>,{" "}
+                  <code>local government</code>, <code>appropriations</code>). 
                   Tags are another way to create filter pages and “collections” for specific clients.
-                  Separate tags with commas.
-                </p>
+                  Separate tags with commas.*/}
+{/*                 </p>
                 <input
                   className="input"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
-                />
+                /> */}
 
                 {/* Tag preview chips (tactile, even before list-page improvements) */}
-                <div className="client-links">
+{/*                 <div className="client-links">
                   {tags
                     .split(",")
                     .map((t) => t.trim())
@@ -586,7 +602,7 @@ export default function NewCaseStudyPage() {
                     ))}
                 </div>
               </div>
-          </div>
+          </div> */}
 
           <div className="form-row form-group">
             <div className="form-field">
@@ -604,18 +620,7 @@ export default function NewCaseStudyPage() {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
-            <input
-              className="input"
-              value={slug}
-              placeholder={autoSlug}
-              onChange={(e) => setSlug(e.target.value)}
-              onBlur={() => {
-                if (!slug.trim() && autoSlug) setSlug(autoSlug);
-              }}
-            />
-          </div>
+
           {/* <SaveBar className="form-actions--bottom" /> */}
           <SaveBar className="form-actions" />
 
@@ -629,6 +634,19 @@ export default function NewCaseStudyPage() {
           <legend className="form-label">Outcomes (advanced)</legend>
           {/* outcomes editing UI here */}
         </fieldset>
+
+        <div className="form-row form-group">
+            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
+            <input
+              className="input"
+              value={slug}
+              placeholder={autoSlug}
+              onChange={(e) => setSlug(e.target.value)}
+              onBlur={() => {
+                if (!slug.trim() && autoSlug) setSlug(autoSlug);
+              }}
+            />
+        </div>
 
         <div className="form-row form-group" id="sectors-checkboxes">
 {/*             <div className="form-field">
@@ -646,6 +664,22 @@ export default function NewCaseStudyPage() {
                 ))}
               </div>
             </div> */}
+{/*             <div className="form-field">
+              <label className="form-label">Sectors</label>
+              <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}></div>
+                {SECTOR_VALUES.map((v) => (
+                  <label key={v}>
+                    <input
+                      type="checkbox"
+                      checked={sectors.includes(v)}
+                      onChange={() => toggleSector(v)}
+                    />
+                    {sectorLabel(v)}
+                  </label>
+                ))}
+              </div>
+            </div> */}
+
 
             <div className="form-field form-field--small">
               <label className="form-label">Year</label>

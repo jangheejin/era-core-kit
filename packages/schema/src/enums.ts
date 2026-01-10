@@ -56,14 +56,13 @@ export type CaseStudySort = z.infer<typeof CaseStudySortSchema>;
 */
 //export const Sector = z.enum([
 export const SECTOR_VALUES = [
-  "PublicSector",
   "Environment",
+  "PublicSector",
   "NaturalResources",
   "Energy",
   "Agriculture",
   "Transportation",
-  "InfrastructurePublicWorks",
-//  "GeospatialGIS",
+//  "InfrastructurePublicWorks",
   "Appropriations",
   "GrantFunding",
   "StateGovernment",
@@ -107,13 +106,13 @@ export type SectorValue = (typeof SECTOR_VALUES)[number];//for when you just nee
  */
 
 export const SECTOR_LABELS: Record<SectorValue, string> = {
-  PublicSector: "Public sector",
   Environment: "Environment",
+  PublicSector: "Public sector",
   NaturalResources: "Natural resources",
   Energy: "Energy",
   Agriculture: "Agriculture",
   Transportation: "Transportation",
-  InfrastructurePublicWorks: "Infrastructure / public works",
+//  InfrastructurePublicWorks: "Infrastructure / public works",
   Appropriations: "Appropriations",
   GrantFunding: "Grant funding",
   StateGovernment: "State government",
@@ -133,7 +132,9 @@ export const SECTOR_LABELS: Record<SectorValue, string> = {
   CivicTech: "Civic tech",
   Infrastructure: "Infrastructure",
 };
-
+export function sectorLabel(v: SectorValue) {
+  return SECTOR_LABELS[v] ?? v;
+}
 /**
  * Mechanism is an explicit controlled list (filter pills, validation)
  * (filter pills are the little clickable toggles that let you filter by things like Mechanism)
