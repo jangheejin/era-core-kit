@@ -300,17 +300,12 @@ export default function NewCaseStudyPage() {
           <a href="#client-views">Client Views</a>
         </div>
       </div>
-
-      <div className="card card-new mt1"> 
-        {/* BASIC DETAILS (always visible, minimum path) */}
-{/*         <div className="card card-new"> */}
-
-
-
+      
 {/* --------------------------------------------------------------------------------- */}
 {/* CORE (REQUIRED) CONTENT */}
 {/* --------------------------------------------------------------------------------- */}
-        {/* 2) WRITE (required) */}
+      <div className="card card-new mt1 card--core"> 
+        {/* BASIC DETAILS (always visible, minimum path; only required steps) */}
         <section aria-labelledby="write-title">
 {/*           <h2 className="section-title-step" id="write-title">1) Write (required)</h2> */}
           <p className="section-kicker">
@@ -365,21 +360,7 @@ export default function NewCaseStudyPage() {
                 placeholder="Write the case study description…"
               />
             </div>
-{/*             <div className="row" style={{ gap: ".5rem", marginBottom: ".5rem" }}>
-              <button className="btn" type="button" onClick={() => applyWrap("**", "**")}>Bold</button>
-              <button className="btn" type="button" onClick={() => applyWrap("*", "*")}>Italic</button>
-              <button className="btn" type="button" onClick={() => applyPrefix("- ")}>Bullets</button>
-              <button className="btn" type="button" onClick={() => applyLink()}>Link</button>
-            </div>
-
-            <textarea
-              ref={writeUpRef}
-              className="input"
-              style={{ minHeight: 160 }}
-              value={writeUp}
-              onChange={(e) => setWriteUp(e.target.value)}
-            />*/}
-          </div> 
+          </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="heroImage">
@@ -389,13 +370,14 @@ export default function NewCaseStudyPage() {
             <p className="admin-hint">
               Provide an image for this case study. If you don’t add one, a default image default image will be used.
             </p>
-            <input
-              id="heroImage"
-              type="file"
-              accept="image/*"
-              onChange={handleHeroImageFileChange}
-            />
-
+            <div className="image-upload">
+              <input
+                id="heroImage"
+                type="file"
+                accept="image/*"
+                onChange={handleHeroImageFileChange}
+              />
+            </div>
             {heroImageUrl && (
               <div style={{ marginTop: "0.75rem" }}>
                 <p className="muted type-small">Preview</p>
@@ -416,48 +398,44 @@ export default function NewCaseStudyPage() {
                 style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
               />
             </div> */}
-
           </div>
-                  {/* STICKY SAVE BAR */}
-        <div className="form-actions form-actions--top">
-          <div className="form-actions__left">
-          {/* <div className="form-actions__right"> */}
-
-            {/* Primary action – Save + Preview */}
-            <button
-              className="btnPrimary"
-              type="button"
-              onClick={save}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save"}
-            >
-              Save + Preview
-            </button>
-
-            <div className="save-status">
-              {validation.success ? "Ready to save." : "Can't save yet: Missing required fields (Client Name + Description)"}
-            </div>
-          </div>
-        </div>
-        {/* END OF STICKY SAVE BAR */}
-        </section>
 {/* --------------------------------------------------------------------------------- */}
 {/* END OF CORE (REQUIRED) CONTENT */}
 {/* --------------------------------------------------------------------------------- */}
-
-        {/* 3) ORGANIZE, TAG, CATEGORIZE (optional, collapsible) */}
+          
+        {/* ORGANIZE, TAG, CATEGORIZE (optional, collapsible) */}
         <details className="admin-disclosure" id="organize">
           <summary className="admin-disclosure__summary">
             <div>
 {/*               <h2 className="section-title" style={{ margin:0 }}>
                 2) Organize, tag, categorize (optional)
               </h2> */}
+          {/* STICKY SAVE BAR */}
+          <div className="form-actions form-actions--underEditor">
+              <div className="form-actions__left">
+              {/* <div className="form-actions__right"> */}
+
+                {/* Primary action – Save + Preview */}
+                <button
+                  className="btnPrimary"
+                  type="button"
+                  onClick={save}
+                  disabled={!validation.success}
+                  title={!validation.success ? "Fix validation errors first" : "Save"}
+                >
+                  Save + Preview
+                </button>
+
+                <div className="save-status">
+                  {validation.success ? "Ready to save." : "Can't save yet: Missing required fields (Client Name + Description)"}
+                </div>
+              </div>
+          </div>
+          {/* END OF STICKY SAVE BAR */}
 
               <label className="form-label-larger" htmlFor="heroImage">
                 OPTIONAL FEATURES
               </label>
-
-
             </div>
             <span className="muted">Expand</span>
           </summary>
@@ -466,6 +444,11 @@ export default function NewCaseStudyPage() {
               <div className="admin-disclosure__hint">
                   You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
                   Tags and categories act like filters.<br /><br />
+
+                  {/* <p className="section-kicker" style={{ marginTop: "0.75rem" }}> */}
+                  <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
+                  <code> /tag/legislation </code>and<code>{" "} /sector/nonprofit</code>.<br /><br />
+                {/* </p> */}
                   For example, you might tag a case study with "Public Sector" so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
                   {/* Maybe say something about ability to search? */}
               </div>
@@ -496,12 +479,6 @@ export default function NewCaseStudyPage() {
                 </p> */}
               </div>
           </div>
-
-          <p className="section-kicker" style={{ marginTop: "0.75rem" }}>
-            <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
-            <code> /tag/legislation</code> and <code> /sector/nonprofit</code>.
-          </p>
-
 
           <div className="form-row form-group" id="tags">
               <div className="form-field">
@@ -701,13 +678,13 @@ export default function NewCaseStudyPage() {
       )}
 
 {/* END OF ADVANCED UI. */}
-
         </details>
       
 
 
+        </section>
       </div>
-      </main>
+    </main>
   );
 }
 {/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}

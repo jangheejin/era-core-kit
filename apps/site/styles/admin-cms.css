@@ -1179,12 +1179,6 @@ h1 .filter-category-title {
 html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !important; }
  */
 
- .form-actions--top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
 
 .form-actions__left {
   flex: 1;
@@ -1301,22 +1295,53 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   font-size: 0.8rem;
 }
 
-/* Sticky save bar: visible while scrolling, but not visually loud */
+/* .form-actions--top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+} */
+
+/* Sticky save bar, visible while scrolling */
 .form-actions--top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  /*NEW: STICKY SAVE 'BAR'*/
   position: sticky;
-  top: 0.75rem;
-  z-index: 50;
-
-  background: rgba(255, 255, 255, 0.92);
+  /* top: 0.75rem;
+  z-index: 50; */
+  bottom: 0;
+  z-index:20;
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(0,0,0,0.10);
-  border-radius: 12px;
-  padding: 0.75rem 0.9rem;
-
+/*   background: rgba(255, 255, 255, 0.92);
+   border: 1px solid rgba(0,0,0,0.10);
+   border-radius: 12px;
+   padding: 0.75rem 0.9rem; */
   margin-bottom: 1.25rem; /* creates separation from first fields */
 }
 
-/* Make your section titles read like a process */
+code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 1em;
+  /* color:#0b2d64; */
+}
+/*NEW sticky save bar that goes UNDER the core section*/
+.form-actions--underEditor {
+  position: sticky;
+  bottom: 12px;          /* space from bottom of viewport */
+  z-index: 50;
+
+/*   background: #fff;
+  border: 1px solid #d0d5dd; 
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.10);
+  padding: 10px; */
+  margin-top: 10px;
+}
+
+
 .section-title {
   font-family: var(--font-heading);
   text-transform: uppercase;
@@ -1340,10 +1365,23 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
 
 /* Collapsible "Organize" area */
 .admin-disclosure {
-  border: 1px solid rgba(0,0,0,.12);
-  border-radius: 12px;
-  background: #fff;
+/*   border: 1px solid rgba(0,0,0,.12);
+  border-radius: 12px; */
+  /* background: #fff; */
   padding: 1rem;
+}
+
+.optional-features{
+    border: 1px solid rgba(0,0,0,.12);
+  border-radius: 12px;
+  cursor:grab;
+/*   background:#9ca3af; */
+}
+.image-upload {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
 }
 
 .admin-disclosure > summary {
