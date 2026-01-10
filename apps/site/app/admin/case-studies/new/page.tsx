@@ -347,10 +347,10 @@ export default function NewCaseStudyPage() {
         {/* BASIC DETAILS (always visible, minimum path; only required steps) */}
         <section aria-labelledby="write-title">
 {/*           <h2 className="section-title-step" id="write-title">1) Write (required)</h2> */}
-          <p className="section-kicker">
+{/*           <p className="section-kicker">
             Minimum to create a case study: <strong>Client Name</strong> + <strong>Full write-up</strong>.
             Everything else is optional.
-          </p>
+          </p> */}
 
           <div className="form-group">
             <label className="form-label" id="client-name-section">
@@ -407,7 +407,7 @@ export default function NewCaseStudyPage() {
               <span className="admin-label-optional">(optional)</span>
             </label>
             <p className="admin-hint">
-              Provide an image for this case study. If you don’t add one, a default image default image will be used.
+              Provide an image for this case study. If you don’t add one, a default image will be used.
             </p>
             <div className="image-upload">
               <input
