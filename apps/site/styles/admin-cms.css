@@ -1304,10 +1304,10 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   gap: 0.75rem;
   /*NEW: STICKY SAVE 'BAR'*/
   position: sticky;
-  /* top: 0.75rem;
-  z-index: 50; */
-  bottom: 0;
-  z-index:20;
+  top: 3.5rem;
+  z-index: 50;
+/*   bottom: 0;
+  z-index:20; */
   backdrop-filter: blur(6px);
 /*   background: rgba(255, 255, 255, 0.92);
    border: 1px solid rgba(0,0,0,0.10);
@@ -1335,6 +1335,12 @@ code {
 /*   margin-top: 10px;
 }
  */
+
+ .form-actions--bottom {
+  position: sticky;
+  bottom: 12px;
+  z-index: 50;
+ }
 
 .section-title {
   font-family: var(--font-heading);

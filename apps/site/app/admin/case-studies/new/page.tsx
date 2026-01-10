@@ -467,6 +467,7 @@ export default function NewCaseStudyPage() {
           
         {/* ORGANIZE, TAG, CATEGORIZE (optional, collapsible) */}
         <details className="admin-disclosure" id="organize">
+        {/* <SaveBar className="form-actions--top" /> */}
           <summary className="admin-disclosure__summary">
             <div>
 {/*               <h2 className="section-title" style={{ margin:0 }}>
@@ -580,6 +581,8 @@ export default function NewCaseStudyPage() {
               }}
             />
           </div>
+          {/* <SaveBar className="form-actions--bottom" /> */}
+          <SaveBar className="form-actions" />
 
           
 {/* --------------------------------------------------------------------------------- */}
