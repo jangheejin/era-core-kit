@@ -453,7 +453,9 @@ export default function NewCaseStudyPage() {
 
           {/* STICKY SAVE BAR */}
           <SaveBar className="form-actions" />
-          <div className="muted type-small" style={{ marginTop: 6 }}>
+
+          {/* debugging */}
+{/*           <div className="muted type-small" style={{ marginTop: 6 }}>
             hasCore={String(hasCore)} | titleLen={title.trim().length} | clientLen={client.trim().length} | writeUpLen={writeUp.trim().length} | canSave={String(validation.success)}
           </div>
 
@@ -461,7 +463,7 @@ export default function NewCaseStudyPage() {
             <pre className="error" style={{ marginTop: 8 }}>
               {JSON.stringify(validation.error.format(), null, 2)}
             </pre>
-          )}
+          )} */}
 {/*           <div className="form-actions form-actions--underEditor">
               <div className="form-actions__left">
                 <button
@@ -726,6 +728,16 @@ export default function NewCaseStudyPage() {
               }}
             />
           </div>
+
+          <div className="muted type-small" style={{ marginTop: 6 }}>
+            hasCore={String(hasCore)} | titleLen={title.trim().length} | clientLen={client.trim().length} | writeUpLen={writeUp.trim().length} | canSave={String(validation.success)}
+          </div>
+
+          {!validation.success && (
+            <pre className="error" style={{ marginTop: 8 }}>
+              {JSON.stringify(validation.error.format(), null, 2)}
+            </pre>
+          )}
 
 
 
