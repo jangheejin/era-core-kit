@@ -23,8 +23,7 @@ import {
   type CaseStudyInput,
   type CaseStudyType,
   type SectorValue,
-  SECTOR_VALUES,
-  SECTOR_LABELS,
+  SECTOR_GROUPS,
   sectorLabel,
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
@@ -111,8 +110,40 @@ export default function NewCaseStudyPage() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
-  const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
-  const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR);
+/*   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
+  const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR); */
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]);
+
+function addCategoryDraft() {
+  setCategoryDrafts((prev) => [...prev, ""]);
+}
+
+function setCategoryAt(index: number, value: SectorValue | "") {
+  setCategoryDrafts((prev) => prev.map((v, i) => (i === index ? value : v)));
+}
+
+function removeCategoryAt(index: number) {
+  setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
+}
+
+function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
+  const out: SectorValue[] = [];
+  const seen = new Set<SectorValue>();
+  for (const d of drafts) {
+    if (!d) continue;
+    if (seen.has(d)) continue;
+    seen.add(d);
+    out.push(d);
+  }
+  return out;
+}
+
+const selectedCategories = useMemo(
+  () => normalizeCategories(categoryDrafts),
+  [categoryDrafts],
+);
+
+
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
 //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
   /* const [sectors, setSectors] = useState<SectorValue[]>(["PublicSector"]); */
@@ -188,8 +219,10 @@ export default function NewCaseStudyPage() {
       title: effectiveTitle,
       client: emptyToUndefined(displayName),
       slug: slugify(slug || displayName),
-      sectors: sector ? [sector as SectorValue] : [],
-//      sectors,
+      //sectors,
+      /* sectors: sector ? [sector as SectorValue] : [], */
+      sectors: selectedCategories,
+
       year: year ? Number(year) : undefined,
       tags: tags.split(",").map(t => t.trim()).filter(Boolean),
   
@@ -217,7 +250,9 @@ export default function NewCaseStudyPage() {
       id, client, slug,
       title,
       //sectors, year, tags, 
-      sector, year, tags,
+      //sector, 
+      selectedCategories,
+      year, tags,
       //brief, writeUp, 
       preview, summaryShortAuto, bodyMDX,
       heroImageUrl, 
@@ -539,31 +574,79 @@ export default function NewCaseStudyPage() {
                   {/* Sectors */}
                 </label>
                 <p className="admin-hint">
-                  Choose a category that best describes the client in this case study. 
+                  {/* Pick one or more categories that best describe the primary focus of this case study. */}
+                  Pick one or more categories. These control where the case study appears in filtered client pages.
                   {/* Select the primary client type (a.k.a. sector) for this case study. */}
-                </p>                
-                <select
+                </p>
+{/* ---------------------------------------------------------------- */}
+                {/* NEW CATEGORY DROPDOWN MENU WITH MULTI-CATEOGRY CAPABILITY */}
+                
+                <div className="category-stack">
+                  {categoryDrafts.map((v, idx) => (
+                    <div key={idx} className="category-row">
+                      <select
+                        className="input"
+                        value={v}
+                        onChange={(e) => setCategoryAt(idx, e.target.value as SectorValue | "")}
+                        aria-label={idx === 0 ? "Primary category" : `Additional category ${idx + 1}`}
+                      >
+                        <option value="">Select a category…</option>
+
+                        {SECTOR_GROUPS.map((g) => (
+                          <optgroup key={g.id} label={g.label}>
+                            {g.values.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {"› "}{sectorLabel(opt)}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
+
+                      {idx > 0 && (
+                        <button
+                          type="button"
+                          className="btnLink"
+                          onClick={() => removeCategoryAt(idx)}
+                          aria-label={`Remove category ${idx + 1}`}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+
+                  {selectedCategories.length >= 1 && (
+                    <button type="button" className="btnLink" onClick={addCategoryDraft}>
+                      + Add another category
+                    </button>
+                  )}
+                </div>
+
+
+
+{/* ---------------------------------------------------------------- */}
+                {/* OLD SECTOR DROPDOWN MENU */}                
+{/*                 <select
                   id="sector"
                   className="input"
                   value={sector}
-                  /* onChange={(e) => setSector(e.target.value)} */
                   onChange={(e) => setSector(e.target.value as SectorValue)}
-                >
+                > */}
 {/*                   <option value="">Select a client type (sector)</option>
                     {SECTOR_VALUES.map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
                       </option>
                     ))} */}
-
-                <option value="">Select a category</option>
+{/*                 <option value="">Select a category</option>
                 {SECTOR_VALUES.map((v) => (
                   <option key={v} value={v}>
                     {sectorLabel(v)}
                   </option>
                 ))}
-
-                </select>
+                </select> */}
+                
 {/*                 <p className="muted type-small">
                   For now, pick one sector; in the final version, you'll be able to pick multiple.
                 </p> */}

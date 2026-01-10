@@ -1860,3 +1860,30 @@ button.chip:active {
 .dbSectorSelect {
   max-width: 220px;
 }
+
+/*new category menu with sub-headings*/
+.c-admin .btnLink {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: var(--brand);
+  cursor: pointer;
+  font: inherit;
+  text-transform: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.c-admin .category-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: .5rem;
+}
+
+.c-admin .category-stack {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
