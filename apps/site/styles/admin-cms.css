@@ -661,6 +661,13 @@ the user fills out)
   color: #000;
 }
 
+.form-label-larger {
+  font-weight: 400;
+  margin-bottom: 0.45rem;
+  display: block;
+  font-size: 1.15rem;
+  color: #000;
+}
 .form-row {
   display: flex;
   flex-wrap: wrap;
@@ -1353,6 +1360,7 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
 .admin-disclosure__hint {
   font-size: 0.85rem;
   opacity: 0.7;
+  margin-bottom:1.5rem;
 }
 
 /* “Client Views” links */
@@ -1419,7 +1427,7 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   border-bottom: 1px solid rgba(0,0,0,0.10);
 }
 
-.editor__btn {
+/* .editor__btn {
   appearance: none;
   border: 1px solid rgba(0,0,0,0.14);
   background: rgba(255,255,255,0.7);
@@ -1432,8 +1440,31 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   letter-spacing: 0.04em;
   font-size: 0.85rem;
   line-height: 1;
+} */
+.text-em {
+  font-style:italic;
 }
+.text-ul {
+  font-style:underline;
+}
+.text-400 {
+  font-weight:400;
+}
+.editor__btn {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
 
+  /* kill the “title font” vibe */
+  text-transform: none;
+  letter-spacing: 0;
+
+  padding: 6px 10px;
+  border: 1px solid #d0d5dd;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
 .editor__textarea {
   width: 100%;
   min-height: 160px;
@@ -1450,4 +1481,45 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   resize: vertical;
 
   box-sizing: border-box;
+}
+
+
+/* Toolbar wrapper */
+.mdToolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  /* visually attach to textarea */
+  padding: 8px;
+  border: 1px solid #d0d5dd;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: #f8fafc;
+}
+
+/* Toolbar buttons */
+.mdToolbar button {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+
+  /* kill the “title font” vibe */
+  text-transform: none;
+  letter-spacing: 0;
+
+  padding: 6px 10px;
+  border: 1px solid #d0d5dd;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.mdToolbar button:hover {
+  background: #f2f4f7;
+}
+
+.mdToolbar button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }

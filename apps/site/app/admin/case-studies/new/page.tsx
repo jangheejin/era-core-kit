@@ -351,7 +351,7 @@ export default function NewCaseStudyPage() {
                   Bullets
                 </button>
                 <button className="editor__btn" type="button" onClick={() => applyLink()}>
-                  Link
+                  <span className="text-ul">🔗 Link</span>
                 </button>
               </div>
 
@@ -447,31 +447,33 @@ export default function NewCaseStudyPage() {
         <details className="admin-disclosure" id="organize">
           <summary className="admin-disclosure__summary">
             <div>
-              <h2 className="section-title" style={{ margin:0 }}>
+{/*               <h2 className="section-title" style={{ margin:0 }}>
                 2) Organize, tag, categorize (optional)
-              </h2>
+              </h2> */}
+
+              <label className="form-label-larger" htmlFor="heroImage">
+                OPTIONAL FEATURES
+              </label>
+
               <div className="admin-disclosure__hint">
-                  OPTIONAL: Add categories and tags so this case study can be used in custom websites created exclusively for certain clients. Tags and categories are what allow filtering and searching.
+                  You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
+                  Tags and categories act like filters.<br /><br />
                   For example, you might tag a case study with "Public Sector" so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
+                  {/* Maybe say something about ability to search? */}
               </div>
             </div>
             <span className="muted">Expand</span>
           </summary>
-
-          <p className="section-kicker" style={{ marginTop: "0.75rem" }}>
-            <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
-            <code> /tag/legislation</code> and <code> /sector/nonprofit</code>.
-          </p>
-
+          
           <div className="form-row form-group" id="sector">
               <div className="form-field">          
                 {/* <h2 className="cms-h3">Client type</h2> */}
                 <label className="form-label" htmlFor="sector">
-                  Client Type
+                  Client Type / Sector
                   {/* Sectors */}
                 </label>
                 <p className="admin-hint">
-                  Select the primary sector (a.k.a. client type) for this case study.
+                  Select the primary client type (a.k.a. sector) for this case study.
                 </p>                
                 <select
                   id="sector"
@@ -479,7 +481,7 @@ export default function NewCaseStudyPage() {
                   value={sector}
                   onChange={(e) => setSector(e.target.value)}
                 >
-                  <option value="">Select a sector (client type)</option>
+                  <option value="">Select a client type (sector)</option>
                     {SECTOR_VALUES.map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
@@ -491,6 +493,12 @@ export default function NewCaseStudyPage() {
                 </p> */}
               </div>
           </div>
+
+          <p className="section-kicker" style={{ marginTop: "0.75rem" }}>
+            <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
+            <code> /tag/legislation</code> and <code> /sector/nonprofit</code>.
+          </p>
+
 
           <div className="form-row form-group" id="tags">
               <div className="form-field">
