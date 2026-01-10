@@ -99,6 +99,7 @@ function autoSummaryFromText(text: string, max = 180) {
 
 export default function NewCaseStudyPage() {
   const router = useRouter();
+
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   const [id] = useState(() =>
@@ -218,6 +219,7 @@ export default function NewCaseStudyPage() {
     [candidateInput]
   );
 
+  
   function save() {
     // Make slug collision-safe right at the save boundary
     const desired = candidateInput.slug;
@@ -230,6 +232,43 @@ export default function NewCaseStudyPage() {
     const out: CaseStudyType = res.data;
     upsertCaseStudy(out);
     router.push(`/admin/case-studies/mock/${out.slug}`);
+  }
+
+  const canSave = validation.success; //reusable save button state
+  const SaveButton = (
+    <button
+      className="btnPrimary"
+      type="button"
+      onClick={save}
+      disabled={!canSave}
+      title={!canSave ? "Fix validation errors first" : "Save"}
+    >
+      Save + Preview
+    </button>
+  );
+
+  function SaveBar({ className }: { className: string }) {
+    return (
+      <div className={className}>
+        <div className="form-actions__left">
+          <button
+            className="btnPrimary"
+            type="button"
+            onClick={save}
+            disabled={!canSave}
+            title={!canSave ? "Fix validation errors first" : "Save"}
+          >
+            Save + Preview
+          </button>
+
+          <div className="save-status">
+            {canSave
+              ? "Ready to save."
+              : "Can't save yet: Missing required fields (Client Name + Description)"}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   //helpers for formatting toolbar
@@ -400,12 +439,10 @@ export default function NewCaseStudyPage() {
             </div> */}
           </div>
 
-                    {/* STICKY SAVE BAR */}
-                    <div className="form-actions form-actions--underEditor">
+          {/* STICKY SAVE BAR */}
+          <SaveBar className="form-actions" />
+{/*           <div className="form-actions form-actions--underEditor">
               <div className="form-actions__left">
-              {/* <div className="form-actions__right"> */}
-
-                {/* Primary action – Save + Preview */}
                 <button
                   className="btnPrimary"
                   type="button"
@@ -420,7 +457,7 @@ export default function NewCaseStudyPage() {
                   {validation.success ? "Ready to save." : "Can't save yet: Missing required fields (Client Name + Description)"}
                 </div>
               </div>
-          </div>
+          </div> */}
           {/* END OF STICKY SAVE BAR */}
         </section>
         </div>
