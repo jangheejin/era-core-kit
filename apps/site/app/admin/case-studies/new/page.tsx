@@ -455,17 +455,18 @@ export default function NewCaseStudyPage() {
                 OPTIONAL FEATURES
               </label>
 
+
+            </div>
+            <span className="muted">Expand</span>
+          </summary>
+          
+          <div className="form-row form-group" id="sector">
               <div className="admin-disclosure__hint">
                   You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
                   Tags and categories act like filters.<br /><br />
                   For example, you might tag a case study with "Public Sector" so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
                   {/* Maybe say something about ability to search? */}
               </div>
-            </div>
-            <span className="muted">Expand</span>
-          </summary>
-          
-          <div className="form-row form-group" id="sector">
               <div className="form-field">          
                 {/* <h2 className="cms-h3">Client type</h2> */}
                 <label className="form-label" htmlFor="sector">
