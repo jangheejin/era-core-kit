@@ -423,6 +423,7 @@ export default function NewCaseStudyPage() {
           </div>
           {/* END OF STICKY SAVE BAR */}
         </section>
+        </div>
 {/* --------------------------------------------------------------------------------- */}
 {/* END OF CORE (REQUIRED) CONTENT */}
 {/* --------------------------------------------------------------------------------- */}
@@ -683,7 +684,7 @@ export default function NewCaseStudyPage() {
 {/* END OF ADVANCED UI. */}
         </details>
       
-      </div>
+      
     </main>
   );
 }
