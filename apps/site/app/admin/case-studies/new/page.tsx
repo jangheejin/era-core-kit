@@ -508,14 +508,24 @@ export default function NewCaseStudyPage() {
           
           <div className="form-row form-group" id="sector">
               <div className="admin-disclosure__hint">
-                  You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
-                  Tags and categories act like filters.<br /><br />
+                  {/* You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
+                  Tags and categories act like filters. */}
+                  You can choose to add categories to this case study. <br /><br />
+
+                  Categories are used to filter the case study database and create custom websites for specific clients. 
+                  For example, you can view all case studies categorized as <code>Local Government</code> <a href="https://era-core-kit-site.vercel.app/local-government">here</a>
+
+{/*                   Adding a tag to a case study is what will enable it to be used in the custom websites created exclusively for specific clients. 
+                  <br /><br />                  
+                  For example, if you tag a case study with <code>Local Government</code>, 
+                  it will appear in  of all the public-sector–related case studies for potential new clients in that sector.
+ */}
+                  {/* These will act like filters for the Case Studies Database */}
 
                   {/* <p className="section-kicker" style={{ marginTop: "0.75rem" }}> */}
-                  <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
-                  <code> /tag/legislation </code>and<code>{" "} /sector/nonprofit</code>.<br /><br />
+{/*                   <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
+                  <code> /tag/legislation </code>and<code>{" "} /sector/nonprofit</code>.<br /><br /> */}
                 {/* </p> */}
-                  For example, you might tag a case study with "Public Sector" so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
                   {/* Maybe say something about ability to search? */}
               </div>
               <div className="form-field">          
