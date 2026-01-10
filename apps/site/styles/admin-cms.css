@@ -1364,25 +1364,26 @@ code {
 }
 
 /* Collapsible "Organize" area */
-.admin-disclosure {
-/*   border: 1px solid rgba(0,0,0,.12);
+/*.admin-disclosure {
+   border: 1px solid rgba(0,0,0,.12);
   border-radius: 12px; */
-  /* background: #fff; */
+  /* background: #fff; 
   padding: 1rem;
-}
+}*/
 
-.optional-features{
+.admin-disclosure {
+  /* border: 1px solid rgba(0,0,0,.12); */
+ border-radius: 12px;
+ padding: 1rem;
+ background:#e4e4e4; 
+}
+/*.optional-features{
     border: 1px solid rgba(0,0,0,.12);
   border-radius: 12px;
   cursor:grab;
-/*   background:#9ca3af; */
-}
-.image-upload {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0,0,0,0.10);
-  border-radius: 12px;
-  padding: 0.75rem 0.9rem;
-}
+   background:#9ca3af; 
+}*/
+
 
 .admin-disclosure > summary {
   cursor: pointer;
@@ -1553,11 +1554,22 @@ code {
   cursor: pointer;
 }
 
-.mdToolbar button:hover {
+.mdToolbar button:hover, .editor__btn:hover {
   background: #f2f4f7;
 }
 
-.mdToolbar button:focus-visible {
+.mdToolbar button:focus-visible, .editor__btn:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
+}
+
+.card.card-new.mt1.card--core{
+  background-color:#ebf1fa;
+}
+
+.image-upload {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
 }
