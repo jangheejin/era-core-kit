@@ -106,6 +106,34 @@ export const SectorSchema = z.enum(SECTOR_VALUES); */
 export type SectorValue = (typeof SECTOR_VALUES)[number];//for when you just need the string values without usding Zod (pure TS)
  */
 
+export const SECTOR_LABELS: Record<SectorValue, string> = {
+  PublicSector: "Public sector",
+  Environment: "Environment",
+  NaturalResources: "Natural resources",
+  Energy: "Energy",
+  Agriculture: "Agriculture",
+  Transportation: "Transportation",
+  InfrastructurePublicWorks: "Infrastructure / public works",
+  Appropriations: "Appropriations",
+  GrantFunding: "Grant funding",
+  StateGovernment: "State government",
+  LocalGovernment: "Local government",
+  TribalGovernment: "Tribal government",
+  PrivateSector: "Private sector",
+  GovContracting: "Government contracting",
+  Nonprofit: "Nonprofit",
+  EmergencyMgmt: "Emergency management",
+  Education: "Education",
+  Geospatial: "Geospatial",
+  Manufacturing: "Manufacturing",
+  Industry: "Industry",
+  Defense: "Defense",
+  Health: "Health",
+  FinTech: "FinTech",
+  CivicTech: "Civic tech",
+  Infrastructure: "Infrastructure",
+};
+
 /**
  * Mechanism is an explicit controlled list (filter pills, validation)
  * (filter pills are the little clickable toggles that let you filter by things like Mechanism)

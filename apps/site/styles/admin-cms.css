@@ -1617,3 +1617,246 @@ code {
   padding: 0.75rem 0.9rem;
 }
 
+.input--tiny {
+  max-width: 260px;
+  padding-block: 0.2rem;
+  font-size: 0.85rem;
+}
+
+
+/*DATABASE / LIST VIEW */
+
+.dbItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dbItemClient {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.dbItemBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .35rem;
+}
+/* Base chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(0,0,0,0.04);
+  color: inherit;
+
+  font-size: 0.85rem;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+}
+button.chip {
+  cursor: pointer;
+}
+button.chip:hover {
+  background: rgba(0,0,0,0.06);
+}
+button.chip:active {
+  transform: translateY(0.5px);
+}
+
+/* Soft tag pill (used for tag display) */
+.chip--soft {
+  background: rgba(0,0,0,0.035);
+  border-color: rgba(0,0,0,0.12);
+}
+
+/* Active chip state (used for Match any/all + selected tags in cloud) */
+.chip--active {
+  background: rgba(0,0,0,0.10);
+  border-color: rgba(0,0,0,0.22);
+}
+
+/* =========================================================
+   TAG FILTER CLOUD (your existing tag filter UI)
+   ========================================================= */
+
+.tag-filter {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.tag-filter__top {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tag-filter__modes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag-filter__search {
+  min-width: 220px;
+  flex: 1;
+}
+
+.tag-cloud {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Tag chip with count on the right */
+.tag-chip {
+  padding-right: 0.4rem; /* room for count */
+}
+
+.tag-chip__label {
+  padding-right: 0.35rem;
+}
+
+.tag-chip__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 1.4rem;
+  height: 1.1rem;
+  padding: 0 0.35rem;
+
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(255,255,255,0.7);
+  opacity: 0.85;
+}
+
+/* Make active tag chips feel selected */
+.tag-chip.chip--active .tag-chip__count {
+  border-color: rgba(0,0,0,0.22);
+  background: rgba(255,255,255,0.85);
+  opacity: 1;
+}
+/* =========================================================
+   STATUS CHIPS (Draft/Published/Internal/etc.)
+   ========================================================= */
+
+/* .chip--status {
+  padding: .15rem .45rem;
+  font-size: .8rem;
+} */
+.chip--status {
+  padding: 0.22rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* keep these subtle; you're not doing color system yet */
+.chip--draft {
+  opacity: 0.85;
+}
+
+.chip--published {
+  opacity: 1;
+}
+
+.chip--internal {
+  opacity: 0.8;
+}
+
+.chip--client {
+  opacity: 0.95;
+}
+
+.chip--featured {
+  opacity: 1;
+  border-style: dashed;
+}
+
+
+
+
+/* =========================================================
+   INLINE TAG EDITOR (pills with remove x)
+   ========================================================= */
+
+.dbTagPill {
+  gap: 0.35rem;
+}
+
+.dbTagRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(0,0,0,0.03);
+  opacity: 0.75;
+}
+
+.dbTagPill:hover .dbTagRemove {
+  opacity: 0.95;
+}
+
+.dbSummary {
+  margin-top: .5rem;
+  font-size: .95rem;
+}
+
+.dbMetaBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  align-items: center;
+  margin-top: .65rem;
+}
+
+.dbTagWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  align-items: center;
+  flex: 1;
+  min-width: 240px;
+}
+
+.dbTagPill {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.dbTagRemove {
+  opacity: .7;
+}
+
+.input--tiny {
+  max-width: 260px;
+  padding-block: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.dbTagInput {
+  max-width: 170px;
+}
+
+.dbSectorSelect {
+  max-width: 220px;
+}

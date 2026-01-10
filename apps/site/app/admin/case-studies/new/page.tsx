@@ -347,7 +347,8 @@ export default function NewCaseStudyPage() {
         <h1 className="form-title">CREATE A NEW CASE STUDY</h1>
         <div className="form-nav">
           <a href="/admin">Admin</a> |{" "}
-          <a href="/admin/case-studies/list">All case studies</a> |{" "}
+          {/* <a href="/admin/case-studies/list">All case studies</a> |{" "} */}
+          <a href="/admin/case-studies/list">Database View (All Case Studies)</a> |{" "}
           <a href="#client-views">Client Views</a>
         </div>
       </div>

@@ -3,25 +3,28 @@
 
 "use client";
 
+import "@styles/admin-cms.css";
+
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { type SectorValue } from "@kit/schema";
 
 import {
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
   SECTOR_VALUES,
+  type SectorValue,
+  type CaseStudyType,
+  normalizeTagList,
+  tagSlug
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-import { normalizeTagList, tagSlug } from "@kit/schema";
-
 export default function CaseStudyListPage() {
   
   //const { items } = useAdminCaseStudies();
-  const { items, resetToBaseline } = useAdminCaseStudies();
+  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
 
   const [q, setQ] = useState("");
   //const [sector, setSector] = useState<string>("");
@@ -35,6 +38,31 @@ export default function CaseStudyListPage() {
   const [selectedTagSlugs, setSelectedTagSlugs] = useState<string[]>([]);
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [tagSearch, setTagSearch] = useState("");
+
+  const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
+
+function parseTagString(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+function commitTagDraft(cs: CaseStudyType) {
+  const raw = (tagDraftById[cs.id] ?? "").trim();
+  if (!raw) return;
+
+  const merged = normalizeTagsStrict([...(cs.tags ?? []), ...parseTagString(raw)]);
+  updateMeta(cs.id, { tags: merged });
+
+  setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
+}
+
+function removeTag(cs: CaseStudyType, removeSlug: string) {
+  const next = normalizeTagsStrict(cs.tags ?? []).filter((t) => tagSlug(t) !== removeSlug);
+  updateMeta(cs.id, { tags: next });
+}
+
 
   const tagOptions = useMemo(() => {
     const counts = new Map<string, { label: string; slug: string; count: number }>();
@@ -60,6 +88,28 @@ export default function CaseStudyListPage() {
       prev.includes(slug) ? prev.filter((x) => x !== slug): [...prev, slug],
     );
   }
+
+  function updateMeta(id: string, patch: Partial<CaseStudyType>) {
+    const existing = items.find((c) => c.id === id);
+    if (!existing) return;
+    upsertCaseStudy({ ...existing, ...patch });
+  }
+
+  function normalizeTagsStrict(input: string[]) {
+    const list = normalizeTagList(input);
+    const seen = new Set<string>();
+    const out: string[] = [];
+  
+    for (const t of list) {
+      const slug = tagSlug(t);
+      if (!slug) continue;
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      out.push(t);
+    }
+    return out;
+  }
+  
 
   //now adding tag filters into existing filtered useMemo
   const filtered = useMemo(() => {
@@ -253,25 +303,162 @@ export default function CaseStudyListPage() {
           {filtered.map((cs) => (
             <div key={cs.id} className="card">
               <div className="row" style={{ justifyContent: "space-between" }}>
-                <div>
-                  <div>
-                    <strong>{cs.title}</strong>{" "}
-                    <span className="muted">({cs.client ?? "—"})</span>
-                  </div>
+              {(() => {
+                const clientLabel = cs.client ?? cs.title ?? "Untitled";
 
-                  <div className="muted" style={{ fontSize: ".9rem" }}>
-                    /{cs.slug} • {(cs.sectors ?? []).join(", ")}• {cs.status} •{" "} {cs.visibility}
+                const isPublished = cs.status === "Published";
+                const isFeatured = Boolean((cs as any).isFeaturedHome); // remove `(as any)` if CaseStudyType includes it
+                const isClientViewable = Boolean((cs as any).isPublic); // same note as above
+
+                // Audience chip: keep it simple and aligned with how you're thinking about it
+                const audienceLabel = !isPublished
+                  ? "Internal"
+                  : isFeatured
+                    ? "Homepage"
+                    : isClientViewable
+                      ? "Client view"
+                      : (cs.visibility === "Public" ? "Public" : "Internal");
+
+                return (
+                  <div className="dbItemHeader">
+                    <div>
+                      <div className="dbItemClient">{clientLabel}</div>
+
+                      <div className="dbItemBadges">
+                        <span className={`chip chip--status ${isPublished ? "chip--published" : "chip--draft"}`}>
+                          {isPublished ? "Published" : "Draft"}
+                        </span>
+
+                        <span className={`chip chip--status ${audienceLabel === "Internal" ? "chip--internal" : "chip--client"}`}>
+                          {audienceLabel}
+                        </span>
+
+                        {isFeatured && <span className="chip chip--status chip--featured">Featured</span>}
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
+                    </div>
                   </div>
-                </div>
+                );
+              })()}
+
 
                 <div className="row">
                   <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
                 </div>
               </div>
 
-              <div className="muted" style={{ marginTop: ".5rem" }}>
+              <div className="dbSummary">
                 {cs.summaryShort}
               </div>
+
+              <div className="dbMetaBar">
+                {/* Tag pills */}
+                <div className="dbTagWrap" aria-label="Tags">
+                  {normalizeTagsStrict(cs.tags ?? []).map((t) => {
+                    const slug = tagSlug(t);
+                    return (
+                      <button
+                        key={slug}
+                        type="button"
+                        className="chip chip--soft dbTagPill"
+                        onClick={() => removeTag(cs, slug)}
+                        title="Remove tag"
+                      >
+                        <span>{t}</span>
+                        <span className="dbTagRemove">×</span>
+                      </button>
+                    );
+                  })}
+
+                  <input
+                    className="input input--tiny dbTagInput"
+                    value={tagDraftById[cs.id] ?? ""}
+                    placeholder="Add tag…"
+                    onChange={(e) => setTagDraftById((prev) => ({ ...prev, [cs.id]: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === ",") {
+                        e.preventDefault();
+                        commitTagDraft(cs);
+                      }
+                    }}
+                    onBlur={() => commitTagDraft(cs)}
+                  />
+                </div>
+
+                {/* Sector edit (still editable, but not shown as text in the item line) */}
+                <select
+                  className="input input--tiny dbSectorSelect"
+                  value={cs.sectors?.[0] ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value as "" | SectorValue;
+                    updateMeta(cs.id, { sectors: v ? [v] : [] });
+                  }}
+                  aria-label="Client type (sector)"
+                  title="Client type"
+                >
+                  <option value="">Client type…</option>
+                  {SECTOR_VALUES.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+
+              <details className="admin-disclosure admin-disclosure--compact" style={{ marginTop: ".75rem" }}>
+                <summary className="admin-disclosure__summary">
+                  <span className="muted">Edit tags / sector</span>
+                  <span className="muted">Expand</span>
+                </summary>
+
+                <div className="form-row form-group" style={{ marginTop: ".75rem" }}>
+                  <div className="form-field">
+                    <label className="form-label">Sector (client type)</label>
+                    <select
+                      className="input input--tiny"
+                      value={cs.sectors?.[0] ?? ""}
+                      onChange={(e) => {
+                        const v = e.target.value as "" | SectorValue;
+                        updateMeta(cs.id, { sectors: v ? [v] : [] });
+                      }}
+                    >
+                      <option value="">—</option>
+                      {SECTOR_VALUES.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-field">
+                    <label className="form-label">Tags</label>
+                    <input
+                      className="input input--tiny"
+                      defaultValue={(cs.tags ?? []).join(", ")}
+                      placeholder="e.g. environment, appropriations"
+                      onBlur={(e) => {
+                        const tags = normalizeTagList(
+                          e.target.value
+                            .split(",")
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                        );
+                        
+                        updateMeta(cs.id, { tags });
+                      }}
+                    />
+                    <p className="admin-hint">Comma-separated. Saves when you click out.</p>
+                  </div>
+                </div>
+              </details>
+
+
+
             </div>
           ))}
         </div>
