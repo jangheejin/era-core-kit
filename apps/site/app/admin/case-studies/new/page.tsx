@@ -180,12 +180,50 @@ const selectedCategories = useMemo(
     reader.readAsDataURL(file);
   }
   
+  // status, visibility (isFeaturedHome, isPublic)
   const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
     useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(false);
+
+  //new helpers for status and visibility based on the simplified controls with 3 options 
+  //(internal draft, published public, and shared with clients)
+  type SharingPreset = "internal" | "clients" | "website" | "custom";
+
+function deriveSharingPreset(): SharingPreset {
+  if (!isPublic && !isFeaturedHome && status === "Draft" && visibility === "Internal") return "internal";
+  if (!isPublic && !isFeaturedHome && status === "Published" && visibility === "ClientSafe") return "clients";
+  if (isPublic && status === "Published" && visibility === "Public") return "website";
+  return "custom";
+}
+
+const sharingPreset = deriveSharingPreset();
+
+function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
+  if (p === "internal") {
+    setStatus("Draft");
+    setVisibility("Internal");
+    setIsPublic(false);
+    setIsFeaturedHome(false);
+    return;
+  }
+  if (p === "clients") {
+    setStatus("Published");
+    setVisibility("ClientSafe");
+    setIsPublic(false);
+    setIsFeaturedHome(false);
+    return;
+  }
+  // website
+  setStatus("Published");
+  setVisibility("Public");
+  setIsPublic(true);
+  // leave featured as-is; user can toggle it
+}
+
   
+
   // form state
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
   const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
@@ -596,7 +634,8 @@ const selectedCategories = useMemo(
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((opt) => (
                               <option key={opt} value={opt}>
-                                {"› "}{sectorLabel(opt)}
+                                {sectorLabel(opt)}
+                                {/* {"› "}{sectorLabel(opt)} */}
                               </option>
                             ))}
                           </optgroup>
@@ -686,8 +725,11 @@ const selectedCategories = useMemo(
                 </div>
               </div>
           </div> */}
+{/* new improved STATUS & VISIBILITY OPTIONS */}
 
-          <div className="form-row form-group">
+
+{/* OLD CLUNKY STATUS & VISIBILITY DROPDOWN MENUs */}
+{/*           <div className="form-row form-group">
             <div className="form-field">
               <label className="form-label">Status</label>
               <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
@@ -701,7 +743,7 @@ const selectedCategories = useMemo(
                 {CASE_STUDY_VISIBILITY_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
-          </div>
+          </div> */}
 
 
           {/* <SaveBar className="form-actions--bottom" /> */}
