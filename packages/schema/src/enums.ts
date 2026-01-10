@@ -81,6 +81,7 @@ export const SECTOR_VALUES = [
   "FinTech",
   "CivicTech",
   "Infrastructure",
+  "PublicWorks",
 //]);
 ] as const;
 export type SectorValue = (typeof SECTOR_VALUES)[number];
@@ -131,10 +132,98 @@ export const SECTOR_LABELS: Record<SectorValue, string> = {
   FinTech: "FinTech",
   CivicTech: "Civic tech",
   Infrastructure: "Infrastructure",
+  PublicWorks: "Public Works",
 };
-export function sectorLabel(v: SectorValue) {
+/* export function sectorLabel(v: SectorValue) {
   return SECTOR_LABELS[v] ?? v;
+} */
+
+// --------------------
+// SECTOR UI HELPERS (labels + grouping)
+// --------------------
+
+function humanizeEnum(value: string) {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/_/g, " ")
+    .trim()
+    .replace(/^./, (c) => c.toUpperCase());
 }
+
+const SECTOR_LABEL_OVERRIDES: Partial<Record<SectorValue, string>> = {
+  PublicSector: "Public sector",
+  PrivateSector: "Private sector",
+  StateGovernment: "State government",
+  LocalGovernment: "Local government",
+  TribalGovernment: "Tribal government",
+  GovContracting: "Government contracting",
+  EmergencyMgmt: "Emergency management",
+  NaturalResources: "Natural resources",
+  CivicTech: "Civic tech",
+  FinTech: "FinTech",
+  Infrastructure: "Infrastructure",
+  PublicWorks: "Public works",
+};
+
+export function sectorLabel(v: SectorValue): string {
+  return SECTOR_LABEL_OVERRIDES[v] ?? humanizeEnum(v);
+}
+
+export type SectorGroup = {
+  id: string;
+  label: string;         // shows as the optgroup header
+  values: SectorValue[]; // actual dropdown options
+};
+
+export const SECTOR_GROUPS: SectorGroup[] = [
+  {
+    id: "clientType",
+    label: "Client type",
+    values: [
+      "PublicSector",
+      "PrivateSector",
+      "Nonprofit",
+      "StateGovernment",
+      "LocalGovernment",
+      "TribalGovernment",
+      "GovContracting",
+    ],
+  },
+  {
+    id: "clientIndustry",
+    label: "Client industry",
+    values: [
+      "Energy",
+      "Agriculture",
+      "Manufacturing",
+      "Industry",
+      "FinTech",
+      "Health",
+      "Defense",
+      "Transportation",
+    ],
+  },
+  {
+    id: "domains",
+    label: "Domains / Programs",
+    values: [
+      "Environment",
+      "NaturalResources",
+      "Infrastructure",
+      "PublicWorks",
+      "Geospatial",
+      "Education",
+      "EmergencyMgmt",
+      "CivicTech",
+    ],
+  },
+  {
+    id: "funding",
+    label: "Funding / budgeting",
+    values: ["Appropriations", "GrantFunding"],
+  },
+];
+
 /**
  * Mechanism is an explicit controlled list (filter pills, validation)
  * (filter pills are the little clickable toggles that let you filter by things like Mechanism)
