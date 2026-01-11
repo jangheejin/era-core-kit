@@ -8,7 +8,8 @@ type NavItem = {
   href: string; 
   label: string; 
 /*   activeIfStartsWith?: string; */
-  startsWith?: string;
+  match?: (pathname: string) => boolean;
+  kind?: "normal" | "primary";
 };
 
 /* const NAV: NavItem[] = [
@@ -18,12 +19,24 @@ type NavItem = {
   { href: "/", label: "Public site" },
 ];
  */
-const NAV: NavItem[] = [
+/*const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard" },
-  // THIS is the “database view”. Label it for humans:
   { href: "/admin/case-studies/list", label: "Case Study Library", startsWith: "/admin/case-studies" },
   { href: "/admin/client-pages", label: "Client Pages", startsWith: "/admin/client-pages" },
+; ]*/
+
+/*const NAV: NavItem[] = [
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/case-studies/list", label: "Case Study Library" },
+   { href: "/admin/client-pages", label: "Client Pages" },
+]; */
+
+const NAV: NavItem[] = [
+  { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
+  { href: "/admin/case-studies/list", label: "Case Studies", match: (p) => p.startsWith("/admin/case-studies") },
+  { href: "/admin/case-studies/new", label: "+ New", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
+
 /* function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   if (href === "/admin") return pathname === "/admin";
@@ -38,7 +51,10 @@ const NAV: NavItem[] = [
  */
 function isActive(pathname: string, item: NavItem) {
   if (item.href === "/admin") return pathname === "/admin";
-  if (item.startsWith) return pathname.startsWith(item.startsWith);
+  if (item.href === "/admin/case-studies/list")
+    return pathname === "/admin/case-studies/list" || pathname.startsWith("/admin/case-studies/list/");
+  if (item.href === "/admin/client-pages")
+    return pathname === "/admin/client-pages" || pathname.startsWith("/admin/client-pages/");
   return pathname === item.href;
 }
 
@@ -46,13 +62,16 @@ export function AdminTopNav() {
   const pathname = usePathname() ?? "";
 
   return (
-    <div className="adminTopNav">
+    <header className="adminTopNav">
+    {/* <div className="adminTopNav"> */}
       <div className="adminTopNav__inner">
         {/* <div className="adminTopNav__brand"> */}
         <div className="adminTopNav__left">
-          <Link href="/admin" className="adminTopNav__brand">
+          {/* <Link href="/admin" className="adminTopNav__brand"> */}
+          <div className="adminTopNav__brand">
             Demo CMS
-          </Link>
+          </div>
+          {/* </Link> */}
 {/*           <Link href="/admin" className="adminTopNav__brandLink">
             Demo CMS
           </Link> */}
@@ -68,24 +87,33 @@ export function AdminTopNav() {
 /*                 className={
                   active ? "adminTopNav__link is-active" : "adminTopNav__link"
                 } */
-                className={`adminTopNav__link ${active ? "adminTopNav__link--active" : ""}`}
+                aria-current={active ? "page" : undefined}
+                /* className={`adminTopNav__link ${active ? "adminTopNav__link--active" : ""}`} */
+                /* className={`adminTopNav__tab ${active ? "is-active" : ""}`} */
+                className={[
+                  "adminTopNav__pill",
+                  active ? "is-active" : "",
+                  item.kind === "primary" ? "is-primary" : "",
+                ].join(" ")}
               >
                 {item.label}
               </Link>
             );
           })}
         </nav>
-      </div>
+      
+{/*         <div className="adminTopNav__right">
+          <Link className="adminTopNav__btn" href="/admin/case-studies/new">
+            + New Case Study
+          </Link>
 
-      <div className="adminTopNav__right">
-        <Link className="adminTopNav__Link" href="/admin/case-studies/new">
-          + New Case Study
-        </Link>
-
-        <Link className="adminTopNav__Link" href="/">
-          Public Site
-        </Link>
+          <Link className="adminTopNav__btn adminTopNav__btn--ghost" href="/">
+            Public Site
+          </Link>
+        </div> */}
+        
       </div>
-    </div>
+    {/* </div> */}
+    </header>
   );
 }

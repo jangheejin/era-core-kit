@@ -36,7 +36,7 @@ import { AdminTopNav } from "./components/AdminTopNav";
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <>
-{/*       <AdminTopNav /> */}
+      <AdminTopNav />
       {children}
     </>
   );
