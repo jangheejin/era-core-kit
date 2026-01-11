@@ -12,6 +12,8 @@ import {
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
   SECTOR_VALUES,
+  SECTOR_GROUPS,
+  sectorLabel,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
