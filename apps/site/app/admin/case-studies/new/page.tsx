@@ -189,7 +189,40 @@ const selectedCategories = useMemo(
 
   //new helpers for status and visibility based on the simplified controls with 3 options 
   //(internal draft, published public, and shared with clients)
-  type SharingPreset = "internal" | "clients" | "website" | "custom";
+
+  type AvailabilityPreset = "internal" | "clients" | "website" | "custom";
+
+  function deriveAvailabilityPreset(): AvailabilityPreset {
+    if (!isPublic && !isFeaturedHome && status === "Draft" && visibility === "Internal") return "internal";
+    if (!isPublic && !isFeaturedHome && status === "Published" && visibility === "ClientSafe") return "clients";
+    if (isPublic && status === "Published" && visibility === "Public") return "website";
+    return "custom";
+  }
+
+  const availabilityPreset = deriveAvailabilityPreset();
+
+  function applyAvailabilityPreset(p: Exclude<AvailabilityPreset, "custom">) {
+    if (p === "internal") {
+      setStatus("Draft");
+      setVisibility("Internal");
+      setIsPublic(false);
+      setIsFeaturedHome(false);
+      return;
+    }
+    if (p === "clients") {
+      setStatus("Published");
+      setVisibility("ClientSafe");
+      setIsPublic(false);
+      setIsFeaturedHome(false);
+      return;
+    }
+    // website
+    setStatus("Published");
+    setVisibility("Public");
+    setIsPublic(true);
+    // keep isFeaturedHome as-is; user can toggle it
+  }
+/*   type SharingPreset = "internal" | "clients" | "website" | "custom";
 
 function deriveSharingPreset(): SharingPreset {
   if (!isPublic && !isFeaturedHome && status === "Draft" && visibility === "Internal") return "internal";
@@ -215,12 +248,11 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
     setIsFeaturedHome(false);
     return;
   }
-  // website
+
   setStatus("Published");
   setVisibility("Public");
   setIsPublic(true);
-  // leave featured as-is; user can toggle it
-}
+} */
 
   
 
@@ -726,6 +758,103 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
               </div>
           </div> */}
 {/* new improved STATUS & VISIBILITY OPTIONS */}
+
+          <fieldset className="form-group">
+            <legend className="form-label">Publishing</legend>
+          {/*   <p className="admin-hint">
+              Who can see this, and whether it appears on the public website.
+            </p> */}
+
+            <div className="radioList" role="radiogroup" aria-label="Access and placement">
+              <label className={`radioRow ${availabilityPreset === "internal" ? "isSelected" : ""}`}>
+                <input
+                  type="radio"
+                  name="availability"
+                  checked={availabilityPreset === "internal"}
+                  onChange={() => applyAvailabilityPreset("internal")}
+                />
+                <div className="radioText">
+                  <div className="radioTitle">Internal draft</div>
+                  <div className="radioDesc">Team-only. Not visible to clients or on the website.</div>
+                </div>
+              </label>
+
+              <label className={`radioRow ${availabilityPreset === "clients" ? "isSelected" : ""}`}>
+                <input
+                  type="radio"
+                  name="availability"
+                  checked={availabilityPreset === "clients"}
+                  onChange={() => applyAvailabilityPreset("clients")}
+                />
+                <div className="radioText">
+                  <div className="radioTitle">Client-visible</div>
+                  <div className="radioDesc">Visible in client pages/collections. Not public.</div>
+                </div>
+              </label>
+
+              <label className={`radioRow ${availabilityPreset === "website" ? "isSelected" : ""}`}>
+                <input
+                  type="radio"
+                  name="availability"
+                  checked={availabilityPreset === "website"}
+                  onChange={() => applyAvailabilityPreset("website")}
+                />
+                <div className="radioText">
+                  <div className="radioTitle">Public website</div>
+                  <div className="radioDesc">Publicly visible on the site.</div>
+                </div>
+              </label>
+
+              {availabilityPreset === "custom" && (
+                <label className="radioRow isSelected">
+                  <input type="radio" name="availability" checked readOnly />
+                  <div className="radioText">
+                    <div className="radioTitle">Custom</div>
+                    <div className="radioDesc">Using advanced workflow settings below.</div>
+                  </div>
+                </label>
+              )}
+            </div>
+
+            {availabilityPreset === "website" && (
+              <label className="toggleRow">
+                <input
+                  type="checkbox"
+                  checked={isFeaturedHome}
+                  onChange={(e) => setIsFeaturedHome(e.target.checked)}
+                />
+                <span><strong>Feature on homepage</strong></span>
+              </label>
+            )}
+
+{/*             <details className="advancedBox">
+              <summary>Advanced workflow</summary>
+
+              <div className="form-row form-group" style={{ marginTop: ".75rem" }}>
+                <div className="form-field">
+                  <label className="form-label">Workflow status</label>
+                  <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
+                    {CASE_STUDY_STATUS_VALUES.map((v) => (
+                      <option key={v} value={v}>
+                        {v === "InProgress" ? "In progress" : v === "NeedsReview" ? "Needs review" : v}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Access level</label>
+                  <select className="input" value={visibility} onChange={(e) => setVisibility(e.target.value as any)}>
+                    {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                      <option key={v} value={v}>
+                        {v === "ClientSafe" ? "Client-safe" : v}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </details> */}
+          </fieldset>
 
 
 {/* OLD CLUNKY STATUS & VISIBILITY DROPDOWN MENUs */}
