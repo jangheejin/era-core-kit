@@ -2111,132 +2111,8 @@ button.chip:active {
   background: transparent;
   box-sizing: border-box;
 }
-
-/* Hover + active feel */
-.radioRow:hover{
-  background: var(--ui-surface-2);
-  border-color: var(--ui-border-strong);
-}
-
-.radioRow:active{
-  transform: scale(0.995);
-}
-
-/* Focus state */
-.radioRow:focus-within{
-  border-color: var(--ui-accent);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22), var(--ui-shadow);
-}
-@media (prefers-color-scheme: dark) {
-  .radioRow:focus-within{
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.22), var(--ui-shadow);
-  }
-}
-
-/* Selected state (works with .isSelected class) */
-.radioRow.isSelected, 
-.radioRow.radioRow:has(input[type="radio"]:checked){/* Optional: if the class toggle is ever removed, this “just works” in modern browsers */
-  background: var(--brand-light);
-
-/*   border-color: rgba(255,255,255,0.65);
-  border-width: 1px;
-  box-shadow:
-    inset 0 0 0 2px rgba(255,255,255,0.55),
-    var(--ui-shadow); */
-  border-width: 1.5px;
-  border-radius: 12px;
-
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.75);
-}
-
-.radioRow.isSelected .radioTitle,
-.radioRow:has(input[type="radio"]:checked) .radioTitle{
-  color: #fff;
-}
-
-.radioRow.isSelected .radioDesc,
-.radioRow:has(input[type="radio"]:checked) .radioDesc{
-  color: rgba(255,255,255,0.86);
-}
-
-/* radio glyph contrasting with the brand background */
-.radioRow.isSelected::before,
-.radioRow:has(input[type="radio"]:checked)::before{
-  border-color: rgba(255,255,255,0.92);
-  background: radial-gradient(circle at 50% 50%, #fff 0 4px, transparent 5px);
-}
-
-/* Keep focus visible even on a strong background */
-.radioRow.isSelected:focus-within,
-.radioRow:has(input[type="radio"]:checked):focus-within{
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.28), var(--ui-shadow);
-}
-
-/* Optional: stronger hover contrast when NOT selected */
-.radioRow:not(.isSelected):hover{
-  background: var(--ui-surface-2);
-}
-.radioRow.isSelected::before{
-  border-color: var(--ui-accent);
-  background: radial-gradient(circle at 50% 50%, var(--ui-accent) 0 4px, transparent 5px);
-}
-
-.radioRow:has(input[type="radio"]:checked)::before{
-  border-color: var(--brand);
-  background: radial-gradient(circle at 50% 50%, var(--ui-accent) 0 4px, transparent 5px);
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .radioRow{ transition: none; }
-  .radioRow:active{ transform: none; }
-}
-
-/* Windows high-contrast / forced colors */
-@media (forced-colors: active){
-  .radioRow{
-    forced-color-adjust: auto;
-    box-shadow: none;
-    border: 1px solid CanvasText;
-    /* background: Canvas; */
-    background: var(--brand);
-  }
-  .radioRow::before{
-    border-color: CanvasText;
-  }
-  .radioRow.isSelected{
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-
-/* ------------------------------- */
-/* Optional: style toggleRow  */
-/* ------------------------------- */
-
-.toggleRow{
-  margin-top: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-
-  padding: 0.7rem 0.9rem;
-  border: 1px solid var(--ui-border);
-  border-radius: 12px;
-  background: var(--ui-surface);
-  box-shadow: var(--ui-shadow);
-}
-
-.toggleRow input[type="checkbox"]{
-  width: 18px;
-  height: 18px;
-  accent-color: var(--ui-accent);
-}
-
-
 /* ----------------------------------------- */
-/* Publishing radios -> 3 side-by-side buttons */
-/* Uses your existing: .radioList / .radioRow  */
+/* Publishing radios as 3 compact buttons    */
 /* ----------------------------------------- */
 
 .radioList{
@@ -2246,61 +2122,63 @@ button.chip:active {
   margin-top: 0.5rem;
 }
 
-/* Make each label look like a small button */
+/* label becomes the button */
 .radioRow{
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr; /* kill the old "radio icon + text" layout */
-  align-items: center;
-  justify-items: center;
-
-  padding: 0.65rem 0.75rem;
-  min-height: 62px;
-
-  border-radius: 12px;
-  border: 1px solid var(--ui-border);
-  background: var(--ui-surface);
-
-  box-shadow: none; /* feels more button-like */
-  cursor: pointer;
-  text-align: center;
-
-  transition: background-color 140ms ease, border-color 140ms ease, transform 60ms ease;
-}
-
-/* Hide the custom radio glyph from the "card" version */
-.radioRow::before{
-  display: none;
-}
-
-/* Keep the real radio accessible but invisible */
-.radioRow input[type="radio"]{
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  margin: 0;
-}
-
-/* Center the text stack */
-.radioRow .radioText{
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 0.15rem;
+
+  padding: 0.65rem 0.75rem;
+  min-height: 58px;
+
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  background: var(--ui-surface);
+  background-color: #a8a8a8;
+
+  box-shadow: none;
+  cursor: pointer;
+  user-select: none;
+
+  transition: background-color 140ms ease, border-color 140ms ease, transform 60ms ease, box-shadow 140ms ease;
+  box-shadow:
+  inset 0 0 0 2px rgba(255,255,255,0.9),
+  0 0 0 1px rgba(0,0,0,0.18);
+}
+
+/* IMPORTANT: do NOT overlay the whole label with the input.
+   Use a “visually hidden but focusable” pattern instead. */
+.radioRow input[type="radio"]{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.radioRow .radioText{
+  text-align: center;
   min-width: 0;
 }
 
 .radioRow .radioTitle{
-  color: var(--ui-text);
+  /* color: var(--ui-text); */
+  color: #000;
   font-weight: 650;
   font-size: 0.92rem;
   line-height: 1.15;
 }
 
-/* Optional: keep desc but clamp so buttons stay compact */
 .radioRow .radioDesc{
-  color: var(--ui-muted);
+  margin-top: 0.15rem;
+  /* color: var(--ui-muted); */
+  color: #000;
   font-size: 0.78rem;
   line-height: 1.25;
 
@@ -2310,47 +2188,85 @@ button.chip:active {
   overflow: hidden;
 }
 
-/* Hover/press */
 .radioRow:hover{
-  background: var(--ui-surface-2);
-  border-color: var(--ui-border-strong);
+  /* background: var(--ui-surface-2); */
+  background: var(--brand-lightest);
+  border-color: var(--brand-lighter);
 }
 
 .radioRow:active{
   transform: scale(0.99);
 }
 
-/* Keyboard focus */
+/* Focus ring */
 .radioRow:focus-within{
   border-color: var(--ui-accent);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22);
 }
+@media (prefers-color-scheme: dark){
+  .radioRow:focus-within{
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.22);
+  }
+}
 
-/* Selected = high contrast using var(--brand) + unmistakable ring */
+/* Selected state: high contrast using --brand + VERY obvious ring */
 .radioRow.isSelected{
-  background: var(--brand-light);
-  border-color: var(--brand);
-  border-width:3px;
+  background: var(--brand);
+  border-color: rgba(255,255,255,0.75);
 
   box-shadow:
-    inset 0 0 0 2px rgba(255,255,255,0.92),
-    0 0 0 2px rgba(0,0,0,0.18);
+    inset 0 0 0 2px rgba(255,255,255,0.9),
+    0 0 0 1px rgba(0,0,0,0.18);
 }
 
 .radioRow.isSelected .radioTitle{
   color: #fff;
 }
-
 .radioRow.isSelected .radioDesc{
   color: rgba(255,255,255,0.86);
 }
 
-/* Optional: small checkmark to make selection unambiguous */
-.radioRow.isSelected::after{
+/* Make title a centered row so an icon + text stays centered */
+.radioRow .radioTitle{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+/* Reserve space so layout doesn't jump when selected */
+.radioRow .radioTitle::before{
+  content: "✓";
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.20);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1;
+
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+/* Show the badge only when selected */
+.radioRow.isSelected .radioTitle::before{
+  opacity: 1;
+  transform: scale(1);
+}
+/* Optional: checkmark badge (safe version) DIDN'T wORK*/
+/* .radioRow.isSelected::after{
   content: "✓";
   position: absolute;
   top: 8px;
   right: 10px;
+  pointer-events: none;
+  z-index: 1;
 
   width: 18px;
   height: 18px;
@@ -2363,11 +2279,15 @@ button.chip:active {
   font-weight: 800;
   font-size: 12px;
   line-height: 1;
+} */
+
+/* Responsive fallback */
+@media (max-width: 640px){
+  .radioList{ grid-template-columns: 1fr; }
 }
 
-/* Responsive: if it gets cramped, wrap to 1 column */
-@media (max-width: 640px){
-  .radioList{
-    grid-template-columns: 1fr;
-  }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .radioRow{ transition: none; }
+  .radioRow:active{ transform: none; }
 }
