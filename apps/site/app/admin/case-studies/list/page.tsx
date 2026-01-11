@@ -6,94 +6,90 @@
 import "@styles/admin-cms.css";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
-  SECTOR_VALUES,
   SECTOR_GROUPS,
+  SECTOR_VALUES,
   sectorLabel,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
-  tagSlug
+  tagSlug,
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-export default function CaseStudyListPage() {
-  
-  //const { items } = useAdminCaseStudies();
-  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+// Demo-only: restore “auto-set a category if none selected”
+const DEMO_AUTO_DEFAULT_CATEGORY = true;
+const DEFAULT_CATEGORY: SectorValue = "PublicSector";
 
-  const [q, setQ] = useState("");
-  //const [sector, setSector] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
-  const [visibility, setVisibility] = useState<string>("");
-
-//  const [sector, setSector] = useState<SectorValue | "">("");
-  const [sectorFilter, setSectorFilter] = useState<SectorValue | "">("");
-
-  const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
-
-
-
-  type TagMode = "any" | "all";
-  const [selectedTagSlugs, setSelectedTagSlugs] = useState<string[]>([]);
-  const [tagMode, setTagMode] = useState<"any" | "all">("any");
-  const [tagSearch, setTagSearch] = useState("");
-
-  const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
-
-function parseTagString(raw: string): string[] {
+function parseCommaList(raw: string): string[] {
   return raw
     .split(",")
     .map((t) => t.trim())
     .filter(Boolean);
 }
 
-function commitTagDraft(cs: CaseStudyType) {
-  const raw = (tagDraftById[cs.id] ?? "").trim();
-  if (!raw) return;
-
-  const merged = normalizeTagsStrict([...(cs.tags ?? []), ...parseTagString(raw)]);
-  updateMeta(cs.id, { tags: merged });
-
-  setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
+// No typeof checks. This is “recover if some old draft accidentally saved the wrong shape”.
+function toStringArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.map((x) => String(x));
+  if (v == null) return [];
+  const s = String(v).trim();
+  if (!s) return [];
+  return parseCommaList(s); // handles "a, b, c"
 }
 
-function removeTag(cs: CaseStudyType, removeSlug: string) {
-  const next = normalizeTagsStrict(cs.tags ?? []).filter((t) => tagSlug(t) !== removeSlug);
-  updateMeta(cs.id, { tags: next });
-}
+function normalizeTagsStrict(list: string[]): string[] {
+  const normalized = normalizeTagList(list);
+  const seen = new Set<string>();
+  const out: string[] = [];
 
-
-  const tagOptions = useMemo(() => {
-    const counts = new Map<string, { label: string; slug: string; count: number }>();
-    for (const cs of items) {
-      for (const t of normalizeTagList(cs.tags ?? [])) {
-        const slug = tagSlug(t);
-        const prev = counts.get(slug);
-        if (prev) prev.count += 1;
-        else counts.set(slug, { label: t, slug, count: 1 });
-      }
-    }
-    return Array.from(counts.values()).sort((a, b) => b.count - a.count);
-  }, [items]);
-
-  const visibleTagOptions = useMemo(() => {
-    const q = tagSearch.trim().toLowerCase();
-    if (!q) return tagOptions;
-    return tagOptions.filter((t) => t.label.toLowerCase().includes(q));
-  }, [tagOptions, tagSearch]);
-
-  function toggleTag(slug:string) {
-      setSelectedTagSlugs((prev) =>
-      prev.includes(slug) ? prev.filter((x) => x !== slug): [...prev, slug],
-    );
+  for (const t of normalized) {
+    const slug = tagSlug(t);
+    if (!slug) continue;
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+    out.push(t);
   }
+  return out;
+}
+
+function normalizeSectorsStrict(list: string[]): SectorValue[] {
+  const allowed = new Set<string>(SECTOR_VALUES);
+  const out: SectorValue[] = [];
+
+  for (const raw of list) {
+    const s = String(raw).trim();
+    if (!allowed.has(s)) continue;
+    out.push(s as SectorValue);
+  }
+
+  // de-dupe while preserving order
+  const seen = new Set<string>();
+  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
+}
+
+function visibilityLabel(v: string) {
+  if (v === "ClientSafe") return "Client-safe";
+  return v;
+}
+
+export default function CaseStudyListPage() {
+  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+
+  // filters
+  const [q, setQ] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+
+  // per-row editing state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
 
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
@@ -101,102 +97,76 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
     upsertCaseStudy({ ...existing, ...patch });
   }
 
-  function normalizeTagsStrict(input: string[]) {
-    const list = normalizeTagList(input);
-    const seen = new Set<string>();
-    const out: string[] = [];
-  
-    for (const t of list) {
-      const slug = tagSlug(t);
-      if (!slug) continue;
-      if (seen.has(slug)) continue;
-      seen.add(slug);
-      out.push(t);
-    }
-    return out;
-  }
-  
+  // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
+  useEffect(() => {
+    if (!DEMO_AUTO_DEFAULT_CATEGORY) return;
 
-  //now adding tag filters into existing filtered useMemo
+    // Only patch records that are genuinely missing categories.
+    const missing = items.filter((cs) => {
+      const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+      return sectors.length === 0;
+    });
+
+    if (missing.length === 0) return;
+
+    for (const cs of missing) {
+      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
+
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
-    
+
     return items.filter((cs) => {
-//      if (sectorFilter && !(cs.sectors ?? []).includes(sectorFilter)) return false;
-      if (sectorFilter && !cs.sectors?.includes(sectorFilter)) return false;
-//      if (sector && !cs.sectors?.includes(sector)) return false;
-      if (status && cs.status !== status) return false;
-      if (visibility && cs.visibility !== visibility) return false;
+      const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+      const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
 
-      //tag CHIPS filtering
-      if (selectedTagSlugs.length > 0) {
-        const csTagSlugs = new Set(normalizeTagList(cs.tags ?? []).map(tagSlug));
-
-        const ok =
-          tagMode === "any"
-            ? selectedTagSlugs.some((t) => csTagSlugs.has(t))
-            : selectedTagSlugs.every((t) => csTagSlugs.has(t));
-        
-        if (!ok) return false;
-      }
-/*         const hits = selectedTagSlugs.filter((t) => csTagSlugs.includes(t)).length;
-        if (tagMode === "any" && hits === 0) return false;
-        if (tagMode === "all" && hits !== selectedTagSlugs.length) return false; */
+      if (categoryFilter && !sectors.includes(categoryFilter)) return false;
+      if (statusFilter && cs.status !== statusFilter) return false;
+      if (visibilityFilter && cs.visibility !== visibilityFilter) return false;
 
       if (!qq) return true;
+
       const hay = [
-        cs.title,
         cs.client ?? "",
-        cs.slug,
-        cs.summaryShort,
-        ...(cs.tags ?? []),
+        cs.title ?? "",
+        cs.summaryShort ?? "",
+        ...sectors.map((s) => sectorLabel(s)),
+        ...tags,
       ]
         .join(" ")
         .toLowerCase();
 
       return hay.includes(qq);
     });
-  }, [//DEPENDENCIES
-    items, 
-    q, 
-    sectorFilter,
-    //sector, 
-    status, 
-    visibility,
-    selectedTagSlugs,
-    tagMode
-  ]);
+  }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
 
-  /*TO DO: MAYBE CHANGE CLASSNAME FROM  C-ADMIN BACK TO C-SECTION, ETC? and similarly throughout*/
-  //const [sectors, setSectors] = useState<SectorValue[]>([SECTOR_VALUES[0]]);
   return (
     <main className="c-admin">
-      <ContextBanner view="preview">This is a {/* temporary  */}demo CMS database. 
-        {/* You can filter by client type using the dropdown menu, "All sectors". You can also filter by tag, client name, etc, by typing in the "Search" box */}
-        {/*<br/><br/>
-         After you <Link href="/admin/case-studies/new">create your own mock case studies</Link>, you can preview them here as if they're part of this 
-        database, but changes are stored only in your browser. They will remain viewable by you as long as you don't clear 
-        your cache/use incognito mode<br/><br/> 
-        The database currently contains (<strong>{items.length}</strong>) total case studies, 5 of 
-        which are mock entries created to populate the database with something. */}
+      <ContextBanner view="preview">
+        This is a temporary demo CMS database. You can filter by category, filter by visibility, and search.
+        Changes are stored only in your browser (localStorage).
       </ContextBanner>
+
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className = "type-h2">Case Study Database</h1>
-        <div className="row">
-{/*           <Link href="/admin">Admin</Link>
-          <Link href="/admin/case-studies/new">New</Link> */}
+        <h1 className="type-h2">Demo Case Study Database</h1>
+        <div className="row" style={{ gap: ".5rem" }}>
+{/*           <Link className="btnSmall" href="/admin/case-studies/new">
+            New
+          </Link> */}
           <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>
         </div>
       </div>
 
+      {/* FILTER BAR */}
       <div className="card" style={{ marginTop: "1rem" }}>
-        <div className="row">
+        <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
           <input
             className="input"
-            /* placeholder="Search title / client / slug / tags…" */
-            placeholder="Search client / category / tags…"
+            placeholder="Search client / categories / tags…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             style={{ flex: 1, minWidth: 240 }}
@@ -204,330 +174,276 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
 
           <select
             className="input"
-            value={sectorFilter}
-            onChange={(e) => setSectorFilter(e.target.value as SectorValue | "")}
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
           >
-{/*           <select className="input" value={sector} onChange={(e) => setSector(e.target.value)}> */}
-            {/* <option value="">All sectors</option> */}
             <option value="">Filter by category</option>
             {SECTOR_VALUES.map((v) => (
               <option key={v} value={v}>
-                {v}
+                {sectorLabel(v)}
               </option>
             ))}
           </select>
 
-{/*           <select className="input" value={status} onChange={(e) => setStatus(e.target.value)}> */}
-            {/* <option value="">All status</option> */}
-{/*             <option value="">Filter by draft status</option> */}
-{/*             {CASE_STUDY_STATUS_VALUES.map((v) => (
+{/*           <select className="input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="">All status</option>
+            {CASE_STUDY_STATUS_VALUES.map((v) => (
               <option key={v} value={v}>
                 {v}
               </option>
             ))}
-          </select>
- */}
-          <select
-            className="input"
-            value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
-          >
+          </select> */}
+
+          <select className="input" value={visibilityFilter} onChange={(e) => setVisibilityFilter(e.target.value)}>
             <option value="">Filter by visibility</option>
             {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
               <option key={v} value={v}>
-                {v}
+                {visibilityLabel(v)}
               </option>
             ))}
           </select>
         </div>
-
-        {/* tag filtering */}
-        
-        {/* <div className="tag-filter">
-          <div className="tag-filter__top">
-            <div className="tag-filter__modes">
-              <label>Filter by tag</label>
-              <button
-                type="button"
-                className={`chip ${tagMode === "any" ? "chip--active" : ""}`}
-                onClick={() => setTagMode("any")}
-                aria-pressed={tagMode === "any"}
-              >
-                Match any
-              </button>
-
-              <button
-                type="button"
-                className={`chip ${tagMode === "all" ? "chip--active" : ""}`}
-                onClick={() => setTagMode("all")}
-                aria-pressed={tagMode === "all"}
-              >
-                Match all
-              </button>
-
-              {selectedTagSlugs.length > 0 && (
-                <button className="btn" type="button" onClick={() => setSelectedTagSlugs([])}>
-                  Clear tags
-                </button>
-              )}
-            </div>
-
-            <input
-              className="input tag-filter__search"
-              placeholder="Filter tags…"
-              value={tagSearch}
-              onChange={(e) => setTagSearch(e.target.value)}
-            />
-          </div>
-
-          <div className="tag-cloud" role="list">
-            {visibleTagOptions.map((t) => {
-              const active = selectedTagSlugs.includes(t.slug);
-              return (
-                <button
-                  key={t.slug}
-                  type="button"
-                  className={`chip tag-chip ${active ? "chip--active" : ""}`}
-                  onClick={() => toggleTag(t.slug)}
-                  aria-pressed={active}
-                  title={`${t.label} (${t.count})`}
-                >
-                  <span className="tag-chip__label">{t.label}</span>
-                  <span className="tag-chip__count">{t.count}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div> */}
-
-{/* END OF CASE STUDY FILTER SECTION */}
       </div>
 
-        
-
+      {/* LIST */}
       <div className="card" style={{ marginTop: "1rem" }}>
-        <p className="muted">Showing {filtered.length} / {items.length}</p>
+        <p className="muted">
+          Showing {filtered.length} / {items.length}
+        </p>
 
         <div style={{ display: "grid", gap: ".75rem" }}>
-          {filtered.map((cs) => (
-            <div key={cs.id} className="card">
-              <div className="row" style={{ justifyContent: "space-between" }}>
-              {(() => {
-                const clientLabel = cs.client ?? cs.title ?? "Untitled";
+          {filtered.map((cs) => {
+            const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
+            const hasSeparateTitle =
+              (cs.client ?? "").trim().length > 0 &&
+              (cs.title ?? "").trim().length > 0 &&
+              (cs.client ?? "").trim() !== (cs.title ?? "").trim();
 
-                const isPublished = cs.status === "Published";
-                const isFeatured = Boolean((cs as any).isFeaturedHome); // remove `(as any)` if CaseStudyType includes it
-                const isClientViewable = Boolean((cs as any).isPublic); // same note as above
+            const secondaryTitle = hasSeparateTitle ? cs.title : null;
 
-                const audienceLabel = !isPublished
-                  ? "Internal"
-                  : isFeatured
-                    ? "Homepage"
-                    : isClientViewable
-                      ? "Client view"
-                      : (cs.visibility === "Public" ? "Public" : "Internal");
+            const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+            const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
 
-                return (
-                  <div className="dbItemHeader">
-                    <div>
-                      <div className="dbItemClient">{clientLabel}</div>
+            const isEditing = editingId === cs.id;
 
-                      <div className="dbItemBadges">
-                        <span className={`chip chip--status ${isPublished ? "chip--published" : "chip--draft"}`}>
-                          {isPublished ? "Published" : "Draft"}
-                        </span>
+            const isPublished = cs.status === "Published";
+            const vis = cs.visibility;
 
-                        <span className={`chip chip--status ${audienceLabel === "Internal" ? "chip--internal" : "chip--client"}`}>
-                          {audienceLabel}
-                        </span>
+            return (
+              <div key={cs.id} className="card dbItem">
+                <div className="dbItemHeader">
+                  <div className="dbItemMain">
+                    <div className="dbItemClient">{clientLabel}</div>
+{/*                     {secondaryTitle && <div className="dbItemTitle">{secondaryTitle}</div>} */}
 
-                        {isFeatured && <span className="chip chip--status chip--featured">Featured</span>}
-                      </div>
+                    <div className="dbBadges">
+                      <span className={`badge ${isPublished ? "badge--published" : "badge--draft"}`}>
+                        <span className="badgeDot" />
+                        {isPublished ? "Published" : "Draft"}
+                      </span>
+
+                      <span className={`badge badge--audience`}>
+                        <span className="badgeDot" />
+                        {visibilityLabel(vis)}
+                      </span>
                     </div>
-
-{/*                     <div className="row">
-                      <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
-                    </div> */}
                   </div>
-                );
-              })()}
 
+                  <div className="dbActions">
+                    <Link className="btnSmall" href={`/admin/case-studies/mock/${cs.slug}`}>
+                      Preview
+                    </Link>
 
-                <div className="row">
-                  <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
-                </div>
-              </div>
-
-              <div className="dbSummary">
-                {cs.summaryShort}
-              </div>
-
-              <div className="dbMetaBar">
-                {/* Tag pills */}
-{/*                 <div className="dbTagWrap" aria-label="Tags">
-                  {normalizeTagsStrict(cs.tags ?? []).map((t) => {
-                    const slug = tagSlug(t);
-                    return (
-                      <button
-                        key={slug}
-                        type="button"
-                        className="chip chip--soft dbTagPill"
-                        onClick={() => removeTag(cs, slug)}
-                        title="Remove tag"
-                      >
-                        <span>{t}</span>
-                        <span className="dbTagRemove">×</span>
-                      </button>
-                    );
-                  })}
-
-                  <input
-                    className="input input--tiny dbTagInput"
-                    value={tagDraftById[cs.id] ?? ""}
-                    placeholder="Add tag…"
-                    onChange={(e) => setTagDraftById((prev) => ({ ...prev, [cs.id]: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === ",") {
-                        e.preventDefault();
-                        commitTagDraft(cs);
-                      }
-                    }}
-                    onBlur={() => commitTagDraft(cs)}
-                  />
-                </div> */}
-
-                {/* Sector edit (still editable, but not shown as text in the item line) */}
-{/*                 <select
-                  className="input input--tiny dbSectorSelect"
-                  value={cs.sectors?.[0] ?? ""}
-                  onChange={(e) => {
-                    const v = e.target.value as "" | SectorValue;
-                    updateMeta(cs.id, { sectors: v ? [v] : [] });
-                  }}
-                  aria-label="Client type (sector)"
-                  title="Client type"
-                >
-                  <option value="">Client type…</option>
-                  {SECTOR_VALUES.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select> */}
-              </div>
-
-
-{/*               <details className="admin-disclosure admin-disclosure--compact"> */}
-{/*                 <summary className="admin-disclosure__summary">
-                  <span className="muted">Edit tags / sector</span>
-                  <span className="muted">Expand</span>
-                </summary> */}
-
-                <div className="form-row form-group" style={{ marginTop: ".75rem" }}>
-                  <div className="form-field">
-                    {/* <label className="form-label">Sector (client type)</label> */}
-                    <label className="form-label">Categories</label>
-                    <select
-                      className="input input--tiny"
-                      value={cs.sectors?.[0] ?? ""}
-                      onChange={(e) => {
-                        const v = e.target.value as "" | SectorValue;
-                        updateMeta(cs.id, { sectors: v ? [v] : [] });
-                      }}
+                    <button
+                      className="btnSmall"
+                      type="button"
+                      onClick={() => setEditingId((prev) => (prev === cs.id ? null : cs.id))}
+                      aria-expanded={isEditing}
                     >
-                      <option value="">—</option>
-                      {SECTOR_VALUES.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      {isEditing ? "Close" : "Edit"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="dbSummary">{cs.summaryShort}</div>
+
+                {/* PROPERTY ROWS (compact, always visible) */}
+                <div className="dbProps">
+                  <div className="dbProp">
+                    <div className="dbPropLabel">Categories</div>
+                    <div className="dbPillRow">
+                      {sectors.length === 0 ? (
+                        <span className="pill pill--muted">Uncategorized</span>
+                      ) : (
+                        sectors.map((s) => (
+                          <span key={s} className="pill pill--cat">
+                            {sectorLabel(s)}
+                          </span>
+                        ))
+                      )}
+                    </div>
                   </div>
 
-{/*                   <div className="form-field">
-                    <label className="form-label">Tags</label>
-                    <input
-                      className="input input--tiny"
-                      defaultValue={(cs.tags ?? []).join(", ")}
-                      placeholder="e.g. environment, appropriations"
-                      onBlur={(e) => {
-                        const tags = normalizeTagList(
-                          e.target.value
-                            .split(",")
-                            .map((t) => t.trim())
-                            .filter(Boolean)
-                        );
-                        
-                        updateMeta(cs.id, { tags });
-                      }}
-                    />
-                    <p className="admin-hint">Comma-separated. Saves when you click out.</p>
+{/*                   <div className="dbProp">
+                    <div className="dbPropLabel">Tags</div>
+                    <div className="dbPillRow">
+                      {tags.length === 0 ? (
+                        <span className="pill pill--muted">None</span>
+                      ) : (
+                        tags.map((t) => (
+                          <span key={tagSlug(t)} className="pill pill--tag">
+                            {t}
+                          </span>
+                        ))
+                      )}
+                    </div>
                   </div> */}
                 </div>
-{/*               </details> */}
 
+                {/* EDIT PANEL (only when Edit is open) */}
+                {isEditing && (
+                  <div className="dbEditPanel">
+                    {/* MULTI-CATEGORY EDITOR */}
+                    <div className="dbEditBlock">
+                      <div className="form-label">Edit categories</div>
 
+                      <div className="dbPillRow">
+                        {sectors.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            className="pill pill--cat pill--removable"
+                            onClick={() => {
+                              const next = sectors.filter((x) => x !== s);
+                              updateMeta(cs.id, { sectors: next.length ? next : [DEFAULT_CATEGORY] });
+                            }}
+                            title="Remove category"
+                          >
+                            {sectorLabel(s)} <span className="pillX">×</span>
+                          </button>
+                        ))}
+                      </div>
 
-            </div>
-          ))}
+                      <select
+                        className="input input--tiny"
+                        value=""
+                        onChange={(e) => {
+                          const v = e.target.value as "" | SectorValue;
+                          if (!v) return;
+                          if (sectors.includes(v)) return;
+                          updateMeta(cs.id, { sectors: [...sectors, v] });
+                        }}
+                      >
+                        <option value="">Add category…</option>
+                        {SECTOR_GROUPS.map((g) => (
+                          <optgroup key={g.id} label={g.label}>
+                            {g.values.map((v) => (
+                              <option key={v} value={v} disabled={sectors.includes(v)}>
+                                {sectorLabel(v)}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* TAG EDITOR */}
+                    <div className="dbEditBlock">
+                      <div className="form-label">Edit tags</div>
+
+                      <div className="dbPillRow">
+                        {tags.map((t) => {
+                          const slug = tagSlug(t);
+                          return (
+                            <button
+                              key={slug}
+                              type="button"
+                              className="pill pill--tag pill--removable"
+                              onClick={() => {
+                                const next = tags.filter((x) => tagSlug(x) !== slug);
+                                updateMeta(cs.id, { tags: next });
+                              }}
+                              title="Remove tag"
+                            >
+                              {t} <span className="pillX">×</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <input
+                        className="input input--tiny"
+                        value={tagDraftById[cs.id] ?? ""}
+                        placeholder="Add tags (comma-separated). Enter to save."
+                        onChange={(e) =>
+                          setTagDraftById((prev) => ({
+                            ...prev,
+                            [cs.id]: e.target.value,
+                          }))
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key !== "Enter") return;
+                          e.preventDefault();
+
+                          const raw = (tagDraftById[cs.id] ?? "").trim();
+                          if (!raw) return;
+
+                          const added = parseCommaList(raw);
+                          const merged = normalizeTagsStrict([...tags, ...added]);
+                          updateMeta(cs.id, { tags: merged });
+
+                          setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
+                        }}
+                        onBlur={() => {
+                          const raw = (tagDraftById[cs.id] ?? "").trim();
+                          if (!raw) return;
+
+                          const added = parseCommaList(raw);
+                          const merged = normalizeTagsStrict([...tags, ...added]);
+                          updateMeta(cs.id, { tags: merged });
+
+                          setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
+                        }}
+                      />
+                    </div>
+
+                    {/* STATUS / VISIBILITY EDITOR (optional but useful) */}
+                    <div className="dbEditBlock">
+                      <div className="form-label">Publishing</div>
+
+                      <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
+                        <select
+                          className="input input--tiny"
+                          value={cs.status}
+                          onChange={(e) => updateMeta(cs.id, { status: e.target.value as any })}
+                        >
+                          {CASE_STUDY_STATUS_VALUES.map((v) => (
+                            <option key={v} value={v}>
+                              {v}
+                            </option>
+                          ))}
+                        </select>
+
+                        <select
+                          className="input input--tiny"
+                          value={cs.visibility}
+                          onChange={(e) => updateMeta(cs.id, { visibility: e.target.value as any })}
+                        >
+                          {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                            <option key={v} value={v}>
+                              {visibilityLabel(v)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </main>
   );
 }
-
-
-
-
-
-/*       <div className="c-container c-stack">
-        <h1 className="type-h2">Mock Case Study Database</h1>
-        <p className="type-body type-muted">
-          These entries are stored locally in this browser (localStorage). They
-          are not synced to a backend.
-        </p>
-
-        {items.length === 0 ? (
-          <p className="type-body type-muted">
-            No mock case studies yet.{" "}
-            <Link href="/admin/case-studies/new" className="c-link">
-              Create one now
-            </Link>
-            .
-          </p>
-        ) : (
-          <div className="c-stack">
-            {items.map((cs) => (
-              <div key={cs.slug} className="card">
-                <div className="card-body c-stack">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="type-h3">{cs.title}</h2>
-                      <p className="type-small type-muted">
-                        /admin/case-studies/mock/{cs.slug}
-                      </p>
-                      <p className="type-small type-muted">
-                        <strong>Status:</strong> {cs.status}{" "}
-                        <strong style={{ marginLeft: 12 }}>Visibility:</strong>{" "}
-                        {cs.visibility}
-                      </p>
-                    </div>
-
-                    <Link
-                      href={`/admin/case-studies/mock/${cs.slug}`}
-                      className="c-button"
-                    >
-                      View page
-                    </Link>
-                  </div>
-
-                  <p className="type-body type-muted">{cs.summaryShort}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </main>
-  );
-} */
