@@ -2118,7 +2118,7 @@ button.chip:active {
   width: 18px;
   height: 18px;
 /*   margin-bottom: 0.4rem; */
-margin:0;
+  margin:0;
 
   border-radius: 999px;
   border: 2px solid var(--ui-border-strong);
@@ -2142,6 +2142,11 @@ margin:0;
 
   /* optical centering */
   transform: translateY(-0.6px);
+}
+
+.radioRow:hover,
+.radioRow.isSelected:hover {
+  color: #000;
 }
 
 /* ----------------------------------------- */
@@ -2245,7 +2250,7 @@ margin:0;
 }
 
 /* Selected state: high contrast using --brand + VERY obvious ring */
-.radioRow.isSelected{
+label.radioRow.isSelected{
   background: var(--brand-light-0);
   border-color: rgba(255,255,255,0.75);
 
@@ -2306,3 +2311,89 @@ margin:0;
   .radioRow{ transition: none; }
   .radioRow:active{ transform: none; }
 }
+
+/* fieldset.form-group{
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  padding: 0.9rem;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+fieldset.form-group > legend.form-label{
+  display: inline-block;
+  padding: 0 0.5rem;              
+  margin-left: 0.25rem;
+  background: var(--ui-surface);  
+}
+
+.publishingFs{
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.publishingLegend{
+  display: block;
+  padding: 0;
+  margin: 0.75rem 0 0.5rem;
+  background: transparent;
+
+  color: var(--ui-text);
+  font-weight: 650;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.publishingPanel{
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  background: var(--ui-surface);
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.publishingPanel .radioList{
+  margin-top: 0;
+}
+ */
+
+.publishingSection{
+  margin: 0.75rem 0 1rem;
+  padding: 0.9rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 14px;
+
+  background: #fff;
+  color: var(--ui-text);
+}
+
+/* .publishingTitle{
+  margin: 0 0 0.6rem;
+  font-weight: 650;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #000;
+}
+ */
+
+.publishingTitle {
+  font-weight: 600;
+  margin-bottom: 0.55rem;
+  display: block;
+  font-size: 1.05rem;
+  color: #000;
+}
+/* If your dark-mode token override is still enabled, keep radios light too */
+.publishingSection .radioRow{
+  background: #a8a8a8; /* your current “unselected” gray */
+}
+
+.publishingSection .radioRow:hover{
+  background: var(--brand-lightest);
+  border-color: var(--brand-lighter);
+}
+
+.radioRow.isSelected:hover .radioTitle { color: #000; }
+.radioRow.isSelected:hover .radioDesc  { color: #000; }
