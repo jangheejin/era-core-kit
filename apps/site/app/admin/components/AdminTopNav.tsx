@@ -33,8 +33,8 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
-  { href: "/admin/case-studies/list", label: "Case Studies", match: (p) => p.startsWith("/admin/case-studies") },
-  { href: "/admin/case-studies/new", label: "+ New", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
+  { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") },
+  { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
 
 /* function isActive(pathname: string, href: string) {
@@ -76,7 +76,7 @@ export function AdminTopNav() {
             Demo CMS
           </Link> */}
         </div>
-
+        <div className="adminTopNav__spacer" />
         <nav className="adminTopNav__links" aria-label="Admin navigation">
           {NAV.map((item) => {
             const active = isActive(pathname, item);
@@ -111,7 +111,7 @@ export function AdminTopNav() {
             Public Site
           </Link>
         </div> */}
-        
+
       </div>
     {/* </div> */}
     </header>

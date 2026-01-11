@@ -115,11 +115,11 @@ export default function NewCaseStudyPage() {
   const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR); */
   
   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
-const [sectorsDraft, setSectorsDraft] = useState<Array<SectorValue | "">>([
+/* const [sectorsDraft, setSectorsDraft] = useState<Array<SectorValue | "">>([
   DEFAULT_SECTOR,
-]);
+]); */
 
-function cleanSectors(list: Array<SectorValue | "">): SectorValue[] {
+/* function cleanSectors(list: Array<SectorValue | "">): SectorValue[] {
   const out: SectorValue[] = [];
   const seen = new Set<SectorValue>();
   for (const v of list) {
@@ -129,9 +129,13 @@ function cleanSectors(list: Array<SectorValue | "">): SectorValue[] {
     out.push(v);
   }
   return out.length ? out : [DEFAULT_SECTOR];
-}
+} */
 
-  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]);
+  /* const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]); */
+  /* TODO: CHANGE THIS BACK LATER. for now though we're assigning a default sector auatomatically*/ 
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([
+    DEFAULT_SECTOR,
+  ]);
 
 function addCategoryDraft() {
   setCategoryDrafts((prev) => [...prev, ""]);
@@ -154,7 +158,9 @@ function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
     seen.add(d);
     out.push(d);
   }
-  return out;
+  /* return out; */
+  /** TODO: CHANGE THIS BACK LATER*/
+  return out.length ? out : [DEFAULT_SECTOR];
 }
 
 const selectedCategories = useMemo(
@@ -705,7 +711,13 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                     </div>
                   ))}
 
-                  {selectedCategories.length >= 1 && (
+{/*                   {selectedCategories.length >= 1 && (
+                    <button type="button" className="btnLink" onClick={addCategoryDraft}>
+                      + Add another category
+                    </button>
+                  )} */}
+{/*                   TODO: CHANGE THIS BACK LATER (we had to change it to accommodate teh temporary use of an auto assigned default category)*/}                  
+                  {categoryDrafts[categoryDrafts.length - 1] !== "" && (
                     <button type="button" className="btnLink" onClick={addCategoryDraft}>
                       + Add another category
                     </button>

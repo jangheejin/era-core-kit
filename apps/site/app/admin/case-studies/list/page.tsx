@@ -182,9 +182,9 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1 className = "type-h2">Mock CMS Database</h1>
         <div className="row">
-          <Link href="/admin">Admin</Link>
-          <Link href="/admin/case-studies/new">New</Link>
-          <button className="btn" type="button" onClick={resetToBaseline}>
+{/*           <Link href="/admin">Admin</Link>
+          <Link href="/admin/case-studies/new">New</Link> */}
+          <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>
         </div>
@@ -194,7 +194,8 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
         <div className="row">
           <input
             className="input"
-            placeholder="Search title / client / slug / tags…"
+            /* placeholder="Search title / client / slug / tags…" */
+            placeholder="Search client / category / tags…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             style={{ flex: 1, minWidth: 240 }}
@@ -206,7 +207,8 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
             onChange={(e) => setSectorFilter(e.target.value as SectorValue | "")}
           >
 {/*           <select className="input" value={sector} onChange={(e) => setSector(e.target.value)}> */}
-            <option value="">All sectors</option>
+            {/* <option value="">All sectors</option> */}
+            <option value="">Filter by category</option>
             {SECTOR_VALUES.map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -214,21 +216,22 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
             ))}
           </select>
 
-          <select className="input" value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">All status</option>
-            {CASE_STUDY_STATUS_VALUES.map((v) => (
+{/*           <select className="input" value={status} onChange={(e) => setStatus(e.target.value)}> */}
+            {/* <option value="">All status</option> */}
+{/*             <option value="">Filter by draft status</option> */}
+{/*             {CASE_STUDY_STATUS_VALUES.map((v) => (
               <option key={v} value={v}>
                 {v}
               </option>
             ))}
           </select>
-
+ */}
           <select
             className="input"
             value={visibility}
             onChange={(e) => setVisibility(e.target.value)}
           >
-            <option value="">All visibility</option>
+            <option value="">Filter by visibility</option>
             {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -239,7 +242,7 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
 
         {/* tag filtering */}
         
-        <div className="tag-filter">
+        {/* <div className="tag-filter">
           <div className="tag-filter__top">
             <div className="tag-filter__modes">
               <label>Filter by tag</label>
@@ -294,8 +297,7 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
               );
             })}
           </div>
-        </div>
-
+        </div> */}
 
 {/* END OF CASE STUDY FILTER SECTION */}
       </div>
@@ -342,9 +344,9 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                       </div>
                     </div>
 
-                    <div className="row">
+{/*                     <div className="row">
                       <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
-                    </div>
+                    </div> */}
                   </div>
                 );
               })()}
@@ -361,7 +363,7 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
 
               <div className="dbMetaBar">
                 {/* Tag pills */}
-                <div className="dbTagWrap" aria-label="Tags">
+{/*                 <div className="dbTagWrap" aria-label="Tags">
                   {normalizeTagsStrict(cs.tags ?? []).map((t) => {
                     const slug = tagSlug(t);
                     return (
@@ -391,10 +393,10 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                     }}
                     onBlur={() => commitTagDraft(cs)}
                   />
-                </div>
+                </div> */}
 
                 {/* Sector edit (still editable, but not shown as text in the item line) */}
-                <select
+{/*                 <select
                   className="input input--tiny dbSectorSelect"
                   value={cs.sectors?.[0] ?? ""}
                   onChange={(e) => {
@@ -410,19 +412,20 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                       {opt}
                     </option>
                   ))}
-                </select>
+                </select> */}
               </div>
 
 
-              <details className="admin-disclosure admin-disclosure--compact" style={{ marginTop: ".75rem" }}>
-                <summary className="admin-disclosure__summary">
+{/*               <details className="admin-disclosure admin-disclosure--compact"> */}
+{/*                 <summary className="admin-disclosure__summary">
                   <span className="muted">Edit tags / sector</span>
                   <span className="muted">Expand</span>
-                </summary>
+                </summary> */}
 
                 <div className="form-row form-group" style={{ marginTop: ".75rem" }}>
                   <div className="form-field">
-                    <label className="form-label">Sector (client type)</label>
+                    {/* <label className="form-label">Sector (client type)</label> */}
+                    <label className="form-label">Categories</label>
                     <select
                       className="input input--tiny"
                       value={cs.sectors?.[0] ?? ""}
@@ -440,7 +443,7 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                     </select>
                   </div>
 
-                  <div className="form-field">
+{/*                   <div className="form-field">
                     <label className="form-label">Tags</label>
                     <input
                       className="input input--tiny"
@@ -458,9 +461,9 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                       }}
                     />
                     <p className="admin-hint">Comma-separated. Saves when you click out.</p>
-                  </div>
+                  </div> */}
                 </div>
-              </details>
+{/*               </details> */}
 
 
 

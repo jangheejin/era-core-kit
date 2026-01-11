@@ -130,7 +130,7 @@ const SEED_CASE_STUDIES: CaseStudyType[] = RAW_SEEDS.flatMap((item) => {
 });*/
 
 function loadLocalValidated(): CaseStudyType[] {
-  console.log("LocalStorage contents after load:", JSON.stringify(localStorage.getItem(STORAGE_KEY), null, 2));
+  /* console.log("LocalStorage contents after load:", JSON.stringify(localStorage.getItem(STORAGE_KEY), null, 2)); */
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -241,6 +241,8 @@ function mergeBaselineWithStored(baseline: CaseStudyType[], stored: CaseStudyTyp
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   // Start from fixtures only to avoid SSR/CSR mismatch.
   const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
+  const [hydrated, setHydrated] = useState(false);
+  /* const [items, setItems] = useState<CaseStudyType[]>(BASELINE); */
   //const [items, setItems] = useState<CaseStudyType[]>(() => buildInitialItems());
   //const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
 
@@ -254,22 +256,29 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     const stored = loadLocalValidated();
 
     //guardrail against seeds
-    for (const item of stored) {
+/*     for (const item of stored) {
       if (item.tags?.includes("seed")) {
         console.error("❌ Found seed tag in localStorage:", item);
       }
-    }
+    } */
 
-    if (stored.length === 0) return;
-    setItems(mergeBaselineWithStored(BASELINE, stored));
+/*     if (stored.length === 0) return;
+    setItems(mergeBaselineWithStored(BASELINE, stored)); */
     //setItems(mergeFixtureWithStored(stored));
-    console.log("!!!!Final loaded case studies:", items);
+    /* console.log("!!!!Final loaded case studies:", items); */
+
+    if (stored.length > 0) {
+      setItems(mergeBaselineWithStored(BASELINE, stored));
+    }
+    setHydrated(true);
   }, []);
 
   // Persist any changes (this will store fixtures too but that’s OK for toy mode)
   useEffect(() => {
+    if (!hydrated) return;
     saveLocal(items);
-  }, [items]);
+  }, [items, hydrated]);
+  /* }, [items]); */
 
   const ensureUniqueSlug = useCallback(
     (desiredSlug: string, currentId?: string) => {

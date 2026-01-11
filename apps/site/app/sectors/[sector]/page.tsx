@@ -1,4 +1,28 @@
 //apps/site/app/sectors/[sector]/page.tsx
+
+// use the component, SectorPageView, into which we extracted the actual page UI 
+// in the existing /sectors/[sector] route 
+// this is the canonical sector archive route
+
+import { SECTOR_ROUTE_SLUG } from "@kit/schema";
+import SectorPageView from "../SectorPageView";
+
+export async function generateStaticParams() {
+  return Object.values(SECTOR_ROUTE_SLUG).map((sector) => ({ sector }));
+}
+
+export default async function SectorArchivePage({
+  params,
+}: {
+  params: { sector: string };
+}) {
+  return <SectorPageView sectorSlug={params.sector} />;
+}
+
+/* export default function SectorPage({ params }: { params: { sector: string } }) {
+  return <SectorPageView sectorSlug={params.sector} />;
+} */
+/* 
 import { notFound } from "next/navigation";
 import { sectorFromRouteSlug } from "@kit/schema";
 import { SECTOR_VALUES, type SectorValue } from "@kit/schema";
@@ -57,7 +81,7 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
       </div>
     </main>
   );
-}
+} */
 
 
 /*   return (

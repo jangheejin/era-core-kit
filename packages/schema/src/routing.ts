@@ -59,7 +59,7 @@ export const SECTOR_ROUTE_SLUG: Record<SectorValue, string> = {
   Energy: "energy",
   Agriculture: "agriculture",
   Transportation: "transportation",
-  InfrastructurePublicWorks: "infrastructure-public-works",
+  PublicWorks: "public-works",
   Appropriations: "appropriations",
   GrantFunding: "grant-funding",
   StateGovernment: "state-government",
@@ -97,7 +97,8 @@ export function sectorRouteSlug(sector: SectorValue): string {
 }
 
 export function sectorFromRouteSlug(routeSlug: string): SectorValue | null {
-  const s = slugify(routeSlug); // normalize just in case
+  /* const s = slugify(routeSlug); // normalize just in case */
+  const s = routeSlug.trim().toLowerCase();//Safer normalization for URL path segments
   return ROUTE_SLUG_TO_SECTOR.get(s) ?? null;
 }
 

@@ -2499,9 +2499,13 @@ fieldset.form-group > legend.form-label{
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(245, 245, 247, 0.92);
+  /* background: rgba(245, 245, 247, 0.92); */
+  background: #4d8bff;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0,0,0,0.10);
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; */
+  /* box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset; */
 }
 
 .adminTopNav :where(a) {
@@ -2515,26 +2519,30 @@ fieldset.form-group > legend.form-label{
   padding: 0.6rem 1.25rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.adminTopNav__left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-width: 0;
+/*   justify-content: space-between; */
+  gap: 0.9rem;
 }
 
 .adminTopNav__brand {
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 0.9rem;
+  /* font-size: 0.9rem; */
+  font-size:1rem;
   opacity: 0.85;
   white-space: nowrap;
+  margin-right: 0.25rem;
+  /* color: #111827; */
+  color: #e7ecf5!important;
 }
+/* .adminTopNav__left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+} */
 
+/* 
 .adminTopNav__tabs {
   display: flex;
   align-items: center;
@@ -2585,4 +2593,52 @@ fieldset.form-group > legend.form-label{
 
 .adminTopNav__btn--ghost {
   background: transparent;
+}
+ */
+.adminTopNav__spacer {
+  flex: 1;
+}
+.adminTopNav__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  /*move all to the right*/
+  margin-left:auto;
+  justify-content: flex-end;
+}
+
+.adminTopNav__pill {
+  height: 30px;
+  padding: 0 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(255,255,255,0.55);
+  /* font-size: 0.9rem; */
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.adminTopNav__pill:hover {
+  background: rgba(255,255,255,0.85);
+}
+
+.adminTopNav__pill.is-active {
+  background: #111827;
+  border-color: rgba(0,0,0,0.22);
+  color: #fff;
+}
+
+.adminTopNav__pill.is-primary {
+  /* background: #111827; */
+  background: rgba(255,255,255,0.55);
+  border-color: rgba(0,0,0,0.82);
+  color:#111827;
+}
+
+.adminTopNav__pill.is-primary:hover {
+  background: rgba(0,0,0,0.9);
 }
