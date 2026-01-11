@@ -1,4 +1,6 @@
 // apps/site/app/client-pages/[slug]/ClientPagePublicClient.tsx
+
+// Public route to show a client page's filtered case studies
 "use client";
 
 import Link from "next/link";

@@ -31,10 +31,14 @@ export default function CaseStudyListPage() {
   const [q, setQ] = useState("");
   //const [sector, setSector] = useState<string>("");
   const [status, setStatus] = useState<string>("");
-  const [visibility, setVisibility] = useState<string>("")
+  const [visibility, setVisibility] = useState<string>("");
 
 //  const [sector, setSector] = useState<SectorValue | "">("");
   const [sectorFilter, setSectorFilter] = useState<SectorValue | "">("");
+
+  const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
+
+
 
   type TagMode = "any" | "all";
   const [selectedTagSlugs, setSelectedTagSlugs] = useState<string[]>([]);
@@ -312,7 +316,6 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
                 const isFeatured = Boolean((cs as any).isFeaturedHome); // remove `(as any)` if CaseStudyType includes it
                 const isClientViewable = Boolean((cs as any).isPublic); // same note as above
 
-                // Audience chip: keep it simple and aligned with how you're thinking about it
                 const audienceLabel = !isPublished
                   ? "Internal"
                   : isFeatured

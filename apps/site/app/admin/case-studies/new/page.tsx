@@ -24,6 +24,7 @@ import {
   type CaseStudyType,
   type SectorValue,
   SECTOR_GROUPS,
+  SECTOR_VALUES,
   sectorLabel,
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
@@ -112,6 +113,24 @@ export default function NewCaseStudyPage() {
   const [client, setClient] = useState("");
 /*   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
   const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR); */
+  
+  const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
+const [sectorsDraft, setSectorsDraft] = useState<Array<SectorValue | "">>([
+  DEFAULT_SECTOR,
+]);
+
+function cleanSectors(list: Array<SectorValue | "">): SectorValue[] {
+  const out: SectorValue[] = [];
+  const seen = new Set<SectorValue>();
+  for (const v of list) {
+    if (!v) continue;
+    if (seen.has(v)) continue;
+    seen.add(v);
+    out.push(v);
+  }
+  return out.length ? out : [DEFAULT_SECTOR];
+}
+
   const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]);
 
 function addCategoryDraft() {

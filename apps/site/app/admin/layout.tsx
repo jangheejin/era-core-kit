@@ -13,7 +13,7 @@ import AdminProviders from "./AdminProviders";
 //import AdminCssWrapper from "./AdminCssWrapper";
 //import "@styles/admin.css";
 import "@styles/admin-cms.css"
-
+import { AdminTopNav } from "./components/AdminTopNav";
 /* export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminCssWrapper>
@@ -34,7 +34,12 @@ import "@styles/admin-cms.css"
 // root layout is wrapped with AdminProviders
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+{/*       <AdminTopNav /> */}
+      {children}
+    </>
+  );
 }
 
 //-------------------------------------------------------

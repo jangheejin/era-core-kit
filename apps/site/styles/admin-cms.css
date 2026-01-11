@@ -2397,3 +2397,71 @@ fieldset.form-group > legend.form-label{
 
 .radioRow.isSelected:hover .radioTitle { color: #000; }
 .radioRow.isSelected:hover .radioDesc  { color: #000; }
+
+/* ADMIN TOPNAV */
+/* =========================================================
+   ADMIN TOP NAV
+   ========================================================= */
+
+   .adminTopNav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(245, 245, 247, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.10);
+  }
+  
+  .adminTopNav__inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .adminTopNav__left {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .adminTopNav__brand {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+  
+  .adminTopNav__links,
+  .adminTopNav__right {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .adminTopNav__link {
+    padding: 0.35rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: transparent;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .adminTopNav__link:hover {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.10);
+  }
+  
+  .adminTopNav__link--active {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.18);
+  }
+  

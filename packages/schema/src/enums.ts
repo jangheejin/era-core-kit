@@ -150,7 +150,7 @@ function humanizeEnum(value: string) {
     .replace(/^./, (c) => c.toUpperCase());
 }
 
-const SECTOR_LABEL_OVERRIDES: Partial<Record<SectorValue, string>> = {
+/* const SECTOR_LABEL_OVERRIDES: Partial<Record<SectorValue, string>> = {
   PublicSector: "Public sector",
   PrivateSector: "Private sector",
   StateGovernment: "State government",
@@ -164,10 +164,14 @@ const SECTOR_LABEL_OVERRIDES: Partial<Record<SectorValue, string>> = {
   Infrastructure: "Infrastructure",
   PublicWorks: "Public works",
 };
+ */
+/* export function sectorLabel(v: SectorValue): string {
+  return SECTOR_LABEL_OVERRIDES[v] ?? humanizeEnum(v);
+} */
 
 export function sectorLabel(v: SectorValue): string {
-  return SECTOR_LABEL_OVERRIDES[v] ?? humanizeEnum(v);
-}
+  return SECTOR_LABELS[v] ?? v;
+}  
 
 export type SectorGroup = {
   id: string;
