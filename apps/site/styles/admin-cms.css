@@ -2099,7 +2099,7 @@ button.chip:active {
   line-height: 1.35;
 }
 
-/* Custom radio “glyph” */
+/* Custom radio “glyph” 
 .radioRow::before{
   content: "";
   width: 18px;
@@ -2110,7 +2110,39 @@ button.chip:active {
   border: 2px solid var(--ui-border-strong);
   background: transparent;
   box-sizing: border-box;
+}*/
+
+/* Single indicator (top center) */
+.radioRow::before{
+  content: "";
+  width: 18px;
+  height: 18px;
+  margin-bottom: 0.4rem;
+
+  border-radius: 999px;
+  border: 2px solid var(--ui-border-strong);
+  background: transparent;
+  box-sizing: border-box;
+
+  display: grid;
+  place-items: center;
 }
+
+/* Selected indicator: check inside the same circle */
+.radioRow.isSelected::before{
+  content: "✓";
+  border-color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+
+  /* optical centering */
+  transform: translateY(-0.6px);
+}
+
 /* ----------------------------------------- */
 /* Publishing radios as 3 compact buttons    */
 /* ----------------------------------------- */
@@ -2234,7 +2266,7 @@ button.chip:active {
   gap: 0.4rem;
 }
 
-/* Reserve space so layout doesn't jump when selected */
+/* 
 .radioRow .radioTitle::before{
   content: "✓";
   width: 18px;
@@ -2252,13 +2284,13 @@ button.chip:active {
   opacity: 0;
   transform: scale(0.9);
   transition: opacity 120ms ease, transform 120ms ease;
-}
+} */
 
-/* Show the badge only when selected */
+/* Show the badge only when selected
 .radioRow.isSelected .radioTitle::before{
   opacity: 1;
   transform: scale(1);
-}
+} */
 
 
 /* Responsive fallback */
