@@ -2259,27 +2259,7 @@ button.chip:active {
   opacity: 1;
   transform: scale(1);
 }
-/* Optional: checkmark badge (safe version) DIDN'T wORK*/
-/* .radioRow.isSelected::after{
-  content: "✓";
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  pointer-events: none;
-  z-index: 1;
 
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-
-  border-radius: 999px;
-  background: rgba(255,255,255,0.20);
-  color: #fff;
-  font-weight: 800;
-  font-size: 12px;
-  line-height: 1;
-} */
 
 /* Responsive fallback */
 @media (max-width: 640px){
