@@ -476,7 +476,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
       {/* <div className="row mt1"> */}
       <div className="form-header">
-        <h1 className="form-title">CREATE A NEW CASE STUDY</h1>
+        {/* <h1 className="form-title"> */}<h1 className="type-h2">CREATE A NEW CASE STUDY</h1>
 {/*         <div className="form-nav">
           <a href="/admin">Admin</a> |{" "}
           <a href="/admin/case-studies/list">Database View (All Case Studies)</a> |{" "}
