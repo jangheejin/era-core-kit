@@ -180,7 +180,7 @@ function removeTag(cs: CaseStudyType, removeSlug: string) {
         which are mock entries created to populate the database with something.
       </ContextBanner>
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className = "type-h2">Mock CMS Database</h1>
+        <h1 className = "type-h2">Case Study Database</h1>
         <div className="row">
 {/*           <Link href="/admin">Admin</Link>
           <Link href="/admin/case-studies/new">New</Link> */}
