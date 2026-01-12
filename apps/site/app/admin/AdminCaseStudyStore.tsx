@@ -10,6 +10,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useRef,
   type ReactNode,
 } from "react";
 
@@ -246,6 +247,9 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   //const [items, setItems] = useState<CaseStudyType[]>(() => buildInitialItems());
   //const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
 
+  // only persist after a user action (prevents baseline from overwriting storage)
+  const hasUserEditsRef = useRef(false);
+
   const getBySlug = useCallback(
     (slug: string) => items.find((x) => x.slug === slug),
     [items],
@@ -267,15 +271,17 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     //setItems(mergeFixtureWithStored(stored));
     /* console.log("!!!!Final loaded case studies:", items); */
 
+    //now hydrated effect always sets hydrated
     if (stored.length > 0) {
       setItems(mergeBaselineWithStored(BASELINE, stored));
     }
     setHydrated(true);
   }, []);
 
-  // Persist any changes (this will store fixtures too but that’s OK for toy mode)
+  // Persist any changes (this will store fixtures too but that’s OK for demo)
   useEffect(() => {
     if (!hydrated) return;
+    if (!hasUserEditsRef.current) return;
     saveLocal(items);
   }, [items, hydrated]);
   /* }, [items]); */
@@ -297,12 +303,22 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
+  //flip the “user edited” flag inside mutators
   const addCaseStudy = useCallback((cs: CaseStudyType) => {
+    hasUserEditsRef.current = true;
     // Keep existing behavior: newest first, replace by slug.
     setItems((prev) => {
       const filtered = prev.filter((p) => p.slug !== cs.slug);
       return [cs, ...filtered];
     });
+  }, []);
+  
+  const resetToBaseline = useCallback(() => {
+    if (typeof window !== "undefined") {
+      try { window.localStorage.removeItem(STORAGE_KEY); } catch {}
+    }
+    hasUserEditsRef.current = false; // important: don’t re-persist baseline
+    setItems(CASE_STUDIES_FIXTURE);
   }, []);
 
 /*   const addCaseStudy = (cs: CaseStudyType) => {
@@ -311,6 +327,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       return [cs, ...filtered];
     });
   }; */
+  
 
   const upsertCaseStudy = addCaseStudy;
 
@@ -337,14 +354,15 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     setItems(CASE_STUDIES_FIXTURE);
   }; */
 
-  const resetToBaseline = useCallback(() => {
+/*   const resetToBaseline = useCallback(() => {
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
       } catch {}
     }
     setItems(CASE_STUDIES_FIXTURE);
-  }, []);
+  }, []); */
+
 
   const value = useMemo<AdminCaseStudyContextValue>(
     () => ({
