@@ -19,6 +19,8 @@ import {
   CaseStudyInput,
   CASE_STUDIES_FIXTURE,//the dummy entries for the demo cms database
   type CaseStudyType,
+  SECTOR_VALUES,
+  type SectorValue,
 } from "@kit/schema";
 
 import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
@@ -43,6 +45,28 @@ function migrateHeroUrl(input: any) {
     return { ...input, heroImageUrl: raw };
   }
   return input;
+}
+
+//migration that guarantees sectors is non-empty
+function migrateEnsureNonEmptySectors(input: any) {
+  if (!input || typeof input !== "object") return input;
+
+  const DEFAULT = SECTOR_VALUES[0] as SectorValue;
+
+  // normalize sectors if present
+  const raw = (input as any).sectors;
+  if (Array.isArray(raw)) {
+    const cleaned = raw.map(String).map((s) => s.trim()).filter(Boolean);
+    if (cleaned.length > 0) return { ...input, sectors: cleaned };
+  }
+
+  // fallback: legacy single sector
+  if (typeof (input as any).sector === "string" && (input as any).sector.trim()) {
+    return { ...input, sectors: [(input as any).sector.trim()] };
+  }
+
+  // last resort: ensure schema won't drop it
+  return { ...input, sectors: [DEFAULT] };
 }
 
 type AdminCaseStudyContextValue = {
