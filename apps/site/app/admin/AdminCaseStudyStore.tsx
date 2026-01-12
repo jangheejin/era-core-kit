@@ -165,17 +165,25 @@ function loadLocalValidated(): CaseStudyType[] {
 
     const ok: CaseStudyType[] = [];
     for (const item of parsed) {
+      const id = typeof item?.id === "string" ? item.id : "";
+
       //ignore any entries with seed tag (outdated, oversimplified mock case studies)
       if (item.tags?.includes("seed")) continue;
 
       //const migrated = migrateLegacySector(item);
       const migrated = migrateHeroUrl(migrateLegacySector(item));
 
+      //now make it possible to ignore anything that's a seed record by id prefix (rather than tag. 
+      // by tag will still work but will be phased out in the final cms)
       const res = CaseStudySchema.safeParse(migrated);
+
       /*add some debug stuff to figure out why case studies are being dropped*/
       if (res.success) {
         ok.push(res.data);
-      } else {
+      } 
+      
+      //comment out this debug stuff later
+      else {
         console.warn(
           "[cms] Dropped invalid saved case study:",
           { id: (item as any)?.id, slug: (item as any)?.slug },
@@ -366,8 +374,8 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
 
   const upsertCaseStudy = addCaseStudy;
 
-  //make deletions persist (set hasUserEditsRef.current = true)
   const removeCaseStudy = useCallback((slug: string) => {
+    hasUserEditsRef.current = true;//make deletions persist
     setItems((prev) => prev.filter((p) => p.slug !== slug));
   }, []);
 
