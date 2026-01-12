@@ -170,8 +170,19 @@ function loadLocalValidated(): CaseStudyType[] {
 
       //const migrated = migrateLegacySector(item);
       const migrated = migrateHeroUrl(migrateLegacySector(item));
+
       const res = CaseStudySchema.safeParse(migrated);
-      if (res.success) ok.push(res.data);
+      /*add some debug stuff to figure out why case studies are being dropped*/
+      if (res.success) {
+        ok.push(res.data);
+      } else {
+        console.warn(
+          "[cms] Dropped invalid saved case study:",
+          { id: (item as any)?.id, slug: (item as any)?.slug },
+          res.error.flatten()
+        );
+      }
+      /* if (res.success) ok.push(res.data); */
     }
     return ok;
   } catch {
@@ -355,6 +366,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
 
   const upsertCaseStudy = addCaseStudy;
 
+  //make deletions persist (set hasUserEditsRef.current = true)
   const removeCaseStudy = useCallback((slug: string) => {
     setItems((prev) => prev.filter((p) => p.slug !== slug));
   }, []);
