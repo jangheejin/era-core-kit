@@ -6,9 +6,10 @@
 import "@styles/admin-cms.css";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 
 import {
+  CaseStudy as CaseStudySchema,
   CASE_STUDY_STATUS_VALUES,
   CASE_STUDY_VISIBILITY_VALUES,
   SECTOR_GROUPS,
@@ -25,7 +26,11 @@ import { ContextBanner } from "@/admin/components/ContextBanner";
 
 // Demo-only: restore “auto-set a category if none selected”
 const DEMO_AUTO_DEFAULT_CATEGORY = true;
-const DEFAULT_CATEGORY: SectorValue = "PublicSector";
+const DEFAULT_CATEGORY = (
+  SECTOR_VALUES.includes("PublicSector")
+    ? "PublicSector"
+    : SECTOR_VALUES[0]
+) as SectorValue;
 
 function parseCommaList(raw: string): string[] {
   return raw
@@ -81,6 +86,8 @@ function visibilityLabel(v: string) {
 export default function CaseStudyListPage() {
   const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
 
+  const didAutoFixRef = useRef(false);
+
   // filters
   const [q, setQ] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
@@ -91,19 +98,50 @@ export default function CaseStudyListPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
 
+  // fix this so it can't save incorrect case study shapes. prevent sectors: [] from being saved and 
+  // upgrades any “wrong-shape” legacy data into the correct shape as soon as the user touches it
+  // new version normalizes + Zod-validates before saving
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
     if (!existing) return;
-    upsertCaseStudy({ ...existing, ...patch });
+
+     // Normalize sectors/tags even if existing data was the wrong shape
+    const sectorsRaw = (patch as any).sectors ?? (existing as any).sectors;
+    const tagsRaw = (patch as any).tags ?? (existing as any).tags;
+
+    const sectorsNorm = normalizeSectorsStrict(toStringArray(sectorsRaw));
+    const tagsNorm = normalizeTagsStrict(toStringArray(tagsRaw));
+
+    const candidate: CaseStudyType = {
+      ...existing,
+      ...patch,
+      sectors: sectorsNorm.length ? sectorsNorm : [DEFAULT_CATEGORY],
+      tags: tagsNorm,
+    };
+
+    const res = CaseStudySchema.safeParse(candidate);
+    if (!res.success) {
+      console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
+      return;
+    }
+    
+    upsertCaseStudy(res.data);
+
+    /* upsertCaseStudy({ ...existing, ...patch }); */
   }
 
   // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
+  // New update: gated version so it doesn't run infinitely
   useEffect(() => {
     if (!DEMO_AUTO_DEFAULT_CATEGORY) return;
+    if (didAutoFixRef.current) return;
+    if (items.length === 0) return;
 
     // Only patch records that are genuinely missing categories.
     const missing = items.filter((cs) => {
-      const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+      const sectors = normalizeSectorsStrict(
+        toStringArray((cs as unknown as { sectors?: unknown }).sectors)
+      );
       return sectors.length === 0;
     });
 
@@ -113,7 +151,8 @@ export default function CaseStudyListPage() {
       updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
+  }, [items.length]);
+/*   }, [items]); */
 
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
