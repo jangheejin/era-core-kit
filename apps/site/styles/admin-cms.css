@@ -2737,3 +2737,64 @@ fieldset.form-group > legend.form-label{
   padding-block: 0.25rem;
   font-size: 0.9rem;
 }
+/* Make each case study feel like a distinct “object” */
+.dbItem {
+  padding: 14px;
+}
+
+.dbItemHeader {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Stronger “this one is in edit mode” signal */
+.dbItem--editing {
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
+
+/* Edit panel becomes an attached sub-card */
+.dbEditPanel {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+}
+
+.dbEditPanelHeader {
+  margin-bottom: 10px;
+}
+
+.dbEditKicker {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.dbEditClient {
+  font-size: 14px;
+  font-weight: 650;
+  margin-top: 2px;
+}
+
+/* Each edit block is its own contained unit */
+.dbEditBlock {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.12);
+}
+
+.dbEditBlock + .dbEditBlock {
+  margin-top: 10px;
+}
+
+.dbEditBlockTitle {
+  font-size: 12px;
+  font-weight: 650;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}

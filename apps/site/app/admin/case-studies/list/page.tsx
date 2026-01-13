@@ -100,6 +100,10 @@ export default function CaseStudyListPage() {
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [visibilityFilter, setVisibilityFilter] = useState<string>("");
 
+  //state for sorting
+  type SortMode = "Newest" | "Oldest" | "AtoZ" | "ZtoA";
+  const [sortMode, setSortMode] = useState<SortMode>("Newest");
+
   // per-row editing state
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
@@ -192,6 +196,26 @@ export default function CaseStudyListPage() {
     });
   }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
 
+  const sorted = useMemo(() => {
+    if (sortMode === "Newest") return filtered;
+  
+    if (sortMode === "Oldest") return [...filtered].reverse();
+  
+    // A–Z
+    return [...filtered].sort((a, b) => {
+      const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
+      const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
+      return aLabel.localeCompare(bLabel);
+    });
+
+    // Z-A
+    return [...filtered].sort((a, b) => {
+      const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
+      const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
+      return aLabel.localeCompare(bLabel);
+    });
+  }, [filtered, sortMode]);
+
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
@@ -261,6 +285,19 @@ export default function CaseStudyListPage() {
               </option>
             ))}
           </select>
+
+          {/* sort by date and alphabetical order */}
+          <select
+            className="input"
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value as SortMode)}
+          >
+            <option value="Newest">Sort: Newest first</option>
+            <option value="Oldest">Sort: Oldest first</option>
+            <option value="AtoZ">Sort: Alphabetical (A–Z)</option>
+            <option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option>
+          </select>
+
         </div>
       </div>
 
@@ -271,7 +308,9 @@ export default function CaseStudyListPage() {
         </p>
 
         <div style={{ display: "grid", gap: ".75rem" }}>
-          {filtered.map((cs) => {
+          {/* include the new date and alphabetical sorting */}
+          {sorted.map((cs) => {
+          {/* {filtered.map((cs) => { */}
             const isHighlighted = cs.id === savedId || cs.id === editId;
             const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
             const hasSeparateTitle =
@@ -290,11 +329,14 @@ export default function CaseStudyListPage() {
             const vis = cs.visibility;
 
             return (
-              /* Add an anchor id + highlight styling per card */
+              /* Added an anchor id + highlight styling per card */
+              
               <div
                 key={cs.id}
                 id={`cs-${cs.id}`}
-                className="card dbItem"
+                /* className="card dbItem" */
+                /* added an editing state to the outer card class */
+                className={`card dbItem ${isEditing ? "dbItem--editing" : ""}`}
                 style={
                   isHighlighted
                     ? { outline: "2px solid var(--brand)", outlineOffset: 2 }
@@ -339,22 +381,23 @@ export default function CaseStudyListPage() {
                 <div className="dbSummary">{cs.summaryShort}</div>
 
                 {/* PROPERTY ROWS (compact, always visible) */}
-                <div className="dbProps">
-                  <div className="dbProp">
-                    <div className="dbPropLabel">Categories</div>
-                    <div className="dbPillRow">
-                      {sectors.length === 0 ? (
-                        <span className="pill pill--muted">Uncategorized</span>
-                      ) : (
-                        sectors.map((s) => (
-                          <span key={s} className="pill pill--cat">
-                            {sectorLabel(s)}
-                          </span>
-                        ))
-                      )}
+                {/* update: get rid of redundant category listing when user is editing */}
+                {!isEditing &&
+                  <div className="dbProps">
+                    <div className="dbProp">
+                      <div className="dbPropLabel">Categories</div>
+                      <div className="dbPillRow">
+                        {sectors.length === 0 ? (
+                          <span className="pill pill--muted">Uncategorized</span>
+                        ) : (
+                          sectors.map((s) => (
+                            <span key={s} className="pill pill--cat">
+                              {sectorLabel(s)}
+                            </span>
+                          ))
+                        )}
+                      </div>
                     </div>
-                  </div>
-
 {/*                   <div className="dbProp">
                     <div className="dbPropLabel">Tags</div>
                     <div className="dbPillRow">
@@ -370,13 +413,26 @@ export default function CaseStudyListPage() {
                     </div>
                   </div> */}
                 </div>
+                }
+
 
                 {/* EDIT PANEL (only when Edit is open) */}
+                {/* added a header inside the edit panel so it’s obvious what you’re editing */}
                 {isEditing && (
-                  <div className="dbEditPanel">
+                  <div className="dbEditPanel" aria-label={`Editing ${clientLabel}`}>
+                    <div className="dbEditPanelHeader">
+                      <div>
+{/*                         <div className="dbEditKicker">CURRENTLY EDITING: <span className="dbEditClient">{clientLabel}</span></div>
+ */}
+{/*                         <div className="dbEditKicker">Editing</div>
+                        <div className="dbEditClient">{clientLabel}</div> */}
+                      </div>
+                    </div>
+                    
                     {/* MULTI-CATEGORY EDITOR */}
                     <div className="dbEditBlock">
-                      <div className="form-label">Edit categories</div>
+                      {/* <div className="form-label">Edit categories</div> */}
+                      <div className="dbEditBlockTitle">Edit Categories</div>
 
                       <div className="dbPillRow">
                         {sectors.map((s) => (
@@ -420,7 +476,7 @@ export default function CaseStudyListPage() {
 
                     {/* TAG EDITOR */}
 {/*                    <div className="dbEditBlock">
-                       <div className="form-label">Edit tags</div>
+                       <div className="dbEditBlockTitle">Edit Tags</div>
 
                       <div className="dbPillRow">
                         {tags.map((t) => {
@@ -480,7 +536,7 @@ export default function CaseStudyListPage() {
 
                     {/* STATUS / VISIBILITY EDITOR (optional but useful) */}
                     <div className="dbEditBlock">
-                      <div className="form-label">Publishing Status</div>
+                    <div className="dbEditBlockTitle">Publishing Status</div>
 
                       <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
                         <select
