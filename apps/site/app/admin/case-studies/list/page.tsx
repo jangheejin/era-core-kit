@@ -104,6 +104,11 @@ export default function CaseStudyListPage() {
   type SortMode = "Newest" | "Oldest" | "AtoZ" | "ZtoA";
   const [sortMode, setSortMode] = useState<SortMode>("Newest");
 
+  //helper for sorting
+  function clientLabelForSort(cs: CaseStudyType) {
+    return (cs.client ?? cs.title ?? "Untitled").trim().toLowerCase();
+  }
+
   // per-row editing state
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
@@ -198,15 +203,18 @@ export default function CaseStudyListPage() {
 
   const sorted = useMemo(() => {
     if (sortMode === "Newest") return filtered;
+    const arr = [...filtered];
   
-    if (sortMode === "Oldest") return [...filtered].reverse();
-  
+    if (sortMode === "Oldest") return arr.reverse();
+
     // A–Z
-    return [...filtered].sort((a, b) => {
+    return arr.sort((a,b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
+
+/*     return [...filtered].sort((a, b) => {
       const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
       const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
       return aLabel.localeCompare(bLabel);
-    });
+    }); */
 
     // Z-A
 /*     const dir = -1; // -1 = Z→A, +1 = A→Z
@@ -215,6 +223,13 @@ export default function CaseStudyListPage() {
       const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
       return dir * aLabel.localeCompare(bLabel);
     }); */
+
+/*     if (sortMode === "AtoZ") {
+      return arr.sort((a,b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
+    }
+
+    //Z to A
+    return arr.sort((a,b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a))); */
   }, [filtered, sortMode]);
 
   return (
@@ -240,7 +255,7 @@ export default function CaseStudyListPage() {
       <div className="card" style={{ marginTop: "1rem" }}>
         <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
           <input
-            className="input"
+            className="input search"
             placeholder="Search client / categories / tags…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -286,29 +301,33 @@ export default function CaseStudyListPage() {
               </option>
             ))}
           </select>
-
-          {/* sort by date and alphabetical order */}
-          <select
-            className="input"
-            value={sortMode}
-            onChange={(e) => setSortMode(e.target.value as SortMode)}
-          >
-            <option value="Newest">Sort: Newest first</option>
-            <option value="Oldest">Sort: Oldest first</option>
-            <option value="AtoZ">Sort: Alphabetical (A–Z)</option>
-{/*             <option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option> */}
-          </select>
-
         </div>
       </div>
 
       {/* LIST */}
-      <div className="card" style={{ marginTop: "1rem" }}>
+      <div className="card mt">
+         {/* results header, now with sort */}
+         <div className="dbResultsHeader">
+          <div className="dbResultsHeader__sort">
+            <span className="muted type-small">Sort:</span>
+            {/* sort by date and alphabetical order */}
+            <select
+              className="input input--tiny"
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value as SortMode)}
+            >
+              <option value="Newest">Newest first</option>
+              <option value="Oldest">Oldest first</option>
+              <option value="AtoZ">Alphabetical (A–Z)</option>
+               {/*<option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option> */}
+            </select>
+          </div>
+
         <p className="muted">
           Showing {filtered.length} / {items.length}
         </p>
-
-        <div style={{ display: "grid", gap: ".75rem" }}>
+      </div>
+      <div style={{ display: "grid", gap: ".75rem" }}>
           {/* include the new date and alphabetical sorting */}
           {sorted.map((cs) => {
           {/* {filtered.map((cs) => { */}

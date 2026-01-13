@@ -62,6 +62,15 @@ the user fills out)
   padding: .6rem .7rem;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,.18);
+  margin-left:0;
+  margin-right: 0;
+}
+.c-admin .search {
+  margin-bottom: 1rem;
+}
+.c-admin .input--tiny{
+  padding: .2rem .2rem;
+  margin-left: .75rem;
 }
 .form-field input, .form-group input,
 .form-field select, .form-group textarea,
