@@ -2879,7 +2879,7 @@ fieldset.form-group > legend.form-label{
 .dbItemHeader,
 .dbActions {
   overflow: visible;
-} */
+} 
 
 .hasTooltip {
   position: relative;
@@ -2903,9 +2903,21 @@ fieldset.form-group > legend.form-label{
   pointer-events: none;
   transition: opacity 120ms ease;
   z-index: 10;
-}
+}*/
 
-.hasTooltip:hover::after,
+/* .hasTooltip:hover::after,
 .hasTooltip:focus-visible::after {
   opacity: 1;
 }
+
+.ttContent{
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.2;
+  background: #111;
+  color: #fff;
+  z-index: 9999;
+  max-width: 260px;
+}
+.ttArrow{ fill: #111; } */

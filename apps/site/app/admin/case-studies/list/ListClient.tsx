@@ -23,6 +23,9 @@ import {
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
+//tooltip
+import * as Tooltip from "@radix-ui/react-tooltip";
+
 // Demo-only: restore “auto-set a category if none selected”
 const DEMO_AUTO_DEFAULT_CATEGORY = true;
 const DEFAULT_CATEGORY = (
@@ -403,36 +406,50 @@ export default function ListClient() {
                       Edit
                     </Link>
 
-                    <button
-                      className="btnSmall hasTooltip"
-                      type="button"
-                      title="Edit categories & change status"
-                      data-tooltip="Edit categories & change status"
-                      onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
-                      aria-expanded={isQuickEditing}
-                    >
-                      {isQuickEditing ? "Close" : "Change Settings"}
-                      {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
-                      {/* {isEditing ? "Close" : "Edit"} */}
-                    </button>
+{/*                     <Tooltip.Provider delayDuration={200}>
+                      <Tooltip.Root>
+                        <Tooltip.Trigger asChild>
+                        <button
+                          className="btnSmall hasTooltip"
+                          type="button"
+                          title="Edit categories & change status"
+                          data-tooltip="Edit categories & change status"
+                          onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
+                          aria-expanded={isQuickEditing}
+                        >
+                          {isQuickEditing ? "Close" : "Change Settings"} */}
+                          {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
+                          {/* {isEditing ? "Close" : "Edit"} */}
+{/*                         </button>
+                        </Tooltip.Trigger>
 
-{/* failed version  */}
-{/*                     <span className="tooltip">
+
+                        <Tooltip.Portal>
+                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                            Edit categories & change status
+                            <Tooltip.Arrow className="tooltipArrow" />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    </Tooltip.Provider>           */}          
+
+{/* failed version */}
+                    <span className="tooltip">
                     <button
                       className="btnSmall tooltip__trigger"
                       type="button"
-                      title="Edit categories & change status"
+                      title="Edit categories & change publishing status"
                       data-tooltip="Edit categories & change status"
                       onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
                       //onClick={() => setEditingId((prev) => (prev === cs.id ? null : cs.id))}
                       aria-expanded={isQuickEditing}
                       //aria-expanded={isEditing}
                     >
-                      {isQuickEditing ? "Close" : "Change Settings"} */}
+                      {isQuickEditing ? "Close" : "Change Settings"}
                       {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
                       {/* {isEditing ? "Close" : "Edit"} */}
-{/*                     </button>
-                    </span> */}
+                    </button>
+                    </span>
 
 
                   </div>
