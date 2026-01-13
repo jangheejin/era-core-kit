@@ -412,7 +412,7 @@ export default function ListClient() {
                         <button
                           className="btnSmall hasTooltip"
                           type="button"
-                          title="Edit categories & change status"
+                          /* title="Edit categories & change status" */
                           data-tooltip="Edit categories & change status"
                           onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
                           aria-expanded={isQuickEditing}
