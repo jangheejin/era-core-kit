@@ -1215,7 +1215,9 @@ h1 .filter-category-title {
 html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !important; }
  */
 
-
+.type-small {
+  font-size:.85rem;
+}
 .form-actions__left {
   flex: 1;
 }
@@ -1824,10 +1826,7 @@ button.chip:active {
   opacity: 0.95;
 }
 
-.dbSummary {
-  margin-top: .5rem;
-  font-size: .95rem;
-}
+
 
 .dbMetaBar {
   display: flex;
@@ -2677,7 +2676,10 @@ fieldset.form-group > legend.form-label{
 
 .btnSmall:hover { background: rgba(0,0,0,.04); }
 
-.dbBadges { display:flex; gap:.45rem; flex-wrap:wrap; margin-top: .4rem; }
+.dbBadges { 
+  display:flex; gap:.45rem; flex-wrap:wrap; 
+  margin-top: .4rem; 
+}
 
 /* badges are NOT “tags” */
 .badge {
@@ -2703,7 +2705,11 @@ fieldset.form-group > legend.form-label{
 .badge--draft { background: rgba(0,0,0,.03); }
 .badge--audience { background: rgba(0,0,0,.03); }
 
-.dbSummary { margin-top: .6rem; opacity: .9; }
+/* .dbSummary { margin-top: .6rem; opacity: .9; } */
+.dbSummary {
+  margin-top: 0;
+  font-size: 1rem;
+}
 
 .dbProps { margin-top: .75rem; display:grid; gap:.6rem; }
 .dbPropLabel { font-size: .82rem; opacity: .7; margin-bottom: .25rem; }
@@ -2739,13 +2745,6 @@ fieldset.form-group > legend.form-label{
 
 .pillX { opacity: .7; margin-left: .15rem; }
 
-.dbEditPanel {
-  margin-top: .85rem;
-  padding-top: .85rem;
-  border-top: 1px solid rgba(0,0,0,.10);
-  display: grid;
-  gap: .85rem;
-}
 
 .dbEditBlock .input--tiny {
   max-width: 360px;
@@ -2759,7 +2758,7 @@ fieldset.form-group > legend.form-label{
 
 .dbItemHeader {
   padding-bottom: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -2769,11 +2768,22 @@ fieldset.form-group > legend.form-label{
   box-shadow: 0 10px 30px rgba(0,0,0,0.28);
 }
 
+.dbEditPanel {
+  display: grid;
+  /* gap: .85rem; */
+  gap: .5rem;
+}
+
 /* Edit panel becomes an attached sub-card */
 .dbEditPanel {
-  margin-top: 12px;
-  padding: 12px;
+  margin-top:0;
+/*   padding-top: .85rem; */
+  /* padding: 12px; */
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:0;
   border-radius: 12px;
+  border-top: 1px solid rgba(0,0,0,.10);
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.03);
 }
@@ -2812,4 +2822,30 @@ fieldset.form-group > legend.form-label{
   font-weight: 550;
   margin-bottom: 8px;
   opacity: 0.9;
+}
+
+/* Results header: sort on left, count on right */
+.dbResultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.dbResultsHeader__sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dbResultsHeader__count {
+  margin: 0;
+}
+
+/* List grid spacing */
+.dbListGrid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
 }
