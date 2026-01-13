@@ -399,12 +399,26 @@ export default function ListClient() {
                       Preview
                     </Link>
 
-                    <Link 
-                      className="btnSmall" 
-                      href={`/admin/case-studies/${cs.slug}/edit`}
-                    >
-                      Edit
-                    </Link>
+                    <Tooltip.Provider delayDuration={200}>
+                      <Tooltip.Root>
+                        <Tooltip.Trigger asChild>
+                          <Link 
+                            className="btnSmall" 
+                            href={`/admin/case-studies/${cs.slug}/edit`}
+                          >
+                            Edit
+                          </Link>
+                        </Tooltip.Trigger>
+                        
+                        <Tooltip.Portal>
+                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                            Open full editor to edit the content of this case study
+                            <Tooltip.Arrow className="tooltipArrow" />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    </Tooltip.Provider>
+
 
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
