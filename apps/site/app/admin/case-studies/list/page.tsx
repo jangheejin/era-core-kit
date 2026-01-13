@@ -419,8 +419,8 @@ export default function CaseStudyListPage() {
                     </div>
 
                     {/* TAG EDITOR */}
-                    <div className="dbEditBlock">
-                      <div className="form-label">Edit tags</div>
+{/*                    <div className="dbEditBlock">
+                       <div className="form-label">Edit tags</div>
 
                       <div className="dbPillRow">
                         {tags.map((t) => {
@@ -476,11 +476,11 @@ export default function CaseStudyListPage() {
                           setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
                         }}
                       />
-                    </div>
+                    </div> */}
 
                     {/* STATUS / VISIBILITY EDITOR (optional but useful) */}
                     <div className="dbEditBlock">
-                      <div className="form-label">Publishing</div>
+                      <div className="form-label">Publishing Status</div>
 
                       <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
                         <select
