@@ -167,8 +167,10 @@ function loadLocalValidated(): CaseStudyType[] {
     for (const item of parsed) {
       const id = typeof item?.id === "string" ? item.id : "";
 
-      //ignore any entries with seed tag (outdated, oversimplified mock case studies)
-      if (item.tags?.includes("seed")) continue;
+      //instead of ignoring any entries with seed tag (the outdated, oversimplified mock case studies)
+      // now we ignore by ID prefix instead
+      if (typeof item?.id === "string" && item.id.startsWith("seed-")) continue;
+      /* if (item.tags?.includes("seed")) continue; */
 
       //const migrated = migrateLegacySector(item);
       const migrated = migrateHeroUrl(migrateLegacySector(item));

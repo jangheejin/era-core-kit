@@ -109,7 +109,8 @@ export default function ListClient() {
   }
 
   // per-row editing state
-  const [editingId, setEditingId] = useState<string | null>(null);
+  //const [editingId, setEditingId] = useState<string | null>(null);
+  const [quickEditId, setQuickEditId] = useState<string | null>(null);
   const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
 
   //per-row "Add category..." dropdown menus
@@ -343,7 +344,9 @@ export default function ListClient() {
             const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
             const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
 
-            const isEditing = editingId === cs.id;
+            const isQuickEditing = quickEditId === cs.id;
+
+            //const isEditing = editingId === cs.id;
 
             const isPublished = cs.status === "Published";
             const vis = cs.visibility;
@@ -356,7 +359,8 @@ export default function ListClient() {
                 id={`cs-${cs.id}`}
                 /* className="card dbItem" */
                 /* added an editing state to the outer card class */
-                className={`card dbItem ${isEditing ? "dbItem--editing" : ""}`}
+               /*  className={`card dbItem ${isEditing ? "dbItem--editing" : ""}`} */
+                className={`card dbItem ${isQuickEditing ? "dbItem--editing" : ""}`}
                 style={
                   isHighlighted
                     ? { outline: "2px solid var(--brand)", outlineOffset: 2 }
@@ -384,18 +388,53 @@ export default function ListClient() {
                   </div>
 
                   <div className="dbActions">
-                    <Link className="btnSmall" href={`/admin/case-studies/mock/${cs.slug}`}>
+                    <Link 
+                      className="btnSmall" 
+                      href={`/admin/case-studies/mock/${cs.slug}`}
+                      target="_blank"
+                    >
                       Preview
                     </Link>
 
-                    <button
-                      className="btnSmall"
-                      type="button"
-                      onClick={() => setEditingId((prev) => (prev === cs.id ? null : cs.id))}
-                      aria-expanded={isEditing}
+                    <Link 
+                      className="btnSmall" 
+                      href={`/admin/case-studies/${cs.slug}/edit`}
                     >
-                      {isEditing ? "Close" : "Edit"}
+                      Edit
+                    </Link>
+
+                    <button
+                      className="btnSmall hasTooltip"
+                      type="button"
+                      title="Edit categories & change status"
+                      data-tooltip="Edit categories & change status"
+                      onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
+                      aria-expanded={isQuickEditing}
+                    >
+                      {isQuickEditing ? "Close" : "Change Settings"}
+                      {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
+                      {/* {isEditing ? "Close" : "Edit"} */}
                     </button>
+
+{/* failed version  */}
+{/*                     <span className="tooltip">
+                    <button
+                      className="btnSmall tooltip__trigger"
+                      type="button"
+                      title="Edit categories & change status"
+                      data-tooltip="Edit categories & change status"
+                      onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
+                      //onClick={() => setEditingId((prev) => (prev === cs.id ? null : cs.id))}
+                      aria-expanded={isQuickEditing}
+                      //aria-expanded={isEditing}
+                    >
+                      {isQuickEditing ? "Close" : "Change Settings"} */}
+                      {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
+                      {/* {isEditing ? "Close" : "Edit"} */}
+{/*                     </button>
+                    </span> */}
+
+
                   </div>
                 </div>
 
@@ -403,7 +442,8 @@ export default function ListClient() {
 
                 {/* PROPERTY ROWS (compact, always visible) */}
                 {/* update: get rid of redundant category listing when user is editing */}
-                {!isEditing &&
+                {/* {!isEditing && */}
+                {!isQuickEditing &&(
                   <div className="dbProps">
 
                     <div className="dbProp">
@@ -449,12 +489,13 @@ export default function ListClient() {
                     </div>
                   </div> */}
                 </div>
-                }
+                )}
 
 
                 {/* EDIT PANEL (only when Edit is open) */}
                 {/* added a header inside the edit panel so it’s obvious what you’re editing */}
-                {isEditing && (
+                {/* {isEditing && ( */}
+                {isQuickEditing && (
                   <div className="dbEditPanel" aria-label={`Editing ${clientLabel}`}>
                     <div className="dbEditPanelHeader">
                       <div>
