@@ -6,6 +6,7 @@
 import "@styles/admin-cms.css";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";//needed to separate "Save" and "Preview"
 import { useEffect, useMemo, useState, useRef } from "react";
 
 import {
@@ -88,6 +89,11 @@ export default function CaseStudyListPage() {
 
   const didAutoFixRef = useRef(false);
 
+  //needed to separate "Save" and "Preview"
+  const searchParams = useSearchParams();
+  const savedId = searchParams.get("saved"); // e.g. ?saved=<id>
+  const editId = searchParams.get("edit");   // e.g. ?edit=<id>
+
   // filters
   const [q, setQ] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
@@ -97,6 +103,9 @@ export default function CaseStudyListPage() {
   // per-row editing state
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
+
+  //per-row "Add category..." dropdown menus
+  const [categoryDraftById, setCategoryDraftById] = useState<Record<string, SectorValue | "">>({});
 
   // fix this so it can't save incorrect case study shapes. prevent sectors: [] from being saved and 
   // upgrades any “wrong-shape” legacy data into the correct shape as soon as the user touches it
@@ -150,6 +159,8 @@ export default function CaseStudyListPage() {
     for (const cs of missing) {
       updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
     }
+
+    didAutoFixRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 /*   }, [items]); */
@@ -217,10 +228,19 @@ export default function CaseStudyListPage() {
             onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
           >
             <option value="">Filter by category</option>
-            {SECTOR_VALUES.map((v) => (
+            {/* use GROUPED categories */}
+            {SECTOR_GROUPS.map((g) => (
+              <optgroup key={g.id} label={g.label}>
+                {g.values.map((v) => (
+                  <option key={v} value={v}>
+                    {sectorLabel(v)}
+                  </option>
+                ))}
+              </optgroup>
+            /* {SECTOR_VALUES.map((v) => ( 
               <option key={v} value={v}>
                 {sectorLabel(v)}
-              </option>
+              </option>*/
             ))}
           </select>
 
@@ -252,6 +272,7 @@ export default function CaseStudyListPage() {
 
         <div style={{ display: "grid", gap: ".75rem" }}>
           {filtered.map((cs) => {
+            const isHighlighted = cs.id === savedId || cs.id === editId;
             const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
             const hasSeparateTitle =
               (cs.client ?? "").trim().length > 0 &&
@@ -269,7 +290,18 @@ export default function CaseStudyListPage() {
             const vis = cs.visibility;
 
             return (
-              <div key={cs.id} className="card dbItem">
+              /* Add an anchor id + highlight styling per card */
+              <div
+                key={cs.id}
+                id={`cs-${cs.id}`}
+                className="card dbItem"
+                style={
+                  isHighlighted
+                    ? { outline: "2px solid var(--brand)", outlineOffset: 2 }
+                    : undefined
+                }
+              >
+              {/* <div key={cs.id} className="card dbItem"> */}
                 <div className="dbItemHeader">
                   <div className="dbItemMain">
                     <div className="dbItemClient">{clientLabel}</div>

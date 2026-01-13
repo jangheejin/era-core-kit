@@ -359,8 +359,40 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
     [candidateInput]
   );
 
+  /* separate SAVE from PREVIEW */
+  function persistDraft(): CaseStudyType | null {
+    // Make slug collision-safe right at the save boundary
+    const desired = candidateInput.slug;
+    const unique = ensureUniqueSlug(desired, candidateInput.id);
   
-  function save() {
+    const next: CaseStudyInput = { ...candidateInput, slug: unique };
+    const res = CaseStudySchema.safeParse(next);
+    if (!res.success) return null;
+  
+    const out: CaseStudyType = res.data;
+    upsertCaseStudy(out);
+    return out;
+  }
+  
+  function handleSave() {
+    const out = persistDraft();
+    if (!out) return;
+  
+    // Save → take users back to the database, with a highlight anchor
+    router.push(`/admin/case-studies/list?saved=${out.id}#cs-${out.id}`);
+  }
+  
+  function handlePreview() {
+    const out = persistDraft();
+    if (!out) return;
+  
+    // Preview → go to the preview page
+    router.push(`/admin/case-studies/mock/${out.slug}`);
+  }
+  
+
+  /* OLD button, combined both SAVE and PREVIEW into one button */
+/*   function save() {
     // Make slug collision-safe right at the save boundary
     const desired = candidateInput.slug;
     const unique = ensureUniqueSlug(desired, candidateInput.id);
@@ -372,12 +404,12 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
     const out: CaseStudyType = res.data;
     upsertCaseStudy(out);
     router.push(`/admin/case-studies/mock/${out.slug}`);
-  }
+  } */
+
 
   const canSave = validation.success; //reusable save button state
-  const SaveButton = (
+/*   const SaveButton = (
     <button
-      /* className="btnPrimary" */
       className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
       type="button"
       onClick={save}
@@ -386,14 +418,40 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
     >
       Save + Preview
     </button>
-  );
+  ); */
 
   function SaveBar({ className }: { className: string }) {
+    return (
+      <div className="row" style={{ gap: ".5rem" }}>
+        <button
+          className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
+          type="button"
+          onClick={handleSave}
+          disabled={!canSave}
+          title={!canSave ? "Fix validation errors first" : "Save"}
+        >
+          Save
+        </button>
+
+        <button
+          className="btn"
+          type="button"
+          onClick={handlePreview}
+          disabled={!canSave}
+          title={!canSave ? "Fix validation errors first" : "Preview"}
+        >
+          Preview
+        </button>
+      </div>
+    )
+  }
+
+
+/*   function SaveBar({ className }: { className: string }) {
     return (
       <div className={className}>
         <div className="form-actions__left">
           <button
-            /* className="btnPrimary" */
             className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
             type="button"
             onClick={save}
@@ -409,11 +467,10 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
               : "Can't save yet: Missing required fields (Client Name + Description)"}
           </div>
 
-
         </div>
       </div>
     );
-  }
+  } */
 
   //helpers for formatting toolbar
   function applyWrap(left: string, right: string) {
