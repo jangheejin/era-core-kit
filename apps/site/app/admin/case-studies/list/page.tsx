@@ -434,6 +434,11 @@ export default function CaseStudyListPage() {
                       {/* <div className="form-label">Edit categories</div> */}
                       <div className="dbEditBlockTitle">Edit Categories</div>
 
+                      <div className="muted type-small" style={{ marginBottom: 8 }}>
+                        Click a category to remove it. Use the dropdown to add another.
+                      </div>
+
+
                       <div className="dbPillRow">
                         {sectors.map((s) => (
                           <button

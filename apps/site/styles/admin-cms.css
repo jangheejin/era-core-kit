@@ -1634,7 +1634,7 @@ code {
 }
 
 .dbItemClient {
-  font-size: 1.05rem;
+  font-size: 1.4rem!important;
   font-weight: 600;
 }
 
@@ -2715,7 +2715,13 @@ fieldset.form-group > legend.form-label{
 
 .pill--muted { opacity: .7; }
 .pill--tag { background: rgba(0,0,0,.03); }
-.pill--cat { background: rgba(0,0,0,.04); }
+.pill--cat { 
+  background: rgba(0,0,0,.04); 
+  font-size: .95em;
+  margin-bottom: 1.15em;
+  margin-left: .25em;
+  margin-top:.5em;
+}
 
 .pill--removable {
   cursor: pointer;
@@ -2793,8 +2799,8 @@ fieldset.form-group > legend.form-label{
 }
 
 .dbEditBlockTitle {
-  font-size: 12px;
-  font-weight: 650;
+  font-size: 1.15em;
+  font-weight: 550;
   margin-bottom: 8px;
   opacity: 0.9;
 }
