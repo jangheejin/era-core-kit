@@ -209,11 +209,12 @@ export default function CaseStudyListPage() {
     });
 
     // Z-A
+/*     const dir = -1; // -1 = Z→A, +1 = A→Z
     return [...filtered].sort((a, b) => {
       const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
       const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
-      return aLabel.localeCompare(bLabel);
-    });
+      return dir * aLabel.localeCompare(bLabel);
+    }); */
   }, [filtered, sortMode]);
 
   return (
@@ -295,7 +296,7 @@ export default function CaseStudyListPage() {
             <option value="Newest">Sort: Newest first</option>
             <option value="Oldest">Sort: Oldest first</option>
             <option value="AtoZ">Sort: Alphabetical (A–Z)</option>
-            <option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option>
+{/*             <option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option> */}
           </select>
 
         </div>

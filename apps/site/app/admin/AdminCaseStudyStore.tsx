@@ -270,16 +270,30 @@ const BASELINE = buildBaselineItems();
 
 function mergeBaselineWithStored(baseline: CaseStudyType[], stored: CaseStudyType[]) {
   const bySlug = new Map<string, CaseStudyType>();
+
+  //baseline first, then stored overrides
   for (const cs of baseline) bySlug.set(cs.slug, cs);
   for (const cs of stored) bySlug.set(cs.slug, cs);
 
   const order: string[] = [];
-  const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
+  const seen = new Set<string>();
+  const push = (slug: string) => { 
+    if (seen.has(slug)) return;
+      seen.add(slug);
+      order.push(slug);
+/*     if (!order.includes(slug)) order.push(slug); */ 
+  };
 
-  for (const cs of baseline) push(cs.slug);
+  //STORED FIRST (preserves “newest first” because upsert puts new items first)
   for (const cs of stored) push(cs.slug);
 
-  return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
+  //then add whatever fixtures weren't in storage
+  for (const cs of baseline) push(cs.slug);
+
+  return order
+    .map((slug) => bySlug.get(slug))
+    /* .map((s) => bySlug.get(s)) */
+    .filter((x): x is CaseStudyType => Boolean(x));
 }
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
