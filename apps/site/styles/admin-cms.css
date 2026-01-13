@@ -2733,9 +2733,10 @@ fieldset.form-group > legend.form-label{
 .pill--cat { 
   background: rgba(0,0,0,.04); 
   font-size: .95em;
-  margin-bottom: 1.15em;
   margin-left: .25em;
-  margin-top:.5em;
+/*   margin-top:.5em; */
+/*   margin-bottom: 1.15em; */
+  margin-bottom: .5em;
 }
 
 .pill--removable {

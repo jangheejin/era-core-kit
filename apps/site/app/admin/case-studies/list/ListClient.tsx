@@ -369,7 +369,7 @@ export default function ListClient() {
                     <div className="dbItemClient">{clientLabel}</div>
 {/*                     {secondaryTitle && <div className="dbItemTitle">{secondaryTitle}</div>} */}
 
-                    <div className="dbBadges">
+{/*                     <div className="dbBadges">
                       <span className={`badge ${isPublished ? "badge--published" : "badge--draft"}`}>
                         <span className="badgeDot" />
                         {isPublished ? "Published" : "Draft"}
@@ -379,7 +379,8 @@ export default function ListClient() {
                         <span className="badgeDot" />
                         {visibilityLabel(vis)}
                       </span>
-                    </div>
+                    </div> */}
+
                   </div>
 
                   <div className="dbActions">
@@ -404,6 +405,7 @@ export default function ListClient() {
                 {/* update: get rid of redundant category listing when user is editing */}
                 {!isEditing &&
                   <div className="dbProps">
+
                     <div className="dbProp">
                       <div className="dbPropLabel">Categories</div>
                       <div className="dbPillRow">
@@ -418,6 +420,20 @@ export default function ListClient() {
                         )}
                       </div>
                     </div>
+
+                    <div className="dbProp">
+                      <div className="dbPropLabel">Publishing Status</div>
+                      <div className="dbPillRow">
+                        <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
+                          {isPublished ? "Published" : "Draft"}
+                        </span>
+
+                        <span className="pill pill--audience">
+                          {visibilityLabel(vis)}
+                        </span>
+                      </div>
+                    </div>
+
 {/*                   <div className="dbProp">
                     <div className="dbPropLabel">Tags</div>
                     <div className="dbPillRow">
