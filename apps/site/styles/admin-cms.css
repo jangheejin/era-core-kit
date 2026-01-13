@@ -2905,10 +2905,7 @@ fieldset.form-group > legend.form-label{
   z-index: 10;
 }*/
 
-/* .hasTooltip:hover::after,
-.hasTooltip:focus-visible::after {
-  opacity: 1;
-}
+/* 
 
 .ttContent{
   padding: 6px 8px;
@@ -2920,4 +2917,26 @@ fieldset.form-group > legend.form-label{
   z-index: 9999;
   max-width: 260px;
 }
-.ttArrow{ fill: #111; } */
+ */
+
+
+
+.hasTooltip:hover::after,
+.hasTooltip:focus-visible::after {
+  opacity: 1;
+}
+
+.tooltipContent {
+  background: rgba(15, 15, 15, 0.95);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.2;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  z-index: 999999;
+  max-width: 280px;
+} 
+
+.tooltipArrow{ fill: #111; }

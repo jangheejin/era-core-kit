@@ -406,7 +406,7 @@ export default function ListClient() {
                       Edit
                     </Link>
 
-{/*                     <Tooltip.Provider delayDuration={200}>
+                    <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
                         <button
@@ -417,10 +417,8 @@ export default function ListClient() {
                           onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
                           aria-expanded={isQuickEditing}
                         >
-                          {isQuickEditing ? "Close" : "Change Settings"} */}
-                          {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
-                          {/* {isEditing ? "Close" : "Edit"} */}
-{/*                         </button>
+                          {isQuickEditing ? "Close" : "Change Settings"}
+                         </button>
                         </Tooltip.Trigger>
 
 
@@ -431,10 +429,11 @@ export default function ListClient() {
                           </Tooltip.Content>
                         </Tooltip.Portal>
                       </Tooltip.Root>
-                    </Tooltip.Provider>           */}          
+                    </Tooltip.Provider>           
+          
 
 {/* failed version */}
-                    <span className="tooltip">
+{/*                     <span className="tooltip">
                     <button
                       className="btnSmall tooltip__trigger"
                       type="button"
@@ -445,11 +444,11 @@ export default function ListClient() {
                       aria-expanded={isQuickEditing}
                       //aria-expanded={isEditing}
                     >
-                      {isQuickEditing ? "Close" : "Change Settings"}
+                      {isQuickEditing ? "Close" : "Change Settings"} */}
                       {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
                       {/* {isEditing ? "Close" : "Edit"} */}
-                    </button>
-                    </span>
+{/*                     </button>
+                    </span> */}
 
 
                   </div>
