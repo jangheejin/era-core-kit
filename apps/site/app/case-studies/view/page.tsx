@@ -11,6 +11,8 @@ import styles from "./CaseStudyView.module.css"
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import { sectorLabel, type SectorValue } from "@kit/schema";
 
+import { Markdown } from "@/components/Markdown"
+
 function readParams(): { slug: string | null; preview: boolean } {
   if (typeof window === "undefined") return { slug: null, preview: false };
   const params = new URLSearchParams(window.location.search);
@@ -193,7 +195,8 @@ export default function CaseStudyViewPage() {
       {cs.bodyMDX ? (
         <section className="csViewSection">
           <h2 className="csViewH2">Body</h2>
-          <div className="csViewMDX">{cs.bodyMDX}</div>
+          {/* <div className="csViewMDX">{cs.bodyMDX}</div> */}
+          <Markdown>{cs.bodyMDX}</Markdown>
         </section>
       ) : null}
     </main>

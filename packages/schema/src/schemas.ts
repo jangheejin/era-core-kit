@@ -215,7 +215,7 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
       deriveSummaryFromWriteUp(val.bodyMDX ?? "", 180);
 
     const { sector, ...rest } = val as any;
-    return { ...rest, sectors };
+    return { ...rest, sectors, summaryShort };
   })
   .pipe(CaseStudyCanonicalSchema);
 

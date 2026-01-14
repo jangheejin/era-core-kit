@@ -7,7 +7,7 @@
 
 // demo edit: this is client-side again.
 
-"use client";
+//"use client";
 
 import '@styles/work.css';
 
@@ -17,23 +17,78 @@ import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server"
 import { useMemo } from "react";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 //import { DemoGate } from "./_demo/DemoGate"
+import { deriveSummaryFromWriteUp } from "@kit/schema"; // ✅ already exists in your repo
 
-function toWorkCase(cs: any, featured: boolean): WorkCase {
-  const sector = (cs.sectors ?? []).join(", ");
+
+function isDemoOn(v: unknown) {
+  if (typeof v === "string") return v === "1";
+  if (Array.isArray(v)) return v.includes("1");
+  return false;
+}
+
+//function toWorkCase(cs: any, featured: boolean): WorkCase {
+function toWorkCase(cs: any): WorkCase {
+  const SECTOR_SEPARATOR = ", "; // or " · "
+  const sector = Array.isArray(cs?.sectors) ? cs.sectors.join(", ") : "";
+//  const sector = (cs.sectors ?? []).join(", ");
+  const client = (cs?.client ?? "").trim() || (cs?.title ?? "").trim() || cs.slug;
+  const summary =
+    (cs?.brief ?? "").trim() ||
+    (cs?.summaryShort ?? "").trim() ||
+    deriveSummaryFromWriteUp(String(cs?.bodyMDX ?? ""), 180) || // fallback
+    "";
+
   return {
     slug: cs.slug,
+    //sector: cs.sectors?.join(SECTOR_SEPARATOR) || "",
     sector,
-    client: cs.client?.trim() || cs.title?.trim() || cs.slug,
-    featured,
-    summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
+    //client: cs.client?.trim() || cs.title?.trim() || cs.slug,
+    client,
+    //IMPORTANT
+    featured: !!cs?.isFeaturedHome,
+    //featured,
+    //summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
+    //hiding for now in order to simplify creation->publishing flow for client demo
+    summary/* : (cs?.brief ?? "").trim() || (cs?.summaryShort ?? "").trim() || "" */,
+    outcomes: Array.isArray(cs?.outcomes) ? cs.outcomes : undefined,
+/*     outcomes: Array.isArray(cs?.outcomes)
+      ? cs.outcomes.map((o: any) => ({
+          label: o?.label,
+          description: o?.description,
+        }))
+      : undefined, */
     imageUrl: cs.heroImageUrl,
   };
 }
 
-export default function OurWorkPage() {
-  const { items } = useAdminCaseStudies();
+export default async function OurWorkPage() {
+/*   searchParams,
+}: {
+  searchParams?: { demo?: string | string[] };
+}) {
+  const demo = isDemoOn(searchParams?.demo); */
+  const items = (await listPublicCaseStudies()).map(toWorkCase);
 
-  const cases = useMemo(() => {
+  return (
+    <div data-cms-ssr="1">
+      <OurWorkClient cases={items} basePath="/our-work" demo={false} />
+    </div>
+  );
+}
+
+/*   return (
+    <>
+      <div data-cms-ssr="1">
+        <OurWorkClient cases={items} basePath="/our-work" demo={false} />
+      </div>
+ */
+      {/* <DemoGate enabled={demo} /> */}
+/*     </>
+  ); 
+}*/
+  //const { items } = useAdminCaseStudies();
+
+/*   const cases = useMemo(() => {
     const publicItems = items.filter((cs) => cs.isPublic);
 
     const anyFeatured = publicItems.some((cs) => Boolean(cs.isFeaturedHome));
@@ -42,8 +97,8 @@ export default function OurWorkPage() {
     );
   }, [items]);
 
-  return <OurWorkClient cases={cases} basePath="/our-work" demo={false} />;
-}
+  return <OurWorkClient cases={cases} basePath="/our-work" demo={false} />; 
+}*/
 /* const ALL_CASES: WorkCase[] = [
   {
     slug: 'sanborn-appgeo',

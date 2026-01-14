@@ -10,6 +10,7 @@ import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 import { ContextBanner } from "../../../components/ContextBanner";
 import { CaseStudyMetadata } from "../../../components/CaseStudyMetadata";
 
+import { Markdown } from "@/components/Markdown";
 
 export default function MockCaseStudyPage() {
   const params = useParams<{ slug: string }>();
@@ -162,7 +163,8 @@ export default function MockCaseStudyPage() {
       {cs.bodyMDX ? (
         <div className="card" style={{ marginTop: "1rem" }}>
           <h3>Full Body (Raw text)</h3>
-          <pre style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</pre>
+          {/* <pre style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</pre> */}
+          <Markdown>{cs.bodyMDX}</Markdown>
         </div>
       ) : null}
 

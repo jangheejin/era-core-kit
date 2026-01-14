@@ -25,6 +25,19 @@ import {
 
 import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
+const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
+
+function migrateEnsureAtLeastOneSector(input: any) {
+  const sectors = Array.isArray(input?.sectors) ? input.sectors : [];
+  const sector = typeof input?.sector === "string" ? input.sector : null;
+
+  if (sectors.length > 0) return input;
+  if (sector) return { ...input, sectors: [sector] };
+
+  // demo-only safety net
+  return { ...input, sectors: [DEFAULT_SECTOR] };
+}
+
 function migrateLegacySector(input: any) {
   if (!input || typeof input !== "object") return input;
   if (input.sectors == null && input.sector != null) {

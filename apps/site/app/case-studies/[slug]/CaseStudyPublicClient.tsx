@@ -5,6 +5,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
+import { Markdown } from "@/components/Markdown";
 
 export default function CaseStudyPublicClient({ slug }: { slug: string }) {
   const { getBySlug } = useAdminCaseStudies();
@@ -28,7 +29,9 @@ export default function CaseStudyPublicClient({ slug }: { slug: string }) {
         <h1 className="type-h2">{cs.client ?? cs.title ?? cs.slug}</h1>
         {cs.heroImageUrl ? <img className="case-study__hero" src={cs.heroImageUrl} alt="" /> : null}
         {cs.brief ? <p className="muted">{cs.brief}</p> : null}
-        {cs.bodyMDX ? <div style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</div> : null}
+        {cs.bodyMDX ? (
+          <Markdown>{cs.bodyMDX}</Markdown>
+        ) : null}
       </div>
     </main>
   );

@@ -456,3 +456,10 @@ ol {
 .c-section--work .type-h2 {
   margin-block-end: clamp(0.75rem, 1.4vw, 1.1rem);
 }
+
+/* Markdown: kill browser-default margins so c-stack controls spacing */
+.c-markdown :is(h1,h2,h3,h4,h5,h6,p,ul,ol,blockquote,pre) { margin: 0; }
+.c-markdown ul, .c-markdown ol { padding-left: 1.25rem; }
+
+/* Optional: slightly tighter than global c-stack if you want */
+.c-markdown.c-stack > * + * { margin-top: var(--space-3, 1.5rem); }
