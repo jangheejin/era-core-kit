@@ -2,7 +2,42 @@
 
 "use client";
 
+"use client";
+
+import { useMemo } from "react";
 import Link from "next/link";
+import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
+
+export default function CaseStudyPublicClient({ slug }: { slug: string }) {
+  const { getBySlug } = useAdminCaseStudies();
+  const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
+
+  if (!cs || !cs.isPublic) {
+    return (
+      <main className="c-page">
+        <div className="c-container c-stack">
+          <h1 className="type-h2">Not found</h1>
+          <Link href="/case-studies">Back</Link>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="c-page">
+      <div className="c-container c-stack">
+        <Link href="/case-studies" className="muted">← Back</Link>
+        <h1 className="type-h2">{cs.client ?? cs.title ?? cs.slug}</h1>
+        {cs.heroImageUrl ? <img className="case-study__hero" src={cs.heroImageUrl} alt="" /> : null}
+        {cs.brief ? <p className="muted">{cs.brief}</p> : null}
+        {cs.bodyMDX ? <div style={{ whiteSpace: "pre-wrap" }}>{cs.bodyMDX}</div> : null}
+      </div>
+    </main>
+  );
+}
+
+
+/* import Link from "next/link";
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
@@ -71,3 +106,4 @@ export default function CaseStudySinglePage() {
     </main>
   );
 }
+ */
