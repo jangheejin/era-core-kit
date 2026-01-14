@@ -4,7 +4,7 @@ import "@styles/admin-cms.css";
 import "@styles/admin-cms-buttons.css";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useState, useRef, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -144,6 +144,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     () => slugify(slugDraft.trim() || autoSlug),
     [slugDraft, autoSlug],
   );
+
+  const bannerRef = useRef<HTMLDivElement | null>(null);
 
   //SINGLE candidateInput builder (nullable)
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
