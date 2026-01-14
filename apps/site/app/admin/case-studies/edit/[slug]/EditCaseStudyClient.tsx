@@ -21,6 +21,16 @@ import {
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
+//helper to protect against slug collisions
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;
   const t = s.trim();
@@ -29,7 +39,9 @@ function emptyToUndefined(s: unknown): string | undefined {
 
 export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
-  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
+//  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
+//part one of protecting against slug collisions. update store destructure
+  const { getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   // Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
@@ -49,16 +61,19 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [tags, setTags] = useState<string>("");
 
-  const [isPublic, setIsPublic] = useState(false);
-  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+//  const [isPublic, setIsPublic] = useState(false);
+//  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
   //3 publishing states 
   type PublishState = "InternalDraft" | "ClientViewable" | "Homepage";
   const [publishState, setPublishState] = useState<PublishState>("InternalDraft");
 
+  //part of protecting against slug collisions. slugDraft needs a state
+  const [slugDraft, setSlugDraft] = useState("");
+
   const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
 
-  // hydrate local form state once we have cs
+  // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
     if (!cs || ready) return;
 
@@ -72,8 +87,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setTags(Array.isArray(cs.tags) ? cs.tags.join(", ") : "");
     setHeroImageUrl(cs.heroImageUrl ?? "");
 
-    setIsPublic(Boolean(cs.isPublic));
-    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
+    //hydrate slugDraft once (part of protecting against slug collisions)
+    setSlugDraft(cs.slug);
+
+//    setIsPublic(Boolean(cs.isPublic));
+//    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
 
     const nextState: PublishState =
       cs.visibility === "Public"
@@ -111,6 +129,17 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     return previewBlurb ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [previewBlurb, bodyMDX]);
 
+  //compute an "effective slug" to protect against slug collisions
+  const autoSlug = useMemo(
+    () => slugify(client || cs?.title || cs?.slug || ""),
+    [client, cs?.title, cs?.slug],
+  );
+  
+  const effectiveSlug = useMemo(
+    () => slugify(slugDraft.trim() || autoSlug),
+    [slugDraft, autoSlug],
+  );
+
   //SINGLE candidateInput builder (nullable)
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
     if (!cs) return null;
@@ -135,8 +164,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     return {
       ...base,
 
-      // keep route stable during edit
-      slug: base.slug,
+      // keep route stable during edit. new: protect against slug collisions
+      slug: effectiveSlug || base.slug,
+//      slug: base.slug,
 
       title: displayName || base.title || base.slug,
       client: emptyToUndefined(displayName),
@@ -164,8 +194,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     summaryShortAuto,
     sector,
     heroImageUrl,
-    isPublic,
-    isFeaturedHome,
+    //isPublic,
+    //isFeaturedHome,
+    publishState,
+    effectiveSlug,
   ]);
 
   const validation = useMemo(() => {
@@ -188,34 +220,76 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const basePublic = Boolean(cs.isPublic);
     const baseFeatured = Boolean(cs.isFeaturedHome);
 
+    const basePublishState: PublishState =
+      cs.visibility === "Public"
+        ? "Homepage"
+        : cs.visibility === "ClientSafe"
+          ? "ClientViewable"
+          : "InternalDraft";
+    const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
+    const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
+
     return (
       client.trim() !== baseClient ||
       writeUp !== baseWriteUp ||
       brief !== baseBrief ||
       (sector || "") !== (baseSector || "") ||
       tags.trim() !== baseTags.trim() ||
-      (heroImageUrl || "") !== (baseHero || "") ||
-      isPublic !== basePublic ||
-      isFeaturedHome !== baseFeatured
+      //(heroImageUrl || "") !== (baseHero || "") ||
+      heroNorm !== baseHeroNorm ||
+      
+      publishState !== basePublishState
+//      isPublic !== basePublic ||
+//      isFeaturedHome !== baseFeatured
     );
-  }, [cs, client, writeUp, brief, sector, tags, heroImageUrl, isPublic, isFeaturedHome, DEFAULT_SECTOR]);
+  }, [
+    cs, client, writeUp, brief, sector, tags, heroImageUrl, 
+    //isPublic, isFeaturedHome, 
+    publishState,
+    DEFAULT_SECTOR
+  ]);
 
-  function saveOnly() {
-    if (!candidateInput) return;
+  // to make preview always save as well, need to make saveOnly return the saved object or null
+    //  function saveOnly() {
+  function saveOnly(): CaseStudyType | null {
+    if (!candidateInput) return null;
 
-    const parsed = CaseStudySchema.safeParse(candidateInput);
+    //enforce unique slug at save boundary
+    const desired = candidateInput.slug;
+    const unique = ensureUniqueSlug(desired, candidateInput.id);
+
+    const next: CaseStudyInput = { ...candidateInput, slug: unique };
+    const parsed = CaseStudySchema.safeParse(next);
     if (!parsed.success) {
       alert("Can't save yet. Required fields missing (Client + Content).");
-      return;
+      return null;
     }
+
+/*     const parsed = CaseStudySchema.safeParse(candidateInput);
+    if (!parsed.success) {
+      alert("Can't save yet. Required fields missing (Client + Content).");
+      return null;
+    } */
 
     upsertCaseStudy(parsed.data);
     setLastSavedAt(new Date().toLocaleTimeString());
+
+    //keep UI and route consistent if the slug is changed
+    if (unique !== slugDraft) setSlugDraft(unique);
+    if (unique !== slug) router.replace(`/admin/case-studies/edit/${unique}`);
+
+    return parsed.data;
   }
 
-  function previewOnly() {
-    router.push(`/admin/case-studies/mock/${slug}`);
+  function previewNow() {
+    const out = saveOnly();
+    if (!out) return;
+    router.push(`/admin/case-studies/mock/${out.slug}`);
   }
+
+/*   function previewOnly() {
+    router.push(`/admin/case-studies/mock/${slug}`);
+  } */
 
   // Not Found is rendered AFTER all hooks (inside JSX)
   if (!cs) {
@@ -291,7 +365,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                   className="heroImagePreview"
                   src={heroImageUrl}
                   alt="Hero preview"
-                  style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
                 />
               </div>
             ) : null}
@@ -310,7 +383,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 Save
               </button>
 
-              <button className="btn" type="button" onClick={previewOnly}>
+              {/* <button className="btn" type="button" onClick={previewOnly}> */}
+              <button className="btn" type="button" onClick={previewNow} disabled={!canSave}>
                 Preview
               </button>
 
@@ -432,6 +506,22 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               </select>
             </div>
           </div>
+
+{/*           <div className="form-row form-group" id="setSlug">
+            <div className="form-field">
+              <label className="form-label">URL slug</label>
+              <p className="admin-hint">Leave blank to auto-generate from client name.</p>
+              <input
+                className="input"
+                value={slugDraft}
+                placeholder={autoSlug}
+                onChange={(e) => setSlugDraft(e.currentTarget.value)}
+                onBlur={() => {
+                  if (!slugDraft.trim() && autoSlug) setSlugDraft(autoSlug);
+                }}
+              />
+            </div>
+          </div> */}
 
 {/*           <div className="form-row form-group" id="tags">
             <div className="form-field">
