@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLayoutEffect, useRef } from "react";//needed for improved sticky header
 
 type NavItem = { 
   href: string; 
@@ -61,8 +62,32 @@ function isActive(pathname: string, item: NavItem) {
 export function AdminTopNav() {
   const pathname = usePathname() ?? "";
 
+  //improved sticky header (appear below context banner, but stick to top)
+  const headerRef = useRef<HTMLElement | null>(null);
+  useLayoutEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const setVar = () => {
+      const h = el.getBoundingClientRect().height;
+      document.documentElement.style.setProperty("--adminTopNavH", `${h}px`);
+    };
+
+    setVar();
+
+    const ro = new ResizeObserver(() => setVar());
+    ro.observe(el);
+
+    window.addEventListener("resize", setVar);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", setVar);
+    };
+  }, []);
+  
+
   return (
-    <header className="adminTopNav">
+    <header ref={headerRef} className="adminTopNav">
     {/* <div className="adminTopNav"> */}
       <div className="adminTopNav__inner">
         {/* <div className="adminTopNav__brand"> */}

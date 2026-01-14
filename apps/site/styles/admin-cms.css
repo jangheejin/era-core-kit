@@ -2979,3 +2979,30 @@ fieldset.form-group > legend.form-label{
 .form-actions--editCaseStudy .form-actions__publish .input {
   max-width: 420px;
 }
+
+/*improved sticky navbar*/
+:root {
+  --adminTopNavH: 0px; /* will be set dynamically (optional but recommended) */
+}
+
+/* Make the top nav actually be the top sticky thing */
+.adminTopNav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /*background: white;*/
+}
+
+/* This is the "sticky toolbar" */
+.form-actions--top {
+  position: sticky;
+  top: var(--adminTopNavH);
+  z-index: 900;
+
+  /* so it looks like a bar and doesn’t inherit weird backgrounds */
+  /* background: white; */
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  /* optional: spacing so it doesn’t feel cramped */
+  padding: 0.75rem 0;
+}

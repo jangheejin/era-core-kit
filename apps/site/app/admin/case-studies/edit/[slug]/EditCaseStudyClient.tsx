@@ -317,8 +317,12 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   function previewNow() {
     const out = saveOnly();
     if (!out) return;
-    router.push(`/admin/case-studies/mock/${out.slug}`);
-//    window.open(`/admin/case-studies/mock/${out.slug}`);
+//    router.push(`/admin/case-studies/mock/${out.slug}`);
+    window.open(
+      `/admin/case-studies/mock/${out.slug}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
 /*   function previewOnly() {
