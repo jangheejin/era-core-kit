@@ -412,7 +412,7 @@ export default function ListClient() {
                         <Tooltip.Trigger asChild>
                           <Link 
                             className="btnSmall" 
-                            href={`/admin/case-studies/${cs.slug}/edit`}
+                            href={`/admin/case-studies/edit/${cs.slug}`}
                           >
                             Edit
                           </Link>
