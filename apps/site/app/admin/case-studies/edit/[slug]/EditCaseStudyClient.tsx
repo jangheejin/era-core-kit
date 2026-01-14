@@ -264,9 +264,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             {/* {heroImageUrl ? ( */}
             {/* do not show preview of hero unless it's something other than default */}
             {showHeroPreview ? (
-              <div className="mt">
-                <p className="muted type-small">Preview</p>
+              <div className="mt heroPreview">
+                <p className="muted type-small">Image Preview</p>
                 <img
+                  className="heroImagePreview"
                   src={heroImageUrl}
                   alt="Hero preview"
                   style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
@@ -314,7 +315,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               }}
               aria-pressed={isPublic}
             >
-              On site
+              Client-Viewable
             </button>
 
             <button

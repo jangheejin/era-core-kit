@@ -2940,3 +2940,22 @@ fieldset.form-group > legend.form-label{
 } 
 
 .tooltipArrow{ fill: #111; }
+
+.heroPreview {
+  margin-top: 0.75rem;
+  max-width: 360px; /* adjust down to make smaller */
+}
+
+/* .heroPreview__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+} */
+.heroImagePreview {
+  display: block;
+  width: 360px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8;
+}
