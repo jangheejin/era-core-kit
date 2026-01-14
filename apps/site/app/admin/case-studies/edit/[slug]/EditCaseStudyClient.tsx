@@ -31,7 +31,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
   const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
 
-  // ✅ Always call hooks unconditionally
+  // Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
 
   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
@@ -51,6 +51,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   const [isPublic, setIsPublic] = useState(false);
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+
+  const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
 
   // hydrate local form state once we have cs
   useEffect(() => {
@@ -96,7 +98,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     return previewBlurb ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [previewBlurb, bodyMDX]);
 
-  // ✅ SINGLE candidateInput (nullable). No second return floating around.
+  //SINGLE candidateInput (nullable). No second return floating around.
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
     if (!cs) return null;
 
@@ -152,7 +154,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   const canSave = validation?.success ?? false;
 
-  // ✅ dirty is ONLY boolean
+  // dirty is ONLY boolean
   const dirty = useMemo(() => {
     if (!cs) return false;
 
@@ -194,7 +196,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     router.push(`/admin/case-studies/mock/${slug}`);
   }
 
-  // ✅ Not Found is rendered AFTER all hooks (inside JSX)
+  // Not Found is rendered AFTER all hooks (inside JSX)
   if (!cs) {
     return (
       <main className="c-admin">
@@ -259,8 +261,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             </p>
             <input id="heroImage" type="file" accept="image/*" onChange={handleHeroImageFileChange} />
 
-            {heroImageUrl ? (
-              <div style={{ marginTop: "0.75rem" }}>
+            {/* {heroImageUrl ? ( */}
+            {/* do not show preview of hero unless it's something other than default */}
+            {showHeroPreview ? (
+              <div className="mt">
                 <p className="muted type-small">Preview</p>
                 <img
                   src={heroImageUrl}
@@ -332,7 +336,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           <summary className="admin-collapse__summary">
             <div>
               <p className="admin-hint">
-                OPTIONAL: Assign categories and tags so this case study can be used in custom client pages.
+                {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client pages. */}
+                OPTIONAL: Assign categories so this case study can be used in custom client pages.
               </p>
             </div>
             <span className="admin-collapse__chevron" aria-hidden="true">
@@ -362,7 +367,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             </div>
           </div>
 
-          <div className="form-row form-group" id="tags">
+{/*           <div className="form-row form-group" id="tags">
             <div className="form-field">
               <label className="form-label" htmlFor="tagsInput">
                 Tags
@@ -374,10 +379,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 onChange={(e) => setTags(e.currentTarget.value)}
               />
             </div>
-          </div>
+          </div> */}
+
         </details>
       </div>
-
+{/* 
       <div className="card card-new mt1">
         <h3>Validation</h3>
         {validation?.success ? (
@@ -388,7 +394,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             {validation ? JSON.stringify(validation.error.format(), null, 2) : "Loading…"}
           </pre>
         )}
-      </div>
+      </div> */}
+
     </main>
   );
 }
