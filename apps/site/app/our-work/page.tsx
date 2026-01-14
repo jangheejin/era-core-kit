@@ -5,55 +5,45 @@
 // - later when the real CMS is finished, data will come from there
 //'use client';
 
+// demo edit: this is client-side again.
+
+"use client";
+
 import '@styles/work.css';
 
 import { OurWorkClient, type WorkCase } from "./OurWorkClient";
 import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server";
+
+import { useMemo } from "react";
+import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 //import { DemoGate } from "./_demo/DemoGate"
 
-function isDemoOn(v: unknown) {
-  if (typeof v === "string") return v === "1";
-  if (Array.isArray(v)) return v.includes("1");
-  return false;
-}
-
-function toWorkCase(cs: any): WorkCase {
-  const SECTOR_SEPARATOR = ", "; // or " · "
+function toWorkCase(cs: any, featured: boolean): WorkCase {
+  const sector = (cs.sectors ?? []).join(", ");
   return {
     slug: cs.slug,
-    //sector: cs.sectors?.[0] ?? "Case Study",
-    sector: cs.sectors?.join(SECTOR_SEPARATOR) || "",
+    sector,
     client: cs.client?.trim() || cs.title?.trim() || cs.slug,
-    featured: !!cs.isFeaturedHome || true, // pick a default rule
+    featured,
     summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
-    //outcomes: cs.outcomes,
-/*     outcomes: (cs.outcomes ?? []).map((o: any) => ({
-      label: o.label,
-      description: o.description,
-    })), */ //hiding for now in order to simplify creation->publishing flow for client demo
     imageUrl: cs.heroImageUrl,
   };
 }
 
-export default async function OurWorkPage({
-  searchParams,
-}: {
-  searchParams?: { demo?: string | string[] };
-}) {
-  const demo = isDemoOn(searchParams?.demo);
-  const items = (await listPublicCaseStudies()).map(toWorkCase);
+export default function OurWorkPage() {
+  const { items } = useAdminCaseStudies();
 
-  return (
-    <>
-      <div data-cms-ssr="1">
-        <OurWorkClient cases={items} basePath="/our-work" demo={false} />
-      </div>
+  const cases = useMemo(() => {
+    const publicItems = items.filter((cs) => cs.isPublic);
 
-      {/* <DemoGate enabled={demo} /> */}
-    </>
-  );
+    const anyFeatured = publicItems.some((cs) => Boolean(cs.isFeaturedHome));
+    return publicItems.map((cs, idx) =>
+      toWorkCase(cs, anyFeatured ? Boolean(cs.isFeaturedHome) : idx < 6),
+    );
+  }, [items]);
+
+  return <OurWorkClient cases={cases} basePath="/our-work" demo={false} />;
 }
-
 /* const ALL_CASES: WorkCase[] = [
   {
     slug: 'sanborn-appgeo',
