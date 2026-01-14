@@ -52,6 +52,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [isPublic, setIsPublic] = useState(false);
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
+  //3 publishing states 
+  type PublishState = "InternalDraft" | "ClientViewable" | "Homepage";
+  const [publishState, setPublishState] = useState<PublishState>("InternalDraft");
+
   const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
 
   // hydrate local form state once we have cs
@@ -70,6 +74,15 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
     setIsPublic(Boolean(cs.isPublic));
     setIsFeaturedHome(Boolean(cs.isFeaturedHome));
+
+    const nextState: PublishState =
+      cs.visibility === "Public"
+        ? "Homepage"
+        : cs.visibility === "ClientSafe"
+          ? "ClientViewable"
+          : "InternalDraft";
+
+    setPublishState(nextState);
 
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
@@ -98,7 +111,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     return previewBlurb ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [previewBlurb, bodyMDX]);
 
-  //SINGLE candidateInput (nullable). No second return floating around.
+  //SINGLE candidateInput builder (nullable)
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
     if (!cs) return null;
 
@@ -111,6 +124,13 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     );
 
     const base = cs as CaseStudyType;
+
+    const publishing =
+      publishState === "InternalDraft"
+        ? { visibility: "Internal" as const, status: "Draft" as const, isPublic: false, isFeaturedHome: false }
+        : publishState === "ClientViewable"
+          ? { visibility: "ClientSafe" as const, status: "Published" as const, isPublic: true, isFeaturedHome: false }
+          : { visibility: "Public" as const, status: "Published" as const, isPublic: true, isFeaturedHome: true };
 
     return {
       ...base,
@@ -131,8 +151,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
       heroImageUrl: emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL,
 
-      isPublic,
-      isFeaturedHome: isPublic ? isFeaturedHome : false,
+/*       isPublic,
+      isFeaturedHome: isPublic ? isFeaturedHome : false, */
+      ...publishing,
     };
   }, [
     cs,
@@ -303,9 +324,52 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               </div>
             </div>
 
-            <div style={{ flex: 1 }} />
+            <div className="form-group">
+              <label className="form-label">Publishing Status</label>
+              <select
+                className="input"
+                value={publishState}
+                onChange={(e) => setPublishState(e.currentTarget.value as PublishState)}
+              >
+                <option value="InternalDraft">Internal Draft</option>
+                <option value="ClientViewable">Client-Viewable</option>
+                <option value="Homepage">Published on Homepage</option>
+              </select>
+            </div>
 
-            <button
+
+            {/* <div style={{ flex: 1 }} />
+
+            <div className="row" style={{ gap: 10, alignItems: "center" }}>
+              <button
+                type="button"
+                className={`pillToggle ${publishState === "InternalDraft" ? "pillToggle--on" : ""}`}
+                onClick={() => setPublishState("InternalDraft")}
+                aria-pressed={publishState === "InternalDraft"}
+              >
+                Internal Draft
+              </button>
+
+              <button
+                type="button"
+                className={`pillToggle ${publishState === "ClientViewable" ? "pillToggle--on" : ""}`}
+                onClick={() => setPublishState("ClientViewable")}
+                aria-pressed={publishState === "ClientViewable"}
+              >
+                Client-Viewable
+              </button>
+
+              <button
+                type="button"
+                className={`pillToggle ${publishState === "Homepage" ? "pillToggle--on" : ""}`}
+                onClick={() => setPublishState("Homepage")}
+                aria-pressed={publishState === "Homepage"}
+              >
+                Published on Homepage
+              </button>
+            </div> */}
+
+{/*             <button
               type="button"
               className={`pillToggle ${isPublic ? "pillToggle--on" : ""}`}
               onClick={() => {
@@ -327,7 +391,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               title={!isPublic ? "Turn on 'On site' first" : "Feature on Our Work"}
             >
               Featured on Homepage
-            </button>
+            </button> */}
           </div>
         </div>
       </section>
