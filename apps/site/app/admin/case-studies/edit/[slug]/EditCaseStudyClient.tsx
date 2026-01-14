@@ -343,13 +343,15 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   return (
     <main className="c-admin">
-      <ContextBanner view="preview">
-        You’re editing a demo case study stored in your browser. Save commits changes to the local demo store.
-        Preview shows what the public-facing template looks like.
-      </ContextBanner>
+{/*       <ContextBanner view="preview"> */}
+{/*         You’re editing a demo case study stored in your browser. Save commits changes to the local demo store.
+        Preview shows what the public-facing template looks like. */}
+{/*         You’re editing a demo case study stored in your browser.
+      </ContextBanner> */}
 
       <div className="form-header">
-        <h1 className="form-title">EDIT CASE STUDY</h1>
+        <h1 className="form-title">CASE STUDY EDITOR</h1>
+        {/* <h1 className="form-title">EDIT CASE STUDY</h1> */}
         {/* <div className="form-nav">
           <Link href="/admin">Admin</Link> |{" "}
           <Link href="/admin/case-studies/list">Case Study Library</Link> |{" "}
@@ -358,6 +360,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       </div>
 
       <section className="card card-new mt1">
+        
         <div className="card card-new">
           <div className="form-group">
             <label className="form-label">

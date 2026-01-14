@@ -34,7 +34,8 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
-  { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") },
+  /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
+  { href: "/admin/case-studies/list", label: "Case Study Library", match: (p) => p.startsWith("/admin/case-studies") },
   { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
 
@@ -93,8 +94,11 @@ export function AdminTopNav() {
         {/* <div className="adminTopNav__brand"> */}
         <div className="adminTopNav__left">
           {/* <Link href="/admin" className="adminTopNav__brand"> */}
-          <div className="adminTopNav__brand">
+{/*           <div className="adminTopNav__brand">
             Demo CMS
+          </div> */}
+          <div className="adminTopNav__brand">
+            Case Study CMS
           </div>
           {/* </Link> */}
 {/*           <Link href="/admin" className="adminTopNav__brandLink">
