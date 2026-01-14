@@ -297,7 +297,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             ) : null}
           </div>
 
-          <div className="form-actions form-actions--top">
+          {/* <div className="form-actions form-actions--top"> */}
+          <div className="form-actions form-actions--top form-actions--editCaseStudy">
             <div className="form-actions__left">
               <button
                 className="btnPrimary"
@@ -324,7 +325,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group form-actions__publish">
               <label className="form-label">Publishing Status</label>
               <select
                 className="input"
