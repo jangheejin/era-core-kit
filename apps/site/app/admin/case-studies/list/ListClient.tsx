@@ -399,6 +399,14 @@ export default function ListClient() {
                       Preview
                     </Link>
 
+{/*                     <Link 
+                      className="btnSmall" 
+                      href={`/case-studies/view/${cs.slug}?preview=1`}
+                      target="_blank"
+                    >
+                      Preview (NEW TEMP TEST)
+                    </Link> */}
+
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>

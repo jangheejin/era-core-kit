@@ -65,8 +65,39 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   function save() {
     // keep tags + everything else intact; patch only what editor controls
-    const base = cs;
-    if (!base) return; // TS safety; shouldn’t happen if your Not Found return is above
+    const current = cs;
+    if (!current) return;
+
+    const trimmedClient = client.trim();
+    const existingTitle = (current.title ?? "").trim();
+    const nextTitle = existingTitle || trimmedClient || slug;
+
+    const next = {
+      ...current,
+      client: trimmedClient || undefined,
+      title: nextTitle,
+      bodyMDX: writeUp,
+      brief: brief.trim() || undefined,
+      summaryShort,
+      sectors: sector ? [sector]: [],
+      heroImageUrl: heroImageUrl.trim() || DEFAULT_HERO_IMAGE_URL,
+      isPublic,
+      isFeaturedHome: isPublic ? isFeaturedHome : false,
+    };
+
+    const parsed = CaseStudySchema.safeParse(next);
+    if (!parsed.success) {
+      alert("Can't save yet. Required fields missing (Client + Content).");
+      return;
+    }
+
+    upsertCaseStudy(parsed.data);
+    router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
+  }
+
+
+/*     const base = cs;
+    if (!base) return; // TS safety; shouldn’t happen if your Not Found return is above */
     /* const trimmedClient = client.trim();
     const existingTitle = (cs.title ?? "").trim();
     const nextTitle = existingTitle || trimmedClient || slug; // slug prop is always defined
@@ -93,7 +124,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     upsertCaseStudy(parsed.data);
     router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
   } */
-     const next = {
+/*      const next = {
       ...cs,
       client: client.trim() || undefined,
       title: (cs.title ?? "").trim() || client.trim() || cs.slug,
@@ -104,18 +135,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       heroImageUrl: heroImageUrl.trim() || DEFAULT_HERO_IMAGE_URL,
       isPublic,
       isFeaturedHome: isPublic ? isFeaturedHome : false,
-    };
+    }; */
 
-    const parsed = CaseStudySchema.safeParse(next);
+/*     const parsed = CaseStudySchema.safeParse(next);
     if (!parsed.success) {
       // keep it simple for demo: just block save
       alert("Can’t save yet — required fields missing (Client + Content).");
       return;
-    }
+    } 
 
     upsertCaseStudy(parsed.data);
     router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
-  }
+  }*/
 
   return (
     <main className="c-admin">
