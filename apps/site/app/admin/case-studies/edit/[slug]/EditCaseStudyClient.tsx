@@ -37,6 +37,11 @@ function emptyToUndefined(s: unknown): string | undefined {
   return t ? t : undefined;
 }
 
+//helper for previewing and saving at same time
+function buildPreviewUrl(slug: string) {
+  return `/admin/case-studies/mock/${slug}`;
+}
+
 export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
 //  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
@@ -144,6 +149,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
     if (!cs) return null;
 
+    const base = cs as CaseStudyType;
+
     const displayName = client.trim();
     const nextTags = normalizeTagList(
       tags
@@ -152,14 +159,36 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         .filter(Boolean),
     );
 
-    const base = cs as CaseStudyType;
+    //sectors fallback
+    const nextSectors: SectorValue[] =
+    sector
+      ? [sector as SectorValue]
+      : Array.isArray(base.sectors) && base.sectors.length > 0
+        ? base.sectors
+        : [DEFAULT_SECTOR];
 
+// one source of truth: publishState
     const publishing =
-      publishState === "InternalDraft"
-        ? { visibility: "Internal" as const, status: "Draft" as const, isPublic: false, isFeaturedHome: false }
-        : publishState === "ClientViewable"
-          ? { visibility: "ClientSafe" as const, status: "Published" as const, isPublic: true, isFeaturedHome: false }
-          : { visibility: "Public" as const, status: "Published" as const, isPublic: true, isFeaturedHome: true };
+    publishState === "InternalDraft"
+      ? {
+          visibility: "Internal" as const,
+          status: "Draft" as const,
+          isPublic: false,
+          isFeaturedHome: false,
+        }
+      : publishState === "ClientViewable"
+        ? {
+            visibility: "ClientSafe" as const,
+            status: "Published" as const,
+            isPublic: true,
+            isFeaturedHome: false,
+          }
+        : {
+            visibility: "Public" as const,
+            status: "Published" as const,
+            isPublic: true,
+            isFeaturedHome: true,
+          };
 
     return {
       ...base,
@@ -175,7 +204,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       brief: previewBlurb,
       summaryShort: summaryShortAuto,
 
-      sectors: sector ? [sector as SectorValue] : [],
+//      sectors: sector ? [sector as SectorValue] : [],
+
+      sectors: nextSectors,
 
       tags: nextTags,
 
@@ -198,6 +229,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     //isFeaturedHome,
     publishState,
     effectiveSlug,
+    DEFAULT_SECTOR,
   ]);
 
   const validation = useMemo(() => {
@@ -217,8 +249,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const baseSector = (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
     const baseTags = Array.isArray(cs.tags) ? cs.tags.join(", ") : "";
     const baseHero = cs.heroImageUrl ?? "";
-    const basePublic = Boolean(cs.isPublic);
-    const baseFeatured = Boolean(cs.isFeaturedHome);
+//    const basePublic = Boolean(cs.isPublic);
+//    const baseFeatured = Boolean(cs.isFeaturedHome);
 
     const basePublishState: PublishState =
       cs.visibility === "Public"
@@ -226,6 +258,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         : cs.visibility === "ClientSafe"
           ? "ClientViewable"
           : "InternalDraft";
+
     const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
     const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
 
@@ -285,6 +318,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const out = saveOnly();
     if (!out) return;
     router.push(`/admin/case-studies/mock/${out.slug}`);
+//    window.open(`/admin/case-studies/mock/${out.slug}`);
   }
 
 /*   function previewOnly() {
@@ -312,11 +346,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
       <div className="form-header">
         <h1 className="form-title">EDIT CASE STUDY</h1>
-        <div className="form-nav">
+        {/* <div className="form-nav">
           <Link href="/admin">Admin</Link> |{" "}
           <Link href="/admin/case-studies/list">Case Study Library</Link> |{" "}
           <Link href={`/admin/case-studies/mock/${slug}`}>Preview</Link>
-        </div>
+        </div> */}
       </div>
 
       <section className="card card-new mt1">
