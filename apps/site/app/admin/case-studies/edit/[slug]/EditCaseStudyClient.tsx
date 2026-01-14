@@ -1,4 +1,3 @@
-//apps/site/app/admin/case-studies/edit/[slug]/EditCaseStudyClient.tsx
 "use client";
 
 import "@styles/admin-cms.css";
@@ -32,6 +31,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
   const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
 
+  // ✅ Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
 
   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
@@ -44,17 +44,15 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [writeUp, setWriteUp] = useState("");
   const [brief, setBrief] = useState("");
 
-  //optional fields
-  const [sector, setSector] = useState<string>(""); // allow empty like create
-//  const [sector, setSector] = useState<SectorValue>(DEFAULT_SECTOR);
-  //const [heroImageUrl, setHeroImageUrl] = useState("");
+  // optional fields
+  const [sector, setSector] = useState<string>(""); // matches create page (allows empty)
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [tags, setTags] = useState<string>("");
 
   const [isPublic, setIsPublic] = useState(false);
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
-  // load initial from store record
+  // hydrate local form state once we have cs
   useEffect(() => {
     if (!cs || ready) return;
 
@@ -62,11 +60,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setWriteUp(cs.bodyMDX ?? "");
     setBrief(cs.brief ?? "");
 
-    // keep behavior consistent with create: allow empty, but seed from existing
     const initialSector = (cs.sectors?.[0] as SectorValue | undefined) ?? DEFAULT_SECTOR;
     setSector(initialSector);
-
-    //setSector((cs.sectors?.[0] as SectorValue) ?? DEFAULT_SECTOR);
 
     setTags(Array.isArray(cs.tags) ? cs.tags.join(", ") : "");
     setHeroImageUrl(cs.heroImageUrl ?? "");
@@ -77,7 +72,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
 
-  // hero image upload (same as create)
   function handleHeroImageFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -90,46 +84,38 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     reader.readAsDataURL(file);
   }
 
-
-  if (!cs) {
-    return (
-      <main className="c-admin">
-        <div className="c-container c-stack">
-          <h1 className="type-h2">Not found</h1>
-          <Link href="/admin/case-studies/list">Back to database</Link>
-        </div>
-      </main>
-    );
-  }
+  const onSectorChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const v = e.currentTarget.value;
+    setSector(v === "" ? "" : (v as SectorValue));
+  };
 
   const bodyMDX = useMemo(() => writeUp, [writeUp]);
   const previewBlurb = useMemo(() => emptyToUndefined(brief), [brief]);
 
-  //const summaryShort = deriveSummaryFromWriteUp(brief?.trim() || writeUp, 180);
   const summaryShortAuto = useMemo(() => {
     return previewBlurb ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [previewBlurb, bodyMDX]);
 
-  // candidate object for validation + save
-  const candidateInput: CaseStudyInput = useMemo(() => {
+  // ✅ SINGLE candidateInput (nullable). No second return floating around.
+  const candidateInput = useMemo<CaseStudyInput | null>(() => {
+    if (!cs) return null;
+
     const displayName = client.trim();
     const nextTags = normalizeTagList(
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     );
 
-    // IMPORTANT: preserve everything you’re not editing
     const base = cs as CaseStudyType;
 
     return {
       ...base,
 
-      // keep slug stable on edit (don’t silently change route)
+      // keep route stable during edit
       slug: base.slug,
 
-      // align with create: title = displayName; client optional
       title: displayName || base.title || base.slug,
       client: emptyToUndefined(displayName),
 
@@ -149,31 +135,35 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   }, [
     cs,
     client,
+    tags,
     bodyMDX,
     previewBlurb,
     summaryShortAuto,
     sector,
-    tags,
     heroImageUrl,
     isPublic,
     isFeaturedHome,
   ]);
 
-  const validation = useMemo(() => CaseStudySchema.safeParse(candidateInput), [candidateInput]);
+  const validation = useMemo(() => {
+    if (!candidateInput) return null;
+    return CaseStudySchema.safeParse(candidateInput);
+  }, [candidateInput]);
 
-  // “dirty” indicator: compare against store object (clears after successful upsert)
+  const canSave = validation?.success ?? false;
+
+  // ✅ dirty is ONLY boolean
   const dirty = useMemo(() => {
-    const base = cs;
-    if (!base) return false;
+    if (!cs) return false;
 
-    const baseClient = (base.client ?? base.title ?? "").trim();
-    const baseWriteUp = base.bodyMDX ?? "";
-    const baseBrief = base.brief ?? "";
-    const baseSector = (base.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
-    const baseTags = Array.isArray(base.tags) ? base.tags.join(", ") : "";
-    const baseHero = base.heroImageUrl ?? "";
-    const basePublic = Boolean(base.isPublic);
-    const baseFeatured = Boolean(base.isFeaturedHome);
+    const baseClient = (cs.client ?? cs.title ?? "").trim();
+    const baseWriteUp = cs.bodyMDX ?? "";
+    const baseBrief = cs.brief ?? "";
+    const baseSector = (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
+    const baseTags = Array.isArray(cs.tags) ? cs.tags.join(", ") : "";
+    const baseHero = cs.heroImageUrl ?? "";
+    const basePublic = Boolean(cs.isPublic);
+    const baseFeatured = Boolean(cs.isFeaturedHome);
 
     return (
       client.trim() !== baseClient ||
@@ -188,106 +178,33 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   }, [cs, client, writeUp, brief, sector, tags, heroImageUrl, isPublic, isFeaturedHome, DEFAULT_SECTOR]);
 
   function saveOnly() {
+    if (!candidateInput) return;
+
     const parsed = CaseStudySchema.safeParse(candidateInput);
-    if (!parsed.success) return;
-
-    upsertCaseStudy(parsed.data);
-    setLastSavedAt(new Date().toLocaleTimeString());
-  }
-
-/*   function previewOnly() {
-    // preview shows last-saved version. that’s the whole point of separating buttons.
-    router.push(`/admin/case-studies/mock/${cs.slug}`);
-  } */
-
-    // preview shows last-saved version. that’s the whole point of separating buttons.
-    function previewOnly() {
-      router.push(`/admin/case-studies/mock/${slug}`);
-    }
-  /* function save() {
-    // keep tags + everything else intact; patch only what editor controls
-    const current = cs;
-    if (!current) return;
-
-    const trimmedClient = client.trim();
-    const existingTitle = (current.title ?? "").trim();
-    const nextTitle = existingTitle || trimmedClient || slug;
-
-    const next = {
-      ...current,
-      client: trimmedClient || undefined,
-      title: nextTitle,
-      bodyMDX: writeUp,
-      brief: brief.trim() || undefined,
-      summaryShort,
-      sectors: sector ? [sector]: [],
-      heroImageUrl: heroImageUrl.trim() || DEFAULT_HERO_IMAGE_URL,
-      isPublic,
-      isFeaturedHome: isPublic ? isFeaturedHome : false,
-    };
-
-    const parsed = CaseStudySchema.safeParse(next);
     if (!parsed.success) {
       alert("Can't save yet. Required fields missing (Client + Content).");
       return;
     }
 
     upsertCaseStudy(parsed.data);
-    router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
-  } */
+    setLastSavedAt(new Date().toLocaleTimeString());
+  }
 
+  function previewOnly() {
+    router.push(`/admin/case-studies/mock/${slug}`);
+  }
 
-/*     const base = cs;
-    if (!base) return; // TS safety; shouldn’t happen if your Not Found return is above */
-    /* const trimmedClient = client.trim();
-    const existingTitle = (cs.title ?? "").trim();
-    const nextTitle = existingTitle || trimmedClient || slug; // slug prop is always defined
-  
-    const next = {
-      ...cs,
-      client: trimmedClient || undefined,
-      title: nextTitle,
-      bodyMDX: writeUp,
-      brief: brief.trim() || undefined,
-      summaryShort,
-      sectors: sector ? [sector] : [],
-      heroImageUrl: heroImageUrl.trim() || DEFAULT_HERO_IMAGE_URL,
-      isPublic,
-      isFeaturedHome: isPublic ? isFeaturedHome : false,
-    };
-  
-    const parsed = CaseStudySchema.safeParse(next);
-    if (!parsed.success) {
-      alert("Can’t save yet — required fields missing (Client + Content).");
-      return;
-    }
-  
-    upsertCaseStudy(parsed.data);
-    router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
-  } */
-/*      const next = {
-      ...cs,
-      client: client.trim() || undefined,
-      title: (cs.title ?? "").trim() || client.trim() || cs.slug,
-      bodyMDX: writeUp,
-      brief: brief.trim() || undefined,
-      summaryShort,
-      sectors: sector ? [sector] : [],
-      heroImageUrl: heroImageUrl.trim() || DEFAULT_HERO_IMAGE_URL,
-      isPublic,
-      isFeaturedHome: isPublic ? isFeaturedHome : false,
-    }; */
-
-/*     const parsed = CaseStudySchema.safeParse(next);
-    if (!parsed.success) {
-      // keep it simple for demo: just block save
-      alert("Can’t save yet — required fields missing (Client + Content).");
-      return;
-    } 
-
-    upsertCaseStudy(parsed.data);
-    router.push(`/admin/case-studies/mock/${parsed.data.slug}`);
-  }*/
+  // ✅ Not Found is rendered AFTER all hooks (inside JSX)
+  if (!cs) {
+    return (
+      <main className="c-admin">
+        <div className="c-container c-stack">
+          <h1 className="type-h2">Not found</h1>
+          <Link href="/admin/case-studies/list">Back to database</Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="c-admin">
@@ -301,208 +218,115 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         <div className="form-nav">
           <Link href="/admin">Admin</Link> |{" "}
           <Link href="/admin/case-studies/list">Case Study Library</Link> |{" "}
-          <Link href={`/admin/case-studies/mock/${cs.slug}`}>Preview</Link>
+          <Link href={`/admin/case-studies/mock/${slug}`}>Preview</Link>
         </div>
       </div>
 
-      {/* CORE */}
-      {/* <div className="card mt1 card--core"> */}
       <section className="card card-new mt1">
         <div className="card card-new">
-        <div className="form-group">
-          <label className="form-label">
-            Client Name <span className="admin-label-required">(required)</span>
-          </label>
-          <input className="input" 
-            value={client} 
-            //onChange={(e) => setClient(e.target.value)} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setClient(e.currentTarget.value)
-            }
-          />
-          {/* In React, prefer e.currentTarget.value because it’s correctly typed to the element you attached the handler to */}
-        </div>
-
-        <div className="form-group" id="write-up-section">
-          <label className="form-label">
-            Description <span className="admin-label-required">(required)</span>
-          </label>
-
-          <p className="admin-hint">
-            Write something about the case study here. Any format is OK (notes or a full write-up).
-          </p>
-          <textarea
-            className="input"
-            style={{ minHeight: 220 }}
-            value={writeUp}
-            //onChange={(e) => setWriteUp(e.target.value)}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              setWriteUp(e.currentTarget.value)
-            }
-          />
-        </div>
-
-{/*         <div className="form-group">
-          <label className="form-label">
-            Preview blurb <span className="admin-label-optional">(optional)</span>
-          </label>
-          <p className="admin-hint">
-            If provided, this is used as the short “summary” shown in list cards.
-          </p>
-          <textarea
-            className="input"
-            style={{ minHeight: 90 }}
-            value={brief}
-            onChange={(e) => setBrief(e.target.value)}
-          />
-        </div> */}
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="heroImage">
-            Upload an image <span className="admin-label-optional">(optional)</span>
-          </label>
-          <p className="admin-hint">
-            If you don’t add one, a default image will be used.
-          </p>
-          <input id="heroImage" type="file" accept="image/*" onChange={handleHeroImageFileChange} />
-
-          {heroImageUrl ? (
-            <div style={{ marginTop: "0.75rem" }}>
-              <p className="muted type-small">Preview</p>
-              <img
-                src={heroImageUrl}
-                alt="Hero preview"
-                style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
-              />
-            </div>
-          ) : null}
-        </div>
-
-        {/* ACTION BAR (separate Save vs Preview) */}
-        <div className="form-actions form-actions--top">
-          <div className="form-actions__left">
-            <button
-              className="btnPrimary"
-              type="button"
-              onClick={saveOnly}
-              disabled={!validation.success}
-              title={!validation.success ? "Fix validation errors first" : "Save changes"}
-            >
-              Save
-            </button>
-
-            <button className="btn" type="button" onClick={previewOnly}>
-              Preview
-            </button>
-
-            <div className="save-status">
-              {!validation.success
-                ? "Can't save yet: Missing required fields (Client Name + Description)"
-                : dirty
-                  ? "Unsaved changes."
-                  : lastSavedAt
-                    ? `Saved at ${lastSavedAt}.`
-                    : "No changes"
-              }
-            </div>
-          </div>
-
-          <div style={{ flex: 1 }} />
-
-          {/* Publishing toggles (keep the pill UI) */}
-          <button
-            type="button"
-            className={`pillToggle ${isPublic ? "pillToggle--on" : ""}`}
-            onClick={() => {
-              const next = !isPublic;
-              setIsPublic(next);
-              if (!next) setIsFeaturedHome(false);
-            }}
-            aria-pressed={isPublic}
-          >
-            On site
-          </button>
-
-          <button
-            type="button"
-            className={`pillToggle ${isFeaturedHome ? "pillToggle--on" : ""}`}
-            onClick={() => setIsFeaturedHome((v) => !v)}
-            disabled={!isPublic}
-            aria-pressed={isFeaturedHome}
-            title={!isPublic ? "Turn on 'On site' first" : "Feature on Our Work"}
-          >
-            Featured on Homepage
-          </button>
-        </div>
-
-
-
-{/*        <div className="form-row form-group">
-          <div className="form-field">
-            <label className="form-label">Category</label>
-            <select
-              className="input"
-              value={sector}
-              onChange={(e) => setSector(e.target.value as SectorValue)}
-            >
-              {SECTOR_VALUES.map((v) => (
-                <option key={v} value={v}>{v}</option>
-              ))}
-            </select>
-          </div>
-
-           <div className="form-field">
-            <label className="form-label">Hero image URL (optional)</label>
+          <div className="form-group">
+            <label className="form-label">
+              Client Name <span className="admin-label-required">(required)</span>
+            </label>
             <input
               className="input"
-              value={heroImageUrl}
-              onChange={(e) => setHeroImageUrl(e.target.value)}
-              placeholder={DEFAULT_HERO_IMAGE_URL}
+              value={client}
+              onChange={(e) => setClient(e.currentTarget.value)}
             />
-          </div> 
-        </div>*/}
+          </div>
 
-{/*         <div className="row" style={{ gap: 10, alignItems: "center" }}>
-          <button
-            type="button"
-            className={`pillToggle ${isPublic ? "pillToggle--on" : ""}`}
-            onClick={() => {
-              const next = !isPublic;
-              setIsPublic(next);
-              if (!next) setIsFeaturedHome(false);
-            }}
-            aria-pressed={isPublic}
-          >
-            On site
-          </button>
+          <div className="form-group" id="write-up-section">
+            <label className="form-label">
+              Description <span className="admin-label-required">(required)</span>
+            </label>
+            <p className="admin-hint">
+              Write something about the case study here. Any format is OK (notes or a full write-up).
+            </p>
+            <textarea
+              className="input"
+              style={{ minHeight: 220 }}
+              value={writeUp}
+              onChange={(e) => setWriteUp(e.currentTarget.value)}
+            />
+          </div>
 
-          <button
-            type="button"
-            className={`pillToggle ${isFeaturedHome ? "pillToggle--on" : ""}`}
-            onClick={() => setIsFeaturedHome((v) => !v)}
-            disabled={!isPublic}
-            aria-pressed={isFeaturedHome}
-            title={!isPublic ? "Turn on 'On site' first" : "Feature on Our Work"}
-          >
-            Featured
-          </button>
+          <div className="form-group">
+            <label className="form-label" htmlFor="heroImage">
+              Upload an image <span className="admin-label-optional">(optional)</span>
+            </label>
+            <p className="admin-hint">
+              If you don’t add one, a default image will be used.
+            </p>
+            <input id="heroImage" type="file" accept="image/*" onChange={handleHeroImageFileChange} />
 
-          <div style={{ flex: 1 }} />
+            {heroImageUrl ? (
+              <div style={{ marginTop: "0.75rem" }}>
+                <p className="muted type-small">Preview</p>
+                <img
+                  src={heroImageUrl}
+                  alt="Hero preview"
+                  style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+                />
+              </div>
+            ) : null}
+          </div>
 
-        </div> 
-        
+          <div className="form-actions form-actions--top">
+            <div className="form-actions__left">
+              <button
+                className="btnPrimary"
+                type="button"
+                onClick={saveOnly}
+                disabled={!canSave}
+                title={!canSave ? "Fix validation errors first" : "Save changes"}
+              >
+                Save
+              </button>
 
-          <button className="btnSave btnSave--ready" type="button" onClick={saveOnly}>
-            Save + Preview
-          </button>*/}
+              <button className="btn" type="button" onClick={previewOnly}>
+                Preview
+              </button>
 
+              <div className="save-status">
+                {!canSave
+                  ? "Can't save yet: Missing required fields (Client Name + Description)"
+                  : dirty
+                    ? "Unsaved changes."
+                    : lastSavedAt
+                      ? `Saved at ${lastSavedAt}.`
+                      : "No changes"}
+              </div>
+            </div>
+
+            <div style={{ flex: 1 }} />
+
+            <button
+              type="button"
+              className={`pillToggle ${isPublic ? "pillToggle--on" : ""}`}
+              onClick={() => {
+                const next = !isPublic;
+                setIsPublic(next);
+                if (!next) setIsFeaturedHome(false);
+              }}
+              aria-pressed={isPublic}
+            >
+              On site
+            </button>
+
+            <button
+              type="button"
+              className={`pillToggle ${isFeaturedHome ? "pillToggle--on" : ""}`}
+              onClick={() => setIsFeaturedHome((v) => !v)}
+              disabled={!isPublic}
+              aria-pressed={isFeaturedHome}
+              title={!isPublic ? "Turn on 'On site' first" : "Feature on Our Work"}
+            >
+              Featured on Homepage
+            </button>
+          </div>
         </div>
-        {/* end of 2nd largest outer card wrapper (CORE) */}
-      {/* </div> */}
-      {/* end of core */}
       </section>
 
-      {/* OPTIONAL (match create’s “advanced” block shape) */}
       <div className="card card-new mt1">
         <details className="admin-collapse" open>
           <summary className="admin-collapse__summary">
@@ -521,16 +345,12 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               <label className="form-label" htmlFor="sectorSelect">
                 Client Type
               </label>
-              <p className="admin-hint">Select the primary sector (client type) for this case study.</p>
 
               <select
                 id="sectorSelect"
                 className="input"
                 value={sector}
-                //onChange={(e) => setSector(e.target.value)}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setSector(e.currentTarget.value)
-                }
+                onChange={onSectorChange}
               >
                 <option value="">Select a sector (client type)</option>
                 {SECTOR_VALUES.map((opt) => (
@@ -547,33 +367,28 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               <label className="form-label" htmlFor="tagsInput">
                 Tags
               </label>
-              <p className="admin-hint">
-                Separate tags with commas (e.g. <code>environment</code>, <code>appropriations</code>).
-              </p>
               <input
                 id="tagsInput"
                 className="input"
                 value={tags}
-                onChange={(e) => setTags(e.target.value)}
+                onChange={(e) => setTags(e.currentTarget.value)}
               />
             </div>
           </div>
         </details>
       </div>
 
-      {/* Validation block (optional but useful in demo) */}
       <div className="card card-new mt1">
         <h3>Validation</h3>
-        {validation.success ? (
+        {validation?.success ? (
           <p className="muted">✅ Valid (ready to save)</p>
         ) : (
           <pre className="error">
             ❌ Invalid{"\n\n"}
-            {JSON.stringify(validation.error.format(), null, 2)}
+            {validation ? JSON.stringify(validation.error.format(), null, 2) : "Loading…"}
           </pre>
         )}
       </div>
-
     </main>
   );
 }
