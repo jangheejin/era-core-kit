@@ -1,7 +1,7 @@
 // apps/site/src/utils/BlockRenderer.tsx
 "use client";
 
-import React from "react";
+//import React from "react";
 import type { ComponentType } from "react";
 
 import type { LayoutBlock, BlockType } from "@kit/blocks";
@@ -17,8 +17,10 @@ import {
   DocLink,
   OutcomeList,
   ImageFigure,
-  WorkWithCaseGrid,
+//  WorkWithCaseGrid,
 } from "@kit/blocks";
+
+import { WorkWithCaseGridSmart } from "@/components/WorkWithCaseGridSmart";
 
 // Map each allowed block type to its React component.
 // Note: lowercase aliases share the same component.
@@ -32,7 +34,8 @@ const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
   WorkText,
   CaseGrid,
   TeamStrip,
-  WorkWithCaseGrid,
+//  WorkWithCaseGrid,
+  WorkWithCaseGrid: WorkWithCaseGridSmart,
 
   Callout,
   callout: Callout,

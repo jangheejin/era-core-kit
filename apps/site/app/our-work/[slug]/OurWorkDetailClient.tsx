@@ -6,17 +6,24 @@ import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 
+import { Markdown } from "@/components/Markdown";
+
+function displayTitle(cs: { client?: string; title?: string; slug: string }) {
+  return (cs.client ?? "").trim() || (cs.title ?? "").trim() || cs.slug;
+}
 
 export default function OurWorkDetailClient({ slug }: { slug: string }) {
   const { getBySlug } = useAdminCaseStudies();
-  const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
+  //const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
+  const cs = getBySlug(slug);
 
-  if (!cs || !cs.isPublic) {
+  //if (!cs || !cs.isPublic) {
+  if (!cs) {
     return (
       <main className="c-page">
         <div className="c-container c-stack">
           <h1 className="type-h2">Not found</h1>
-          <Link href="/our-work">Back</Link>
+          <Link href="/our-work">Back to Our Work</Link>
         </div>
       </main>
     );
@@ -25,13 +32,21 @@ export default function OurWorkDetailClient({ slug }: { slug: string }) {
   return (
     <main className="c-page">
       <div className="c-container c-stack">
+
         <Link href="/our-work" className="muted">← Back to Our Work</Link>
-        <h1 className="type-h2">{cs.client ?? cs.title ?? cs.slug}</h1>
+
+        {/* <h1 className="type-h2">{cs.client ?? cs.title ?? cs.slug}</h1> */}
+        <h1 className="type-h2">{displayTitle(cs)}</h1>
+
         {cs.heroImageUrl ? <img className="case-study__hero" src={cs.heroImageUrl} alt="" /> : null}
+        
         {cs.brief ? <p className="muted">{cs.brief}</p> : null}
-        {cs.bodyMDX ? (
+        
+        {/* {cs.bodyMDX ? (
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{cs.bodyMDX}</ReactMarkdown>
-        ) : null}
+        ) : null} */}
+        {cs.bodyMDX ? <Markdown>{cs.bodyMDX}</Markdown> : null}
+        
       </div>
     </main>
   );

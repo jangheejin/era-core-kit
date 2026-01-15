@@ -19,7 +19,8 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
         {items.map((item) => (
           <a
             key={item.slug}
-            href={`/case-studies/${item.slug}`}
+            //href={`/case-studies/${item.slug}`}
+            href={`/our-work/${item.slug}`}
             className="case-card"
           >
             <div className="case-card__image">

@@ -1,4 +1,5 @@
 // apps/site/app/admin/case-studies/list/ListClient.tsx
+
 "use client";
 
 import "@styles/admin-cms.css";
@@ -84,6 +85,23 @@ function visibilityLabel(v: string) {
   if (v === "ClientSafe") return "Client-safe";
   return v;
 }
+
+// For the public site demo, these two booleans are the real source of truth:
+// - isPublic: shows on the public site
+// - isFeaturedHome: also shows in the homepage 'Featured' section
+// We keep status/visibility in sync so filters remain meaningful.
+type PublishState = "InternalDraft" | "ClientViewable" | "Homepage";
+
+function derivePublishState(cs: {
+  isPublic?: boolean;
+  isFeaturedHome?: boolean;
+  visibility?: string;
+}): PublishState {
+  if (cs.isFeaturedHome || cs.visibility === "Public") return "Homepage";
+  if (cs.isPublic || cs.visibility === "ClientSafe") return "ClientViewable";
+  return "InternalDraft";
+}
+
 
 /* export default function CaseStudyListPage() { */
 export default function ListClient() {
@@ -354,6 +372,8 @@ export default function ListClient() {
             const isPublished = cs.status === "Published";
             const vis = cs.visibility;
 
+            const publishState = derivePublishState(cs);
+
             return (
               /* Added an anchor id + highlight styling per card */
               
@@ -486,6 +506,7 @@ export default function ListClient() {
 
                     <div className="dbProp">
                       <div className="dbPropLabel">Categories</div>
+
                       <div className="dbPillRow">
                         {sectors.length === 0 ? (
                           <span className="pill pill--muted">Uncategorized</span>
@@ -502,11 +523,73 @@ export default function ListClient() {
                     <div className="dbProp">
                       <div className="dbPropLabel">Publishing Status</div>
                       <div className="dbPillRow">
-                        <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
-                          {isPublished ? "Published" : "Draft"}
-                        </span>
 
-                        <span className="pill pill--audience">
+                        <button
+                          type="button"
+                          className={`pillToggle ${publishState !== "InternalDraft" ? "pillToggle--on" : ""}`}
+                          onClick={() => {
+                            const next: PublishState =
+                              publishState === "InternalDraft" ? "ClientViewable" : "InternalDraft";
+
+                            updateMeta(
+                              cs.id,
+                              next === "InternalDraft"
+                                ? {
+                                    visibility: "Internal" as any,
+                                    status: "Draft" as any,
+                                    isPublic: false,
+                                    isFeaturedHome: false,
+                                  }
+                                : {
+                                    visibility: "ClientSafe" as any,
+                                    status: "Published" as any,
+                                    isPublic: true,
+                                    isFeaturedHome: false,
+                                  },
+                            );
+                          }}
+                          aria-pressed={publishState !== "InternalDraft"}
+                          title="Show or hide this case study on the public site"
+                        >
+                          On site
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`pillToggle ${publishState === "Homepage" ? "pillToggle--on" : ""}`}
+                          onClick={() => {
+                            const next: PublishState =
+                              publishState === "Homepage" ? "ClientViewable" : "Homepage";
+
+                            updateMeta(
+                              cs.id,
+                              next === "Homepage"
+                                ? {
+                                    visibility: "Public" as any,
+                                    status: "Published" as any,
+                                    isPublic: true,
+                                    isFeaturedHome: true,
+                                  }
+                                : {
+                                    visibility: "ClientSafe" as any,
+                                    status: "Published" as any,
+                                    isPublic: true,
+                                    isFeaturedHome: false,
+                                  },
+                            );
+                          }}
+                          aria-pressed={publishState === "Homepage"}
+                          title={publishState === "InternalDraft" ? "Turn on 'On site' first" : "Feature on homepage"}
+                          disabled={publishState === "InternalDraft"}
+                        >
+                          Featured
+                        </button>
+{/*                         <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
+                          {isPublished ? "Published" : "Draft"}
+                        </span> */}
+
+                        <span className={`pill pill--audience pill--audience-${vis}`}>
+                        {/* <span className="pill pill--audience"> */}
                           {visibilityLabel(vis)}
                         </span>
                       </div>

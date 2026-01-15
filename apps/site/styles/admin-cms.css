@@ -3008,3 +3008,36 @@ fieldset.form-group > legend.form-label{
   z-index: 50;
   background: var(--card-bg, #fff);
 }
+
+/* Compact on/off pills for 'On site' + 'Featured' toggles */
+.pillToggle {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.18rem .55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.14);
+  background: rgba(255,255,255,.75);
+  font-size: .82rem;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.pillToggle:hover { border-color: rgba(0,0,0,.22); }
+
+.pillToggle--on {
+  background: rgba(0,0,0,.08);
+  border-color: rgba(0,0,0,.22);
+}
+
+.pillToggle:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Read-only audience indicator (kept in sync with the toggles) */
+.pill--audience { background: rgba(0,0,0,.03); }
+
+.pill--audience-Internal { opacity: .7; }
+.pill--audience-ClientSafe { opacity: .85; }
+.pill--audience-Public { opacity: 1; }

@@ -9,6 +9,7 @@ export * from "./cms";
 export type {
   LayoutBlock,
   BlockType,
+  //CaseGridItem,
 
   // Landing Page Props
   HeroProps,
