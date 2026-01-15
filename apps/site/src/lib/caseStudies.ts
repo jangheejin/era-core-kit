@@ -28,14 +28,31 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyType | 
   return all.find((cs) => cs.slug === slug) ?? null;
 }
 
-export async function getCaseStudiesBySectorRouteSlug(sectorSlug: string) {
+export type SectorRouteResult = {
+  sector: SectorValue;
+  items: CaseStudyType[];
+  caseStudies: CaseStudyType[]; // alias so callers can use the obvious name
+};
+
+export async function getCaseStudiesBySectorRouteSlug(
+  sectorSlug: string,
+): Promise<SectorRouteResult | null> {
+  const sector = sectorFromRouteSlug(sectorSlug);
+  if (!sector) return null;
+
+  const all = await getPublicCaseStudies();
+  const items = all.filter((cs) => cs.sectors?.includes(sector));
+
+  return { sector, items, caseStudies: items };
+}
+/* export async function getCaseStudiesBySectorRouteSlug(sectorSlug: string) {
   const sector = sectorFromRouteSlug(sectorSlug);
   if (!sector) return { sector: null as SectorValue | null, items: [] as CaseStudyType[] };
 
   const all = await getPublicCaseStudies();
   const items = all.filter((cs) => cs.sectors?.includes(sector));
   return { sector, items };
-}
+} */
 
 export async function getCaseStudiesByTagRouteSlug(tagRouteSlug: string) {
   const all = await getPublicCaseStudies();
