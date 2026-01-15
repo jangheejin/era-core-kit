@@ -21,6 +21,7 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+import { useAdminClientPages, type ClientPage } from "../../AdminClientPageStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
 //tooltip
@@ -106,6 +107,8 @@ function publishPresetLabel(p: PublishPreset) {
   if (p === "client") return "Client-Viewable";
   return "Published to Homepage";
 }
+
+//fix preset detection so “Featured” never accidentally bleeds into “Client-Viewable”
 function getPublishPreset(cs: CaseStudyType): PublishPreset {
   if (Boolean((cs as any).isFeaturedHome)) return "homepage";
   if (Boolean((cs as any).isPublic) && cs.visibility === "ClientSafe") return "client";
@@ -143,10 +146,118 @@ function applyPublishPreset(
   updateMeta(id, patch);
 }
 
+function matchesClientPageFilters(
+  cs: CaseStudyType,
+  sectors: SectorValue[],
+  tagSlugs: string[],
+  page: ClientPage,
+): boolean {
+  const f = page.filters;
+
+  // Client pages should only show published records, never drafts
+  // (otherwise the public preview is lying)
+  const status = cs.status ?? "Draft";
+  if (status !== "Published") return false;
+//  if ((cs.status ?? "Draft") !== "Published") return false;
+
+  // Audience gate based on visibility
+  const visibility = cs.visibility ?? "Internal";
+  if (f.audience === "Public") {
+    if (visibility !== "Public") return false;
+  } else {
+    // ClientSafe pages can include ClientSafe + Public (both are safe to show clients)
+    if (visibility !== "ClientSafe" && visibility !== "Public") return false;
+  }
+
+  // Sector gate
+  if (f.sector) {
+    if (!sectors.includes(f.sector)) return false;
+  }
+
+  // Tag gate
+  const required = (f.tags ?? []).map(tagSlug).filter(Boolean);
+  if (required.length) {
+    const mode = f.tagMode ?? "any";
+    if (mode === "all") {
+      for (const t of required) if (!tagSlugs.includes(t)) return false;
+    } else {
+      if (!required.some((t) => tagSlugs.includes(t))) return false;
+    }
+  }
+
+  return true;
+}
+
+/* function matchesClientPageFilters(
+  status: CaseStudyType["status"],
+  visibility: CaseStudyType["visibility"],
+  sectors: SectorValue[],
+  tagSlugs: string[],
+  page: ClientPage,
+): boolean {
+  const f = page.filters;
+
+  //status gate
+  if (status !== "Published") return false;
+
+  // audience gate (visibility)
+  if (f.audience === "ClientSafe") {
+    // Client-safe pages can include both ClientSafe + Public case studies.
+    if (visibility === "Internal") return false;
+  } else if (f.audience === "Public") {
+    // Public pages include only Public case studies.
+    if (visibility !== "Public") return false;
+  } */
+
+/*   // status gate
+  if (f.status === "PublishedOnly") {
+    if (status !== "Published") return false;
+  }
+
+  // audience gate (visibility)
+  if (f.audience === "ClientSafeOnly") {
+    if (visibility !== "ClientSafe" && visibility !== "Public") return false;
+  } else if (f.audience === "PublicOnly") {
+    if (visibility !== "Public") return false;
+  } */
+
+  // sector gate
+/*   if (f.sector) {
+    if (!sectors.includes(f.sector)) return false;
+  }
+
+  // tag gate
+  const required = (f.tags ?? []).map(tagSlug).filter(Boolean);
+  if (required.length) {
+    const mode = f.tagMode ?? "any";
+    if (mode === "all") {
+      for (const t of required) if (!tagSlugs.includes(t)) return false;
+    } else {
+      if (!required.some((t) => tagSlugs.includes(t))) return false;
+    }
+  }
+
+  return true;
+} */
 
 /* export default function CaseStudyListPage() { */
 export default function ListClient() {
   const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+
+  //make it explicit (if there are no pages, don't ignore that)
+  const { pages: clientPages, createPage } = useAdminClientPages();
+  const hasClientPages = clientPages.length > 0;
+//  const { pages: clientPages } = useAdminClientPages();
+  const [clientPageLens, setClientPageLens] = useState<string>("");
+  const lensPage = useMemo(
+    () => (clientPageLens ? clientPages.find((p) => p.slug === clientPageLens) ?? null : null),
+    [clientPageLens, clientPages],
+  );
+
+  function openClientPagePreview() {
+    if (!clientPageLens) return;
+    window.open(`/client-pages/${clientPageLens}`, "_blank", "noopener,noreferrer");
+  }
 
   const didAutoFixRef = useRef(false);
 
@@ -241,7 +352,16 @@ export default function ListClient() {
 
     return items.filter((cs) => {
       const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
-      const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
+      //const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
+      const tags = normalizeTagsStrict(toStringArray((cs as any).tags));
+      const tagSlugs = tags.map(tagSlug).filter(Boolean);
+
+      if (lensPage) {
+        if (!matchesClientPageFilters(cs, sectors, tagSlugs, lensPage)) return false;
+//        const status = cs.status ?? "Draft";
+//        const visibility = cs.visibility ?? "Internal";
+//        if (!matchesClientPageFilters(status, visibility, sectors, tags, lensPage)) return false;
+      }
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
       if (statusFilter && cs.status !== statusFilter) return false;
@@ -261,7 +381,11 @@ export default function ListClient() {
 
       return hay.includes(qq);
     });
-  }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
+  }, 
+  [
+    items, q, categoryFilter, statusFilter, visibilityFilter,
+    lensPage
+  ]);
 
   const sorted = useMemo(() => {
     if (sortMode === "Newest") return filtered;
@@ -302,7 +426,8 @@ export default function ListClient() {
       </ContextBanner>
 
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">Demo Case Study Database</h1>
+        {/* <h1 className="type-h2">Demo Case Study Database</h1> */}
+        <h1 className="type-h2">Case Study Library</h1>
         <div className="row" style={{ gap: ".5rem" }}>
 {/*           <Link className="btnSmall" href="/admin/case-studies/new">
             New
@@ -314,8 +439,8 @@ export default function ListClient() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="card" style={{ marginTop: "1rem" }}>
-        <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
+      <div className="card mt">
+        <div className="row filterMenus">
           <input
             className="input search"
             placeholder="Search client / categories / tags…"
@@ -364,7 +489,52 @@ export default function ListClient() {
             ))}
           </select>
         </div>
+
+        {/* new Client Page features (so-called Lens UI area) */}
+        <div className="row listLensPage">
+          {hasClientPages ? (
+            <>
+            <select
+              className="input"
+              value={clientPageLens}
+              onChange={(e) => setClientPageLens(e.currentTarget.value)}
+              title="Viewing"
+            >
+              <option value="">All case studies</option>
+              {clientPages.map((p) => (
+                <option key={p.slug} value={p.slug}>
+                  {p.name ? `Client page: ${p.name}` : `Client page: ${p.slug}`}
+  {/*                 {p.filters?.title ? `Client page: ${p.filters.title}` : `Client page: ${p.slug}`} */}
+                </option>
+              ))}
+            </select>
+
+            <button
+              type="button"
+              className="btnSmall"
+              onClick={openClientPagePreview}
+              disabled={!clientPageLens}
+              title={!clientPageLens ? "Select a client page first" : "Open in a new tab"}
+            >
+              Client Page Preview
+            </button>
+            </>
+          ) : (
+            <div className="muted type-small">
+              No custom client pages yet. Create one from saved views or add a demo seed.
+            </div>
+          
+          )}
+
+
+          
+        </div>
       </div>
+
+      
+
+      
+
 
       {/* LIST */}
       <div className="card mt">

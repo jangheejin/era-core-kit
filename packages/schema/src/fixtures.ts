@@ -23,11 +23,15 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
   const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "FAKETEMPORARYTITLE",
+    title: "FAKETEMPORARYTITLE: Geospatial modernization and federal engagement",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
-    sectors: ["GovContracting", "Geospatial", "EmergencyMgmt"],
+    sectors: [
+      "GovContracting", "Geospatial", "EmergencyMgmt", 
+      "PrivateSector",
+      "Appropriations", "GrantFunding",
+    ],
     year: 2024,
 
     mechanisms: [],
@@ -88,11 +92,14 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-napsg-foundation",
-    title: "(Temporary Title) NAPSG Foundation",
+    title: "(Temporary Title) Policy-facing storytelling for a technical nonprofit",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
 //    sector: "Nonprofit",
-    sectors: ["Nonprofit", "GovContracting", "Geospatial"],
+    sectors: ["Nonprofit", "GovContracting", "Geospatial", 
+      "PublicSector", "EmergencyMgmt",
+      "Appropriations", "GrantFunding",
+    ],
     year: 2024,
 
     mechanisms: [],
@@ -153,11 +160,15 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-crucis",
-    title: "Temporary Title: Crucis",
+    title: "Temporary Title: Federal procurement strategy for a growing contractor",
     slug: "crucis",
     client: "Crucis",
 //    sector: "GovContracting",
-    sectors: ["GovContracting", "Industry", "Manufacturing"],
+    sectors: [
+      "GovContracting", "Industry", 
+      "Manufacturing", "PrivateSector",
+      "Appropriations",
+    ],
     year: 2024,
 
     mechanisms: [],
@@ -218,11 +229,15 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-mkr-fabricators",
-    title: "Temporary Title: MKR Fabricators",
+    title: "Temporary Title: Emergency response manufacturing alignment",
     slug: "mkr-fabricators",
     client: "MKR Fabricators",
     //sector: "EmergencyMgmt",
-    sectors: ["EmergencyMgmt", "Manufacturing", "Industry"],
+    sectors: [
+      "EmergencyMgmt", "Manufacturing", "Defense",
+      "Industry", "PrivateSector",
+      "Appropriations",
+    ],
     year: 2024,
 
     mechanisms: [],
@@ -283,7 +298,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-stemheads",
-    title: "STEMheads (draft sample)",
+    title: "Lorem Ipsum STEMheads",
     slug: "stemheads",
     client: "STEMheads",
 //    sector: "Education",
@@ -321,6 +336,93 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     // If you ONLY want 4 featured cards on home, set this one false.
     isFeaturedHome: true,
+    isPublic: true,
+  },
+  {
+    id: "cs-temp-public",
+    title: "Temporary Public Sector Case Study",
+    slug: "temp-public",
+    client: "Dummy Public Sector Org",
+    sectors: [
+      "PublicSector", "StateGovernment", "LocalGovernment", "TribalGovernment",
+      "Energy", "Agriculture", "Health", "Defense", "Transportation", "NaturalResources",
+      "Environment", "Infrastructure", "PublicWorks", "CivicTech",
+      "Appropriations", "GrantFunding",
+    ],
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["education", "draft"],
+
+    heroImageUrl: "/img/temp2.svg",
+
+    summaryShort:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    brief:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
+    outcomes: [
+      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
+
+    sections: [
+      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
+      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: false,
+    isPublic: true,
+  },
+  {
+    id: "cs-temp-public",
+    title: "Temporary Private Sector Case Study",
+    slug: "temp-public",
+    client: "Dummy Private Sector Org",
+    sectors: [
+      "PrivateSector",
+    ],
+    year: 2024,
+
+    mechanisms: [],
+    jurisdictions: ["Federal"],
+    tags: ["education", "draft"],
+
+    heroImageUrl: "/img/temp2.svg",
+
+    summaryShort:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    brief:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
+    outcomes: [
+      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+    ],
+
+    evidence: [],
+
+    bodyMDX:
+      "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
+
+    sections: [
+      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
+      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+    ],
+
+    attachments: [],
+    links: [],
+
+    isFeaturedHome: false,
     isPublic: true,
   },
 ] satisfies CaseStudyInput[];
@@ -584,7 +686,11 @@ const SEEDS: CaseStudySeedInput[] = [
     title: "Geospatial modernization and federal engagement",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
-    sectors: ["GovContracting", "Geospatial"],
+    sectors: [
+      "GovContracting", "Geospatial", "EmergencyMgmt", 
+      "PrivateSector",
+      "Appropriations", "GrantFunding",
+    ],
     heroImageUrl: "/img/case1.webp",
     summaryShort:
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
@@ -600,7 +706,11 @@ const SEEDS: CaseStudySeedInput[] = [
     title: "Policy-facing storytelling for a technical nonprofit",
     client: "NAPSG Foundation",
     //sector: "Nonprofit",
-    sectors: ["Nonprofit", "Geospatial"],
+    sectors: [
+      "Nonprofit", "Geospatial", "Nonprofit", 
+      "PublicSector", "EmergencyMgmt",
+      "Appropriations", "GrantFunding",
+    ],
     heroImageUrl: "/img/case2.webp",
     summaryShort:
       "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
@@ -616,7 +726,11 @@ const SEEDS: CaseStudySeedInput[] = [
     title: "Federal procurement strategy for a growing contractor",
     client: "Crucis",
     //sector: "GovContracting",
-    sectors: ["GovContracting"],
+    sectors: [
+      "GovContracting", "Industry", 
+      "Manufacturing", "PrivateSector",
+      "Appropriations",
+    ],
     heroImageUrl: "/img/case3.webp",
     summaryShort:
       "Guiding a growing government contractor through the realities of federal procurement and engagement.",
@@ -631,7 +745,11 @@ const SEEDS: CaseStudySeedInput[] = [
     slug: "mkr-fabricators",
     title: "Emergency response manufacturing alignment",
     client: "MKR Fabricators",
-    sectors: ["EmergencyMgmt", "Manufacturing"],
+    sectors: [
+      "EmergencyMgmt", "Manufacturing", "Defense",
+      "Industry", "PrivateSector",
+      "Appropriations",
+    ],
     heroImageUrl: "/img/temp.svg",
     summaryShort:
       "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",

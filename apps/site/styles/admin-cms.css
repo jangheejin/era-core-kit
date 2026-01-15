@@ -3056,3 +3056,14 @@ fieldset.form-group > legend.form-label{
 .btnSmall.hasTooltip.changeSettings {
   text-decoration: underline;
 }
+
+.row.listLensPage {
+  gap: .5rem;
+  align-items: center;
+  margin-top: .5rem;
+}
+
+.row.filterMenus {
+ gap: .5rem;
+flex-wrap: wrap;
+}
