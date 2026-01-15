@@ -21,7 +21,7 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
-import { useAdminClientPages, type ClientPage } from "../../AdminClientPageStore";
+//import { useAdminClientPages, type ClientPage } from "../../AdminClientPageStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
 //tooltip
@@ -146,7 +146,7 @@ function applyPublishPreset(
   updateMeta(id, patch);
 }
 
-function matchesClientPageFilters(
+/* function matchesClientPageFilters(
   cs: CaseStudyType,
   sectors: SectorValue[],
   tagSlugs: string[],
@@ -186,7 +186,7 @@ function matchesClientPageFilters(
   }
 
   return true;
-}
+} */
 
 /* function matchesClientPageFilters(
   status: CaseStudyType["status"],
@@ -245,11 +245,11 @@ export default function ListClient() {
   const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
 
   //make it explicit (if there are no pages, don't ignore that)
-  const { pages: clientPages, createPage } = useAdminClientPages();
+//  const { pages: clientPages, createPage } = useAdminClientPages();
   const hasClientPages = clientPages.length > 0;
 //  const { pages: clientPages } = useAdminClientPages();
-  const [clientPageLens, setClientPageLens] = useState<string>("");
-  const lensPage = useMemo(
+//  const [clientPageLens, setClientPageLens] = useState<string>("");
+/*   const lensPage = useMemo(
     () => (clientPageLens ? clientPages.find((p) => p.slug === clientPageLens) ?? null : null),
     [clientPageLens, clientPages],
   );
@@ -257,7 +257,7 @@ export default function ListClient() {
   function openClientPagePreview() {
     if (!clientPageLens) return;
     window.open(`/client-pages/${clientPageLens}`, "_blank", "noopener,noreferrer");
-  }
+  } */
 
   const didAutoFixRef = useRef(false);
 
@@ -356,12 +356,12 @@ export default function ListClient() {
       const tags = normalizeTagsStrict(toStringArray((cs as any).tags));
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
-      if (lensPage) {
+/*       if (lensPage) {
         if (!matchesClientPageFilters(cs, sectors, tagSlugs, lensPage)) return false;
 //        const status = cs.status ?? "Draft";
 //        const visibility = cs.visibility ?? "Internal";
 //        if (!matchesClientPageFilters(status, visibility, sectors, tags, lensPage)) return false;
-      }
+      } */
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
       if (statusFilter && cs.status !== statusFilter) return false;
