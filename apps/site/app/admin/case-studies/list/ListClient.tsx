@@ -81,9 +81,68 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
 }
 
 function visibilityLabel(v: string) {
-  if (v === "ClientSafe") return "Client-safe";
+  if (v === "ClientSafe") return "Client-Viewable";
   return v;
 }
+
+//simplified publishing statuses
+//type PublishPreset = "internal" | "client" | "featured";
+type PublishPreset = "private" | "client" | "homepage";
+
+/* function getPublishPreset(cs: CaseStudyType): PublishPreset {
+  if (Boolean((cs as any).isFeaturedHome)) return "featured";
+  if (Boolean((cs as any).isPublic) && cs.visibility === "ClientSafe") return "client";
+  return "internal";
+}
+
+function publishPresetLabel(p: PublishPreset) {
+  if (p === "internal") return "Internal draft";
+  if (p === "client") return "Client viewable";
+  return "Featured on homepage";
+}
+ */
+function publishPresetLabel(p: PublishPreset) {
+  if (p === "private") return "Private Draft";
+  if (p === "client") return "Client-Viewable";
+  return "Published to Homepage";
+}
+function getPublishPreset(cs: CaseStudyType): PublishPreset {
+  if (Boolean((cs as any).isFeaturedHome)) return "homepage";
+  if (Boolean((cs as any).isPublic) && cs.visibility === "ClientSafe") return "client";
+  return "private";
+}
+// This is the whole point: ONE click sets a coherent combo.
+// No mysterious partial toggles.
+function applyPublishPreset(
+  id: string,
+  preset: PublishPreset,
+  updateMeta: (id: string, patch: Partial<CaseStudyType>) => void
+) {
+  const patch: Partial<CaseStudyType> =
+    preset === "private"
+      ? {
+          status: "Draft",
+          visibility: "Internal",
+          isPublic: false,
+          isFeaturedHome: false, // always false
+        }
+      : preset === "client"
+        ? {
+            status: "Published",
+            visibility: "ClientSafe",
+            isPublic: true,
+            isFeaturedHome: false, // CRUCIAL: always false
+          }
+        : {
+            status: "Published",
+            visibility: "Public",
+            isPublic: true,
+            isFeaturedHome: true, // ONLY HERE
+          };
+
+  updateMeta(id, patch);
+}
+
 
 /* export default function CaseStudyListPage() { */
 export default function ListClient() {
@@ -432,7 +491,7 @@ export default function ListClient() {
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
                         <button
-                          className="btnSmall hasTooltip"
+                          className="btnSmall hasTooltip changeSettings"
                           type="button"
                           /* title="Edit categories & change status" */
                           data-tooltip="Edit categories & change status"

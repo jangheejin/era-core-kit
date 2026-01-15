@@ -3008,3 +3008,51 @@ fieldset.form-group > legend.form-label{
   z-index: 50;
   background: var(--card-bg, #fff);
 }
+
+
+/*make the currently-selected selection for the visiblity status more apparent*/
+/* Publishing preset buttons (Quick Edit) */
+.pubPresetGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pubPresetBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.18);
+  background: rgba(255,255,255,.75);
+  cursor: pointer;
+  font: inherit;
+}
+
+.pubPresetBtn.is-active {
+  border-color: rgba(0,0,0,.35);
+  background: rgba(0,0,0,.06);
+  font-weight: 600;
+}
+
+/* Simplified publishing pill (read-only display in list) */
+.pill--pub {
+  border-color: rgba(0,0,0,.22);
+}
+
+.pill--pub-internal {
+  background: rgba(0,0,0,.03);
+}
+
+.pill--pub-client {
+  background: rgba(0,0,0,.05);
+}
+
+.pill--pub-featured {
+  background: rgba(0,0,0,.08);
+  font-weight: 600;
+}
+
+.btnSmall.hasTooltip.changeSettings {
+  text-decoration: underline;
+}
