@@ -28,3 +28,11 @@
 - Section: vertical rhythm
 - Stack: vertical flow
 - Grid: responsive auto-fit minmax
+
+## useful commmands
+pnpm --filter site dev 
+git checkout main 
+git pull origin main
+git merge --ff-only <BRANCH NAME>
+git push
+git checkout <BRANCH NAME>

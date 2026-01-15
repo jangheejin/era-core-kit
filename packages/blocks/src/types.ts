@@ -50,6 +50,11 @@ export type WorkTextProps = {
 
 export type CaseGridItem = {
   title?: string;
+
+  //show only one sector/category on preview cards. optional.
+  primarySector?: string;
+  primarySectorReadable?: string;
+
 //  sector?: string;
   sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
   sectorsReadable?: string;//human-readable display label, e.g. "Health · Defense"
@@ -98,6 +103,8 @@ export type WorkWithCaseGridProps = {
     imageUrl: string;
     slug: string;
   }>;
+  itemsSource?: "featured";
+  maxItems?: number;
 };
 /*export type WorkWithCaseGridProps = {
   heading: string;

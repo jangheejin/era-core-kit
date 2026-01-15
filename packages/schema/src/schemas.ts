@@ -124,6 +124,9 @@ const CaseStudyCanonicalSchema = z.object({
   // canonical multi-sector field
   sectors: SectorsSchema,
 
+  //new: user can select one sector to show on cards/teasers (defaults to sectors[0])
+  primarySector: SectorSchema.optional(),
+
   client: z.string().trim().max(100).optional(),
   year: z.number().int().min(1990).max(2100).optional(),
 
@@ -214,8 +217,14 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
       val.brief?.trim() ||
       deriveSummaryFromWriteUp(val.bodyMDX ?? "", 180);
 
+    const wantedPrimary = 
+      typeof (val as any).primarySector === "string" ? ((val as any).primarySector as any) : undefined;
+    const primarySector = 
+      (wantedPrimary && sectors.includes(wantedPrimary) ? wantedPrimary: sectors[0]) ?? undefined;
+    
     const { sector, ...rest } = val as any;
-    return { ...rest, sectors, summaryShort };
+    
+    return { ...rest, sectors, primarySector, summaryShort };
   })
   .pipe(CaseStudyCanonicalSchema);
 

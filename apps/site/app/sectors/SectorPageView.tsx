@@ -2,7 +2,7 @@
 
 // extract the actual page UI into one shared component
 
-//"use client";
+"use client";
 
 //import "@styles/admin-cms.css"; // remove if you don't want admin styles here
 
