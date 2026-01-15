@@ -21,7 +21,6 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
-//import { useAdminClientPages, type ClientPage } from "../../AdminClientPageStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
 //tooltip
@@ -90,18 +89,6 @@ function visibilityLabel(v: string) {
 //type PublishPreset = "internal" | "client" | "featured";
 type PublishPreset = "private" | "client" | "homepage";
 
-/* function getPublishPreset(cs: CaseStudyType): PublishPreset {
-  if (Boolean((cs as any).isFeaturedHome)) return "featured";
-  if (Boolean((cs as any).isPublic) && cs.visibility === "ClientSafe") return "client";
-  return "internal";
-}
-
-function publishPresetLabel(p: PublishPreset) {
-  if (p === "internal") return "Internal draft";
-  if (p === "client") return "Client viewable";
-  return "Featured on homepage";
-}
- */
 function publishPresetLabel(p: PublishPreset) {
   if (p === "private") return "Private Draft";
   if (p === "client") return "Client-Viewable";
@@ -146,118 +133,9 @@ function applyPublishPreset(
   updateMeta(id, patch);
 }
 
-/* function matchesClientPageFilters(
-  cs: CaseStudyType,
-  sectors: SectorValue[],
-  tagSlugs: string[],
-  page: ClientPage,
-): boolean {
-  const f = page.filters;
-
-  // Client pages should only show published records, never drafts
-  // (otherwise the public preview is lying)
-  const status = cs.status ?? "Draft";
-  if (status !== "Published") return false;
-//  if ((cs.status ?? "Draft") !== "Published") return false;
-
-  // Audience gate based on visibility
-  const visibility = cs.visibility ?? "Internal";
-  if (f.audience === "Public") {
-    if (visibility !== "Public") return false;
-  } else {
-    // ClientSafe pages can include ClientSafe + Public (both are safe to show clients)
-    if (visibility !== "ClientSafe" && visibility !== "Public") return false;
-  }
-
-  // Sector gate
-  if (f.sector) {
-    if (!sectors.includes(f.sector)) return false;
-  }
-
-  // Tag gate
-  const required = (f.tags ?? []).map(tagSlug).filter(Boolean);
-  if (required.length) {
-    const mode = f.tagMode ?? "any";
-    if (mode === "all") {
-      for (const t of required) if (!tagSlugs.includes(t)) return false;
-    } else {
-      if (!required.some((t) => tagSlugs.includes(t))) return false;
-    }
-  }
-
-  return true;
-} */
-
-/* function matchesClientPageFilters(
-  status: CaseStudyType["status"],
-  visibility: CaseStudyType["visibility"],
-  sectors: SectorValue[],
-  tagSlugs: string[],
-  page: ClientPage,
-): boolean {
-  const f = page.filters;
-
-  //status gate
-  if (status !== "Published") return false;
-
-  // audience gate (visibility)
-  if (f.audience === "ClientSafe") {
-    // Client-safe pages can include both ClientSafe + Public case studies.
-    if (visibility === "Internal") return false;
-  } else if (f.audience === "Public") {
-    // Public pages include only Public case studies.
-    if (visibility !== "Public") return false;
-  } */
-
-/*   // status gate
-  if (f.status === "PublishedOnly") {
-    if (status !== "Published") return false;
-  }
-
-  // audience gate (visibility)
-  if (f.audience === "ClientSafeOnly") {
-    if (visibility !== "ClientSafe" && visibility !== "Public") return false;
-  } else if (f.audience === "PublicOnly") {
-    if (visibility !== "Public") return false;
-  } */
-
-  // sector gate
-/*   if (f.sector) {
-    if (!sectors.includes(f.sector)) return false;
-  }
-
-  // tag gate
-  const required = (f.tags ?? []).map(tagSlug).filter(Boolean);
-  if (required.length) {
-    const mode = f.tagMode ?? "any";
-    if (mode === "all") {
-      for (const t of required) if (!tagSlugs.includes(t)) return false;
-    } else {
-      if (!required.some((t) => tagSlugs.includes(t))) return false;
-    }
-  }
-
-  return true;
-} */
-
 /* export default function CaseStudyListPage() { */
 export default function ListClient() {
   const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
-
-  //make it explicit (if there are no pages, don't ignore that)
-//  const { pages: clientPages, createPage } = useAdminClientPages();
-  const hasClientPages = clientPages.length > 0;
-//  const { pages: clientPages } = useAdminClientPages();
-//  const [clientPageLens, setClientPageLens] = useState<string>("");
-/*   const lensPage = useMemo(
-    () => (clientPageLens ? clientPages.find((p) => p.slug === clientPageLens) ?? null : null),
-    [clientPageLens, clientPages],
-  );
-
-  function openClientPagePreview() {
-    if (!clientPageLens) return;
-    window.open(`/client-pages/${clientPageLens}`, "_blank", "noopener,noreferrer");
-  } */
 
   const didAutoFixRef = useRef(false);
 
@@ -271,6 +149,20 @@ export default function ListClient() {
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+
+  // --- Client Page Preview (opens the filtered page) ---
+  const clientPagePreviewHref = useMemo(() => {
+    if (!categoryFilter) return null;
+
+    //for routes that are like /environment, /public-sector, etc
+    const seg = tagSlug(sectorLabel(categoryFilter));
+    return seg ? `/${seg}` : null;
+  }, [categoryFilter]);
+
+  function openClientPagePreview() {
+    if (!clientPagePreviewHref) return;
+    window.open(clientPagePreviewHref, "_blank", "noopener,noreferrer");
+  }
 
   //state for sorting
   type SortMode = "Newest" | "Oldest" | "AtoZ" | "ZtoA";
@@ -384,7 +276,7 @@ export default function ListClient() {
   }, 
   [
     items, q, categoryFilter, statusFilter, visibilityFilter,
-    lensPage
+    //lensPage
   ]);
 
   const sorted = useMemo(() => {
@@ -490,45 +382,23 @@ export default function ListClient() {
           </select>
         </div>
 
-        {/* new Client Page features (so-called Lens UI area) */}
+        {/* new Client Page features */}
         <div className="row listLensPage">
-          {hasClientPages ? (
-            <>
-            <select
-              className="input"
-              value={clientPageLens}
-              onChange={(e) => setClientPageLens(e.currentTarget.value)}
-              title="Viewing"
-            >
-              <option value="">All case studies</option>
-              {clientPages.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.name ? `Client page: ${p.name}` : `Client page: ${p.slug}`}
-  {/*                 {p.filters?.title ? `Client page: ${p.filters.title}` : `Client page: ${p.slug}`} */}
-                </option>
-              ))}
-            </select>
+          <button
+            type="button"
+            className="btnSmall"
+            onClick={openClientPagePreview}
+            disabled={!clientPagePreviewHref}
+            title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
+          >
+            Client Page Preview
+          </button>
 
-            <button
-              type="button"
-              className="btnSmall"
-              onClick={openClientPagePreview}
-              disabled={!clientPageLens}
-              title={!clientPageLens ? "Select a client page first" : "Open in a new tab"}
-            >
-              Client Page Preview
-            </button>
-            </>
-          ) : (
-            <div className="muted type-small">
-              No custom client pages yet. Create one from saved views or add a demo seed.
-            </div>
-          
-          )}
-
-
-          
+          <span className="muted type-small">
+            {clientPagePreviewHref ? `Opens: ${clientPagePreviewHref}` : "Select a category to preview its public page"}
+          </span>
         </div>
+        
       </div>
 
       
