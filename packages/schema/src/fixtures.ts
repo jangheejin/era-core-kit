@@ -28,7 +28,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
     sectors: [
-      "GovContracting", "Geospatial", "EmergencyMgmt", 
+      "Geospatial", "GovContracting", "EmergencyMgmt", 
       "PrivateSector",
       "Appropriations", "GrantFunding",
     ],
@@ -344,8 +344,8 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     slug: "temp-public",
     client: "Dummy Public Sector Org",
     sectors: [
+      "Agriculture", "Energy", "Health", "Defense", "Transportation", "NaturalResources",
       "PublicSector", "StateGovernment", "LocalGovernment", "TribalGovernment",
-      "Energy", "Agriculture", "Health", "Defense", "Transportation", "NaturalResources",
       "Environment", "Infrastructure", "PublicWorks", "CivicTech",
       "Appropriations", "GrantFunding",
     ],

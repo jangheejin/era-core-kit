@@ -1,0 +1,26 @@
+.c-markdown {
+  max-width: 70ch; /* readable line length */
+}
+
+.c-markdown pre,
+.c-markdown code {
+  max-width: 100%;
+}
+
+.c-markdown pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.c-markdown table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.c-markdown img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

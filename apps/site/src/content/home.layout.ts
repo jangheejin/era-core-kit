@@ -43,42 +43,68 @@ export const homeLayout: LayoutBlock[] = [
       layout: "4col",
       items: [
         {
-          sector: "Geospatial Solutions",
+          primarySector: "Geospatial",
+          sectors: [
+            "Geospatial", "GovContracting", "EmergencyMgmt", 
+            "PrivateSector",
+            "Appropriations", "GrantFunding",
+          ],
           client: "Sanborn + AppGeo",
           /*           summary: "Sanborn + AppGeo", */
           imageUrl: "/img/case1.webp",
           slug: "sanborn-appgeo",
         },
         {
-          sector: "Nonprofit Organizations",
+          primarySector: "Nonprofit",
+          sectors: ["Nonprofit", "GovContracting", "Geospatial", 
+            "PublicSector", "EmergencyMgmt",
+            "Appropriations", "GrantFunding",
+          ],
           client: "NAPSG Foundation",
           /*           summary: "NAPSG Foundation", */
           imageUrl: "/img/case2.webp",
           slug: "napsg-foundation",
         },
         {
-          sector: "Government Contracting",
+          primarySector: "GovContracting",
+          sectors: [
+            "GovContracting", "Industry", 
+            "Manufacturing", "PrivateSector",
+            "Appropriations",
+          ],
           client: "Crucis",
           /*           summary: "Crucis", */
           imageUrl: "/img/case3.webp",
           slug: "crucis",
         },
         {
-          sector: "Emergency Response",
+          primarySector: "EmergencyMgmt",
+          sectors: [
+            "EmergencyMgmt", "Manufacturing", "Defense",
+            "Industry", "PrivateSector",
+            "Appropriations",
+          ],
           client: "MKR Fabricators",
           /*           summary: "MKR Fabricators", */
           imageUrl: "/img/temp.svg",
           slug: "mkr-fabricators",
         },
         {
-          sector: "Education",
+          primarySector: "Education",
+          sectors: ["Education", "Nonprofit"],
           client: "STEMheads",
           /*           summary: "MKR Fabricators", */
           imageUrl: "/img/temp2.svg",
           slug: "stemheads",
         },
         {
-          sector: "Nonprofits",
+          primarySector: "Agriculture",
+          sectors: [
+            "Agriculture", "Energy", "Health", "Defense", "Transportation", "NaturalResources",
+            "PublicSector", "StateGovernment", "LocalGovernment", "TribalGovernment",
+            "Environment", "Infrastructure", "PublicWorks", "CivicTech",
+            "Appropriations", "GrantFunding",
+          ],
           client: "Placeholder Org",
           /*           summary: "MKR Fabricators", */
           imageUrl: "/img/temp.svg",

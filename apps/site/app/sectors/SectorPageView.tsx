@@ -11,12 +11,6 @@ import { notFound } from "next/navigation";
 
 import { CaseGrid, type CaseGridProps } from "@kit/blocks";
 
-//import { useMemo } from "react";
-import { getCaseStudies } from "@/lib/caseStudies"; // TO DO: UPDATE LATER (kept because you had it)
-import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
-import { ContextBanner } from "@/admin/components/ContextBanner";
-import { CaseStudyCollapsibleCard } from "@/components/CaseStudyCollapsibleCard";
-
 import {
   DEFAULT_HERO_IMAGE_URL,
   sectorFromRouteSlug,
@@ -25,7 +19,16 @@ import {
   type CaseStudyType,
 } from "@kit/schema";
 
-import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore"; // adjust if your relative path differs
+//import { useMemo } from "react";
+import { getCaseStudies } from "@/lib/caseStudies"; // TO DO: UPDATE LATER
+import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
+import { ContextBanner } from "@/admin/components/ContextBanner";
+import { CaseStudyCollapsibleCard } from "@/components/CaseStudyCollapsibleCard";
+
+import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore"; 
+
+//implementing single-item type 
+type CaseGridItemFromProps = CaseGridProps["items"][number];
 
 export default async function SectorPageView({ sectorSlug }: { sectorSlug: string }) {
 /*   type SectorPageData = {
@@ -59,7 +62,9 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
     //sectorsReadable: cs.sectorsReadable ?? undefined,
   })); */
 
-  const gridItems = caseStudies.map((cs) => {
+  //const gridItems = caseStudies.map((cs) => {
+  const gridItems = caseStudies.map((cs): CaseGridItemFromProps => {
+    // make a non-empty sectors tuple (primary first)
     const sectorsForGrid: [SectorValue, ...SectorValue[]] = [
       cs.primarySector,
       ...cs.sectors.filter((s) => s !== cs.primarySector),
@@ -76,6 +81,7 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
       sectors: sectorsForGrid,
     };
   });
+
 /*   const items = caseStudies.map((cs) => ({
     title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
     description: cs.summaryShort ?? cs.brief ?? "",
