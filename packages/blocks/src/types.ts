@@ -117,6 +117,7 @@ export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
   text2?: string;
+  gridHeading?: string;
   layout: CaseGridProps["layout"];
   items: CaseGridProps["items"];
 
