@@ -1,26 +1,5 @@
 /* apps/site/styles/casegrid.css */
 
-.casegrid {
-  display: grid;
-  gap: var(--space-3);
-/*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
-  margin-top: var(--space-4);
-}
-
-/* Base: safe single-column list. Modifiers add multi-column behavior. */
-.case-grid, .case-grid.mt {
-  display: grid;
-  gap: var(--space-3);
-  /* grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); */
-
-  /* decides what happens to leftover space 
-  justify-content: start;   *//* left align */
-  /* or: justify-content: center; */ /* centered when few cards */
-}
-
-.case-grid.mt {
-  margin-top: 1rem;
-}
 
 /*Use .case-grid--cards when rendering discrete cards
 It caps column width so 1-2 items don't scale up to be huge*/
