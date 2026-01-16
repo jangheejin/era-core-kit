@@ -5,11 +5,14 @@
 // Never re-exports anything from elsewhere here
 //DATA MODEL AND PROPS LIVE HERE. components for rendering are defined in app.
 
+import type { SectorValue } from "@kit/schema";
+
 // Generic shape for all blocks
 /*export type GenericBlock<T extends string, P> = {
   type: T;
   props: P;
 };*/
+export type NonEmptyArray<T> = [T, ...T[]];
 
 export type GenericBlock<T extends keyof BlockComponentProps> = {
   type: T;
@@ -52,12 +55,16 @@ export type CaseGridItem = {
   title?: string;
 
   //show only one sector/category on preview cards. optional.
-  primarySector?: string;
+//  primarySector?: string;
+//  primarySectorReadable?: string;
+  primarySector?: SectorValue;
   primarySectorReadable?: string;
-
 //  sector?: string;
-  sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
+//  sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
+  // if present, must have at least one sector
+  sectors?: NonEmptyArray<SectorValue>;
   sectorsReadable?: string;//human-readable display label, e.g. "Health · Defense"
+  
   client?: string;
   summary?: string;
   brief?: string;
@@ -89,7 +96,7 @@ export type TeamStripProps = {
   items: CaseGridProps['items'];
 };*/
 
-export type WorkWithCaseGridProps = {
+/* export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
   text2?: string;
@@ -105,15 +112,17 @@ export type WorkWithCaseGridProps = {
   }>;
   itemsSource?: "featured";
   maxItems?: number;
-};
-/*export type WorkWithCaseGridProps = {
+}; */
+export type WorkWithCaseGridProps = {
   heading: string;
   text: string;
-  layout: CaseGridProps['layout']; // or inline the union
-  items: CaseGridProps['items'];   // or inline array of items
-};
-*/
+  text2?: string;
+  layout: CaseGridProps["layout"];
+  items: CaseGridProps["items"];
 
+  itemsSource?: "featured";
+  maxItems?: number;
+};
 /*export type ContactFormProps = {
   heading: string;
 };*/

@@ -10,10 +10,14 @@ import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "../../admin/AdminClientPageStore";
 
+import { useSearchParams } from "next/navigation";
+import { encode } from "punycode";
+
 function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
   const { sector, tags, tagMode, audience } = page.filters;
 
   if (cs.status !== "Published") return false;
+  if (!cs.isPublic) return false;
   if (audience === "Public") {
     if (cs.visibility !== "Public") return false;
   } else {
@@ -39,6 +43,16 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
   const { items } = useAdminCaseStudies();
   const { getBySlug } = useAdminClientPages();
 
+  const searchParams = useSearchParams();
+  const backParam = searchParams.get("back") ?? "";
+  const backLabelParam = (searchParams.get("backLabel") ?? "").trim();
+  const safeBack = backParam.startsWith("/") ? backParam : "";
+  const carryBackLabel = backLabelParam || "Back to database";
+  const backLabel = carryBackLabel.startsWith("←") ? carryBackLabel : `← ${carryBackLabel}`;
+  const carryQuery = safeBack
+    ? `?back=${encodeURIComponent(safeBack)}&backLabel=${encodeURIComponent(carryBackLabel)}`
+    : "";
+
   const page = getBySlug(slug);
 
   const filtered = useMemo(() => {
@@ -46,7 +60,10 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
     return items.filter((cs) => matchesClientPage(cs, page));
   }, [items, page]);
 
+  const isFew = items.length <= 2;
+
   if (!page) {
+//  if (!page || !page.published) {
     return (
       <main className="c-page">
         <div className="c-container c-stack">
@@ -63,17 +80,37 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
   return (
     <main className="c-page">
       <div className="c-container c-stack">
+        {safeBack ? ( 
+          <Link href={safeBack} className="muted">
+            {backLabel}
+          </Link>
+        ) : null}
+
         <h1 className="type-h2">{page.name}</h1>
         <p className="muted">
           Showing <strong>{filtered.length}</strong> case studies.
         </p>
 
-        <div className="case-grid">
+        {/* <div className="case-grid"> */}
+        <div className={
+          filtered.length <= 2
+            ? "case-grid case-grid--cards case-grid--center"
+            : "case-grid case-grid--cards"
+          }
+        >
           {filtered.map((cs) => (
             <article key={cs.slug} className="card case-study-card">
-              <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link">
+              {/* <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link"> */}
+              <Link href={`/case-studies/${cs.slug}${carryQuery}`}
+                className="case-study-card__link"
+              >                  
+              {/* <img src={cs.heroImageUrl} alt="" loading="lazy" /> */}
                 {cs.heroImageUrl && (
-                  <img src={cs.heroImageUrl} alt="" loading="lazy" />
+                  <img className="case-study-card__img"
+                    src={cs.heroImageUrl}
+                    alt=""
+                    loading="lazy"
+                  />
                 )}
                 <h2 className="type-h3">{cs.client || cs.title || cs.slug}</h2>
               </Link>

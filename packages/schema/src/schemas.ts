@@ -14,6 +14,7 @@ import {
   JurisdictionSchema,
   AttachmentKindSchema,
   LinkCategorySchema,
+  type SectorValue,
 
   // new workflow enums
   //CaseStudySortSchema,
@@ -26,6 +27,8 @@ import { DEFAULT_HERO_IMAGE_URL } from "./constants";
 
 import { deriveSummaryFromWriteUp } from "./authoring";
 
+//say: "sectors is always present and non-empty"
+const NonEmptySectorsSchema = z.array(SectorSchema).nonempty();
 // ----------HELPERS-------------
 const PathOrUrl = z.string().refine((s) => {
   if (!s) return false;
@@ -121,11 +124,13 @@ const CaseStudyCanonicalSchema = z.object({
   title: z.string().trim().min(1).max(120),
   slug: SlugSchema,
 
-  // canonical multi-sector field
-  sectors: SectorsSchema,
+  // canonical multi-sector field.
+//  sectors: SectorsSchema,
+  sectors: NonEmptySectorsSchema,
 
   //new: user can select one sector to show on cards/teasers (defaults to sectors[0])
-  primarySector: SectorSchema.optional(),
+  //primarySector: SectorSchema.optional(),
+  primarySector: SectorSchema,
 
   client: z.string().trim().max(100).optional(),
   year: z.number().int().min(1990).max(2100).optional(),
@@ -160,18 +165,56 @@ const CaseStudyCanonicalSchema = z.object({
   visibility: CaseStudyVisibilitySchema.default("Internal"),
   isFeaturedHome: z.boolean().default(false),
   isPublic: z.boolean().default(true),
-});
+/*   }).superRefine((val, ctx) => {
+    if (!val.sectors.includes(val.primarySector)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["primarySector"],
+        message: "primarySector must be one of the selected sectors",
+      });
+    }
+  }); */
+  
+    /* alternate version: can use code: custom */
+  }).superRefine((val, ctx) => {
+    if (val.primarySector && Array.isArray(val.sectors) && val.sectors.length) {
+      if (!val.sectors.includes(val.primarySector)) {
+        ctx.addIssue({ 
+          code: z.ZodIssueCode.custom,
+          path: ["primarySector"], 
+          message: "..." 
+        });
+      }
+    }
+  });
+
+/* }).superRefine((val, ctx) => {
+  if (val.primarySector && !val.sectors.includes(val.primarySector)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["primarySector"],
+      message: "primarySector must be one of hte seleted sectors",
+
+    });
+  }
+}); */
+
+//enforcing primarySector. if it exists, it must e inside sectors
+
 
 // 2) Authoring/back-compat input: allow sector OR sectors
 const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
   //.omit({ sectors: true })
-  .omit({ sectors: true, summaryShort: true })
+  .omit({ sectors: true, summaryShort: true, primarySector: true })
   .extend({
     // legacy single-sector input (optional)
     sector: SectorSchema.optional(),
 
     // new multi-sector input (optional at input time)
-    sectors: z.array(SectorSchema).optional(),
+    // Reject empty sector arrays sooner (before superRefine)
+    sectors: z.array(SectorSchema).nonempty().optional(),
+    //sectors: z.array(SectorSchema).optional(),
+    primarySector: SectorSchema.optional(),
 
     //allow authoring without summaryShort
     summaryShort: z.string().optional(),
@@ -203,7 +246,51 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
 
   .transform((val) => {
     const sectors =
-      (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []);
+      (val.sectors && val.sectors.length ? val.sectors : 
+        val.sector ? [val.sector] : 
+        []);
+
+    if (!sectors.length) {
+      // should be impossible due to your superRefine, but keeps TS/runtime sane
+      throw new Error("CaseStudy must have at least one sector");
+    }
+
+    const first = sectors[0];
+    if (first == null) {
+      throw new Error ("CaseStudy must ahve at least one sector");
+    }
+/*     const sectors = (val.sectors?.length
+      ? val.sectors
+      : val.sector
+        ? [val.sector]
+        : []) as SectorValue[]; */
+
+    //const wantedPrimary = val.primarySector;
+
+    //auto-select primary sector
+    // if user explicitly sets one AND it's in sectors, keep that.
+    // otherwise default to first sector
+     const wantedPrimary =
+      typeof val.primarySector === "string" ? val.primarySector : undefined; 
+    
+    const primarySector = 
+      wantedPrimary && sectors.includes(wantedPrimary)
+        ? wantedPrimary
+        : first;
+
+
+/*     const primarySector =
+      wantedPrimary && sectors.includes(wantedPrimary) 
+        ? wantedPrimary 
+        : sectors[0]; */
+/*     const primarySector =
+      val.primarySector && sectors.includes(val.primarySector)
+        ? val.primarySector
+        : sectors[0]; */
+    
+
+    
+//    const sectors = (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []);
 /*       val.sectors?.length ? val.sectors :
       val.sector ? [val.sector] :
       []; */
@@ -217,13 +304,16 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
       val.brief?.trim() ||
       deriveSummaryFromWriteUp(val.bodyMDX ?? "", 180);
 
-    const wantedPrimary = 
+/*     const wantedPrimary = 
       typeof (val as any).primarySector === "string" ? ((val as any).primarySector as any) : undefined;
     const primarySector = 
       (wantedPrimary && sectors.includes(wantedPrimary) ? wantedPrimary: sectors[0]) ?? undefined;
-    
-    const { sector, ...rest } = val as any;
-    
+     */
+
+    //drop the legacy single sector field    
+    //const { sector, ...rest } = val as any;
+    const { sector: _sector, ...rest } = val as any;
+    //const { sector, ...rest } = val as any;;    
     return { ...rest, sectors, primarySector, summaryShort };
   })
   .pipe(CaseStudyCanonicalSchema);

@@ -30,6 +30,8 @@ import "@styles/casegrid.css";
 import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */ 
 import "@styles/primitives.css";
 import "@styles/casegrid.css";
+import "@styles/markdown.css";
+
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
 import "@fontsource/inter/300.css";

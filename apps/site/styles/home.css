@@ -348,3 +348,14 @@ textarea {
 .case-study__hero {
   max-width: var(--container-max);
 }
+
+.site-nav {
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+}
+
+.site-nav a {
+  min-height: 44px; /* mobile tap target */
+  display: inline-flex;
+  align-items: center;
+}

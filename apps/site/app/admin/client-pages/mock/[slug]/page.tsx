@@ -87,7 +87,8 @@ export default function AdminClientPageMock({
             </p>
           </div>
 
-          <div className="case-grid" style={{ marginTop: "1rem" }}>
+          {/* <div className="case-grid" style={{ marginTop: "1rem" }}> */}
+          <div className="case-grid mt">
             {filtered.map((cs) => (
               <article key={cs.slug} className="card case-study-card">
                 <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link">

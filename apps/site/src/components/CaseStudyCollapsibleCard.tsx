@@ -1,9 +1,19 @@
-import type { CaseStudyType } from "@kit/schema";
+//apps/site/src/components/CaseStudyCollapsibleCard.tsx
+import { sectorLabel, type CaseStudyType } from "@kit/schema";
 import { CaseStudyFull } from "./CaseStudyFullRender";
 
 export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
-  const SECTOR_SEPARATOR = ", "; // or " · "
-  return (
+  //const SECTOR_SEPARATOR = ", "; // or " · "
+  const sectors = cs.sectors;
+  if (!sectors?.length) return null;
+
+  const firstSector = sectors[0];
+  if (firstSector == null) return null;
+
+
+
+//  return sectors?.length ? (
+  return(
     <details className="cs-accordion">
       <summary className="cs-accordion__summary">
         <div className="cs-accordion__top">
@@ -22,7 +32,14 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
 
         <div className="muted cs-accordion__meta">
           {cs.client ? <span>{cs.client}</span> : null}
-          {!!cs.sectors?.length ? <span>• {cs.sectors.join(SECTOR_SEPARATOR)}</span> : null}
+          {/* {!!cs.sectors?.length ? <span>• {cs.sectors.join(SECTOR_SEPARATOR)}</span> : null} */}
+          {!!cs.sectors?.length ? (
+            <span>
+              • {sectorLabel(firstSector)}
+              {/* • {sectorLabel(sectors[0]!)} */}
+              {cs.sectors.length > 1 ? ` +${cs.sectors.length -1}` : ""}
+            </span>
+          ) : null}
         </div>
 
         {cs.summaryShort ? <p className="muted cs-accordion__summaryText">{cs.summaryShort}</p> : null}
@@ -34,5 +51,5 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
         </div>
       </div>
     </details>
-  );
+  )//;
 }

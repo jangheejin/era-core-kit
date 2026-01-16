@@ -2,14 +2,14 @@
 
 // extract the actual page UI into one shared component
 
-"use client";
+//"use client";
 
 //import "@styles/admin-cms.css"; // remove if you don't want admin styles here
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { CaseGrid } from "@kit/blocks";
+import { CaseGrid, type CaseGridProps } from "@kit/blocks";
 
 //import { useMemo } from "react";
 import { getCaseStudies } from "@/lib/caseStudies"; // TO DO: UPDATE LATER (kept because you had it)
@@ -48,7 +48,7 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
   }));
  */
 
-  const gridItems = caseStudies.map((cs) => ({
+/*   const gridItems = caseStudies.map((cs) => ({
     slug: cs.slug,
     title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
     client: cs.client ?? undefined,
@@ -57,7 +57,25 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
     imageUrl: cs.heroImageUrl ?? DEFAULT_HERO_IMAGE_URL,
     sectors: cs.sectors ?? undefined,
     //sectorsReadable: cs.sectorsReadable ?? undefined,
-  }));
+  })); */
+
+  const gridItems = caseStudies.map((cs) => {
+    const sectorsForGrid: [SectorValue, ...SectorValue[]] = [
+      cs.primarySector,
+      ...cs.sectors.filter((s) => s !== cs.primarySector),
+    ];
+  
+    return {
+      slug: cs.slug,
+      title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
+      client: cs.client ?? undefined,
+      summary: cs.summaryShort ?? undefined,
+      brief: cs.brief ?? undefined,
+      imageUrl: cs.heroImageUrl ?? DEFAULT_HERO_IMAGE_URL,
+      primarySector: cs.primarySector,
+      sectors: sectorsForGrid,
+    };
+  });
 /*   const items = caseStudies.map((cs) => ({
     title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
     description: cs.summaryShort ?? cs.brief ?? "",
@@ -67,7 +85,7 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
 
   return (
     <main className="c-page">
-      <section className="c-container c-stack" style={{ gap: "1.25rem" }}>
+      <section className="c-container c-stack gap5">
         <header
           style={{
             display: "flex",
@@ -78,15 +96,19 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
           }}
         >
           <div className="c-stack" style={{ gap: ".35rem" }}>
-            <div className="muted type-small">Category</div>
+            {/* <div className="muted type-small">Category</div> */}
             <h1 className="type-h2">{sectorLabel(sector)}</h1>
-            <p className="muted" style={{ maxWidth: 760 }}>
+            {/* <p className="muted" style={{ maxWidth: 760 }}>
               Showing {caseStudies.length} published case stud{caseStudies.length === 1 ? "y" : "ies"} tagged with{" "}
               {sectorLabel(sector)}.
+            </p> */}
+            <p className="muted" style={{ maxWidth: 760 }}>
+              Showing {caseStudies.length} published case stud{caseStudies.length === 1 ? "y" : "ies"} in the{" "}
+              {sectorLabel(sector)} category.
             </p>
           </div>
 
-          <Link className="c-button c-button--sm" href="/case-studies">
+          <Link className="c-button c-button--sm" href="/our-work">
             All case studies
           </Link>
         </header>

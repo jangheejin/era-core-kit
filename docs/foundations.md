@@ -30,9 +30,13 @@
 - Grid: responsive auto-fit minmax
 
 ## useful commmands
+
 pnpm --filter site dev 
+pnpm --filter @kit/schema build //schema always goes first
+pnpm --filter @kit/KITNAME build
+
 git checkout main 
 git pull origin main
-git merge --ff-only <BRANCH NAME>
+git merge --ff-only BRANCHNAME
 git push
-git checkout <BRANCH NAME>
+git checkout BRANCHNAME

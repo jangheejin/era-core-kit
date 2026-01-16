@@ -758,7 +758,8 @@ pre.error {
   white-space: pre-wrap;
   overflow-x: auto;
 }
-.mt, .mt1 {
+.mt, .mt1,
+.card.mt {
   margin-top: 1rem;
 }
 

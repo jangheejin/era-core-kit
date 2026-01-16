@@ -5,5 +5,10 @@ import { AdminCaseStudyProvider } from "./AdminCaseStudyStore";
 import { AdminClientPageProvider } from "./AdminClientPageStore";
 
 export default function AdminProviders({ children }: { children: ReactNode }) {
-  return <AdminCaseStudyProvider>{children}</AdminCaseStudyProvider>;
+  return (
+    <AdminCaseStudyProvider>
+      {/* <AdminClientPageProvider> */}
+        {children}
+      {/* </AdminClientPageProvider> */}
+    </AdminCaseStudyProvider>);
 }

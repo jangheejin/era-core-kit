@@ -3,9 +3,68 @@
 .casegrid {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+/*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
   margin-top: var(--space-4);
 }
+
+/* Base: safe single-column list. Modifiers add multi-column behavior. */
+.case-grid, .case-grid.mt {
+  display: grid;
+  gap: var(--space-3);
+  /* grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); */
+
+  /* decides what happens to leftover space 
+  justify-content: start;   *//* left align */
+  /* or: justify-content: center; */ /* centered when few cards */
+}
+
+.case-grid.mt {
+  margin-top: 1rem;
+}
+
+/*Use .case-grid--cards when rendering discrete cards
+It caps column width so 1-2 items don't scale up to be huge*/
+.case-grid--cards {
+  --case-grid-min: 16rem;
+  --case-grid-max: 24rem;
+  grid-template-columns: reapeat(
+    auto-fit,
+    minmax(min(100%, var(--case-grid-min)), var(--case-grid-max))
+  );
+  justify-content: start;
+}
+
+/*use when the page only has 1-2 items*/
+.case-grid--center {
+  justify-content: center;
+}
+
+.case-study-card__link {
+  display: block;
+  text-decoration: none;
+  color:inherit;
+}
+
+.case-study-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.case-study__hero {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+/* Forces a grid of 2 columns */
+.case-grid.layout-2x2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 
 .casegrid.layout-4 {
   grid-template-columns: repeat(4, 1fr);
@@ -14,11 +73,6 @@
 .casegrid.layout-2 {
   grid-template-columns: repeat(2, 1fr);
 }
-
-/* Forces a grid of 2 columns */
-/* .casegrid.layout-2x2 {
-  grid-template-columns: repeat(2, 1fr);
-} */
 
 /* .casegrid.layout-2x2 {
   --card-max: clamp(18rem, 35vw, 24rem);
@@ -203,3 +257,16 @@
   margin-top: 0.5rem;
 }
 */
+/* Hard stop: never force multi-column grids on small screens */
+@media (max-width: 640px) {
+  .casegrid.layout-4,
+  .casegrid.layout-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 960px) {
+  .casegrid.layout-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

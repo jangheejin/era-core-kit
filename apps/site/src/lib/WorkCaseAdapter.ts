@@ -1,9 +1,20 @@
 //apps/site/src/lib/WorkCaseAdapter.ts
 
 //adapter that maps CaseStudyType (CMS version) → WorkCase (public site Our Work page version)
+import {
+  sectorLabel, 
+  type SectorValue
+} from "@kit/schema"
+
+function sectorLabelFromCaseStudy(cs: { primarySector?: SectorValue; sectors?: SectorValue[] }) {
+  const v = cs.primarySector ?? cs.sectors?.[0];
+  return v ? sectorLabel(v) : "Case Study";
+}
+
 export type WorkCase = {
   slug: string;
   sector: string;      // display label
+  //sector: sectorLabelFromCaseStudy(cs),//ERRORS
   client: string;
   teaser?: string;     // short blurb for cards/social
   featured: boolean;

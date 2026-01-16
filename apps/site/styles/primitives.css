@@ -289,7 +289,7 @@ h2 {
 h3 {
   font-size: var(--fs-h3);
 }
-h3 {
+h4 {
   font-size: var(--fs-h4);
 }
 h5 {
@@ -463,3 +463,57 @@ ol {
 
 /* Optional: slightly tighter than global c-stack if you want */
 .c-markdown.c-stack > * + * { margin-top: var(--space-3, 1.5rem); }
+
+.c-container.c-stack.gap5 {
+  gap: 1.25rem;
+}
+
+/* Base: safe single-column list. Modifiers add multi-column behavior. */
+.case-grid {
+  display: grid;
+  gap: var(--space-3);
+  /* grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); */
+}
+
+/*Use .case-grid--cards when rendering discrete cards
+It caps column width so 1-2 items don't scale up to be huge*/
+.case-grid--cards {
+  --case-grid-min: 16rem;
+  --case-grid-max: 24rem;
+  grid-template-columns: reapeat(
+    auto-fit,
+    minmax(min(100%, var(--case-grid-min)), var(--case-grid-max))
+  );
+  justify-content: start;
+}
+
+/*use when the page only has 1-2 items*/
+.case-grid--center {
+  justify-content: center;
+}
+
+.case-study-card__link {
+  display: block;
+  text-decoration: none;
+  color:inherit;
+}
+
+.case-study-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.case-study__hero {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+.case-grid.layout-2x2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+

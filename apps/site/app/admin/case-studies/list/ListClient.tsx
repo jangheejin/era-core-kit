@@ -195,11 +195,22 @@ export default function ListClient() {
     const sectorsNorm = normalizeSectorsStrict(toStringArray(sectorsRaw));
     const tagsNorm = normalizeTagsStrict(toStringArray(tagsRaw));
 
+    
+    const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector;
+    let primarySector: SectorValue | undefined = undefined;
+    if (typeof primaryRaw === "string" && sectorsNorm.includes(primaryRaw as SectorValue)) {
+      primarySector = primaryRaw as SectorValue;
+    } else {
+      primarySector = sectorsNorm[0] ?? DEFAULT_CATEGORY;
+    }
+
+
     const candidate: CaseStudyType = {
       ...existing,
       ...patch,
       sectors: sectorsNorm.length ? sectorsNorm : [DEFAULT_CATEGORY],
       tags: tagsNorm,
+      primarySector,
     };
 
     const res = CaseStudySchema.safeParse(candidate);
@@ -356,10 +367,6 @@ export default function ListClient() {
                   </option>
                 ))}
               </optgroup>
-            /* {SECTOR_VALUES.map((v) => ( 
-              <option key={v} value={v}>
-                {sectorLabel(v)}
-              </option>*/
             ))}
           </select>
 
@@ -432,8 +439,8 @@ export default function ListClient() {
 
       <div className="dbListGrid">
           {/* include the new date and alphabetical sorting */}
-          {sorted.map((cs) => {
           {/* {filtered.map((cs) => { */}
+          {sorted.map((cs) => {
             const isHighlighted = cs.id === savedId || cs.id === editId;
             const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
             const hasSeparateTitle =
@@ -589,13 +596,28 @@ export default function ListClient() {
                         {sectors.length === 0 ? (
                           <span className="pill pill--muted">Uncategorized</span>
                         ) : (
+                          <>
+                            {/* <span className="pill pill--cat">{sectorLabel(sectors[0])}</span> */}
+                            <span className="pill pill--cat">
+                              {sectorLabel(cs.primarySector)}
+                            </span>
+                            {sectors.length > 1 && (
+                              <span className="pill pill--muted">+{sectors.length - 1} more</span>
+                            )}
+                          </>
+                        )}
+                      </div>
+{/*                       <div className="dbPillRow">
+                        {sectors.length === 0 ? (
+                          <span className="pill pill--muted">Uncategorized</span>
+                        ) : (
                           sectors.map((s) => (
                             <span key={s} className="pill pill--cat">
                               {sectorLabel(s)}
                             </span>
                           ))
                         )}
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="dbProp">
@@ -652,6 +674,35 @@ export default function ListClient() {
                         Click a category to remove it. Use the dropdown to add another.
                       </div>
 
+                      {sectors.length > 0 ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: ".5rem",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            marginBottom: 8,
+                          }}
+                        >
+                          <span className="muted type-small">Primary:</span>
+                          <select
+                            className="input input--tiny"
+                            value={sectors[0]}
+                            onChange={(e) => {
+                              const v = e.target.value as SectorValue;
+                              const next = [v, ...sectors.filter((x) => x !== v)];
+                              updateMeta(cs.id, { sectors: next });
+                            }}
+                          >
+                            {sectors.map((v) => (
+                              <option key={v} value={v}>
+                                {sectorLabel(v)}
+                              </option>
+                            ))}
+                          </select>
+                          <span className="muted type-small">Shown on cards.</span>
+                        </div>
+                      ) : null}
 
                       <div className="dbPillRow">
                         {sectors.map((s) => (

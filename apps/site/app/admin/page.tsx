@@ -68,7 +68,7 @@ export default function AdminPage() {
       </p>
 
       {isLoggedIn ? (
-        <div className="card" style={{ marginTop: "1rem" }}>
+        <div className="card mt">
           <h2>Actions</h2>
           <div className="row" style={{ marginTop: ".75rem" }}>
             <Link href="/admin/case-studies/new">Create new case study</Link>
@@ -76,7 +76,7 @@ export default function AdminPage() {
           </div>
         </div>
       ) : (
-        <div className="card" style={{ marginTop: "1rem" }}>
+        <div className="card mt">
           <h2>Locked</h2>
           <p className="muted">Click “Demo login” to access editor routes.</p>
         </div>
