@@ -2,9 +2,10 @@
 "use client";
 
 import { useMockCMS } from "@/cms/mockCmsStore";
-import { CaseGrid, WorkText } from "@kit/blocks";
+import { CaseGrid, WorkText, type CaseGridProps } from "@kit/blocks";
 //import type { CaseGridItem } from "@kit/blocks"; 
-import type { CaseGridProps } from "@kit/blocks";
+import { type SectorValue, DEFAULT_HERO_IMAGE_URL, } from "@kit/schema";
+
 
 export function HomeCaseGridFromCMS() {
   //const { caseStudies } = useMockCMS();
@@ -20,7 +21,25 @@ export function HomeCaseGridFromCMS() {
   }
 
   // Map the case studies in the store to the card props your CaseGrid expects
-  const items: CaseGridProps["items"] = caseStudies.map((cs) => ({
+  const items: CaseGridProps["items"] = caseStudies.map((cs) => {
+    const sectorsForGrid: [SectorValue, ...SectorValue[]] = [
+      cs.primarySector,
+      ...cs.sectors.filter((s) => s !== cs.primarySector),
+    ];
+  
+    return {
+      title: cs.title,
+      summary: cs.summaryShort ?? "",
+      imageUrl: cs.heroImageUrl ?? DEFAULT_HERO_IMAGE_URL,
+      slug: cs.slug,
+      client: cs.client ?? undefined,
+      brief: cs.brief ?? undefined,
+      primarySector: cs.primarySector,
+      sectors: sectorsForGrid,
+    };
+  });
+  
+/*   const items: CaseGridProps["items"] = caseStudies.map((cs) => ({
   //const items = caseStudies.map((cs) => ({
     title: cs.title,
     summary: cs.summaryShort ?? "", 
@@ -33,7 +52,7 @@ export function HomeCaseGridFromCMS() {
     sectorsReadable: (cs.sectors ?? []).join(SECTOR_SEPARATOR) ?? "",
 //    sectorsReadable: cs.sectors?.join(SECTOR_SEPARATOR) ?? "",
     //sector: cs.sectors?.[0] ?? "",//only returns the first or primary sector
-  }));
+  })); */
 
   return (
     <section className="c-section">
