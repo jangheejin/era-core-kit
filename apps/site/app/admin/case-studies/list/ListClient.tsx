@@ -34,6 +34,44 @@ const DEFAULT_CATEGORY = (
     : SECTOR_VALUES[0]
 ) as SectorValue;
 
+/* const SECTOR_BY_SLUG = new Map<string, SectorValue>(
+  SECTOR_VALUES.map((v) => [tagSlug(sectorLabel(v))!, v as SectorValue])
+); */
+/* const SECTOR_BY_SLUG = new Map<string, SectorValue>(
+  SECTOR_VALUES
+    .map((v) => {
+      const slug = tagSlug(sectorLabel(v));
+      return slug ? [slug, v as SectorValue] as const : null;
+    })
+    .filter(Boolean) as Array<readonly [string, SectorValue]>
+);
+
+function coerceSectorValue(raw: unknown): SectorValue | null {
+  if (typeof raw !== "string") return null;
+  const s = raw.trim();
+  if (!s) return null;
+
+  // already canonical
+  if (SECTOR_VALUES.includes(s as any)) return s as SectorValue;
+
+  // try to map from human label (e.g. "Public Sector" -> "PublicSector")
+  const slug = tagSlug(s);
+  return slug ? SECTOR_BY_SLUG.get(slug) ?? null : null;
+}
+
+function getSectorsForCs(cs: unknown): SectorValue[] {
+  const c = cs as any;
+
+  // gather from ALL possible places
+  const raw = [
+    ...toStringArray(c.sectors),
+    ...toStringArray(c.sector),        // legacy single
+    ...toStringArray(c.primarySector), // new single
+  ];
+
+  return normalizeSectorsStrict(raw);
+} */
+
 function parseCommaList(raw: string): string[] {
   return raw
     .split(",")
@@ -42,12 +80,69 @@ function parseCommaList(raw: string): string[] {
 }
 
 // No typeof checks. This is “recover if some old draft accidentally saved the wrong shape”.
-function toStringArray(v: unknown): string[] {
+/* function toStringArray(v: unknown): string[] {
   if (Array.isArray(v)) return v.map((x) => String(x));
   if (v == null) return [];
   const s = String(v).trim();
   if (!s) return [];
   return parseCommaList(s); // handles "a, b, c"
+} */
+
+function parseListishString(raw: string): string[] {
+  const t = String(raw).trim();
+  if (!t) return [];
+
+  // JSON-stringified arrays, e.g. "[\"PublicSector\",\"Energy\"]"
+  if (t.startsWith("[") && t.endsWith("]")) {
+    try {
+      const parsed = JSON.parse(t);
+      if (Array.isArray(parsed)) {
+        return parsed
+          .map((x) => String(x).trim())
+          .filter(Boolean);
+      }
+    } catch {
+      // fall through
+    }
+  }
+
+  // Semicolons/newlines are common “manual list” separators.
+  const parts = t.split(/[\n;]+/g).flatMap(parseCommaList);
+
+  // Strip single/double quotes that can show up in messy payloads
+  return parts
+    .map((p) => p.replace(/^['"]|['"]$/g, "").trim())
+    .filter(Boolean);
+}
+
+// No typeof checks. This is “recover if some old draft accidentally saved the wrong shape”.
+function toStringArray(v: unknown): string[] {
+  if (v == null) return [];
+
+  if (Array.isArray(v)) {
+    const out: string[] = [];
+    for (const x of v) {
+      if (typeof x === "string") {
+        out.push(...parseListishString(x));
+        continue;
+      }
+      if (x && typeof x === "object" && "value" in x && typeof (x as any).value === "string") {
+        out.push(...parseListishString((x as any).value));
+        continue;
+      }
+      // ignore other junk shapes rather than injecting "[object Object]"
+    }
+    return out;
+  }
+
+  if (typeof v === "string") return parseListishString(v);
+
+  // Handle e.g. { value: "PublicSector,Energy" }
+  if (typeof v === "object" && "value" in (v as any) && typeof (v as any).value === "string") {
+    return parseListishString((v as any).value);
+  }
+
+  return [String(v)];
 }
 
 function normalizeTagsStrict(list: string[]): string[] {
@@ -79,6 +174,104 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
   const seen = new Set<string>();
   return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
 }
+/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
+  const out: SectorValue[] = [];
+  for (const raw of list) {
+    const v = coerceSector(raw);
+    if (v) out.push(v);
+  }
+  const seen = new Set<string>();
+  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
+} */
+
+/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
+  const allowed = new Set<string>(SECTOR_VALUES);
+  const out: SectorValue[] = [];
+
+  for (const raw of list) {
+    const s = String(raw).trim();
+    if (!s) continue;
+
+    // canonical already?
+    if (allowed.has(s)) {
+      out.push(s as SectorValue);
+      continue;
+    }
+
+    // try label -> canonical (e.g. "Public Sector" -> "PublicSector")
+    const slug = tagSlug(s);
+    const mapped = slug ? SECTOR_BY_SLUG.get(slug) : undefined;
+    if (mapped) out.push(mapped);
+  }
+
+  const seen = new Set<string>();
+  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
+} */
+
+/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
+  const out: SectorValue[] = [];
+
+  for (const raw of list) {
+    const v = coerceSectorValue(raw);
+    if (!v) continue;
+    out.push(v);
+  }
+
+  // de-dupe while preserving order
+  const seen = new Set<string>();
+  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
+} */
+
+/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
+  const allowed = new Set<string>(SECTOR_VALUES);
+  const out: SectorValue[] = [];
+
+  for (const raw of list) {
+    const s = String(raw).trim();
+    if (!allowed.has(s)) continue;
+    out.push(s as SectorValue);
+  }
+
+  // de-dupe while preserving order
+  const seen = new Set<string>();
+  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
+} */
+
+/* const SECTOR_LOOKUP = new Map<string, SectorValue>();
+
+for (const v of SECTOR_VALUES as readonly SectorValue[]) {
+  SECTOR_LOOKUP.set(v, v);
+  SECTOR_LOOKUP.set(v.toLowerCase(), v);
+
+  const slugFromValue = tagSlug(v);
+  if (slugFromValue) SECTOR_LOOKUP.set(slugFromValue, v);
+
+  const slugFromLabel = tagSlug(sectorLabel(v));
+  if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
+}
+
+function coerceSector(raw: unknown): SectorValue | null {
+  if (typeof raw !== "string") return null;
+  const s = raw.trim();
+  if (!s) return null;
+
+  // direct match
+  if (SECTOR_VALUES.includes(s as any)) return s as SectorValue;
+
+  // case-insensitive match
+  const lower = s.toLowerCase();
+  const directLower = SECTOR_LOOKUP.get(lower);
+  if (directLower) return directLower;
+
+  // slug match (works for "Public Sector" => "public-sector")
+  const slug = tagSlug(s);
+  if (slug) {
+    const mapped = SECTOR_LOOKUP.get(slug);
+    if (mapped) return mapped;
+  }
+
+  return null;
+} */
 
 function visibilityLabel(v: string) {
   if (v === "ClientSafe") return "Client-Viewable";
@@ -135,7 +328,11 @@ function applyPublishPreset(
 
 /* export default function CaseStudyListPage() { */
 export default function ListClient() {
-  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+//  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+  const { 
+    items: storeItems, resetToBaseline, upsertCaseStudy 
+  } = useAdminCaseStudies();
+  const items = storeItems ?? [];
 
   const didAutoFixRef = useRef(false);
 
@@ -189,21 +386,53 @@ export default function ListClient() {
     if (!existing) return;
 
      // Normalize sectors/tags even if existing data was the wrong shape
-    const sectorsRaw = (patch as any).sectors ?? (existing as any).sectors;
+     const sectorsRaw = patch.sectors ?? existing.sectors;
+     /* const sectorsRaw =
+      (patch as any).sectors ??
+      (existing as any).sectors ??
+      (existing as any).sector; // legacy fallback */
+    //const sectorsRaw = (patch as any).sectors ?? (existing as any).sectors;
+
+    const hasSectorsPatch = Object.prototype.hasOwnProperty.call(patch, "sectors");
+
     const tagsRaw = (patch as any).tags ?? (existing as any).tags;
 
     const sectorsNorm = normalizeSectorsStrict(toStringArray(sectorsRaw));
     const tagsNorm = normalizeTagsStrict(toStringArray(tagsRaw));
-
     
-    const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector;
-    let primarySector: SectorValue | undefined = undefined;
+    // primarySector must be inside sectors
+    const primaryRaw =
+      typeof patch.primarySector === "string"
+        ? patch.primarySector
+        : hasSectorsPatch
+          ? sectorsNorm[0] // if sectors changed/reordered, primary should follow the new first entry
+          : existing.primarySector;
+    //const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector;
+    const sectorsFinal = sectorsNorm.length ? sectorsNorm : [DEFAULT_CATEGORY];
+
+    const primarySector =
+      primaryRaw && sectorsNorm.includes(primaryRaw as SectorValue)
+        ? (primaryRaw as SectorValue)
+        : sectorsNorm[0] ?? DEFAULT_CATEGORY;
+
+/*     let primarySector: SectorValue =
+      typeof primaryRaw === "string" && sectorsFinal.includes(primaryRaw as SectorValue)
+        ? (primaryRaw as SectorValue)
+        : sectorsFinal[0] ?? DEFAULT_CATEGORY; */
+    /* let primarySector: SectorValue | undefined = undefined;
     if (typeof primaryRaw === "string" && sectorsNorm.includes(primaryRaw as SectorValue)) {
       primarySector = primaryRaw as SectorValue;
     } else {
       primarySector = sectorsNorm[0] ?? DEFAULT_CATEGORY;
-    }
+    } */
 
+/*     let primarySector: SectorValue =
+      typeof primaryRaw === "string" && sectorsFinal.includes(primaryRaw as SectorValue)
+        ? (primaryRaw as SectorValue)
+        : sectorsFinal[0] ?? DEFAULT_CATEGORY; */
+    const sectorsFixed = sectorsFinal.includes(primarySector)
+      ? sectorsFinal
+      : ([primarySector, ...sectorsFinal] as SectorValue[]);
 
     const candidate: CaseStudyType = {
       ...existing,
@@ -233,8 +462,12 @@ export default function ListClient() {
 
     // Only patch records that are genuinely missing categories.
     const missing = items.filter((cs) => {
-      const sectors = normalizeSectorsStrict(
+      /* const sectors = normalizeSectorsStrict(
         toStringArray((cs as unknown as { sectors?: unknown }).sectors)
+      ); */
+      //const sectors = getSectorsForCs(cs);
+      const sectors = normalizeSectorsStrict(
+        toStringArray((cs as unknown as { sectors?: unknown; sector?: unknown }).sectors ?? (cs as any).sector)
       );
       return sectors.length === 0;
     });
@@ -242,7 +475,8 @@ export default function ListClient() {
     if (missing.length === 0) return;
 
     for (const cs of missing) {
-      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
+      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY], primarySector: DEFAULT_CATEGORY });
+//      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
     }
 
     didAutoFixRef.current = true;
@@ -254,7 +488,11 @@ export default function ListClient() {
     const qq = q.toLowerCase().trim();
 
     return items.filter((cs) => {
-      const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+      //const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
+      //const sectors = getSectorsForCs(cs);
+      const sectors = normalizeSectorsStrict(
+        toStringArray((cs as unknown as { sectors?: unknown; sector?: unknown }).sectors ?? (cs as any).sector)
+      );
       //const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
       const tags = normalizeTagsStrict(toStringArray((cs as any).tags));
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
@@ -265,6 +503,12 @@ export default function ListClient() {
 //        const visibility = cs.visibility ?? "Internal";
 //        if (!matchesClientPageFilters(status, visibility, sectors, tags, lensPage)) return false;
       } */
+
+      const primary = (cs as any).primarySector;
+      const sectorsForFilter = 
+        typeof primary === "string" && !sectors.includes(primary as SectorValue)
+          ? [primary as SectorValue, ...sectors]
+          : sectors;
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
       if (statusFilter && cs.status !== statusFilter) return false;
@@ -291,14 +535,22 @@ export default function ListClient() {
   ]);
 
   const sorted = useMemo(() => {
-    if (sortMode === "Newest") return filtered;
-    const arr = [...filtered];
+    const base = filtered ?? [];
+    //if (sortMode === "Newest") return filtered;
+
+    if (sortMode === "Newest") return base;
+
+    //const arr = [...filtered];
+    const arr = [...base];
   
     if (sortMode === "Oldest") return arr.reverse();
 
     // A–Z
     return arr.sort((a,b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
 
+    // ZtoA
+/*     return arr.sort((a, b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a)));
+  }, [filtered, sortMode]); */
 /*     return [...filtered].sort((a, b) => {
       const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
       const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
@@ -324,8 +576,8 @@ export default function ListClient() {
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category, filter by visibility, and search.
-        Changes are stored only in your browser (localStorage).
+        This is a temporary demo CMS database. You can filter by category and view custom collections of case studies based on the category.
+        {/* Changes are stored only in your browser (localStorage). */}
       </ContextBanner>
 
       <div className="row" style={{ justifyContent: "space-between" }}>
@@ -687,11 +939,12 @@ export default function ListClient() {
                           <span className="muted type-small">Primary:</span>
                           <select
                             className="input input--tiny"
-                            value={sectors[0]}
+                            value={cs.primarySector}
+                            /* value={sectors[0]} */
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
                               const next = [v, ...sectors.filter((x) => x !== v)];
-                              updateMeta(cs.id, { sectors: next });
+                              updateMeta(cs.id, { sectors: next, primarySector: v });
                             }}
                           >
                             {sectors.map((v) => (

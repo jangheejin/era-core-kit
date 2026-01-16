@@ -27,6 +27,53 @@ import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
 
+function parseListishString(raw: string): string[] {
+  const t = String(raw).trim();
+  if (!t) return [];
+  if (t.startsWith("[") && t.endsWith("]")) {
+    try {
+      const parsed = JSON.parse(t);
+      if (Array.isArray(parsed)) {
+        return parsed.map((x) => String(x).trim()).filter(Boolean);
+      }
+    } catch {}
+  }
+  return t
+    .split(/[\n;]+/g)
+    .flatMap((chunk) => chunk.split(","))
+    .map((x) => x.replace(/^['"]|['"]$/g, "").trim())
+    .filter(Boolean);
+}
+
+function coerceSectors(raw: unknown): string[] {
+  if (raw == null) return [];
+  if (typeof raw === "string") return parseListishString(raw);
+  if (Array.isArray(raw)) return raw.flatMap((x) => (typeof x === "string" ? parseListishString(x) : []));
+  return [];
+}
+
+function migrateEnsureNonEmptySectors(input: any) {
+  const allow = new Set(SECTOR_VALUES);
+  const DEFAULT = SECTOR_VALUES[0] as SectorValue;
+
+  const raw = input?.sectors ?? input?.categories ?? input?.category;
+  const tokens = coerceSectors(raw);
+  const cleaned = tokens.filter((t) => allow.has(t as SectorValue)) as SectorValue[];
+
+  if (cleaned.length > 0) return { ...input, sectors: cleaned };
+
+  if (typeof input?.sector === "string" && allow.has(input.sector as SectorValue)) {
+    return { ...input, sectors: [input.sector] };
+  }
+
+  if (typeof input?.primarySector === "string" && allow.has(input.primarySector as SectorValue)) {
+    return { ...input, sectors: [input.primarySector] };
+  }
+
+  return { ...input, sectors: [DEFAULT] };
+}
+
+
 function migrateEnsureAtLeastOneSector(input: any) {
   const sectors = Array.isArray(input?.sectors) ? input.sectors : [];
   const sector = typeof input?.sector === "string" ? input.sector : null;
@@ -61,7 +108,7 @@ function migrateHeroUrl(input: any) {
 }
 
 //migration that guarantees sectors is non-empty
-function migrateEnsureNonEmptySectors(input: any) {
+/* function migrateEnsureNonEmptySectors(input: any) {
   if (!input || typeof input !== "object") return input;
 
   const DEFAULT = SECTOR_VALUES[0] as SectorValue;
@@ -80,7 +127,7 @@ function migrateEnsureNonEmptySectors(input: any) {
 
   // last resort: ensure schema won't drop it
   return { ...input, sectors: [DEFAULT] };
-}
+} */
 
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
