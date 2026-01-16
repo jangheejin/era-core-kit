@@ -17,8 +17,10 @@ import {
   DocLink,
   OutcomeList,
   ImageFigure,
-  WorkWithCaseGrid,
+//  WorkWithCaseGrid,
 } from "@kit/blocks";
+
+import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/sections/WorkWithCaseGridSmart";
 
 // Map each allowed block type to its React component.
 // Note: lowercase aliases share the same component.

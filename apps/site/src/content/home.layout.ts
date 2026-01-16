@@ -42,6 +42,24 @@ export const homeLayout: LayoutBlock[] = [
         "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
       gridHeading: "Selected Case Studies",
       layout: "4col",
+
+      itemsSource: "featured",
+      maxItems: 6,
+      items: [],
+    },
+  },
+  /* {
+    type: "WorkWithCaseGrid",
+    props: {
+      heading: "Our Work",
+      text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
+      text2:
+        "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
+      gridHeading: "Selected Case Studies",
+      layout: "4col",
+
+      itemsSource: "featured",
+      maxItems: 6,
       items: [
         {
           primarySector: "Geospatial",
@@ -51,7 +69,7 @@ export const homeLayout: LayoutBlock[] = [
             "Appropriations", "GrantFunding",
           ],
           client: "Sanborn + AppGeo",
-          /*           summary: "Sanborn + AppGeo", */
+          //summary: "Sanborn + AppGeo",
           imageUrl: "/img/case1.webp",
           slug: "sanborn-appgeo",
         },
@@ -62,7 +80,7 @@ export const homeLayout: LayoutBlock[] = [
             "Appropriations", "GrantFunding",
           ],
           client: "NAPSG Foundation",
-          /*           summary: "NAPSG Foundation", */
+          //summary: "NAPSG Foundation",
           imageUrl: "/img/case2.webp",
           slug: "napsg-foundation",
         },
@@ -74,7 +92,7 @@ export const homeLayout: LayoutBlock[] = [
             "Appropriations",
           ],
           client: "Crucis",
-          /*           summary: "Crucis", */
+          //summary: "Crucis",
           imageUrl: "/img/case3.webp",
           slug: "crucis",
         },
@@ -86,7 +104,7 @@ export const homeLayout: LayoutBlock[] = [
             "Appropriations",
           ],
           client: "MKR Fabricators",
-          /*           summary: "MKR Fabricators", */
+          //summary: "MKR Fabricators",
           imageUrl: "/img/temp.svg",
           slug: "mkr-fabricators",
         },
@@ -94,7 +112,7 @@ export const homeLayout: LayoutBlock[] = [
           primarySector: "Education",
           sectors: ["Education", "Nonprofit"],
           client: "STEMheads",
-          /*           summary: "MKR Fabricators", */
+          //summary: "MKR Fabricators",
           imageUrl: "/img/temp2.svg",
           slug: "stemheads",
         },
@@ -107,13 +125,13 @@ export const homeLayout: LayoutBlock[] = [
             "Appropriations", "GrantFunding",
           ],
           client: "Placeholder Org",
-          /*           summary: "MKR Fabricators", */
+          //summary: "MKR Fabricators",
           imageUrl: "/img/temp.svg",
           slug: "non-profit",
         },
       ],
     },
-  },
+  }, */
   /* COMBINING WORKTEXT AND CASEGRID INTO ONE SECTION
   {
     type: "WorkText",

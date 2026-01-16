@@ -43,7 +43,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     summaryShort:
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
     brief:
-      "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
+      "We partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
 
     outcomes: [
       {

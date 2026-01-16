@@ -41,6 +41,13 @@ import { ContextBanner } from "@/admin/components/ContextBanner";
 
 import { normalizeTagList } from "@kit/schema";
 
+const FLAT_CATEGORY_OPTIONS = SECTOR_GROUPS.flatMap((g) =>
+  g.values.map((v) => ({
+    value: v,
+    label: `${g.label}: ${sectorLabel(v)}`,
+  }))
+);
+
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false
 function parseEnvFlag(raw: string | undefined, defaultValue: boolean) {
@@ -743,16 +750,21 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                       >
                         <option value="">Select a category…</option>
 
-                        {SECTOR_GROUPS.map((g) => (
+                        {FLAT_CATEGORY_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+
+{/*                         {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((opt) => (
                               <option key={opt} value={opt}>
                                 {sectorLabel(opt)}
-                                {/* {"› "}{sectorLabel(opt)} */}
                               </option>
                             ))}
                           </optgroup>
-                        ))}
+                        ))} */}
                       </select>
 
                       {idx > 0 && (

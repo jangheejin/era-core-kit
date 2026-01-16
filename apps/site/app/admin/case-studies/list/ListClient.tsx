@@ -4,8 +4,8 @@
 import "@styles/admin-cms.css";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";//needed to separate "Save" and "Preview"
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   CaseStudy as CaseStudySchema,
@@ -23,54 +23,57 @@ import {
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-//tooltip
 import * as Tooltip from "@radix-ui/react-tooltip";
+
+const FLAT_CATEGORY_OPTIONS = SECTOR_GROUPS.flatMap((g) =>
+  g.values.map((v) => ({
+    value: v,
+    label: `${g.label}: ${sectorLabel(v)}`,
+  }))
+);
 
 // Demo-only: restore “auto-set a category if none selected”
 const DEMO_AUTO_DEFAULT_CATEGORY = true;
 const DEFAULT_CATEGORY = (
-  SECTOR_VALUES.includes("PublicSector")
-    ? "PublicSector"
-    : SECTOR_VALUES[0]
+  SECTOR_VALUES.includes("PublicSector") ? "PublicSector" : SECTOR_VALUES[0]
 ) as SectorValue;
 
-/* const SECTOR_BY_SLUG = new Map<string, SectorValue>(
-  SECTOR_VALUES.map((v) => [tagSlug(sectorLabel(v))!, v as SectorValue])
-); */
-/* const SECTOR_BY_SLUG = new Map<string, SectorValue>(
-  SECTOR_VALUES
-    .map((v) => {
-      const slug = tagSlug(sectorLabel(v));
-      return slug ? [slug, v as SectorValue] as const : null;
-    })
-    .filter(Boolean) as Array<readonly [string, SectorValue]>
-);
+// ---- sector coercion (fixes old stored data like "Public Sector" or "public-sector") ----
+const SECTOR_LOOKUP = new Map<string, SectorValue>();
 
-function coerceSectorValue(raw: unknown): SectorValue | null {
+for (const v of SECTOR_VALUES as readonly SectorValue[]) {
+  SECTOR_LOOKUP.set(v, v);
+  SECTOR_LOOKUP.set(v.toLowerCase(), v);
+
+  const slugFromValue = tagSlug(v);
+  if (slugFromValue) SECTOR_LOOKUP.set(slugFromValue, v);
+
+  const slugFromLabel = tagSlug(sectorLabel(v));
+  if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
+}
+
+function coerceSector(raw: unknown): SectorValue | null {
   if (typeof raw !== "string") return null;
   const s = raw.trim();
   if (!s) return null;
 
-  // already canonical
+  // exact match
   if (SECTOR_VALUES.includes(s as any)) return s as SectorValue;
 
-  // try to map from human label (e.g. "Public Sector" -> "PublicSector")
+  // case-insensitive match
+  const lower = s.toLowerCase();
+  const directLower = SECTOR_LOOKUP.get(lower);
+  if (directLower) return directLower;
+
+  // slug match (works for "Public Sector" => "public-sector")
   const slug = tagSlug(s);
-  return slug ? SECTOR_BY_SLUG.get(slug) ?? null : null;
+  if (slug) {
+    const mapped = SECTOR_LOOKUP.get(slug);
+    if (mapped) return mapped;
+  }
+
+  return null;
 }
-
-function getSectorsForCs(cs: unknown): SectorValue[] {
-  const c = cs as any;
-
-  // gather from ALL possible places
-  const raw = [
-    ...toStringArray(c.sectors),
-    ...toStringArray(c.sector),        // legacy single
-    ...toStringArray(c.primarySector), // new single
-  ];
-
-  return normalizeSectorsStrict(raw);
-} */
 
 function parseCommaList(raw: string): string[] {
   return raw
@@ -79,70 +82,13 @@ function parseCommaList(raw: string): string[] {
     .filter(Boolean);
 }
 
-// No typeof checks. This is “recover if some old draft accidentally saved the wrong shape”.
-/* function toStringArray(v: unknown): string[] {
+// Recover if some old draft accidentally saved the wrong shape.
+function toStringArray(v: unknown): string[] {
   if (Array.isArray(v)) return v.map((x) => String(x));
   if (v == null) return [];
   const s = String(v).trim();
   if (!s) return [];
-  return parseCommaList(s); // handles "a, b, c"
-} */
-
-function parseListishString(raw: string): string[] {
-  const t = String(raw).trim();
-  if (!t) return [];
-
-  // JSON-stringified arrays, e.g. "[\"PublicSector\",\"Energy\"]"
-  if (t.startsWith("[") && t.endsWith("]")) {
-    try {
-      const parsed = JSON.parse(t);
-      if (Array.isArray(parsed)) {
-        return parsed
-          .map((x) => String(x).trim())
-          .filter(Boolean);
-      }
-    } catch {
-      // fall through
-    }
-  }
-
-  // Semicolons/newlines are common “manual list” separators.
-  const parts = t.split(/[\n;]+/g).flatMap(parseCommaList);
-
-  // Strip single/double quotes that can show up in messy payloads
-  return parts
-    .map((p) => p.replace(/^['"]|['"]$/g, "").trim())
-    .filter(Boolean);
-}
-
-// No typeof checks. This is “recover if some old draft accidentally saved the wrong shape”.
-function toStringArray(v: unknown): string[] {
-  if (v == null) return [];
-
-  if (Array.isArray(v)) {
-    const out: string[] = [];
-    for (const x of v) {
-      if (typeof x === "string") {
-        out.push(...parseListishString(x));
-        continue;
-      }
-      if (x && typeof x === "object" && "value" in x && typeof (x as any).value === "string") {
-        out.push(...parseListishString((x as any).value));
-        continue;
-      }
-      // ignore other junk shapes rather than injecting "[object Object]"
-    }
-    return out;
-  }
-
-  if (typeof v === "string") return parseListishString(v);
-
-  // Handle e.g. { value: "PublicSector,Energy" }
-  if (typeof v === "object" && "value" in (v as any) && typeof (v as any).value === "string") {
-    return parseListishString((v as any).value);
-  }
-
-  return [String(v)];
+  return parseCommaList(s);
 }
 
 function normalizeTagsStrict(list: string[]): string[] {
@@ -161,20 +107,6 @@ function normalizeTagsStrict(list: string[]): string[] {
 }
 
 function normalizeSectorsStrict(list: string[]): SectorValue[] {
-  const allowed = new Set<string>(SECTOR_VALUES);
-  const out: SectorValue[] = [];
-
-  for (const raw of list) {
-    const s = String(raw).trim();
-    if (!allowed.has(s)) continue;
-    out.push(s as SectorValue);
-  }
-
-  // de-dupe while preserving order
-  const seen = new Set<string>();
-  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
-}
-/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
   const out: SectorValue[] = [];
   for (const raw of list) {
     const v = coerceSector(raw);
@@ -182,164 +114,22 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
   }
   const seen = new Set<string>();
   return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
-} */
-
-/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
-  const allowed = new Set<string>(SECTOR_VALUES);
-  const out: SectorValue[] = [];
-
-  for (const raw of list) {
-    const s = String(raw).trim();
-    if (!s) continue;
-
-    // canonical already?
-    if (allowed.has(s)) {
-      out.push(s as SectorValue);
-      continue;
-    }
-
-    // try label -> canonical (e.g. "Public Sector" -> "PublicSector")
-    const slug = tagSlug(s);
-    const mapped = slug ? SECTOR_BY_SLUG.get(slug) : undefined;
-    if (mapped) out.push(mapped);
-  }
-
-  const seen = new Set<string>();
-  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
-} */
-
-/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
-  const out: SectorValue[] = [];
-
-  for (const raw of list) {
-    const v = coerceSectorValue(raw);
-    if (!v) continue;
-    out.push(v);
-  }
-
-  // de-dupe while preserving order
-  const seen = new Set<string>();
-  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
-} */
-
-/* function normalizeSectorsStrict(list: string[]): SectorValue[] {
-  const allowed = new Set<string>(SECTOR_VALUES);
-  const out: SectorValue[] = [];
-
-  for (const raw of list) {
-    const s = String(raw).trim();
-    if (!allowed.has(s)) continue;
-    out.push(s as SectorValue);
-  }
-
-  // de-dupe while preserving order
-  const seen = new Set<string>();
-  return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
-} */
-
-/* const SECTOR_LOOKUP = new Map<string, SectorValue>();
-
-for (const v of SECTOR_VALUES as readonly SectorValue[]) {
-  SECTOR_LOOKUP.set(v, v);
-  SECTOR_LOOKUP.set(v.toLowerCase(), v);
-
-  const slugFromValue = tagSlug(v);
-  if (slugFromValue) SECTOR_LOOKUP.set(slugFromValue, v);
-
-  const slugFromLabel = tagSlug(sectorLabel(v));
-  if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
 }
-
-function coerceSector(raw: unknown): SectorValue | null {
-  if (typeof raw !== "string") return null;
-  const s = raw.trim();
-  if (!s) return null;
-
-  // direct match
-  if (SECTOR_VALUES.includes(s as any)) return s as SectorValue;
-
-  // case-insensitive match
-  const lower = s.toLowerCase();
-  const directLower = SECTOR_LOOKUP.get(lower);
-  if (directLower) return directLower;
-
-  // slug match (works for "Public Sector" => "public-sector")
-  const slug = tagSlug(s);
-  if (slug) {
-    const mapped = SECTOR_LOOKUP.get(slug);
-    if (mapped) return mapped;
-  }
-
-  return null;
-} */
 
 function visibilityLabel(v: string) {
   if (v === "ClientSafe") return "Client-Viewable";
   return v;
 }
 
-//simplified publishing statuses
-//type PublishPreset = "internal" | "client" | "featured";
-type PublishPreset = "private" | "client" | "homepage";
-
-function publishPresetLabel(p: PublishPreset) {
-  if (p === "private") return "Private Draft";
-  if (p === "client") return "Client-Viewable";
-  return "Published to Homepage";
-}
-
-//fix preset detection so “Featured” never accidentally bleeds into “Client-Viewable”
-function getPublishPreset(cs: CaseStudyType): PublishPreset {
-  if (Boolean((cs as any).isFeaturedHome)) return "homepage";
-  if (Boolean((cs as any).isPublic) && cs.visibility === "ClientSafe") return "client";
-  return "private";
-}
-// This is the whole point: ONE click sets a coherent combo.
-// No mysterious partial toggles.
-function applyPublishPreset(
-  id: string,
-  preset: PublishPreset,
-  updateMeta: (id: string, patch: Partial<CaseStudyType>) => void
-) {
-  const patch: Partial<CaseStudyType> =
-    preset === "private"
-      ? {
-          status: "Draft",
-          visibility: "Internal",
-          isPublic: false,
-          isFeaturedHome: false, // always false
-        }
-      : preset === "client"
-        ? {
-            status: "Published",
-            visibility: "ClientSafe",
-            isPublic: true,
-            isFeaturedHome: false, // CRUCIAL: always false
-          }
-        : {
-            status: "Published",
-            visibility: "Public",
-            isPublic: true,
-            isFeaturedHome: true, // ONLY HERE
-          };
-
-  updateMeta(id, patch);
-}
-
-/* export default function CaseStudyListPage() { */
 export default function ListClient() {
-//  const { items, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
-  const { 
-    items: storeItems, resetToBaseline, upsertCaseStudy 
-  } = useAdminCaseStudies();
+  const { items: storeItems, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
   const items = storeItems ?? [];
 
   const didAutoFixRef = useRef(false);
 
-  //needed to separate "Save" and "Preview"
   const searchParams = useSearchParams();
-  const savedId = searchParams.get("saved"); // e.g. ?saved=<id>
-  const editId = searchParams.get("edit");   // e.g. ?edit=<id>
+  const savedId = searchParams.get("saved");
+  const editId = searchParams.get("edit");
 
   // filters
   const [q, setQ] = useState("");
@@ -350,8 +140,6 @@ export default function ListClient() {
   // --- Client Page Preview (opens the filtered page) ---
   const clientPagePreviewHref = useMemo(() => {
     if (!categoryFilter) return null;
-
-    //for routes that are like /environment, /public-sector, etc
     const seg = tagSlug(sectorLabel(categoryFilter));
     return seg ? `/${seg}` : null;
   }, [categoryFilter]);
@@ -361,83 +149,55 @@ export default function ListClient() {
     window.open(clientPagePreviewHref, "_blank", "noopener,noreferrer");
   }
 
-  //state for sorting
   type SortMode = "Newest" | "Oldest" | "AtoZ" | "ZtoA";
   const [sortMode, setSortMode] = useState<SortMode>("Newest");
 
-  //helper for sorting
   function clientLabelForSort(cs: CaseStudyType) {
     return (cs.client ?? cs.title ?? "Untitled").trim().toLowerCase();
   }
 
-  // per-row editing state
-  //const [editingId, setEditingId] = useState<string | null>(null);
   const [quickEditId, setQuickEditId] = useState<string | null>(null);
-  const [tagDraftById, setTagDraftById] = useState<Record<string, string>>({});
 
-  //per-row "Add category..." dropdown menus
-  const [categoryDraftById, setCategoryDraftById] = useState<Record<string, SectorValue | "">>({});
-
-  // fix this so it can't save incorrect case study shapes. prevent sectors: [] from being saved and 
-  // upgrades any “wrong-shape” legacy data into the correct shape as soon as the user touches it
-  // new version normalizes + Zod-validates before saving
+  // Normalize + Zod-validate before saving
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
     if (!existing) return;
 
-     // Normalize sectors/tags even if existing data was the wrong shape
-     const sectorsRaw = patch.sectors ?? existing.sectors;
-     /* const sectorsRaw =
+    // gather sectors from: sectors[] / legacy sector / primarySector (if someone saved only that)
+    const sectorsRaw =
       (patch as any).sectors ??
       (existing as any).sectors ??
-      (existing as any).sector; // legacy fallback */
-    //const sectorsRaw = (patch as any).sectors ?? (existing as any).sectors;
+      (patch as any).sector ??
+      (existing as any).sector ??
+      undefined;
 
-    const hasSectorsPatch = Object.prototype.hasOwnProperty.call(patch, "sectors");
+    const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector ?? undefined;
 
     const tagsRaw = (patch as any).tags ?? (existing as any).tags;
 
-    const sectorsNorm = normalizeSectorsStrict(toStringArray(sectorsRaw));
-    const tagsNorm = normalizeTagsStrict(toStringArray(tagsRaw));
-    
-    // primarySector must be inside sectors
-    const primaryRaw =
-      typeof patch.primarySector === "string"
-        ? patch.primarySector
-        : hasSectorsPatch
-          ? sectorsNorm[0] // if sectors changed/reordered, primary should follow the new first entry
-          : existing.primarySector;
-    //const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector;
+    const sectorsNorm = normalizeSectorsStrict([
+      ...toStringArray(sectorsRaw),
+      ...toStringArray(primaryRaw),
+    ]);
+
     const sectorsFinal = sectorsNorm.length ? sectorsNorm : [DEFAULT_CATEGORY];
 
-    const primarySector =
-      primaryRaw && sectorsNorm.includes(primaryRaw as SectorValue)
-        ? (primaryRaw as SectorValue)
-        : sectorsNorm[0] ?? DEFAULT_CATEGORY;
+    // primarySector must be in sectorsFinal
+    const primaryCoerced = coerceSector(primaryRaw);
+    const primarySector: SectorValue = primaryCoerced && sectorsFinal.includes(primaryCoerced)
+      ? primaryCoerced
+      : sectorsFinal[0] ?? DEFAULT_CATEGORY;
 
-/*     let primarySector: SectorValue =
-      typeof primaryRaw === "string" && sectorsFinal.includes(primaryRaw as SectorValue)
-        ? (primaryRaw as SectorValue)
-        : sectorsFinal[0] ?? DEFAULT_CATEGORY; */
-    /* let primarySector: SectorValue | undefined = undefined;
-    if (typeof primaryRaw === "string" && sectorsNorm.includes(primaryRaw as SectorValue)) {
-      primarySector = primaryRaw as SectorValue;
-    } else {
-      primarySector = sectorsNorm[0] ?? DEFAULT_CATEGORY;
-    } */
-
-/*     let primarySector: SectorValue =
-      typeof primaryRaw === "string" && sectorsFinal.includes(primaryRaw as SectorValue)
-        ? (primaryRaw as SectorValue)
-        : sectorsFinal[0] ?? DEFAULT_CATEGORY; */
     const sectorsFixed = sectorsFinal.includes(primarySector)
       ? sectorsFinal
       : ([primarySector, ...sectorsFinal] as SectorValue[]);
 
+    const tagsNorm = normalizeTagsStrict(toStringArray(tagsRaw));
+
     const candidate: CaseStudyType = {
       ...existing,
       ...patch,
-      sectors: sectorsNorm.length ? sectorsNorm : [DEFAULT_CATEGORY],
+      sectors: sectorsFixed,
       tags: tagsNorm,
       primarySector,
     };
@@ -447,28 +207,22 @@ export default function ListClient() {
       console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
       return;
     }
-    
-    upsertCaseStudy(res.data);
 
-    /* upsertCaseStudy({ ...existing, ...patch }); */
+    upsertCaseStudy(res.data);
   }
 
   // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
-  // New update: gated version so it doesn't run infinitely
   useEffect(() => {
     if (!DEMO_AUTO_DEFAULT_CATEGORY) return;
     if (didAutoFixRef.current) return;
     if (items.length === 0) return;
 
-    // Only patch records that are genuinely missing categories.
     const missing = items.filter((cs) => {
-      /* const sectors = normalizeSectorsStrict(
-        toStringArray((cs as unknown as { sectors?: unknown }).sectors)
-      ); */
-      //const sectors = getSectorsForCs(cs);
-      const sectors = normalizeSectorsStrict(
-        toStringArray((cs as unknown as { sectors?: unknown; sector?: unknown }).sectors ?? (cs as any).sector)
-      );
+      const sectors = normalizeSectorsStrict([
+        ...toStringArray((cs as any).sectors),
+        ...toStringArray((cs as any).sector),
+        ...toStringArray((cs as any).primarySector),
+      ]);
       return sectors.length === 0;
     });
 
@@ -476,39 +230,24 @@ export default function ListClient() {
 
     for (const cs of missing) {
       updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY], primarySector: DEFAULT_CATEGORY });
-//      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY] });
     }
 
     didAutoFixRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
-/*   }, [items]); */
 
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
 
     return items.filter((cs) => {
-      //const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
-      //const sectors = getSectorsForCs(cs);
-      const sectors = normalizeSectorsStrict(
-        toStringArray((cs as unknown as { sectors?: unknown; sector?: unknown }).sectors ?? (cs as any).sector)
-      );
-      //const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
+      const sectors = normalizeSectorsStrict([
+        ...toStringArray((cs as any).sectors),
+        ...toStringArray((cs as any).sector),
+        ...toStringArray((cs as any).primarySector),
+      ]);
+
       const tags = normalizeTagsStrict(toStringArray((cs as any).tags));
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
-
-/*       if (lensPage) {
-        if (!matchesClientPageFilters(cs, sectors, tagSlugs, lensPage)) return false;
-//        const status = cs.status ?? "Draft";
-//        const visibility = cs.visibility ?? "Internal";
-//        if (!matchesClientPageFilters(status, visibility, sectors, tags, lensPage)) return false;
-      } */
-
-      const primary = (cs as any).primarySector;
-      const sectorsForFilter = 
-        typeof primary === "string" && !sectors.includes(primary as SectorValue)
-          ? [primary as SectorValue, ...sectors]
-          : sectors;
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
       if (statusFilter && cs.status !== statusFilter) return false;
@@ -528,65 +267,29 @@ export default function ListClient() {
 
       return hay.includes(qq);
     });
-  }, 
-  [
-    items, q, categoryFilter, statusFilter, visibilityFilter,
-    //lensPage
-  ]);
+  }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
 
   const sorted = useMemo(() => {
     const base = filtered ?? [];
-    //if (sortMode === "Newest") return filtered;
-
     if (sortMode === "Newest") return base;
 
-    //const arr = [...filtered];
     const arr = [...base];
-  
+
     if (sortMode === "Oldest") return arr.reverse();
-
-    // A–Z
-    return arr.sort((a,b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
-
-    // ZtoA
-/*     return arr.sort((a, b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a)));
-  }, [filtered, sortMode]); */
-/*     return [...filtered].sort((a, b) => {
-      const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
-      const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
-      return aLabel.localeCompare(bLabel);
-    }); */
-
-    // Z-A
-/*     const dir = -1; // -1 = Z→A, +1 = A→Z
-    return [...filtered].sort((a, b) => {
-      const aLabel = (a.client ?? a.title ?? "Untitled").trim().toLowerCase();
-      const bLabel = (b.client ?? b.title ?? "Untitled").trim().toLowerCase();
-      return dir * aLabel.localeCompare(bLabel);
-    }); */
-
-/*     if (sortMode === "AtoZ") {
-      return arr.sort((a,b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
-    }
-
-    //Z to A
-    return arr.sort((a,b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a))); */
+    if (sortMode === "AtoZ") return arr.sort((a, b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
+    return arr.sort((a, b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a)));
   }, [filtered, sortMode]);
 
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category and view custom collections of case studies based on the category.
-        {/* Changes are stored only in your browser (localStorage). */}
+        This is a temporary demo CMS database. You can filter by category, filter by visibility, and search.
+        Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
       <div className="row" style={{ justifyContent: "space-between" }}>
-        {/* <h1 className="type-h2">Demo Case Study Database</h1> */}
         <h1 className="type-h2">Case Study Library</h1>
         <div className="row" style={{ gap: ".5rem" }}>
-{/*           <Link className="btnSmall" href="/admin/case-studies/new">
-            New
-          </Link> */}
           <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>
@@ -610,8 +313,12 @@ export default function ListClient() {
             onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
           >
             <option value="">Filter by category</option>
-            {/* use GROUPED categories */}
-            {SECTOR_GROUPS.map((g) => (
+            {FLAT_CATEGORY_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+            {/* {SECTOR_GROUPS.map((g) => (
               <optgroup key={g.id} label={g.label}>
                 {g.values.map((v) => (
                   <option key={v} value={v}>
@@ -619,19 +326,14 @@ export default function ListClient() {
                   </option>
                 ))}
               </optgroup>
-            ))}
+            ))} */}
           </select>
 
-{/*           <select className="input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="">All status</option>
-            {CASE_STUDY_STATUS_VALUES.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select> */}
-
-          <select className="input" value={visibilityFilter} onChange={(e) => setVisibilityFilter(e.target.value)}>
+          <select
+            className="input"
+            value={visibilityFilter}
+            onChange={(e) => setVisibilityFilter(e.target.value)}
+          >
             <option value="">Filter by visibility</option>
             {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
               <option key={v} value={v}>
@@ -641,7 +343,7 @@ export default function ListClient() {
           </select>
         </div>
 
-        {/* new Client Page features */}
+        {/* Client Page Preview */}
         <div className="row listLensPage">
           <button
             type="button"
@@ -654,24 +356,18 @@ export default function ListClient() {
           </button>
 
           <span className="muted type-small">
-            {clientPagePreviewHref ? `Opens: ${clientPagePreviewHref}` : "Select a category to preview its public page"}
+            {clientPagePreviewHref
+              ? `Opens: ${clientPagePreviewHref}`
+              : "Select a category to preview its public page"}
           </span>
         </div>
-        
       </div>
-
-      
-
-      
-
 
       {/* LIST */}
       <div className="card mt">
-         {/* results header, now with sort */}
-         <div className="dbResultsHeader">
+        <div className="dbResultsHeader">
           <div className="dbResultsHeader__sort">
             <span className="muted type-small">Sort:</span>
-            {/* sort by date and alphabetical order */}
             <select
               className="input input--tiny"
               value={sortMode}
@@ -680,102 +376,65 @@ export default function ListClient() {
               <option value="Newest">Newest first</option>
               <option value="Oldest">Oldest first</option>
               <option value="AtoZ">Alphabetical (A–Z)</option>
-               {/*<option value="ZtoA">Sort: Reverse Alphabetical (Z-A)</option> */}
+              {/* <option value="ZtoA">Reverse Alphabetical (Z–A)</option> */}
             </select>
           </div>
 
-        <p className="muted dbResultsHeader__count">
-          Showing {filtered.length} / {items.length}
-        </p>
-      </div>
+          <p className="muted dbResultsHeader__count">
+            Showing {filtered.length} / {items.length}
+          </p>
+        </div>
 
-      <div className="dbListGrid">
-          {/* include the new date and alphabetical sorting */}
-          {/* {filtered.map((cs) => { */}
+        <div className="dbListGrid">
           {sorted.map((cs) => {
             const isHighlighted = cs.id === savedId || cs.id === editId;
             const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
-            const hasSeparateTitle =
-              (cs.client ?? "").trim().length > 0 &&
-              (cs.title ?? "").trim().length > 0 &&
-              (cs.client ?? "").trim() !== (cs.title ?? "").trim();
-
-            const secondaryTitle = hasSeparateTitle ? cs.title : null;
-
-            const sectors = normalizeSectorsStrict(toStringArray((cs as unknown as { sectors?: unknown }).sectors));
-            const tags = normalizeTagsStrict(toStringArray((cs as unknown as { tags?: unknown }).tags));
-
             const isQuickEditing = quickEditId === cs.id;
 
-            //const isEditing = editingId === cs.id;
+            const sectorsRaw = normalizeSectorsStrict([
+              ...toStringArray((cs as any).sectors),
+              ...toStringArray((cs as any).sector),
+              ...toStringArray((cs as any).primarySector),
+            ]);
+
+            const sectors = sectorsRaw.length ? sectorsRaw : [DEFAULT_CATEGORY];
+
+            const primary =
+              coerceSector((cs as any).primarySector) ??
+              sectors[0] ??
+              DEFAULT_CATEGORY;
 
             const isPublished = cs.status === "Published";
             const vis = cs.visibility;
 
             return (
-              /* Added an anchor id + highlight styling per card */
-              
               <div
                 key={cs.id}
                 id={`cs-${cs.id}`}
-                /* className="card dbItem" */
-                /* added an editing state to the outer card class */
-               /*  className={`card dbItem ${isEditing ? "dbItem--editing" : ""}`} */
                 className={`card dbItem ${isQuickEditing ? "dbItem--editing" : ""}`}
-                style={
-                  isHighlighted
-                    ? { outline: "2px solid var(--brand)", outlineOffset: 2 }
-                    : undefined
-                }
+                style={isHighlighted ? { outline: "2px solid var(--brand)", outlineOffset: 2 } : undefined}
               >
-              {/* <div key={cs.id} className="card dbItem"> */}
                 <div className="dbItemHeader">
                   <div className="dbItemMain">
                     <div className="dbItemClient">{clientLabel}</div>
-{/*                     {secondaryTitle && <div className="dbItemTitle">{secondaryTitle}</div>} */}
-
-{/*                     <div className="dbBadges">
-                      <span className={`badge ${isPublished ? "badge--published" : "badge--draft"}`}>
-                        <span className="badgeDot" />
-                        {isPublished ? "Published" : "Draft"}
-                      </span>
-
-                      <span className={`badge badge--audience`}>
-                        <span className="badgeDot" />
-                        {visibilityLabel(vis)}
-                      </span>
-                    </div> */}
-
                   </div>
 
                   <div className="dbActions">
-                    <Link 
-                      className="btnSmall" 
+                    <Link
+                      className="btnSmall"
                       href={`/admin/case-studies/mock/${cs.slug}`}
                       target="_blank"
                     >
                       Preview
                     </Link>
 
-{/*                     <Link 
-                      className="btnSmall" 
-                      href={`/case-studies/view/${cs.slug}?preview=1`}
-                      target="_blank"
-                    >
-                      Preview (NEW TEMP TEST)
-                    </Link> */}
-
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
-                          <Link 
-                            className="btnSmall" 
-                            href={`/admin/case-studies/edit/${cs.slug}`}
-                          >
+                          <Link className="btnSmall" href={`/admin/case-studies/edit/${cs.slug}`}>
                             Edit
                           </Link>
                         </Tooltip.Trigger>
-                        
                         <Tooltip.Portal>
                           <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
                             Open full editor to edit the content of this case study
@@ -785,22 +444,19 @@ export default function ListClient() {
                       </Tooltip.Root>
                     </Tooltip.Provider>
 
-
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
-                        <button
-                          className="btnSmall hasTooltip changeSettings"
-                          type="button"
-                          /* title="Edit categories & change status" */
-                          data-tooltip="Edit categories & change status"
-                          onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
-                          aria-expanded={isQuickEditing}
-                        >
-                          {isQuickEditing ? "Close" : "Change Settings"}
-                         </button>
+                          <button
+                            className="btnSmall hasTooltip changeSettings"
+                            type="button"
+                            data-tooltip="Edit categories & change status"
+                            onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
+                            aria-expanded={isQuickEditing}
+                          >
+                            {isQuickEditing ? "Close" : "Change Settings"}
+                          </button>
                         </Tooltip.Trigger>
-
 
                         <Tooltip.Portal>
                           <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
@@ -809,39 +465,15 @@ export default function ListClient() {
                           </Tooltip.Content>
                         </Tooltip.Portal>
                       </Tooltip.Root>
-                    </Tooltip.Provider>           
-          
-
-{/* failed version */}
-{/*                     <span className="tooltip">
-                    <button
-                      className="btnSmall tooltip__trigger"
-                      type="button"
-                      title="Edit categories & change publishing status"
-                      data-tooltip="Edit categories & change status"
-                      onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
-                      //onClick={() => setEditingId((prev) => (prev === cs.id ? null : cs.id))}
-                      aria-expanded={isQuickEditing}
-                      //aria-expanded={isEditing}
-                    >
-                      {isQuickEditing ? "Close" : "Change Settings"} */}
-                      {/* {isQuickEditing ? "Close" : "Quick Edit"} */}
-                      {/* {isEditing ? "Close" : "Edit"} */}
-{/*                     </button>
-                    </span> */}
-
-
+                    </Tooltip.Provider>
                   </div>
                 </div>
 
                 <div className="dbSummary">{cs.summaryShort}</div>
 
-                {/* PROPERTY ROWS (compact, always visible) */}
-                {/* update: get rid of redundant category listing when user is editing */}
-                {/* {!isEditing && */}
-                {!isQuickEditing &&(
+                {/* PROPERTY ROWS */}
+                {!isQuickEditing && (
                   <div className="dbProps">
-
                     <div className="dbProp">
                       <div className="dbPropLabel">Categories</div>
                       <div className="dbPillRow">
@@ -849,27 +481,13 @@ export default function ListClient() {
                           <span className="pill pill--muted">Uncategorized</span>
                         ) : (
                           <>
-                            {/* <span className="pill pill--cat">{sectorLabel(sectors[0])}</span> */}
-                            <span className="pill pill--cat">
-                              {sectorLabel(cs.primarySector)}
-                            </span>
+                            <span className="pill pill--cat">{sectorLabel(primary)}</span>
                             {sectors.length > 1 && (
                               <span className="pill pill--muted">+{sectors.length - 1} more</span>
                             )}
                           </>
                         )}
                       </div>
-{/*                       <div className="dbPillRow">
-                        {sectors.length === 0 ? (
-                          <span className="pill pill--muted">Uncategorized</span>
-                        ) : (
-                          sectors.map((s) => (
-                            <span key={s} className="pill pill--cat">
-                              {sectorLabel(s)}
-                            </span>
-                          ))
-                        )}
-                      </div> */}
                     </div>
 
                     <div className="dbProp">
@@ -879,47 +497,16 @@ export default function ListClient() {
                           {isPublished ? "Published" : "Draft"}
                         </span>
 
-                        <span className="pill pill--audience">
-                          {visibilityLabel(vis)}
-                        </span>
+                        <span className="pill pill--audience">{visibilityLabel(vis)}</span>
                       </div>
                     </div>
-
-{/*                   <div className="dbProp">
-                    <div className="dbPropLabel">Tags</div>
-                    <div className="dbPillRow">
-                      {tags.length === 0 ? (
-                        <span className="pill pill--muted">None</span>
-                      ) : (
-                        tags.map((t) => (
-                          <span key={tagSlug(t)} className="pill pill--tag">
-                            {t}
-                          </span>
-                        ))
-                      )}
-                    </div>
-                  </div> */}
-                </div>
+                  </div>
                 )}
 
-
-                {/* EDIT PANEL (only when Edit is open) */}
-                {/* added a header inside the edit panel so it’s obvious what you’re editing */}
-                {/* {isEditing && ( */}
+                {/* EDIT PANEL */}
                 {isQuickEditing && (
                   <div className="dbEditPanel" aria-label={`Editing ${clientLabel}`}>
-                    <div className="dbEditPanelHeader">
-                      <div>
-{/*                         <div className="dbEditKicker">CURRENTLY EDITING: <span className="dbEditClient">{clientLabel}</span></div>
- */}
-{/*                         <div className="dbEditKicker">Editing</div>
-                        <div className="dbEditClient">{clientLabel}</div> */}
-                      </div>
-                    </div>
-                    
-                    {/* MULTI-CATEGORY EDITOR */}
                     <div className="dbEditBlock">
-                      {/* <div className="form-label">Edit categories</div> */}
                       <div className="dbEditBlockTitle">Edit Categories</div>
 
                       <div className="muted type-small" style={{ marginBottom: 8 }}>
@@ -939,8 +526,7 @@ export default function ListClient() {
                           <span className="muted type-small">Primary:</span>
                           <select
                             className="input input--tiny"
-                            value={cs.primarySector}
-                            /* value={sectors[0]} */
+                            value={primary}
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
                               const next = [v, ...sectors.filter((x) => x !== v)];
@@ -964,8 +550,10 @@ export default function ListClient() {
                             type="button"
                             className="pill pill--cat pill--removable"
                             onClick={() => {
-                              const next = sectors.filter((x) => x !== s);
-                              updateMeta(cs.id, { sectors: next.length ? next : [DEFAULT_CATEGORY] });
+                              const nextRaw = sectors.filter((x) => x !== s);
+                              const next = nextRaw.length ? nextRaw : [DEFAULT_CATEGORY];
+                              const nextPrimary = next.includes(primary) ? primary : next[0];
+                              updateMeta(cs.id, { sectors: next, primarySector: nextPrimary });
                             }}
                             title="Remove category"
                           >
@@ -981,11 +569,20 @@ export default function ListClient() {
                           const v = e.target.value as "" | SectorValue;
                           if (!v) return;
                           if (sectors.includes(v)) return;
-                          updateMeta(cs.id, { sectors: [...sectors, v] });
+                          updateMeta(cs.id, { sectors: [...sectors, v], primarySector: primary });
                         }}
                       >
                         <option value="">Add category…</option>
-                        {SECTOR_GROUPS.map((g) => (
+                        {FLAT_CATEGORY_OPTIONS.map((opt) => (
+                          <option
+                            key={opt.value}
+                            value={opt.value}
+                            disabled={sectors.includes(opt.value)}
+                          >
+                            {opt.label}
+                          </option>
+                        ))}
+{/*                         {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((v) => (
                               <option key={v} value={v} disabled={sectors.includes(v)}>
@@ -993,73 +590,12 @@ export default function ListClient() {
                               </option>
                             ))}
                           </optgroup>
-                        ))}
+                        ))} */}
                       </select>
                     </div>
 
-                    {/* TAG EDITOR */}
-{/*                    <div className="dbEditBlock">
-                       <div className="dbEditBlockTitle">Edit Tags</div>
-
-                      <div className="dbPillRow">
-                        {tags.map((t) => {
-                          const slug = tagSlug(t);
-                          return (
-                            <button
-                              key={slug}
-                              type="button"
-                              className="pill pill--tag pill--removable"
-                              onClick={() => {
-                                const next = tags.filter((x) => tagSlug(x) !== slug);
-                                updateMeta(cs.id, { tags: next });
-                              }}
-                              title="Remove tag"
-                            >
-                              {t} <span className="pillX">×</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      <input
-                        className="input input--tiny"
-                        value={tagDraftById[cs.id] ?? ""}
-                        placeholder="Add tags (comma-separated). Enter to save."
-                        onChange={(e) =>
-                          setTagDraftById((prev) => ({
-                            ...prev,
-                            [cs.id]: e.target.value,
-                          }))
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key !== "Enter") return;
-                          e.preventDefault();
-
-                          const raw = (tagDraftById[cs.id] ?? "").trim();
-                          if (!raw) return;
-
-                          const added = parseCommaList(raw);
-                          const merged = normalizeTagsStrict([...tags, ...added]);
-                          updateMeta(cs.id, { tags: merged });
-
-                          setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
-                        }}
-                        onBlur={() => {
-                          const raw = (tagDraftById[cs.id] ?? "").trim();
-                          if (!raw) return;
-
-                          const added = parseCommaList(raw);
-                          const merged = normalizeTagsStrict([...tags, ...added]);
-                          updateMeta(cs.id, { tags: merged });
-
-                          setTagDraftById((prev) => ({ ...prev, [cs.id]: "" }));
-                        }}
-                      />
-                    </div> */}
-
-                    {/* STATUS / VISIBILITY EDITOR (optional but useful) */}
                     <div className="dbEditBlock">
-                    <div className="dbEditBlockTitle">Publishing Status</div>
+                      <div className="dbEditBlockTitle">Publishing Status</div>
 
                       <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
                         <select
