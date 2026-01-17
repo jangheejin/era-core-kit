@@ -329,7 +329,7 @@ export default function ListClient() {
             ))} */}
           </select>
 
-          <select
+{/*           <select
             className="input"
             value={visibilityFilter}
             onChange={(e) => setVisibilityFilter(e.target.value)}
@@ -340,7 +340,7 @@ export default function ListClient() {
                 {visibilityLabel(v)}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
 
         {/* Client Page Preview */}

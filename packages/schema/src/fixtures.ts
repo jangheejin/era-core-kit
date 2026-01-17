@@ -288,7 +288,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     attachments: [],
     links: [],
 
-    isFeaturedHome: true,
+    isFeaturedHome: false,
     isPublic: true,
   },
 
