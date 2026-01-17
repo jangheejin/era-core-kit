@@ -109,7 +109,7 @@ export function OurWorkClient({
                         <img src={cs.imageUrl} alt={`${cs.client} case study`} loading="lazy" />
                       </div>
                     )}
-                    <h5 className="type-h5 work-card__sector">{cs.sector}</h5>
+                    {/* <h5 className="type-h5 work-card__sector">{cs.sector}</h5> */}
                     <h2 className="type-h3 work-card__client">{cs.client}</h2>
                   </button>
                 );
@@ -131,10 +131,15 @@ export function OurWorkClient({
 
             <div className="work-detail__top">
               <div className="work-detail__text">
-                <h5 className="type-h5 work-detail__sector">{selected.sector}</h5>
+                {/* <h5 className="type-h5 work-detail__sector">{selected.sector}</h5> */}
                 <h2 className="type-h2 work-detail__title">{selected.client}</h2>
 
                 <p className="type-body work-detail__summary">{selected.summary}</p>
+
+                <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
+                  View full case study
+                </a>
+
 {/* hiding this for now to simplify creation -> publishing flow for client */}
 {/*                 {selected.outcomes?.length ? (
                   <div className="work-detail__outcomes">
@@ -158,9 +163,9 @@ export function OurWorkClient({
               )}
             </div>
 
-            <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
+{/*             <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
               View full case study
-            </a>
+            </a> */}
           </section>
         </div>
       </section>

@@ -309,9 +309,8 @@ textarea {
    display: flex;
 } */
 
-.contact-form .input {
-  width: 100%;
-  padding: 0.9rem 1rem;
+.contact-form .field-group {
+  display: grid;
 }
 @media (max-width: 720px) {
   .contact-form {
