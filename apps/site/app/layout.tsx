@@ -31,6 +31,7 @@ import "@styles/home.css"; /* for things that appear on all pages, like header n
 import "@styles/primitives.css";
 import "@styles/casegrid.css";
 import "@styles/markdown.css";
+import "@styles/contact.css"
 
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
