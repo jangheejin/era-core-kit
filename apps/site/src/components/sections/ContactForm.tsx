@@ -5,6 +5,8 @@
 
 "use client";
 
+import { useState } from "react";
+
 export type ContactFormProps = {
   heading?: string;
   description?: string;
@@ -14,79 +16,79 @@ export function ContactForm({
   heading = "Get in touch",
   description = "Fill out the contact form below",
 }: ContactFormProps) {
+  const [submitted, setSubmitted] = useState(false);
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitted(true);
+  }
+
   return (
     <section className="c-section contact" id="contact">
       <div className="c-container c-stack">
         <p></p>
         <p></p>
         
-        <div className="contact__inner">
-          <div className="contact__copy c-stack">
-            <h2 className="type-h2">{heading}</h2>
-            {description && <p className="type-body">{description}</p>}
-            <p className="type-small type-muted">
-              Fields marked <span aria-hidden="true">*</span> are required.
-            </p>
-          </div>
+        <h2 className="type-h2">{heading}</h2>
+        {description && <p className="type-body">{description}</p>}
+        <div className="contact-form-wrapper">
+			<form className="contact-form" onSubmit={onSubmit}>
+				<div className="field-group">
+					<div className="field">
+						<label className="type-label" htmlFor="name">
+							<div className="field-label">Name</div>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								autoComplete="name"
+								placeholder="Your name"
+								required
+							/>
+						</label>
+					</div>
 
-          <div className="contact__card">
-            <form className="contact-form" aria-label="Contact form">
-              <div className="contact-form__grid">
-                <div className="contact-field">
-                  <label className="contact-field__label" htmlFor="name">
-                    Name <span aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    className="input contact-field__input"
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Your name"
-                    autoComplete="name"
-                    required
-                  />
-                </div>
+					<div className="field">
+						<label className="type-label" htmlFor="email">
+							<div className="field-label">Email</div>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								autoComplete="email"
+								inputMode="email"
+								placeholder="you@domain.com"
+								required
+							/>
+						</label>
+					</div>
 
-                <div className="contact-field">
-                  <label className="contact-field__label" htmlFor="email">
-                    Email <span aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    className="input contact-field__input"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="you@domain.com"
-                    autoComplete="email"
-                    inputMode="email"
-                    required
-                  />
-                </div>
+					<div className="field field--message">
+						<label className="type-label" htmlFor="message">
+							<div className="field-label">Message</div>
+							<textarea
+								id="message"
+								name="message"
+								placeholder="What do you want to talk about?"
+								rows={6}
+								required
+							/>
+						</label>
+					</div>
+				</div>
 
-                <div className="contact-field contact-field--full">
-                  <label className="contact-field__label" htmlFor="message">
-                    Message <span aria-hidden="true">*</span>
-                  </label>
-                  <textarea
-                    className="input contact-field__input"
-                    id="message"
-                    name="message"
-                    placeholder="What are you working on, and how can we help?"
-                    autoComplete="off"
-                    required
-                    rows={7}
-                  />
-                </div>
-              </div>
-
-              <div className="contact-form__actions">
-                <button type="submit" className="c-button c-button--alt2">
-                  Send message
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+				<button type="submit" className="c-button">
+					Send
+				</button>
+				{submitted ? (
+					<p className="form-status form-status--ok" role="status">
+						Submitted (demo). This form doesn’t send yet.
+					</p>
+				) : (
+					<p className="contact-form__helper">Demo form: this doesn’t send yet.</p>
+				)}
+			</form>
+      </div>
       </div>
     </section>
   );
