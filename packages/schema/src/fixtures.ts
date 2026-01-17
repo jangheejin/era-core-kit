@@ -28,9 +28,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
     sectors: [
-      "Geospatial", "GovContracting", "EmergencyMgmt", 
-      "PrivateSector",
-      "Appropriations", "GrantFunding",
+      "Geospatial", "GovContracting", "EmergencyMgmt", "PrivateSector", "Appropriations", "GrantFunding",
     ],
     year: 2024,
 
@@ -96,9 +94,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
 //    sector: "Nonprofit",
-    sectors: ["Nonprofit", "GovContracting", "Geospatial", 
-      "PublicSector", "EmergencyMgmt",
-      "Appropriations", "GrantFunding",
+    sectors: ["Nonprofit", "GovContracting", "Geospatial", "PublicSector", "EmergencyMgmt", "Appropriations", "GrantFunding",
     ],
     year: 2024,
 
@@ -707,9 +703,7 @@ const SEEDS: CaseStudySeedInput[] = [
     client: "NAPSG Foundation",
     //sector: "Nonprofit",
     sectors: [
-      "Nonprofit", "Geospatial", "Nonprofit", 
-      "PublicSector", "EmergencyMgmt",
-      "Appropriations", "GrantFunding",
+      "Nonprofit", "Geospatial", "Nonprofit", "PublicSector", "EmergencyMgmt","Appropriations", "GrantFunding",
     ],
     heroImageUrl: "/img/case2.webp",
     summaryShort:

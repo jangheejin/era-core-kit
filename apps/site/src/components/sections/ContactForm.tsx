@@ -20,65 +20,72 @@ export function ContactForm({
         <p></p>
         <p></p>
         
-        <h2 className="type-h2">{heading}</h2>
-        {description && <p className="type-body">{description}</p>}
-        <div className="contact-form-wrapper">
-          <form className="contact-form" method="post" action="#">
-            {/* TO DO: wire up real fields here later (Demo-only right now.) */}
-            <div className="field-group">
-              <div className="field">
-                <label className="type-label field-label" htmlFor="name">
-                  Name
-                </label>
+        <div className="contact__inner">
+          <div className="contact__copy c-stack">
+            <h2 className="type-h2">{heading}</h2>
+            {description && <p className="type-body">{description}</p>}
+            <p className="type-small type-muted">
+              Fields marked <span aria-hidden="true">*</span> are required.
+            </p>
+          </div>
+
+          <div className="contact__card">
+            <form className="contact-form" aria-label="Contact form">
+              <div className="contact-form__grid">
+                <div className="contact-field">
+                  <label className="contact-field__label" htmlFor="name">
+                    Name <span aria-hidden="true">*</span>
+                  </label>
                   <input
-                    className="input"
+                    className="input contact-field__input"
                     type="text"
                     id="name"
                     name="name"
-                    autoComplete="name"
                     placeholder="Your name"
+                    autoComplete="name"
                     required
                   />
+                </div>
+
+                <div className="contact-field">
+                  <label className="contact-field__label" htmlFor="email">
+                    Email <span aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    className="input contact-field__input"
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@domain.com"
+                    autoComplete="email"
+                    inputMode="email"
+                    required
+                  />
+                </div>
+
+                <div className="contact-field contact-field--full">
+                  <label className="contact-field__label" htmlFor="message">
+                    Message <span aria-hidden="true">*</span>
+                  </label>
+                  <textarea
+                    className="input contact-field__input"
+                    id="message"
+                    name="message"
+                    placeholder="What are you working on, and how can we help?"
+                    autoComplete="off"
+                    required
+                    rows={7}
+                  />
+                </div>
               </div>
 
-              <div className="field">
-                <label className="type-label field-label" htmlFor="email">
-                  Email
-                </label>
-                    <input
-                      className="input"
-                      type="email"
-                      placeholder="you@company.com"
-                      id="email"
-                      name="email"
-                      autoComplete="email"
-                      required
-                    />
+              <div className="contact-form__actions">
+                <button type="submit" className="c-button c-button--alt2">
+                  Send message
+                </button>
               </div>
-
-              <div className="field field--full">
-                <label className="type-label field-label" htmlFor="message">
-                  Message
-                 </label>
-                    <textarea
-                      className="input"
-                      placeholder="What can we help with?"
-                      id="message"
-                      name="message"
-                      required
-                    />
-                  <p className="type-small contact-form__fineprint">
-                    Please don't include sensitive information in this message.
-                  </p>
-              </div>
-            </div>
-
-            <div className="contact-form__actions">
-              <button type="submit" className="c-button">
-                Send
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </section>
