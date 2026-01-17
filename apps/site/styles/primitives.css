@@ -470,8 +470,6 @@ ol {
 
 
 .casegrid {
-  display: grid;
-  gap: var(--space-3);
 /*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
   margin-top: var(--space-4);
 }
@@ -481,13 +479,29 @@ ol {
 .casegrid, .casegrid.mt {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
-
+/*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+ */
   /* decides what happens to leftover space 
   justify-content: start;   *//* left align */
   /* or: justify-content: center; */ /* centered when few cards */
+
+  /* Guardrail: when you don't hit a forced layout class,
+    auto-fit cards never expand to full-page "mondo" width. */
+  --card-min: 18rem;
+  --card-max: 24rem;
+
+  /* auto-fit with a MAX column width + centered grid */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--card-min), 100%), var(--card-max))
+  );
+  justify-content: center;
 }
 
 .case-grid.mt, .casegrid.mt {
   margin-top: 1rem;
+}
+
+.section-space {
+  padding-top: var(--space-2x);
 }
