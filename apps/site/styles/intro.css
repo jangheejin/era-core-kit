@@ -8,6 +8,7 @@
   grid-template-columns: minmax(0, 1.6fr) auto; /* text | image-sized column */
   column-gap: clamp(1.5rem, 4vw, 4.5rem); /* space between text and image */
   align-items: center;
+  container-type: inline-size;
 }
 
 .c-section--intro .intro-copy {
@@ -32,22 +33,24 @@
 
 /* Image: desktop behavior */
 .c-section--intro .intro-image {
-  /* Tie the image column to viewport sizing */
-  width: clamp(180px, 28vw, 275px);
+  width: min(100%, clamp(200px, 32cqw, 360px));
+  justify-self: end;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
 }
 
 /* ========================= */
 /* MOBILE: < 580px → 1 col   */
 /* ========================= */
 
-@media (max-width: 655px) {
+@container (max-width: 42rem) {
   .c-section--intro .intro-grid {
     grid-template-columns: minmax(0, 1fr); /* single column stack */
     row-gap: var(--space-3);
@@ -56,9 +59,27 @@
   .c-section--intro .intro-image {
     margin-top: var(--space-3);
     justify-self: center; /* center the image block under the text */
+    width: min(100%, clamp(180px, 70cqw, 320px));
   }
 
   .c-section--intro .intro-image img {
-    width: clamp(160px, 70vw, 275px); /* scales with viewport */
+    width: 100%; /* scales with viewport but never “huge” */
+  }
+}
+
+@media (max-width: 720px) {
+  .c-section--intro .intro-grid {
+    grid-template-columns: minmax(0, 1fr); /* single column stack */
+    row-gap: var(--space-3);
+  }
+
+  .c-section--intro .intro-image {
+    margin-top: var(--space-3);
+    justify-self: center; /* center the image block under the text */
+    width: min(100%, clamp(180px, 70vw, 320px));
+  }
+
+  .c-section--intro .intro-image img {
+    width: 100%; /* scales with viewport but never “huge” */
   }
 }

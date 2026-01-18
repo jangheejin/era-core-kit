@@ -566,19 +566,25 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             </div>
           </div> */}
 
-{/*           <div className="form-row form-group" id="tags">
+          <div className="form-row form-group" id="tags">
             <div className="form-field">
               <label className="form-label" htmlFor="tagsInput">
                 Tags
               </label>
+              <p className="admin-hint">
+                Add short keywords that describe the case study. Separate tags with commas. Examples:{" "}
+                <code>Earmark</code>, <code>Pilot Program</code>, <code>CDS</code>,{" "}
+                <code>S1</code>, <code>Resilience</code>.
+              </p>
               <input
                 id="tagsInput"
                 className="input"
+                placeholder="Earmark, Pilot Program, CDS"
                 value={tags}
                 onChange={(e) => setTags(e.currentTarget.value)}
               />
             </div>
-          </div> */}
+          </div>
 
         </details>
       </div>

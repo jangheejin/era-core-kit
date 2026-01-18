@@ -216,6 +216,11 @@ textarea {
   gap: 0.4rem;
 }
 
+.contact-form .type-label {
+  display: grid;
+  gap: 0.35rem;
+}
+
 
 .contact-form .field-label {
   font-weight: 600;
@@ -225,12 +230,14 @@ textarea {
 .contact-form input,
 .contact-form textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--gray-300);
   border-radius: 10px;
   background: #fff;
   color: var(--text);
   padding: 0.8rem 0.9rem;
-  
+
 }
 
 .contact-form textarea {

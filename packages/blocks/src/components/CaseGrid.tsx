@@ -9,8 +9,9 @@ import type { CaseGridProps } from "../types";
 function normalizeLayout(layout?: string) {
   // Support existing content/layout values
   if (!layout) return "layout-3";
+  //if (!layout) return "layout-2x2";
   if (layout === "4col") return "layout-4";
-  if (layout === "3col" || layout === "3x3") return "layout-3";
+  if (layout === "3col") return "layout-3";
   if (layout === "2col") return "layout-2";
   if (layout === "2x2") return "layout-2x2";
 
@@ -39,19 +40,12 @@ function pickSingleSector(item: any) {
 export function CaseGrid({ items, layout }: CaseGridProps) {
   const layoutClass = normalizeLayout(layout);
   const SECTOR_SEPARATOR = ", "; // or " · "
-  const itemCount = items?.length ?? 0;
-  const isSmallSet = itemCount <= 2;
-  const gridClasses = [
-    "casegrid",
-    layoutClass,
-    ...(isSmallSet ? ["casegrid--cards", "casegrid--center"] : []),
-  ].join(" ");
   return (
     <section id="case-studies">
       {/* <section className="c-section" id="case-studies"> */}
       {/* <div className="c-container"> */}
       {/* <h2 className="type-h2">Our Work</h2> */}
-      <div className={gridClasses} id="case-studies">
+      <div className={`casegrid ${layoutClass}`} id="case-studies">
       {/* <div className={`casegrid ${layout ?? "layout-2x2"}`} id="case-studies"> */}
       {/* <div className="casegrid layout-2x2" id="case-studies"> */}
         {items.map((item) => (

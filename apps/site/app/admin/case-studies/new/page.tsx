@@ -823,39 +823,35 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
               </div>
           </div>
 
-{/*           <div className="form-row form-group" id="tags">
-              <div className="form-field">
-                <label className="form-label" htmlFor="tags">
-                  Tags
-                </label>
-                <p className="admin-hint">
-                  You can also add short keywords that describe the case study, e.g.{" "}
-                  <code>environment</code>, <code>appropriations</code>).<br /><br />
-                  Tags are another way to create filter pages and “collections” for specific clients.{" "}
-                  Separate tags with commas. */}
-                  {/* Short keywords that describe the work (e.g. <code>environment</code>,{" "}
-                  <code>local government</code>, <code>appropriations</code>). 
-                  Tags are another way to create filter pages and “collections” for specific clients.
-                  Separate tags with commas.*/}
-{/*                 </p>
-                <input
-                  className="input"
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                /> */}
+          <div className="form-row form-group" id="tags">
+            <div className="form-field">
+              <label className="form-label" htmlFor="tags">
+                Tags
+              </label>
+              <p className="admin-hint">
+                Add short keywords that describe the case study. Separate tags with commas. Examples:{" "}
+                <code>Earmark</code>, <code>Pilot Program</code>, <code>CDS</code>,{" "}
+                <code>S1</code>, <code>Resilience</code>.
+              </p>
+              <input
+                className="input"
+                id="tags"
+                placeholder="Earmark, Pilot Program, CDS"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
 
-                {/* Tag preview chips (tactile, even before list-page improvements) */}
-{/*                 <div className="client-links">
-                  {tags
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean)
-                    .map((t) => (
-                      <span key={t} className="chip chip--soft">{t}</span>
-                    ))}
-                </div>
+              <div className="client-links">
+                {tags
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean)
+                  .map((t) => (
+                    <span key={t} className="chip chip--soft">{t}</span>
+                  ))}
               </div>
-          </div> */}
+            </div>
+          </div>
 {/* new improved STATUS & VISIBILITY OPTIONS */}
 
           {/* <fieldset className="form-group publishingFs"> */}
