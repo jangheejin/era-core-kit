@@ -3068,3 +3068,28 @@ fieldset.form-group > legend.form-label{
  gap: .5rem;
 flex-wrap: wrap;
 }
+
+/* Mobile tightening */
+@media (max-width: 480px) {
+  .admin-shell {
+    padding: 1rem;
+  }
+
+  .admin-header {
+    row-gap: 0.75rem;
+  }
+
+  .admin-header__title {
+    font-size: 1.5rem;
+  }
+
+  .admin-content {
+    padding: 1rem;
+  }
+
+  .admin-table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+}

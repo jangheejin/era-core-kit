@@ -31,10 +31,16 @@
 }
 
 /* Image: desktop behavior */
+.c-section--intro .intro-image {
+  /* Tie the image column to viewport sizing */
+  width: clamp(180px, 28vw, 275px);
+}
+
 .c-section--intro .intro-image img {
   display: block;
+  width: 100%;
   height: auto;
-  max-width: 275px; /* cap size so it doesn’t blow up */
+  max-width: 100%;
 }
 
 /* ========================= */
@@ -53,6 +59,6 @@
   }
 
   .c-section--intro .intro-image img {
-    max-width: min(275px, 80vw); /* scales with viewport but never “huge” */
+    width: clamp(160px, 70vw, 275px); /* scales with viewport */
   }
 }

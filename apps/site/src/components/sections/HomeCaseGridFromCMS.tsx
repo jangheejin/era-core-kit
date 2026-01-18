@@ -66,7 +66,7 @@ export function HomeCaseGridFromCMS() {
           heading="Our Work"
           text="This grid is pulling directly from the CMS demo. Any case study you add in the admin UI (this session) shows up here."
         />
-        <CaseGrid layout="4col" items={items} />
+        <CaseGrid layout="3col" items={items} />
       </div>
     </section>
   );

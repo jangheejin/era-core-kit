@@ -1,5 +1,10 @@
 /*apps/site/styles/primitives.css*/
 
+/* Global guardrails for mobile sizing + overflow */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img, svg, video, canvas { max-width: 100%; height: auto; }
+
 /*@import './casegrid.css';  */
 
 /* ----------------------------------------------------- */
@@ -23,7 +28,7 @@
   /*  max-width: 72rem;*/
   margin: 0 auto;
   /*padding-inline: var(--gutter, 1.5rem);*/
-  padding-inline: var(--space-4);
+  padding-inline: clamp(1rem, 4vw, var(--space-4));
 }
 
 /* This will later become @apply p-4; */
@@ -384,6 +389,17 @@ a:hover {
   line-height: 1.4;
 }
 
+.type-label {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: var(--fs-small);
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
 .type-muted {
   opacity: 0.6;
 }
@@ -470,6 +486,8 @@ ol {
 
 
 .casegrid {
+  display: grid;
+  gap: var(--space-3);
 /*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
   margin-top: var(--space-4);
 }
@@ -479,29 +497,13 @@ ol {
 .casegrid, .casegrid.mt {
   display: grid;
   gap: var(--space-3);
-/*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
- */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+
   /* decides what happens to leftover space 
   justify-content: start;   *//* left align */
   /* or: justify-content: center; */ /* centered when few cards */
-
-  /* Guardrail: when you don't hit a forced layout class,
-    auto-fit cards never expand to full-page "mondo" width. */
-  --card-min: 18rem;
-  --card-max: 24rem;
-
-  /* auto-fit with a MAX column width + centered grid */
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(var(--card-min), 100%), var(--card-max))
-  );
-  justify-content: center;
 }
 
 .case-grid.mt, .casegrid.mt {
   margin-top: 1rem;
-}
-
-.section-space {
-  padding-top: var(--space-2x);
 }

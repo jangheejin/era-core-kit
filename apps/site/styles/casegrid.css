@@ -3,10 +3,11 @@
 
 /*Use .case-grid--cards when rendering discrete cards
 It caps column width so 1-2 items don't scale up to be huge*/
-.case-grid--cards {
+.case-grid--cards,
+.casegrid--cards {
   --case-grid-min: 16rem;
   --case-grid-max: 24rem;
-  grid-template-columns: reapeat(
+  grid-template-columns: repeat(
     auto-fit,
     minmax(min(100%, var(--case-grid-min)), var(--case-grid-max))
   );
@@ -14,7 +15,8 @@ It caps column width so 1-2 items don't scale up to be huge*/
 }
 
 /*use when the page only has 1-2 items*/
-.case-grid--center {
+.case-grid--center,
+.casegrid--center {
   justify-content: center;
 }
 
@@ -40,6 +42,7 @@ It caps column width so 1-2 items don't scale up to be huge*/
 }
 
 /* Forces a grid of 2 columns */
+.casegrid.layout-2x2,
 .case-grid.layout-2x2 {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -51,6 +54,32 @@ It caps column width so 1-2 items don't scale up to be huge*/
 
 .casegrid.layout-2 {
   grid-template-columns: repeat(2, 1fr);
+}
+
+
+.casegrid.layout-3 {
+  /* Default: 3x3 grid, but with a hard visual cap so cards don't stretch grotesquely */
+  --card-max: clamp(18rem, 26vw, 22rem);
+  --gap: clamp(var(--space-2), 2vw, var(--space-4));
+  gap: var(--gap);
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: min(100%, calc(3 * var(--card-max) + 2 * var(--gap)));
+  margin-inline: auto;
+}
+
+@media (max-width: 960px) {
+  .casegrid.layout-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: min(100%, calc(2 * var(--card-max) + 1 * var(--gap)));
+  }
+}
+
+@media (max-width: 640px) {
+  .casegrid.layout-3 {
+    grid-template-columns: 1fr;
+    max-width: min(100%, var(--card-max));
+  }
 }
 
 /* .casegrid.layout-2x2 {
@@ -236,51 +265,16 @@ It caps column width so 1-2 items don't scale up to be huge*/
   margin-top: 0.5rem;
 }
 */
-
-/* ----------------------------------------------------- */
-/* Forced layouts — support BOTH naming schemes:
-   - new: layout-4 / layout-2 / layout-2x2
-   - old: 4col / 2col / 2x2   (escaped selectors) */
-/* ----------------------------------------------------- */
-
-.casegrid.layout-4,
-.casegrid.\34 col {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  justify-content: stretch;
-}
-
-.casegrid.layout-2,
-.casegrid.\32 col {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-content: stretch;
-}
-
-/* If you still use "2x2" or "layout-2x2", treat it as a 2-col forced grid */
-.casegrid.layout-2x2,
-.casegrid.\32 x2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-content: center;
-}
-
-.type-h3.case-grid-section, .type-h2.case-grid-section {
-  padding-top: calc(clamp(0.75rem, 1.2vw, 1rem) * 2);
-  /* padding-top: var(
-    --space-2
-  ); */
-}
 /* Hard stop: never force multi-column grids on small screens */
 @media (max-width: 640px) {
   .casegrid.layout-4,
-  .casegrid.layout-2,
-  .casegrid.\34 col,
-  .casegrid.\32 col {
+  .casegrid.layout-2 {
     grid-template-columns: 1fr;
   }
 }
 
 @media (min-width: 641px) and (max-width: 960px) {
-  .casegrid.layout-4,
-  .casegrid.\34 col {
+  .casegrid.layout-4 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
