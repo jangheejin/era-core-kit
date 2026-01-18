@@ -48,7 +48,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { type Metadata } from "next";
 import { Providers } from "./Providers";
-
+import Eruda from "@/components/dev/Eruda";
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
 
@@ -103,6 +103,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="font-setup">
       <body>
+        <Eruda />
         <Providers>
           <Header />
           {children}
