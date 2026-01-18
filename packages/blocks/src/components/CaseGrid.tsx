@@ -8,8 +8,10 @@ import type { CaseGridProps } from "../types";
 
 function normalizeLayout(layout?: string) {
   // Support existing content/layout values
-  if (!layout) return "layout-2x2";
+  if (!layout) return "layout-3";
+  //if (!layout) return "layout-2x2";
   if (layout === "4col") return "layout-4";
+  if (layout === "3col") return "layout-3";
   if (layout === "2col") return "layout-2";
   if (layout === "2x2") return "layout-2x2";
 

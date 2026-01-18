@@ -249,6 +249,12 @@ It caps column width so 1-2 items don't scale up to be huge*/
   justify-content: stretch;
 }
 
+.casegrid.layout-3,
+.casegrid.\33 col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-content: stretch;
+}
+
 .casegrid.layout-2,
 .casegrid.\32 col {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -271,8 +277,10 @@ It caps column width so 1-2 items don't scale up to be huge*/
 /* Hard stop: never force multi-column grids on small screens */
 @media (max-width: 640px) {
   .casegrid.layout-4,
+  .casegrid.layout-3,
   .casegrid.layout-2,
   .casegrid.\34 col,
+  .casegrid.\33 col,
   .casegrid.\32 col {
     grid-template-columns: 1fr;
   }
@@ -280,7 +288,9 @@ It caps column width so 1-2 items don't scale up to be huge*/
 
 @media (min-width: 641px) and (max-width: 960px) {
   .casegrid.layout-4,
-  .casegrid.\34 col {
+  .casegrid.layout-3,
+  .casegrid.\34 col,
+  .casegrid.\33 col {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
