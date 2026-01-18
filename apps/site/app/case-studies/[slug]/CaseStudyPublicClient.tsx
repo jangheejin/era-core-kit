@@ -25,7 +25,8 @@ export default function CaseStudyPublicClient({ slug }: { slug: string }) {
   return (
     <main className="c-page">
       <div className="c-container c-stack">
-        <Link href="/case-studies" className="muted">← Back</Link>
+        {/* <Link href="/case-studies" className="muted">← Back</Link> */}
+        {/* <Link href="/our-work" className="muted">← Back</Link> */}
         <h1 className="type-h2">{cs.client ?? cs.title ?? cs.slug}</h1>
         {cs.heroImageUrl ? <img className="case-study__hero" src={cs.heroImageUrl} alt="" /> : null}
         {cs.brief ? <p className="muted">{cs.brief}</p> : null}
