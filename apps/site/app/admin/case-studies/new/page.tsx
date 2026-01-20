@@ -317,6 +317,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       //sectors,
       /* sectors: sector ? [sector as SectorValue] : [], */
       sectors: selectedCategories,
+      primarySector: selectedCategories[0],
 
       year: year ? Number(year) : undefined,
       tags: tags.split(",").map(t => t.trim()).filter(Boolean),
@@ -345,7 +346,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       id, client, slug,
       title,
       //sectors, year, tags, 
-      //sector, 
+      //sector,
       selectedCategories,
       year, tags,
       //brief, writeUp, 
