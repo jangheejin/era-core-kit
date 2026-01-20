@@ -4,6 +4,7 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import type { Components } from "react-markdown";
 
 type Props = {
@@ -23,7 +24,11 @@ export function Markdown({ children, className }: Props) {
 //export function Markdown({ children }: { children: string }) {
   return (
     <div className={`c-markdown c-stack ${className ?? ""}`}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={mdComponents}
+      >
         {children}
       </ReactMarkdown>
     </div>

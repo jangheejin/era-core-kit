@@ -31,6 +31,7 @@ export type ClientPage = {
   name: string;
   slug: string;
   filters: ClientPageFilters;
+  bodyMDX: string;
   createdAt: number;
   updatedAt: number;
 };
@@ -85,6 +86,11 @@ function coerceFilters(raw: any): ClientPageFilters {
   return { sector, tags, tagMode, audience };
 }
 
+function coerceBodyMDX(raw: any): string {
+  if (typeof raw === "string") return raw;
+  return "";
+}
+
 function isPlainObject(x: any): x is Record<string, unknown> {
   return Boolean(x) && typeof x === "object" && !Array.isArray(x);
 }
@@ -114,6 +120,7 @@ function loadLocalValidated(): ClientPage[] {
         name: item.name,
         slug: item.slug,
         filters: coerceFilters(item.filters),
+        bodyMDX: coerceBodyMDX(item.bodyMDX),
         createdAt,
         updatedAt,
       });
@@ -217,6 +224,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
         name,
         slug,
         filters,
+        bodyMDX: "",
         createdAt: now,
         updatedAt: now,
       };

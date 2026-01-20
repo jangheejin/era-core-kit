@@ -468,7 +468,13 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
 /** Parsed canonical “full” fixtures (full schema output, defaults filled). */
 export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
-  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) => CaseStudySchema.parse(x));
+  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) =>
+    CaseStudySchema.parse({
+      status: "Published",
+      visibility: "Public",
+      ...x,
+    }),
+  );
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {

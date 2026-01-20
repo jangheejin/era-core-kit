@@ -25,13 +25,6 @@ import { ContextBanner } from "@/admin/components/ContextBanner";
 
 import * as Tooltip from "@radix-ui/react-tooltip";
 
-const FLAT_CATEGORY_OPTIONS = SECTOR_GROUPS.flatMap((g) =>
-  g.values.map((v) => ({
-    value: v,
-    label: `${g.label}: ${sectorLabel(v)}`,
-  }))
-);
-
 // Demo-only: restore “auto-set a category if none selected”
 const DEMO_AUTO_DEFAULT_CATEGORY = true;
 const DEFAULT_CATEGORY = (
@@ -313,12 +306,7 @@ export default function ListClient() {
             onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
           >
             <option value="">Filter by category</option>
-            {FLAT_CATEGORY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-            {/* {SECTOR_GROUPS.map((g) => (
+            {SECTOR_GROUPS.map((g) => (
               <optgroup key={g.id} label={g.label}>
                 {g.values.map((v) => (
                   <option key={v} value={v}>
@@ -326,7 +314,7 @@ export default function ListClient() {
                   </option>
                 ))}
               </optgroup>
-            ))} */}
+            ))}
           </select>
 
 {/*           <select

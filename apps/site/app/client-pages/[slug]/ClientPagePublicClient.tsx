@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "../../admin/AdminClientPageStore";
+import { Markdown } from "@/components/Markdown";
 
 import { useSearchParams } from "next/navigation";
 import { encode } from "punycode";
@@ -87,6 +88,11 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
         ) : null}
 
         <h1 className="type-h2">{page.name}</h1>
+        {page.bodyMDX ? (
+          <div className="c-markdown c-stack">
+            <Markdown>{page.bodyMDX}</Markdown>
+          </div>
+        ) : null}
         <p className="muted">
           Showing <strong>{filtered.length}</strong> case studies.
         </p>

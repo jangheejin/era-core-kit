@@ -384,12 +384,45 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             <p className="admin-hint">
               Write something about the case study here. Any format is OK (notes or a full write-up).
             </p>
-            <textarea
-              className="input"
-              style={{ minHeight: 220 }}
-              value={writeUp}
-              onChange={(e) => setWriteUp(e.currentTarget.value)}
-            />
+            <div className="editor">
+              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(writeUpRef.current, "**", "**")}
+                >
+                  Bold
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(writeUpRef.current, "*", "*")}
+                >
+                  Italic
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyPrefix(writeUpRef.current, "- ")}
+                >
+                  Bullets
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyLink(writeUpRef.current)}
+                >
+                  <span className="text-ul">🔗 Link</span>
+                </button>
+              </div>
+              <textarea
+                ref={writeUpRef}
+                className="editor__textarea"
+                value={writeUp}
+                onChange={(e) => setWriteUp(e.currentTarget.value)}
+                placeholder="Write the case study description…"
+              />
+            </div>
           </div>
 
           <div className="form-group">
