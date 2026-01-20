@@ -2636,12 +2636,12 @@ fieldset.form-group > legend.form-label{
 
 /* --- Database list item --- */
 .dbItem { padding: 0.9rem; }
-.dbItemHeader { display:flex; justify-content:space-between; gap: 1rem; align-items:flex-start; }
+.dbItemHeader { display:flex; justify-content:space-between; gap: 1rem; align-items:flex-start; flex-wrap: wrap; }
 .dbItemMain { min-width: 240px; }
 .dbItemClient { font-weight: 700; font-size: 1.05rem; line-height: 1.2; }
 .dbItemTitle { margin-top: .15rem; opacity: .75; font-size: .92rem; }
 
-.dbActions { display:flex; gap: .5rem; align-items:flex-start; flex-shrink: 0; }
+.dbActions { display:flex; gap: .5rem; align-items:flex-start; flex-shrink: 0; flex-wrap: wrap; }
 
 .btnSmall {
   display: inline-flex;

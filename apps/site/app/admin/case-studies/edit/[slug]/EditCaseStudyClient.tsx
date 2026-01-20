@@ -10,7 +10,9 @@ import { useRouter } from "next/navigation";
 import {
   CaseStudy as CaseStudySchema,
   DEFAULT_HERO_IMAGE_URL,
+  SECTOR_GROUPS,
   SECTOR_VALUES,
+  sectorLabel,
   type SectorValue,
   deriveSummaryFromWriteUp,
   normalizeTagList,
@@ -541,10 +543,14 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 onChange={onSectorChange}
               >
                 <option value="">Select a sector (client type)</option>
-                {SECTOR_VALUES.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
+                {SECTOR_GROUPS.map((g) => (
+                  <optgroup key={g.id} label={g.label}>
+                    {g.values.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {sectorLabel(opt)}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
             </div>

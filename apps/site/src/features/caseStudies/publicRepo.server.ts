@@ -2,7 +2,7 @@
 import { CASE_STUDIES_FIXTURE, type CaseStudyType } from "@kit/schema";
 
 export async function listPublicCaseStudies(): Promise<CaseStudyType[]> {
-  return CASE_STUDIES_FIXTURE.filter((cs) => cs.isPublic);
+  return CASE_STUDIES_FIXTURE.filter((cs) => cs.isPublic && cs.status === "Published");
 }
 
 export async function getPublicCaseStudyBySlug(

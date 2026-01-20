@@ -573,16 +573,7 @@ export default function ListClient() {
                         }}
                       >
                         <option value="">Add category…</option>
-                        {FLAT_CATEGORY_OPTIONS.map((opt) => (
-                          <option
-                            key={opt.value}
-                            value={opt.value}
-                            disabled={sectors.includes(opt.value)}
-                          >
-                            {opt.label}
-                          </option>
-                        ))}
-{/*                         {SECTOR_GROUPS.map((g) => (
+                        {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((v) => (
                               <option key={v} value={v} disabled={sectors.includes(v)}>
@@ -590,7 +581,7 @@ export default function ListClient() {
                               </option>
                             ))}
                           </optgroup>
-                        ))} */}
+                        ))}
                       </select>
                     </div>
 

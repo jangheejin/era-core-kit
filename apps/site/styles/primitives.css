@@ -461,28 +461,14 @@ ol {
   padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 
-.c-section--mission,
-.c-section--mission .c-container {
- width: 100%;
-  min-width: 0; 
-}
-
-
 .c-section--mission .type-body {
-  width: 100%;
-  max-width: min(68ch, 100%);
-  /* max-width: 68ch; */
+  max-width: 68ch;
   white-space: normal;
   word-break: normal;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  /* overflow-wrap: normal; 
-  text-wrap: pretty;*/
+  overflow-wrap: normal;
+  text-wrap: pretty;
 }
 
-.c-section--mission .c-grid {
-  grid-template-columns: minmax(0, 1fr);
-}
 /* Markdown: kill browser-default margins so c-stack controls spacing */
 .c-markdown :is(h1,h2,h3,h4,h5,h6,p,ul,ol,blockquote,pre) { margin: 0; }
 .c-markdown ul, .c-markdown ol { padding-left: 1.25rem; }
@@ -507,7 +493,7 @@ ol {
   gap: var(--space-3);
 /*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
  */
-  /* decides what happens to leftover space 
+  /* decides what happens to leftover space
   justify-content: start;   *//* left align */
   /* or: justify-content: center; */ /* centered when few cards */
 
@@ -529,4 +515,5 @@ ol {
 }
 
 .section-space {
-  padding-top: var(--space-2x);}
+  padding-top: var(--space-2x);
+}

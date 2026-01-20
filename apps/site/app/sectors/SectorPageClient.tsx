@@ -1,57 +1,88 @@
 // apps/site/app/sectors/SectorPageClient.tsx
 "use client";
 
-import { useMemo, useState } from "react";
-import { CaseGrid } from "@kit/blocks";
-import type { CaseGridItem } from "@kit/blocks/types"; // adjust path to wherever CaseGridItem lives
+import Link from "next/link";
+import { useMemo } from "react";
+import { CaseGrid, type CaseGridProps } from "@kit/blocks";
+import {
+  DEFAULT_HERO_IMAGE_URL,
+  sectorLabel,
+  type CaseStudyType,
+  type SectorValue,
+} from "@kit/schema";
+import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 
-type Props = {
-  items: CaseGridItem[];
-  layout?: string;
-};
+type CaseGridItemFromProps = CaseGridProps["items"][number];
 
-export function SectorPageClient({ items, layout = "layout-3" }: Props) {
-  const [q, setQ] = useState("");
+function toGridItem(cs: CaseStudyType): CaseGridItemFromProps {
+  const sectorsForGrid: [SectorValue, ...SectorValue[]] = [
+    cs.primarySector,
+    ...cs.sectors.filter((s) => s !== cs.primarySector),
+  ];
+
+  return {
+    slug: cs.slug,
+    title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
+    client: cs.client ?? undefined,
+    summary: cs.summaryShort ?? undefined,
+    brief: cs.brief ?? undefined,
+    imageUrl: cs.heroImageUrl ?? DEFAULT_HERO_IMAGE_URL,
+    primarySector: cs.primarySector,
+    sectors: sectorsForGrid,
+  };
+}
+
+export function SectorPageClient({
+  sector,
+  fallbackItems,
+}: {
+  sector: SectorValue;
+  fallbackItems: CaseStudyType[];
+}) {
+  const { items } = useAdminCaseStudies();
 
   const filtered = useMemo(() => {
-    const s = q.trim().toLowerCase();
-    if (!s) return items;
+    const publicItems = items.filter(
+      (cs) => cs.isPublic && cs.status === "Published",
+    );
+    const source = publicItems.length ? publicItems : fallbackItems;
+    return source.filter((cs) => cs.sectors?.includes(sector));
+  }, [fallbackItems, items, sector]);
 
-    return items.filter((it) => {
-      const haystack = [
-        it.title,
-        it.client,
-        it.summary,
-        it.brief,
-        it.sectorsReadable,
-        ...(it.sectors ?? []),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(s);
-    });
-
-    /* return items.filter((it) =>
-      `${it.title ?? ""} ${it.description ?? ""}`.toLowerCase().includes(s)
-    ); */
-  }, [items, q]);
+  const gridItems = useMemo(() => filtered.map(toGridItem), [filtered]);
 
   return (
-    <div className="c-stack" style={{ gap: "1rem" }}>
-      <input
-        className="c-input"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search case studies…"
-      />
+    <main className="c-page">
+      <section className="c-container c-stack gap5">
+        <header
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <div className="c-stack" style={{ gap: ".35rem" }}>
+            <h1 className="type-h2">{sectorLabel(sector)}</h1>
+            <p className="muted" style={{ maxWidth: 760 }}>
+              Showing {filtered.length} published case stud
+              {filtered.length === 1 ? "y" : "ies"} in the {sectorLabel(sector)}{" "}
+              category.
+            </p>
+          </div>
 
-      {filtered.length === 0 ? (
-        <div className="muted">No matches.</div>
-      ) : (
-        <CaseGrid layout={layout} items={filtered} />
-      )}
-    </div>
+          <Link className="c-button c-button--sm" href="/our-work">
+            All case studies
+          </Link>
+        </header>
+
+        {gridItems.length === 0 ? (
+          <div className="muted">No case studies in this category yet.</div>
+        ) : (
+          <CaseGrid layout="layout-3" items={gridItems} />
+        )}
+      </section>
+    </main>
   );
 }
