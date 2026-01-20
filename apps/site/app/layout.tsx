@@ -26,9 +26,8 @@ ROOT TREE:
 
 import "@styles/tokens.css";
 import "@styles/primitives.css";
-import "@styles/casegrid.css";
+
 import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */ 
-import "@styles/primitives.css";
 import "@styles/casegrid.css";
 import "@styles/markdown.css";
 import "@styles/contact.css"
