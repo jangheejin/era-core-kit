@@ -288,7 +288,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     attachments: [],
     links: [],
 
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
 
@@ -376,7 +376,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     attachments: [],
     links: [],
 
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
   {
@@ -468,13 +468,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
 /** Parsed canonical “full” fixtures (full schema output, defaults filled). */
 export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
-  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) =>
-    CaseStudySchema.parse({
-      status: "Published",
-      visibility: "Public",
-      ...x,
-    }),
-  );
+  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) => CaseStudySchema.parse(x));
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {
