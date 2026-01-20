@@ -60,9 +60,11 @@
 
 /* Grid Layouts */
 .c-grid {
+  --min: 18rem;
   display: grid;
   gap: var(--space-3, 1.5rem);
-  grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr));
+/*   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min)), 1fr));
   container-type: inline-size;
 }
 
@@ -503,10 +505,12 @@ ol {
   --card-max: 24rem;
 
   /* auto-fit with a MAX column width + centered grid */
-  grid-template-columns: repeat(
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
+
+  /* grid-template-columns: repeat(
     auto-fit,
     minmax(min(var(--card-min), 100%), var(--card-max))
-  );
+  ); */
   justify-content: center;
 }
 
@@ -516,4 +520,9 @@ ol {
 
 .section-space {
   padding-top: var(--space-2x);
+}
+
+/* Make grid/flex children allowed to shrink instead of forcing a wrap */
+:where(.c-grid > *, .intro-grid > *, .casegrid > *, .case-grid > *) {
+  min-width: 0;
 }
