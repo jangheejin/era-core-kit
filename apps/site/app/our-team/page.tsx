@@ -21,7 +21,7 @@ const teamMembers: TeamMember[] = [
       "Ed has also previously worked as a political consultant and managed the campaigns of various candidates at the municipal and state level, as well as a member of Congressman Chris Cannon's re-election campaign. With extensive experience working with various departments and agencies of both Democratic and Republican Administrations, Ed values his ability to identify stakeholder needs while also pursuing a comprehensive policy agenda",
       "A graduate of the University of Utah, Ed holds a B.S. in Economics. He served as the State Chairman for Utah's Federation of College Republicans and later as the College Republican National Committee's Regional Political Director. Ed is an Eagle Scout and practiced as a small-engine mechanic, having worked for his family's small business. Originally from St. George, Utah, and after living in Washington, D.C. for a decade, he now resides in Denver, Colorado with his wife Karen, daughter Emery, and sons Everett and Ellis.",
     ],
-    imageUrl: "/team/edwardcox.jpg", // update to your real path
+    imageUrl: "/team/edwardcox.jpg", // update to real path
   },
   {
     name: "Romel Nicholas",

@@ -199,7 +199,7 @@ export default function NewCaseStudyPage() {
   const hasCore = client.trim().length > 0 && writeUp.trim().length > 0;
 
   // Derived fields (DO NOT put hooks inside other hooks)
-  const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from your toolbar
+  const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from toolbar
   const preview = useMemo(() => emptyToUndefined(brief), [brief]);
   //    const preview = useMemo(() => brief.trim() || undefined, [brief]);
 

@@ -39,6 +39,48 @@ function emptyToUndefined(s: unknown): string | undefined {
   return t ? t : undefined;
 }
 
+//helper for the editor text area
+function applyWrap(
+  textarea: HTMLTextAreaElement | null,
+  before: string,
+  after: string,
+) {
+  if (!textarea) return;
+  const start = textarea.selectionStart ?? 0;
+  const end = textarea.selectionEnd ?? 0;
+  const text = textarea.value;
+  const selected = text.slice(start, end);
+  const next = text.slice(0, start) + before + selected + after + text.slice(end);
+  textarea.value = next;
+  const cursor = start + before.length + selected.length + after.length;
+  textarea.selectionStart = cursor;
+  textarea.selectionEnd = cursor;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function applyPrefix(textarea: HTMLTextAreaElement | null, prefix: string) {
+  if (!textarea) return;
+  const start = textarea.selectionStart ?? 0;
+  const end = textarea.selectionEnd ?? 0;
+  const text = textarea.value;
+  const selected = text.slice(start, end) || "item";
+  const lines = selected.split("\n");
+  const nextLines = lines.map((line) => (line.startsWith(prefix) ? line : prefix + line));
+  const next =
+    text.slice(0, start) +
+    nextLines.join("\n") +
+    text.slice(end);
+  textarea.value = next;
+  const cursor = start + nextLines.join("\n").length;
+  textarea.selectionStart = cursor;
+  textarea.selectionEnd = cursor;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function applyLink(textarea: HTMLTextAreaElement | null) {
+  applyWrap(textarea, "[", "](https://)");
+}
+
 //helper for previewing and saving at same time
 function buildPreviewUrl(slug: string) {
   return `/admin/case-studies/mock/${slug}`;
@@ -68,6 +110,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [tags, setTags] = useState<string>("");
 
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([
+    DEFAULT_SECTOR,
+  ])
+
 //  const [isPublic, setIsPublic] = useState(false);
 //  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
@@ -80,6 +126,35 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
 
+  function addCategoryDraft() {
+    setCategoryDrafts((prev) => [...prev, ""]);
+  }
+
+  function setCategoryAt(index: number, value: SectorValue | "") {
+    setCategoryDrafts((prev) => prev.map((v, i) => (i === index ? value : v)));
+  }
+
+  function removeCategoryAt(index: number) {
+    setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
+    const out: SectorValue[] = [];
+    const seen = new Set<SectorValue>();
+    for (const d of drafts) {
+      if (!d) continue;
+      if (seen.has(d)) continue;
+      seen.add(d);
+      out.push(d);
+    }
+    return out.length ? out : [DEFAULT_SECTOR];
+  }
+
+  const selectedCategories = useMemo(
+    () => normalizeCategories(categoryDrafts),
+    [categoryDrafts],
+  );
+
   // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
     if (!cs || ready) return;
@@ -88,8 +163,14 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setWriteUp(cs.bodyMDX ?? "");
     setBrief(cs.brief ?? "");
 
-    const initialSector = (cs.sectors?.[0] as SectorValue | undefined) ?? DEFAULT_SECTOR;
+    const initialSectors = 
+      Array.isArray(cs.sectors) && cs.sectors.length > 0
+        ? cs.sectors: [DEFAULT_SECTOR];
+    setCategoryDrafts(initialSectors);
+
+/*     const initialSector = (cs.sectors?.[0] as SectorValue | undefined) ?? DEFAULT_SECTOR;
     setSector(initialSector);
+ */
 
     setTags(Array.isArray(cs.tags) ? cs.tags.join(", ") : "");
     setHeroImageUrl(cs.heroImageUrl ?? "");
@@ -148,6 +229,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   );
 
   const bannerRef = useRef<HTMLDivElement | null>(null);
+  const writeUpRef = useRef<HTMLTextAreaElement | null>(null);
 
   //SINGLE candidateInput builder (nullable)
   const candidateInput = useMemo<CaseStudyInput | null>(() => {

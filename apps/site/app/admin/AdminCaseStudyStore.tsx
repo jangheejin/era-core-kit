@@ -132,7 +132,7 @@ function migrateHeroUrl(input: any) {
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
 
-  /** Back-compat name (your existing API). */
+  /** Back-compat name (existing API). */
   addCaseStudy: (cs: CaseStudyType) => void;
 
   /** Preferred name (same behavior). */

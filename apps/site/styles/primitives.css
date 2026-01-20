@@ -402,7 +402,7 @@ ol {
   /* pick a fraction of the line height for the gap */
   margin-top: 0.5em;
 
-  margin-block-start: 0.5em; /* ≈ half a line of your body text */
+  margin-block-start: 0.5em; /* ≈ half a line of the body text */
 }
 
 /* Optional enhancement for newer browsers only */
