@@ -401,9 +401,12 @@ export default function ListClient() {
           className="row listLensPage"
           style={{
             alignItems: "stretch",
-            gap: ".75rem",
+            gap: "1rem",
             flexWrap: "wrap",
-            marginTop: ".5rem",
+            marginTop: "1.25rem",
+            padding: ".85rem 1rem",
+            borderRadius: 10,
+            background: "rgba(15, 52, 96, 0.06)",
           }}
         >
           <button
@@ -412,13 +415,13 @@ export default function ListClient() {
             onClick={openClientPagePreview}
             disabled={!clientPagePreviewHref}
             title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
-            style={{ minWidth: 220, padding: ".65rem 1.25rem" }}
+            style={{ minWidth: 240, padding: ".85rem 1.5rem", fontSize: "1rem" }}
           >
             Preview client page
           </button>
 
-          <div className="c-stack" style={{ gap: ".25rem", minWidth: 240 }}>
-            <span className="type-small" style={{ fontWeight: 600 }}>
+          <div className="c-stack" style={{ gap: ".35rem", minWidth: 240 }}>
+            <span className="type-small" style={{ fontWeight: 700 }}>
               Choose a category filter, then preview the matching client page.
             </span>
             <span className="muted type-small">
