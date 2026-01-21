@@ -487,7 +487,7 @@ ol {
 }
 
 .c-section--mission .type-body {
-  max-width: 68ch;
+  max-width: none;
   white-space: normal;
   word-break: normal;
   overflow-wrap: normal;

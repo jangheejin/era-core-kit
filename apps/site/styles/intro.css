@@ -5,24 +5,29 @@
 /* Never size the image column as `auto` in grid — it can shrink the text column. */
 .c-section--intro {
   --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
-  --intro-figure-min: 240px;
-  --intro-figure-max: 340px;
+  --intro-figure-min: 200px;
+  --intro-figure-max: 300px;
 }
 
 /* Desktop / tablet: text | image */
 .c-section--intro .intro-grid {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(var(--intro-figure-min), var(--intro-figure-max));
+  position: relative;
+  display: block;
   column-gap: var(--intro-gap);
-  align-items: start;
+  overflow: hidden;
   container-type: inline-size;
 }
 
 .c-section--intro .intro-copy {
   min-width: 0;
   max-width: 47rem;
+}
+
+.c-section--intro.has-intro-image .intro-copy {
+  padding-right: calc(
+    clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)) +
+      var(--intro-gap)
+  );
 }
 
 /* Heading spacing under intro */
@@ -42,21 +47,21 @@
 }
 
 /* Image: desktop behavior */
-.c-section--intro .intro-image {
-  min-width: 0;
-  width: 100%;
-  justify-self: end;
-  align-self: start;
+.c-section--intro.has-intro-image .intro-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(100%, clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)));
+  height: 100%;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
   border-radius: var(--radius);
-  max-height: clamp(220px, 45vw, 320px);
+  max-height: none;
 }
 
 /* ========================= */
@@ -65,24 +70,30 @@
 
 @media (max-width: 900px) {
   .c-section--intro {
-    --intro-figure-min: 220px;
-    --intro-figure-max: 320px;
+    --intro-figure-min: 200px;
+    --intro-figure-max: 280px;
   }
 }
 
 @media (max-width: 720px) {
   .c-section--intro .intro-grid {
+    display: grid;
     grid-template-columns: 1fr;
     row-gap: var(--space-3);
   }
 
   .c-section--intro .intro-image {
+    position: static;
     margin-top: var(--space-3);
     justify-self: center;
     max-width: 360px;
+    width: 100%;
+    height: auto;
   }
 
   .c-section--intro .intro-image img {
+    height: auto;
+    aspect-ratio: 4 / 3;
     max-height: none;
   }
 }
