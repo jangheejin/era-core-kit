@@ -124,6 +124,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [status, setStatus] = useState<PublishStatus>("Draft");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
   const isPublished = status === "Published";
+  const [featuredSaveState, setFeaturedSaveState] = useState<"idle" | "saving" | "saved" | "error">(
+    "idle",
+  );
+  const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   //part of protecting against slug collisions. slugDraft needs a state
   const [slugDraft, setSlugDraft] = useState("");
@@ -209,6 +213,54 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       setIsFeaturedHome(false);
     }
   }, [isPublished, isFeaturedHome]);
+
+  useEffect(() => {
+    return () => {
+      clearFeaturedSaveTimer();
+    };
+  }, []);
+
+  function clearFeaturedSaveTimer() {
+    if (featuredSaveTimerRef.current) {
+      clearTimeout(featuredSaveTimerRef.current);
+      featuredSaveTimerRef.current = null;
+    }
+  }
+
+  function scheduleFeaturedSaveReset() {
+    clearFeaturedSaveTimer();
+    featuredSaveTimerRef.current = setTimeout(() => {
+      setFeaturedSaveState("idle");
+    }, 2000);
+  }
+
+  function applyFeaturedQuickSave(next: boolean) {
+    const previous = isFeaturedHome;
+    setIsFeaturedHome(next);
+    clearFeaturedSaveTimer();
+    setFeaturedSaveState("saving");
+
+    try {
+      if (!cs) {
+        throw new Error("Missing case study");
+      }
+
+      const candidate = { ...cs, isFeaturedHome: next };
+      const parsed = CaseStudySchema.safeParse(candidate);
+      if (!parsed.success) {
+        throw new Error("Invalid case study payload");
+      }
+
+      upsertCaseStudy(parsed.data);
+      setFeaturedSaveState("saved");
+      scheduleFeaturedSaveReset();
+    } catch (error) {
+      setIsFeaturedHome(previous);
+      setFeaturedSaveState("error");
+      scheduleFeaturedSaveReset();
+      window.alert("Could not update featured status. Please try again.");
+    }
+  }
 
   function handleHeroImageFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -585,11 +637,26 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                   <input
                     type="checkbox"
                     checked={isFeaturedHome && isPublished}
-                    onChange={(e) => setIsFeaturedHome(e.target.checked)}
+                    onChange={(e) => applyFeaturedQuickSave(e.target.checked)}
                     disabled={!isPublished}
                   />
                   <span className="type-small">
                     Feature on homepage ({featuredCount}/{maxFeatured})
+                    {featuredSaveState === "saving" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saving…
+                      </span>
+                    )}
+                    {featuredSaveState === "saved" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saved
+                      </span>
+                    )}
+                    {featuredSaveState === "error" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Save failed
+                      </span>
+                    )}
                   </span>
                 </label>
               </div>

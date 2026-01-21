@@ -155,6 +155,10 @@ export default function AdminClientPages() {
               Create client-facing pages with optional intro text and filters. Use Markdown
               formatting (bold/italic/underline/links) for the intro.
             </p>
+            <p className="muted" style={{ marginTop: ".5rem" }}>
+              Tip: add or edit case study categories/tags in the Case Study Library, then use the
+              “Preview client page” button there to see the filtered public page.
+            </p>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
             <button className="btnSmall" type="button" onClick={resetForm}>
