@@ -380,9 +380,9 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     isPublic: true,
   },
   {
-    id: "cs-temp-public",
-    title: "Temporary Private Sector Case Study",
-    slug: "temp-public",
+    id: "cs-temp-private",
+    title: "Private Sector Case Study",
+    slug: "temp-private",
     client: "Dummy Private Sector Org",
     sectors: [
       "PrivateSector",
@@ -423,7 +423,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
   },
   {
     id: "cs-temp-public",
-    title: "Temporary Private Sector Case Study",
+    title: "Public Sector Case Study",
     slug: "temp-public",
     client: "Dummy Public Sector Org",
     sectors: [
@@ -460,7 +460,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     attachments: [],
     links: [],
 
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
 ] satisfies CaseStudyInput[];

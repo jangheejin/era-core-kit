@@ -25,6 +25,7 @@
     "nukeclean": "pnpm run deepclean && rimraf pnpm-lock.yaml"
   },
   "devDependencies": {
+    "@eslint/config-helpers": "^0.5.1",
     "@types/node": "^20.14.9",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
