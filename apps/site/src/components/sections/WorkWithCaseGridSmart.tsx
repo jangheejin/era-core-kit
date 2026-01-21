@@ -34,10 +34,12 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
       (cs) => Boolean(cs.isPublic) && cs.status === "Published",
     );
 
-    const source =
-      itemsSource === "featured"
-        ? publicItems.filter((cs) => Boolean(cs.isFeaturedHome))
-        : publicItems;
+    if (itemsSource !== "featured") {
+      return publicItems.map(toCaseGridItem);
+    }
+
+    const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
+    const source = featured.length > 0 ? featured : publicItems;
 
     const mapped = source.map(toCaseGridItem);
     return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
