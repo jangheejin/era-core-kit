@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef } from "react";//needed for improved sticky header
+import { useLayoutEffect, useRef, useState } from "react";//needed for improved sticky header
 
 type NavItem = { 
   href: string; 
@@ -63,6 +63,7 @@ function isActive(pathname: string, item: NavItem) {
 
 export function AdminTopNav() {
   const pathname = usePathname() ?? "";
+  const [navOpen, setNavOpen] = useState(false);
 
   //improved sticky header (appear below context banner, but stick to top)
   const headerRef = useRef<HTMLElement | null>(null);
@@ -107,8 +108,22 @@ export function AdminTopNav() {
           </Link> */}
         </div>
         <div className="adminTopNav__spacer" />
+
+        <button
+          type="button"
+          className="adminTopNav__toggle"
+          aria-expanded={navOpen}
+          aria-controls="adminTopNavLinks"
+          onClick={() => setNavOpen((prev) => !prev)}
+        >
+          Menu
+        </button>
         
-        <nav className="adminTopNav__links" aria-label="Admin navigation">
+        <nav
+          id="adminTopNavLinks"
+          className={["adminTopNav__links", navOpen ? "is-open" : ""].join(" ")}
+          aria-label="Admin navigation"
+        >
           {NAV.map((item) => {
             const active = isActive(pathname, item);
             return (

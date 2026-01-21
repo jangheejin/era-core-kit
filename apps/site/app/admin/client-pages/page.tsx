@@ -10,7 +10,6 @@ import {
   type SectorValue,
   normalizeTagList,
 } from "@kit/schema";
-import { AdminTopNav } from "@/admin/components/AdminTopNav";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 import { Markdown } from "@/components/Markdown";
 
@@ -141,8 +140,6 @@ export default function AdminClientPages() {
 
   return (
     <main className="c-admin">
-      <AdminTopNav />
-
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
         <h1 className="type-h2">Client pages</h1>
         <Link href="/admin">Back to admin</Link>
@@ -187,7 +184,10 @@ export default function AdminClientPages() {
         className="row"
         style={{ gap: "1rem", marginTop: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}
       >
-        <div className="card" style={{ flex: "1 1 280px", minWidth: 260 }}>
+        <div
+          className="card"
+          style={{ flex: "1 1 280px", minWidth: 260, background: "var(--brand-lightest)" }}
+        >
           <div className="form-group">
             <label className="form-label">Client pages library</label>
             <select
