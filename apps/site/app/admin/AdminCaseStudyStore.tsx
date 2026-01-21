@@ -20,20 +20,87 @@ import {
   type CaseStudyType,
   SECTOR_VALUES,
   type SectorValue,
+  sectorLabel,
+  tagSlug,
 } from "@kit/schema";
 
 import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
 
+const SECTOR_LOOKUP = new Map<string, SectorValue>();
+
+for (const v of SECTOR_VALUES as readonly SectorValue[]) {
+  SECTOR_LOOKUP.set(v, v);
+  SECTOR_LOOKUP.set(v.toLowerCase(), v);
+
+  const slugFromValue = tagSlug(v);
+  if (slugFromValue) SECTOR_LOOKUP.set(slugFromValue, v);
+
+  const slugFromLabel = tagSlug(sectorLabel(v));
+  if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
+}
+
+function coerceSector(raw: unknown): SectorValue | null {
+  if (typeof raw !== "string") return null;
+  const s = raw.trim();
+  if (!s) return null;
+
+  if (SECTOR_VALUES.includes(s as SectorValue)) return s as SectorValue;
+
+  const lower = s.toLowerCase();
+  const directLower = SECTOR_LOOKUP.get(lower);
+  if (directLower) return directLower;
+
+  const slug = tagSlug(s);
+  if (slug) {
+    const mapped = SECTOR_LOOKUP.get(slug);
+    if (mapped) return mapped;
+  }
+
+  return null;
+}
+
+function normalizeSectors(input: unknown): SectorValue[] {
+  if (Array.isArray(input)) {
+    return input.map(coerceSector).filter((v): v is SectorValue => Boolean(v));
+  }
+  if (typeof input === "string") {
+    const maybe = coerceSector(input);
+    return maybe ? [maybe] : [];
+  }
+  return [];
+}
+
 function migrateLegacySector(input: unknown) {
   if (!input || typeof input !== "object") return input;
   const record = input as Record<string, unknown>;
   if (record.sectors == null && record.sector != null) {
     const { sector, ...rest } = record;
-    return { ...rest, sectors: [sector] };
+    return { ...rest, sectors: normalizeSectors(sector) };
   }
   return input;
+}
+
+function migratePrimarySector(input: unknown) {
+  if (!input || typeof input !== "object") return input;
+  const record = input as Record<string, unknown>;
+  if (record.sectors == null && record.primarySector != null) {
+    const { primarySector, ...rest } = record;
+    const sectors = normalizeSectors(primarySector);
+    return { ...rest, sectors, primarySector };
+  }
+  return input;
+}
+
+function ensureNonEmptySectors(input: unknown) {
+  if (!input || typeof input !== "object") return input;
+  const record = input as Record<string, unknown>;
+  const sectors = normalizeSectors(record.sectors);
+  const primary = normalizeSectors(record.primarySector);
+  const nextSectors = sectors.length ? sectors : primary.length ? primary : [DEFAULT_SECTOR];
+  const nextPrimary = primary[0] ?? nextSectors[0] ?? DEFAULT_SECTOR;
+  return { ...record, sectors: nextSectors, primarySector: nextPrimary };
 }
 
 function migrateHeroUrl(input: unknown) {
@@ -174,7 +241,9 @@ function loadLocalValidated(): CaseStudyType[] {
       /* if (item.tags?.includes("seed")) continue; */
 
       //const migrated = migrateLegacySector(item);
-      const migrated = migrateHeroUrl(migrateLegacySector(item));
+      const migrated = ensureNonEmptySectors(
+        migrateHeroUrl(migratePrimarySector(migrateLegacySector(item))),
+      );
 
       //now make it possible to ignore anything that's a seed record by id prefix (rather than tag. 
       // by tag will still work but will be phased out in the final cms)
@@ -223,6 +292,27 @@ function slugify(s: string) {
 
 const BASELINE: CaseStudyType[] = CASE_STUDIES_FIXTURE;
 
+function mergeBaselineWithStored(
+  baseline: CaseStudyType[],
+  stored: CaseStudyType[],
+): CaseStudyType[] {
+  const bySlug = new Map<string, CaseStudyType>();
+  for (const cs of baseline) bySlug.set(cs.slug, cs);
+  for (const cs of stored) bySlug.set(cs.slug, cs);
+
+  const order: string[] = [];
+  const push = (slug: string) => {
+    if (!order.includes(slug)) order.push(slug);
+  };
+
+  for (const cs of baseline) push(cs.slug);
+  for (const cs of stored) push(cs.slug);
+
+  return order
+    .map((slug) => bySlug.get(slug))
+    .filter((x): x is CaseStudyType => Boolean(x));
+}
+
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
   // Start from the fixture baseline to avoid SSR/CSR mismatch and seed storage.
   const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
@@ -256,7 +346,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     /* console.log("!!!!Final loaded case studies:", items); */
 
     if (stored.length > 0) {
-      setItems(stored);
+      setItems(mergeBaselineWithStored(BASELINE, stored));
     } else {
       setItems(BASELINE);
       saveLocal(BASELINE);
