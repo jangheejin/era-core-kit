@@ -23,6 +23,8 @@ import {
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
+const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
+
 //helper to protect against slug collisions
 function slugify(s: string) {
   return s
@@ -90,7 +92,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
 //  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
 //part one of protecting against slug collisions. update store destructure
-  const { getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const { items: adminItems, getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   // Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
@@ -117,14 +119,28 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 //  const [isPublic, setIsPublic] = useState(false);
 //  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
-  //3 publishing states 
-  type PublishState = "InternalDraft" | "ClientViewable" | "Homepage";
-  const [publishState, setPublishState] = useState<PublishState>("InternalDraft");
+  // publishing (Draft / Published + Featured)
+  type PublishStatus = "Draft" | "Published";
+  const [status, setStatus] = useState<PublishStatus>("Draft");
+  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const isPublished = status === "Published";
 
   //part of protecting against slug collisions. slugDraft needs a state
   const [slugDraft, setSlugDraft] = useState("");
 
   const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
+  const featuredCount = useMemo(
+    () =>
+      adminItems.filter(
+        (item) =>
+          item.status === "Published" &&
+          item.isPublic &&
+          item.visibility === "Public" &&
+          item.isFeaturedHome,
+      ).length,
+    [adminItems],
+  );
+  const maxFeatured = 6;
 
   function addCategoryDraft() {
     setCategoryDrafts((prev) => [...prev, ""]);
@@ -181,17 +197,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 //    setIsPublic(Boolean(cs.isPublic));
 //    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
 
-    const nextState: PublishState =
-      cs.visibility === "Public"
-        ? "Homepage"
-        : cs.visibility === "ClientSafe"
-          ? "ClientViewable"
-          : "InternalDraft";
-
-    setPublishState(nextState);
+    const nextStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    setStatus(nextStatus);
+    setIsFeaturedHome(nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false);
 
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
+
+  useEffect(() => {
+    if (!isPublished && isFeaturedHome) {
+      setIsFeaturedHome(false);
+    }
+  }, [isPublished, isFeaturedHome]);
 
   function handleHeroImageFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -253,28 +270,19 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         ? base.sectors
         : [DEFAULT_SECTOR];
 
-// one source of truth: publishState
-    const publishing =
-    publishState === "InternalDraft"
+    const publishing = isPublished
       ? {
+          visibility: "Public" as const,
+          status: "Published" as const,
+          isPublic: true,
+          isFeaturedHome: isFeaturedHome,
+        }
+      : {
           visibility: "Internal" as const,
           status: "Draft" as const,
           isPublic: false,
           isFeaturedHome: false,
-        }
-      : publishState === "ClientViewable"
-        ? {
-            visibility: "ClientSafe" as const,
-            status: "Published" as const,
-            isPublic: true,
-            isFeaturedHome: false,
-          }
-        : {
-            visibility: "Public" as const,
-            status: "Published" as const,
-            isPublic: true,
-            isFeaturedHome: true,
-          };
+        };
 
     return {
       ...base,
@@ -313,7 +321,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     heroImageUrl,
     //isPublic,
     //isFeaturedHome,
-    publishState,
+    isPublished,
+    isFeaturedHome,
     effectiveSlug,
     DEFAULT_SECTOR,
   ]);
@@ -338,12 +347,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 //    const basePublic = Boolean(cs.isPublic);
 //    const baseFeatured = Boolean(cs.isFeaturedHome);
 
-    const basePublishState: PublishState =
-      cs.visibility === "Public"
-        ? "Homepage"
-        : cs.visibility === "ClientSafe"
-          ? "ClientViewable"
-          : "InternalDraft";
+    const baseStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    const baseFeatured = Boolean(cs.isFeaturedHome);
 
     const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
     const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
@@ -357,14 +362,17 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       //(heroImageUrl || "") !== (baseHero || "") ||
       heroNorm !== baseHeroNorm ||
       
-      publishState !== basePublishState
+      status !== baseStatus ||
+      (isPublished ? isFeaturedHome !== baseFeatured : false)
 //      isPublic !== basePublic ||
 //      isFeaturedHome !== baseFeatured
     );
   }, [
     cs, client, writeUp, brief, sector, tags, heroImageUrl, 
     //isPublic, isFeaturedHome, 
-    publishState,
+    status,
+    isPublished,
+    isFeaturedHome,
     DEFAULT_SECTOR
   ]);
 
@@ -561,15 +569,33 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
             <div className="form-group form-actions__publish">
               <label className="form-label">Publishing Status</label>
-              <select
-                className="input"
-                value={publishState}
-                onChange={(e) => setPublishState(e.currentTarget.value as PublishState)}
-              >
-                <option value="InternalDraft">Internal Draft</option>
-                <option value="ClientViewable">Client-Viewable</option>
-                <option value="Homepage">Published on Homepage</option>
-              </select>
+              <div className="form-row" style={{ gap: ".75rem", alignItems: "center" }}>
+                <select
+                  className="input"
+                  value={status}
+                  onChange={(e) => setStatus(e.currentTarget.value as PublishStatus)}
+                >
+                  {PUBLISH_STATUS_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+                <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={isFeaturedHome && isPublished}
+                    onChange={(e) => setIsFeaturedHome(e.target.checked)}
+                    disabled={!isPublished}
+                  />
+                  <span className="type-small">
+                    Feature on homepage ({featuredCount}/{maxFeatured})
+                  </span>
+                </label>
+              </div>
+              <p className="muted type-small" style={{ marginTop: 6 }}>
+                Only the first {maxFeatured} featured case studies appear on the homepage.
+              </p>
             </div>
 
 

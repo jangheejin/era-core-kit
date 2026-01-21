@@ -15,15 +15,11 @@ import { useSearchParams } from "next/navigation";
 import { encode } from "punycode";
 
 function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
-  const { sector, tags, tagMode, audience } = page.filters;
+  const { sector, tags, tagMode } = page.filters;
 
   if (cs.status !== "Published") return false;
   if (!cs.isPublic) return false;
-  if (audience === "Public") {
-    if (cs.visibility !== "Public") return false;
-  } else {
-    if (cs.visibility !== "Public" && cs.visibility !== "ClientSafe") return false;
-  }
+  if (cs.visibility !== "Public") return false;
 
   if (sector && !(cs.sectors ?? []).includes(sector)) return false;
 

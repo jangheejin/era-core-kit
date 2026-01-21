@@ -9,8 +9,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   CaseStudy as CaseStudySchema,
-  CASE_STUDY_STATUS_VALUES,
-  CASE_STUDY_VISIBILITY_VALUES,
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
@@ -44,6 +42,8 @@ for (const v of SECTOR_VALUES as readonly SectorValue[]) {
   const slugFromLabel = tagSlug(sectorLabel(v));
   if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
 }
+
+const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
 
 function coerceSector(raw: unknown): SectorValue | null {
   if (typeof raw !== "string") return null;
@@ -109,11 +109,6 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
   return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
 }
 
-function visibilityLabel(v: string) {
-  if (v === "ClientSafe") return "Client-Viewable";
-  return v;
-}
-
 export default function ListClient() {
   const { items: storeItems, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
   const items = storeItems ?? [];
@@ -128,7 +123,18 @@ export default function ListClient() {
   const [q, setQ] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
   const [statusFilter, setStatusFilter] = useState<string>("");
-  const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+  const featuredCount = useMemo(
+    () =>
+      items.filter(
+        (cs) =>
+          cs.status === "Published" &&
+          cs.isPublic &&
+          cs.visibility === "Public" &&
+          cs.isFeaturedHome,
+      ).length,
+    [items],
+  );
+  const maxFeatured = 6;
 
   // --- Client Page Preview (opens the filtered page) ---
   const clientPagePreviewHref = useMemo(() => {
@@ -244,7 +250,6 @@ export default function ListClient() {
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
       if (statusFilter && cs.status !== statusFilter) return false;
-      if (visibilityFilter && cs.visibility !== visibilityFilter) return false;
 
       if (!qq) return true;
 
@@ -260,7 +265,7 @@ export default function ListClient() {
 
       return hay.includes(qq);
     });
-  }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
+  }, [items, q, categoryFilter, statusFilter]);
 
   const sorted = useMemo(() => {
     const base = filtered ?? [];
@@ -276,7 +281,7 @@ export default function ListClient() {
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category, filter by visibility, and search.
+        This is a temporary demo CMS database. You can filter by category and search.
         Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
@@ -393,7 +398,7 @@ export default function ListClient() {
               DEFAULT_CATEGORY;
 
             const isPublished = cs.status === "Published";
-            const vis = cs.visibility;
+            const isFeatured = Boolean(cs.isFeaturedHome);
 
             return (
               <div
@@ -484,8 +489,9 @@ export default function ListClient() {
                         <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
                           {isPublished ? "Published" : "Draft"}
                         </span>
-
-                        <span className="pill pill--audience">{visibilityLabel(vis)}</span>
+                        {isFeatured ? (
+                          <span className="pill pill--audience">Featured</span>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -580,27 +586,44 @@ export default function ListClient() {
                         <select
                           className="input input--tiny"
                           value={cs.status}
-                          onChange={(e) => updateMeta(cs.id, { status: e.target.value as any })}
+                          onChange={(e) => {
+                            const nextStatus = e.target.value as CaseStudyType["status"];
+                            updateMeta(cs.id, {
+                              status: nextStatus,
+                              visibility: nextStatus === "Published" ? "Public" : "Internal",
+                              isPublic: nextStatus === "Published",
+                              isFeaturedHome: nextStatus === "Published" ? cs.isFeaturedHome : false,
+                            });
+                          }}
                         >
-                          {CASE_STUDY_STATUS_VALUES.map((v) => (
+                          {PUBLISH_STATUS_VALUES.map((v) => (
                             <option key={v} value={v}>
                               {v}
                             </option>
                           ))}
                         </select>
-
-                        <select
-                          className="input input--tiny"
-                          value={cs.visibility}
-                          onChange={(e) => updateMeta(cs.id, { visibility: e.target.value as any })}
-                        >
-                          {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                            <option key={v} value={v}>
-                              {visibilityLabel(v)}
-                            </option>
-                          ))}
-                        </select>
+                        <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                          <input
+                            type="checkbox"
+                            checked={Boolean(cs.isFeaturedHome) && isPublished}
+                            disabled={!isPublished}
+                            onChange={(e) =>
+                              updateMeta(cs.id, {
+                                isFeaturedHome: e.target.checked,
+                                status: "Published",
+                                visibility: "Public",
+                                isPublic: true,
+                              })
+                            }
+                          />
+                          <span className="type-small">
+                            Feature on homepage ({featuredCount}/{maxFeatured})
+                          </span>
+                        </label>
                       </div>
+                      <p className="muted type-small" style={{ marginTop: 6 }}>
+                        Only the first {maxFeatured} featured case studies appear on the homepage.
+                      </p>
                     </div>
                   </div>
                 )}

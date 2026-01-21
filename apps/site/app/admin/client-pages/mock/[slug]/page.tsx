@@ -16,15 +16,12 @@ import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
 function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
-  const { sector, tags, tagMode, audience } = page.filters;
+  const { sector, tags, tagMode } = page.filters;
 
-  // visibility gating
+  // public-only gating
   if (cs.status !== "Published") return false;
-  if (audience === "Public") {
-    if (cs.visibility !== "Public") return false;
-  } else {
-    if (cs.visibility !== "Public" && cs.visibility !== "ClientSafe") return false;
-  }
+  if (!cs.isPublic) return false;
+  if (cs.visibility !== "Public") return false;
 
   // sector filter
   if (sector && !(cs.sectors ?? []).includes(sector)) return false;
@@ -89,7 +86,7 @@ export default function AdminClientPageMock({
               </div>
             ) : null}
             <p className="muted">
-              Showing <strong>{filtered.length}</strong> case studies (Published + visibility-gated).
+              Showing <strong>{filtered.length}</strong> case studies (Published + public).
             </p>
           </div>
 
