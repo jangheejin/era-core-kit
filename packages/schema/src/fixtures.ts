@@ -421,48 +421,6 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     isFeaturedHome: false,
     isPublic: true,
   },
-  {
-    id: "cs-temp-public",
-    title: "Public Sector Case Study",
-    slug: "temp-public",
-    client: "Dummy Public Sector Org",
-    sectors: [
-      "PublicSector",
-    ],
-    year: 2024,
-
-    mechanisms: [],
-    jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
-
-    heroImageUrl: "/img/temp2.svg",
-
-    summaryShort:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    brief:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-
-    outcomes: [
-      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
-    ],
-
-    evidence: [],
-
-    bodyMDX:
-      "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
-
-    sections: [
-      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
-      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
-    ],
-
-    attachments: [],
-    links: [],
-
-    isFeaturedHome: true,
-    isPublic: true,
-  },
 ] satisfies CaseStudyInput[];
 //];
 

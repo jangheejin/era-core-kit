@@ -1,7 +1,7 @@
 //apps/site/app/our-work/page.tsx
 
 // THIS IS NOW A SERVER PAGE that supplies data
-// - data comes from fixtures for now (demo version)
+// - data comes from the client-side demo CMS store (localStorage)
 // - later when the real CMS is finished, data will come from there
 //'use client';
 
@@ -12,15 +12,12 @@
 import '@styles/work.css';
 
 import { OurWorkDataBridge } from "./OurWorkDataBridge";
-import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server";
 
 //function toWorkCase(cs: any, featured: boolean): WorkCase {
 export default async function OurWorkPage() {
-  const fallback = await listPublicCaseStudies();
-
   return (
     <div data-cms-ssr="1">
-      <OurWorkDataBridge fallback={fallback} basePath="/our-work" />
+      <OurWorkDataBridge basePath="/our-work" />
     </div>
   );
 }

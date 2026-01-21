@@ -2,16 +2,26 @@
 /* INTRO / IMAGE WITH TEXT   */
 /* ========================= */
 
+/* Never size the image column as `auto` in grid — it can shrink the text column. */
+.c-section--intro {
+  --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
+  --intro-figure-min: 240px;
+  --intro-figure-max: 340px;
+}
+
 /* Desktop / tablet: text | image */
 .c-section--intro .intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) auto; /* text | image-sized column */
-  column-gap: clamp(1.5rem, 4vw, 4.5rem); /* space between text and image */
-  align-items: center;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(var(--intro-figure-min), var(--intro-figure-max));
+  column-gap: var(--intro-gap);
+  align-items: start;
   container-type: inline-size;
 }
 
 .c-section--intro .intro-copy {
+  min-width: 0;
   max-width: 47rem;
 }
 
@@ -33,7 +43,8 @@
 
 /* Image: desktop behavior */
 .c-section--intro .intro-image {
-  width: min(100%, clamp(200px, 32cqw, 360px));
+  min-width: 0;
+  width: 100%;
   justify-self: end;
 }
 
@@ -50,36 +61,22 @@
 /* MOBILE: < 580px → 1 col   */
 /* ========================= */
 
-@container (max-width: 42rem) {
-  .c-section--intro .intro-grid {
-    grid-template-columns: minmax(0, 1fr); /* single column stack */
-    row-gap: var(--space-3);
-  }
-
-  .c-section--intro .intro-image {
-    margin-top: var(--space-3);
-    justify-self: center; /* center the image block under the text */
-    width: min(100%, clamp(180px, 70cqw, 320px));
-  }
-
-  .c-section--intro .intro-image img {
-    width: 100%; /* scales with viewport but never “huge” */
+@media (max-width: 900px) {
+  .c-section--intro {
+    --intro-figure-min: 220px;
+    --intro-figure-max: 320px;
   }
 }
 
 @media (max-width: 720px) {
   .c-section--intro .intro-grid {
-    grid-template-columns: minmax(0, 1fr); /* single column stack */
+    grid-template-columns: 1fr;
     row-gap: var(--space-3);
   }
 
   .c-section--intro .intro-image {
     margin-top: var(--space-3);
-    justify-self: center; /* center the image block under the text */
-    width: min(100%, clamp(180px, 70vw, 320px));
-  }
-
-  .c-section--intro .intro-image img {
-    width: 100%; /* scales with viewport but never “huge” */
+    justify-self: center;
+    max-width: 320px;
   }
 }

@@ -34,10 +34,8 @@ function toGridItem(cs: CaseStudyType): CaseGridItemFromProps {
 
 export function SectorPageClient({
   sector,
-  fallbackItems,
 }: {
   sector: SectorValue;
-  fallbackItems: CaseStudyType[];
 }) {
   const { items } = useAdminCaseStudies();
 
@@ -45,9 +43,8 @@ export function SectorPageClient({
     const publicItems = items.filter(
       (cs) => cs.isPublic && cs.status === "Published",
     );
-    const source = publicItems.length ? publicItems : fallbackItems;
-    return source.filter((cs) => cs.sectors?.includes(sector));
-  }, [fallbackItems, items, sector]);
+    return publicItems.filter((cs) => cs.sectors?.includes(sector));
+  }, [items, sector]);
 
   const gridItems = useMemo(() => filtered.map(toGridItem), [filtered]);
 

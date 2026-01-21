@@ -27,10 +27,8 @@ function toWorkCase(cs: CaseStudyType): WorkCase {
 }
 
 export function OurWorkDataBridge({
-  fallback,
   basePath = "/our-work",
 }: {
-  fallback: CaseStudyType[];
   basePath?: string;
 }) {
   const { items } = useAdminCaseStudies();
@@ -39,9 +37,8 @@ export function OurWorkDataBridge({
     const publicItems = items.filter(
       (cs) => cs.isPublic && cs.status === "Published",
     );
-    const source = publicItems.length ? publicItems : fallback;
-    return source.map(toWorkCase);
-  }, [fallback, items]);
+    return publicItems.map(toWorkCase);
+  }, [items]);
 
   return <OurWorkClient cases={cases} basePath={basePath} demo={false} />;
 }
