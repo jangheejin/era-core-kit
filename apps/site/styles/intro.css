@@ -5,8 +5,8 @@
 /* Never size the image column as `auto` in grid — it can shrink the text column. */
 .c-section--intro {
   --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
-  --intro-figure-min: 240px;
-  --intro-figure-max: 340px;
+  --intro-figure-min: 200px;
+  --intro-figure-max: 300px;
 }
 
 /* Desktop / tablet: text | image */
@@ -56,7 +56,7 @@
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--radius);
-  max-height: clamp(180px, 32vw, 260px);
+  max-height: clamp(160px, 24vw, 220px);
 }
 
 /* ========================= */
@@ -65,8 +65,8 @@
 
 @media (max-width: 900px) {
   .c-section--intro {
-    --intro-figure-min: 220px;
-    --intro-figure-max: 320px;
+    --intro-figure-min: 200px;
+    --intro-figure-max: 280px;
   }
 }
 
