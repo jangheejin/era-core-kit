@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import type { ComponentType } from "react";
 
 import type { LayoutBlock, BlockType } from "@kit/blocks";
 import {
@@ -92,7 +91,9 @@ function renderBlock(block: LayoutBlock, key: string) {
     return null;
   }
 
-  return <Component key={key} {...(block as any).props} />;
+  const componentProps =
+    (block as LayoutBlock & { props?: Record<string, unknown> }).props ?? {};
+  return <Component key={key} {...componentProps} />;
 }
 
 /*

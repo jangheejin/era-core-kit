@@ -26,84 +26,28 @@ import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
 
-function parseListishString(raw: string): string[] {
-  const t = String(raw).trim();
-  if (!t) return [];
-  if (t.startsWith("[") && t.endsWith("]")) {
-    try {
-      const parsed = JSON.parse(t);
-      if (Array.isArray(parsed)) {
-        return parsed.map((x) => String(x).trim()).filter(Boolean);
-      }
-    } catch {}
-  }
-  return t
-    .split(/[\n;]+/g)
-    .flatMap((chunk) => chunk.split(","))
-    .map((x) => x.replace(/^['"]|['"]$/g, "").trim())
-    .filter(Boolean);
-}
-
-function coerceSectors(raw: unknown): string[] {
-  if (raw == null) return [];
-  if (typeof raw === "string") return parseListishString(raw);
-  if (Array.isArray(raw)) return raw.flatMap((x) => (typeof x === "string" ? parseListishString(x) : []));
-  return [];
-}
-
-function migrateEnsureNonEmptySectors(input: any) {
-  const allow = new Set(SECTOR_VALUES);
-  const DEFAULT = SECTOR_VALUES[0] as SectorValue;
-
-  const raw = input?.sectors ?? input?.categories ?? input?.category;
-  const tokens = coerceSectors(raw);
-  const cleaned = tokens.filter((t) => allow.has(t as SectorValue)) as SectorValue[];
-
-  if (cleaned.length > 0) return { ...input, sectors: cleaned };
-
-  if (typeof input?.sector === "string" && allow.has(input.sector as SectorValue)) {
-    return { ...input, sectors: [input.sector] };
-  }
-
-  if (typeof input?.primarySector === "string" && allow.has(input.primarySector as SectorValue)) {
-    return { ...input, sectors: [input.primarySector] };
-  }
-
-  return { ...input, sectors: [DEFAULT] };
-}
-
-
-function migrateEnsureAtLeastOneSector(input: any) {
-  const sectors = Array.isArray(input?.sectors) ? input.sectors : [];
-  const sector = typeof input?.sector === "string" ? input.sector : null;
-
-  if (sectors.length > 0) return input;
-  if (sector) return { ...input, sectors: [sector] };
-
-  // demo-only safety net
-  return { ...input, sectors: [DEFAULT_SECTOR] };
-}
-
-function migrateLegacySector(input: any) {
+function migrateLegacySector(input: unknown) {
   if (!input || typeof input !== "object") return input;
-  if (input.sectors == null && input.sector != null) {
-    input = { ...input, sectors: [input.sector] };
-    delete input.sector;
+  const record = input as Record<string, unknown>;
+  if (record.sectors == null && record.sector != null) {
+    const { sector, ...rest } = record;
+    return { ...rest, sectors: [sector] };
   }
   return input;
 }
 
-function migrateHeroUrl(input: any) {
+function migrateHeroUrl(input: unknown) {
   if (!input || typeof input !== "object") return input;
-  const raw = input.heroImageUrl ?? input.imageUrl;
+  const record = input as Record<string, unknown>;
+  const raw = record.heroImageUrl ?? record.imageUrl;
   if (typeof raw !== "string" || raw.trim() === "") {
-    return { ...input, heroImageUrl: DEFAULT_HERO_IMAGE_URL };
+    return { ...record, heroImageUrl: DEFAULT_HERO_IMAGE_URL };
   }
   // only normalize when heroImageUrl  is missing AND raw is a string
-  if (!input.heroImageUrl && typeof raw === "string") {
-    return { ...input, heroImageUrl: raw };
+  if (!record.heroImageUrl && typeof raw === "string") {
+    return { ...record, heroImageUrl: raw };
   }
-  return input;
+  return record;
 }
 
 //migration that guarantees sectors is non-empty
@@ -224,8 +168,6 @@ function loadLocalValidated(): CaseStudyType[] {
 
     const ok: CaseStudyType[] = [];
     for (const item of parsed) {
-      const id = typeof item?.id === "string" ? item.id : "";
-
       //instead of ignoring any entries with seed tag (the outdated, oversimplified mock case studies)
       // now we ignore by ID prefix instead
       if (typeof item?.id === "string" && item.id.startsWith("seed-")) continue;
@@ -245,9 +187,11 @@ function loadLocalValidated(): CaseStudyType[] {
       
       //comment out this debug stuff later
       else {
+        const itemId = typeof item?.id === "string" ? item.id : "unknown";
+        const itemSlug = typeof item?.slug === "string" ? item.slug : "unknown";
         console.warn(
           "[cms] Dropped invalid saved case study:",
-          { id: (item as any)?.id, slug: (item as any)?.slug },
+          { id: itemId, slug: itemSlug },
           res.error.flatten()
         );
       }
