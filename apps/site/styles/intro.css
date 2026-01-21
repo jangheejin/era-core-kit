@@ -56,7 +56,7 @@
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--radius);
-  max-height: clamp(220px, 45vw, 320px);
+  max-height: clamp(180px, 32vw, 260px);
 }
 
 /* ========================= */

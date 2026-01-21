@@ -126,7 +126,19 @@ export default function ListClient() {
   // filters
   const [q, setQ] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const tagFilterChips = useMemo(
+    () =>
+      normalizeTagList(
+        tagFilter
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+      ),
+    [tagFilter],
+  );
   const featuredCount = useMemo(
     () =>
       items.filter(
@@ -140,12 +152,18 @@ export default function ListClient() {
   );
   const maxFeatured = 6;
 
-  // --- Client Page Preview (opens the filtered page) ---
+  // --- Filtered Page Preview (opens a category or single-tag page) ---
   const clientPagePreviewHref = useMemo(() => {
-    if (!categoryFilter) return null;
-    const seg = tagSlug(sectorLabel(categoryFilter));
-    return seg ? `/${seg}` : null;
-  }, [categoryFilter]);
+    if (categoryFilter) {
+      const seg = tagSlug(sectorLabel(categoryFilter));
+      return seg ? `/${seg}` : null;
+    }
+    if (tagFilterChips.length === 1) {
+      const tagSeg = tagSlug(tagFilterChips[0]);
+      return tagSeg ? `/tag/${tagSeg}` : null;
+    }
+    return null;
+  }, [categoryFilter, tagFilterChips]);
 
   function openClientPagePreview() {
     if (!clientPagePreviewHref) return;
@@ -297,6 +315,7 @@ export default function ListClient() {
 
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
+    const wantedTags = tagFilterChips.map(tagSlug).filter(Boolean);
 
     return items.filter((cs) => {
       const sectors = normalizeSectorsStrict([
@@ -309,6 +328,14 @@ export default function ListClient() {
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
+      if (wantedTags.length) {
+        const tagSet = new Set(tagSlugs);
+        const match =
+          tagMode === "all"
+            ? wantedTags.every((t) => tagSet.has(t))
+            : wantedTags.some((t) => tagSet.has(t));
+        if (!match) return false;
+      }
       if (statusFilter && cs.status !== statusFilter) return false;
 
       if (!qq) return true;
@@ -325,7 +352,7 @@ export default function ListClient() {
 
       return hay.includes(qq);
     });
-  }, [items, q, categoryFilter, statusFilter]);
+  }, [items, q, categoryFilter, statusFilter, tagFilterChips, tagMode]);
 
   const sorted = useMemo(() => {
     const base = filtered ?? [];
@@ -341,7 +368,7 @@ export default function ListClient() {
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category and search.
+        This is a temporary demo CMS database. You can filter by category, tags, and search.
         Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
@@ -382,6 +409,23 @@ export default function ListClient() {
             ))}
           </select>
 
+          <input
+            className="input"
+            placeholder="Filter by tags (comma-separated)"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            style={{ minWidth: 220 }}
+          />
+
+          <select
+            className="input"
+            value={tagMode}
+            onChange={(e) => setTagMode(e.target.value as "any" | "all")}
+          >
+            <option value="any">Match any tag</option>
+            <option value="all">Match all tags</option>
+          </select>
+
 {/*           <select
             className="input"
             value={visibilityFilter}
@@ -417,17 +461,20 @@ export default function ListClient() {
             title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
             style={{ minWidth: 240, padding: ".85rem 1.5rem", fontSize: "1rem" }}
           >
-            Preview client page
+            Preview filtered page
           </button>
 
           <div className="c-stack" style={{ gap: ".35rem", minWidth: 240 }}>
             <span className="type-small" style={{ fontWeight: 700 }}>
-              Choose a category filter, then preview the matching client page.
+              Preview a filtered page (category or single-tag).
             </span>
             <span className="muted type-small">
               {clientPagePreviewHref
                 ? `This opens the public page at ${clientPagePreviewHref}.`
-                : "Pick a category above to enable the preview button."}
+                : "Pick a category or a single tag above to enable the preview button."}
+            </span>
+            <span className="muted type-small">
+              For multi-tag or category + tag combinations, use Client Pages to build a final page.
             </span>
           </div>
         </div>
