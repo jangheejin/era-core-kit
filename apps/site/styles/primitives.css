@@ -42,6 +42,23 @@
   }
 }
 
+@media (max-width: 480px) {
+  .c-container {
+    padding-inline: 1rem;
+  }
+
+  .c-buttonRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .c-button,
+  .c-button:link,
+  .c-button:visited {
+    width: 100%;
+  }
+}
+
 /*override for team page*/
 /*more outer padding from the page edge
 .c-section--team .c-container {

@@ -69,9 +69,6 @@ export function SectorPageClient({
             </p>
           </div>
 
-          <Link className="c-button c-button--sm" href="/our-work">
-            All case studies
-          </Link>
         </header>
 
         {gridItems.length === 0 ? (

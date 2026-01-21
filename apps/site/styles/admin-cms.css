@@ -2446,6 +2446,24 @@ fieldset.form-group > legend.form-label{
   white-space: nowrap;
 }
 
+.adminTopNav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.adminTopNav__toggle:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
 .adminTopNav__right {
   gap: 0.5rem;
 }
@@ -2632,6 +2650,74 @@ fieldset.form-group > legend.form-label{
 
 .adminTopNav__pill.is-primary:hover {
   background: rgba(0,0,0,0.9);
+}
+
+@media (max-width: 800px) {
+  .adminTopNav__inner {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .adminTopNav__toggle {
+    display: inline-flex;
+  }
+
+  .adminTopNav__links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.4rem;
+  }
+
+  .adminTopNav__links:not(.is-open) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .c-admin {
+    padding: 0.85rem;
+  }
+
+  .card.card-new {
+    padding: 1.25rem;
+  }
+
+  .c-admin .btn,
+  .c-admin .btnPrimary,
+  .c-admin .btnSmall {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .c-admin .input,
+  .c-admin select,
+  .c-admin textarea {
+    width: 100%;
+  }
+
+  .adminTopNav__inner {
+    padding: 0.55rem 0.9rem;
+  }
+
+  .adminTopNav__links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adminTopNav__pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dbItemHeader,
+  .dbActions {
+    width: 100%;
+  }
+
+  .dbActions {
+    justify-content: flex-start;
+  }
 }
 
 /* --- Database list item --- */

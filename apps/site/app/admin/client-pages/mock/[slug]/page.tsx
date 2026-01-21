@@ -11,7 +11,6 @@ import { useMemo } from "react";
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
 import { Markdown } from "@/components/Markdown";
 
-import { AdminTopNav } from "@/admin/components/AdminTopNav";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
@@ -57,8 +56,6 @@ export default function AdminClientPageMock({
 
   return (
     <main className="c-admin">
-      <AdminTopNav />
-
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
         <h1 className="type-h2">Client page preview</h1>
         <div className="row">

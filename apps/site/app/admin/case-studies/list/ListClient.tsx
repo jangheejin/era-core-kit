@@ -114,6 +114,10 @@ export default function ListClient() {
   const items = storeItems ?? [];
 
   const didAutoFixRef = useRef(false);
+  const [featuredSaveStateById, setFeaturedSaveStateById] = useState<
+    Record<string, "idle" | "saving" | "saved" | "error">
+  >({});
+  const featuredSaveTimersRef = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({});
 
   const searchParams = useSearchParams();
   const savedId = searchParams.get("saved");
@@ -157,10 +161,65 @@ export default function ListClient() {
 
   const [quickEditId, setQuickEditId] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      Object.values(featuredSaveTimersRef.current).forEach((timer) => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
+
+  function clearFeaturedSaveTimer(id: string) {
+    const existing = featuredSaveTimersRef.current[id];
+    if (existing) clearTimeout(existing);
+    featuredSaveTimersRef.current[id] = null;
+  }
+
+  function scheduleFeaturedSaveReset(id: string) {
+    clearFeaturedSaveTimer(id);
+    featuredSaveTimersRef.current[id] = setTimeout(() => {
+      setFeaturedSaveStateById((prev) => ({ ...prev, [id]: "idle" }));
+    }, 2000);
+  }
+
+  function setFeaturedSaveState(id: string, state: "idle" | "saving" | "saved" | "error") {
+    setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
+  }
+
+  function applyFeaturedQuickSave(
+    cs: CaseStudyType,
+    next: boolean,
+  ) {
+    setFeaturedSaveState(cs.id, "saving");
+    clearFeaturedSaveTimer(cs.id);
+    const updated = updateMeta(cs.id, {
+      isFeaturedHome: next,
+      status: "Published",
+      visibility: "Public",
+      isPublic: true,
+    });
+
+    if (updated) {
+      setFeaturedSaveState(cs.id, "saved");
+      scheduleFeaturedSaveReset(cs.id);
+      return;
+    }
+
+    updateMeta(cs.id, {
+      isFeaturedHome: cs.isFeaturedHome,
+      status: cs.status,
+      visibility: cs.visibility,
+      isPublic: cs.isPublic,
+    });
+    setFeaturedSaveState(cs.id, "error");
+    scheduleFeaturedSaveReset(cs.id);
+    window.alert("Could not update featured status. Please try again.");
+  }
+
   // Normalize + Zod-validate before saving
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
-    if (!existing) return;
+    if (!existing) return false;
 
     // gather sectors from: sectors[] / legacy sector / primarySector (if someone saved only that)
     const sectorsRaw =
@@ -204,10 +263,11 @@ export default function ListClient() {
     const res = CaseStudySchema.safeParse(candidate);
     if (!res.success) {
       console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
-      return;
+      return false;
     }
 
     upsertCaseStudy(res.data);
+    return true;
   }
 
   // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
@@ -337,22 +397,39 @@ export default function ListClient() {
         </div>
 
         {/* Client Page Preview */}
-        <div className="row listLensPage">
+        <div
+          className="row listLensPage"
+          style={{
+            alignItems: "stretch",
+            gap: "1rem",
+            flexWrap: "wrap",
+            marginTop: "1.25rem",
+            padding: ".85rem 1rem",
+            borderRadius: 10,
+            background: "rgba(15, 52, 96, 0.06)",
+          }}
+        >
           <button
             type="button"
-            className="btnSmall"
+            className="btnPrimary"
             onClick={openClientPagePreview}
             disabled={!clientPagePreviewHref}
             title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
+            style={{ minWidth: 240, padding: ".85rem 1.5rem", fontSize: "1rem" }}
           >
-            Client Page Preview
+            Preview client page
           </button>
 
-          <span className="muted type-small">
-            {clientPagePreviewHref
-              ? `Opens: ${clientPagePreviewHref}`
-              : "Select a category to preview its public page"}
-          </span>
+          <div className="c-stack" style={{ gap: ".35rem", minWidth: 240 }}>
+            <span className="type-small" style={{ fontWeight: 700 }}>
+              Choose a category filter, then preview the matching client page.
+            </span>
+            <span className="muted type-small">
+              {clientPagePreviewHref
+                ? `This opens the public page at ${clientPagePreviewHref}.`
+                : "Pick a category above to enable the preview button."}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -399,6 +476,7 @@ export default function ListClient() {
 
             const isPublished = cs.status === "Published";
             const isFeatured = Boolean(cs.isFeaturedHome);
+            const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
 
             return (
               <div
@@ -523,14 +601,18 @@ export default function ListClient() {
                             value={primary}
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
-                              const next = [v, ...sectors.filter((x) => x !== v)];
+                              const next = sectors.includes(v) ? sectors : [v, ...sectors];
                               updateMeta(cs.id, { sectors: next, primarySector: v });
                             }}
                           >
-                            {sectors.map((v) => (
-                              <option key={v} value={v}>
-                                {sectorLabel(v)}
-                              </option>
+                            {SECTOR_GROUPS.map((group) => (
+                              <optgroup key={group.id} label={group.label}>
+                                {group.values.map((v) => (
+                                  <option key={v} value={v}>
+                                    {sectorLabel(v)}
+                                  </option>
+                                ))}
+                              </optgroup>
                             ))}
                           </select>
                           <span className="muted type-small">Shown on cards.</span>
@@ -607,23 +689,41 @@ export default function ListClient() {
                             type="checkbox"
                             checked={Boolean(cs.isFeaturedHome) && isPublished}
                             disabled={!isPublished}
-                            onChange={(e) =>
-                              updateMeta(cs.id, {
-                                isFeaturedHome: e.target.checked,
-                                status: "Published",
-                                visibility: "Public",
-                                isPublic: true,
-                              })
-                            }
+                            onChange={(e) => applyFeaturedQuickSave(cs, e.target.checked)}
                           />
                           <span className="type-small">
                             Feature on homepage ({featuredCount}/{maxFeatured})
+                            {featuredSaveState === "saving" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saving…
+                              </span>
+                            )}
+                            {featuredSaveState === "saved" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saved
+                              </span>
+                            )}
+                            {featuredSaveState === "error" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Save failed
+                              </span>
+                            )}
                           </span>
                         </label>
                       </div>
                       <p className="muted type-small" style={{ marginTop: 6 }}>
                         Only the first {maxFeatured} featured case studies appear on the homepage.
                       </p>
+                    </div>
+
+                    <div className="row" style={{ justifyContent: "flex-end" }}>
+                      <button
+                        className="btnSmall"
+                        type="button"
+                        onClick={() => setQuickEditId(null)}
+                      >
+                        Save changes
+                      </button>
                     </div>
                   </div>
                 )}
