@@ -34,7 +34,14 @@ export function OurWorkClient({
   basePath?: string;
   demo?: boolean;
 }) {
-  const featured = useMemo(() => cases.filter((c) => c.featured), [cases]);
+  const featured = useMemo(() => {
+    const flagged = cases.filter((c) => c.featured);
+    if (flagged.length >= 6) return flagged;
+    if (flagged.length === 0) return cases.slice(0, 6);
+    const flaggedSlugs = new Set(flagged.map((c) => c.slug));
+    const filler = cases.filter((c) => !flaggedSlugs.has(c.slug));
+    return [...flagged, ...filler].slice(0, 6);
+  }, [cases]);
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
     featured[0]?.slug ?? null,

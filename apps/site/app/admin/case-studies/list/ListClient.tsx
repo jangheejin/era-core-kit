@@ -140,6 +140,18 @@ export default function ListClient() {
       ),
     [tagFilter],
   );
+  const availableTags = useMemo(() => {
+    const bySlug = new Map<string, string>();
+    for (const item of items) {
+      const tags = normalizeTagsStrict(toStringArray((item as any).tags));
+      for (const tag of tags) {
+        const slug = tagSlug(tag);
+        if (!slug || bySlug.has(slug)) continue;
+        bySlug.set(slug, tag);
+      }
+    }
+    return Array.from(bySlug.values()).sort((a, b) => a.localeCompare(b));
+  }, [items]);
   const featuredCount = useMemo(
     () =>
       items.filter(
@@ -416,7 +428,13 @@ export default function ListClient() {
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
             style={{ minWidth: 220 }}
+            list="tag-filter-options"
           />
+          <datalist id="tag-filter-options">
+            {availableTags.map((tag) => (
+              <option key={tag} value={tag} />
+            ))}
+          </datalist>
 
           <select
             className="input"

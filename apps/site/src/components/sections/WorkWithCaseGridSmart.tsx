@@ -39,7 +39,15 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     }
 
     const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
-    const mapped = featured.map(toCaseGridItem);
+    let ordered = featured;
+
+    if (typeof maxItems === "number" && featured.length < maxItems) {
+      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
+      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
+      ordered = [...featured, ...filler];
+    }
+
+    const mapped = ordered.map(toCaseGridItem);
     return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
   }, [adminItems, itemsSource, maxItems]);
 
