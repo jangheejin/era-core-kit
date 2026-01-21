@@ -16,7 +16,7 @@
     minmax(0, 1fr)
     minmax(var(--intro-figure-min), var(--intro-figure-max));
   column-gap: var(--intro-gap);
-  align-items: start;
+  align-items: stretch;
   container-type: inline-size;
 }
 
@@ -46,17 +46,18 @@
   min-width: 0;
   width: 100%;
   justify-self: end;
-  align-self: start;
+  align-self: stretch;
+  min-height: 0;
+  height: 100%;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
   border-radius: var(--radius);
-  max-height: clamp(160px, 24vw, 220px);
+  max-height: none;
 }
 
 /* ========================= */
@@ -83,6 +84,8 @@
   }
 
   .c-section--intro .intro-image img {
+    height: auto;
+    aspect-ratio: 4 / 3;
     max-height: none;
   }
 }

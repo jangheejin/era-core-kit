@@ -158,7 +158,7 @@ export default function ListClient() {
       const seg = tagSlug(sectorLabel(categoryFilter));
       return seg ? `/${seg}` : null;
     }
-    if (tagFilterChips.length === 1) {
+    if (tagFilterChips.length === 1 && tagFilterChips[0]) {
       const tagSeg = tagSlug(tagFilterChips[0]);
       return tagSeg ? `/tag/${tagSeg}` : null;
     }
