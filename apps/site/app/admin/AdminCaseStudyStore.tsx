@@ -16,6 +16,7 @@ import React, {
 
 import {
   CaseStudy as CaseStudySchema,
+  CASE_STUDIES_FIXTURE,
   type CaseStudyType,
   SECTOR_VALUES,
   type SectorValue,
@@ -143,7 +144,7 @@ type AdminCaseStudyContextValue = {
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
 
-  /** Clears local overrides and returns to an empty baseline. */
+  /** Clears local overrides and returns to the demo baseline. */
   resetToBaseline: () => void;
 };
 
@@ -276,10 +277,10 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-const BASELINE: CaseStudyType[] = [];
+const BASELINE: CaseStudyType[] = CASE_STUDIES_FIXTURE;
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
-  // Start empty to avoid SSR/CSR mismatch and rely on client storage only.
+  // Start from the fixture baseline to avoid SSR/CSR mismatch and seed storage.
   const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
   const [hydrated, setHydrated] = useState(false);
   /* const [items, setItems] = useState<CaseStudyType[]>(BASELINE); */
@@ -310,7 +311,12 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     //setItems(mergeFixtureWithStored(stored));
     /* console.log("!!!!Final loaded case studies:", items); */
 
-    setItems(stored);
+    if (stored.length > 0) {
+      setItems(stored);
+    } else {
+      setItems(BASELINE);
+      saveLocal(BASELINE);
+    }
     setHydrated(true);
   }, []);
 
@@ -355,6 +361,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     }
     hasUserEditsRef.current = false; // important: don’t re-persist baseline
     setItems(BASELINE);
+    saveLocal(BASELINE);
   }, []);
 
 /*   const addCaseStudy = (cs: CaseStudyType) => {
