@@ -63,8 +63,8 @@ export default function AdminPage() {
       <p className="muted">
         This is a temporary demo CMS so you can click around and see how content editing might feel.<br/><br/>
         You can create and edit case studies (and preview them, both individually and as if they're part of a database), but changes are stored only in your browser. Nothing persists to a server backend yet.<br/><br/>
-        This is for preview purposes only. Your edits are saved in your browser and will stay there as long as you don't clear your cache/use incognito mode.<br/><br/> 
-        The demo case study database currently contains <strong>{items.length}</strong> total case studies, 5 of which are mock entries created to populate the database with something. After creating a fake case study of your own, upon viewing the database, you will see your creations along with the existing mock entries.<br/>
+        This is for preview purposes only. Your edits are saved in your browser and will stay there as long as you don't clear your cache/use incognito mode.<br/><br/>
+        The demo case study database currently contains <strong>{items.length}</strong> case studie{items.length === 1 ? "y" : "s"} stored in this browser. Publish and mark a case study as featured to see it appear on the public homepage and archive views.<br/>
       </p>
 
       {isLoggedIn ? (

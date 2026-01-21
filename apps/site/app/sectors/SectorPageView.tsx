@@ -7,16 +7,14 @@
 //import "@styles/admin-cms.css"; // remove if you don't want admin styles here
 
 import { notFound } from "next/navigation";
-import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
+import { sectorFromRouteSlug } from "@kit/schema";
 import { SectorPageClient } from "./SectorPageClient";
 
 export default async function SectorPageView({ sectorSlug }: { sectorSlug: string }) {
-  const res = await getCaseStudiesBySectorRouteSlug(sectorSlug);
-  if (!res) notFound();
+  const sector = sectorFromRouteSlug(sectorSlug);
+  if (!sector) notFound();
 
-  const { sector, items: fallbackItems } = res;
-
-  return <SectorPageClient sector={sector} fallbackItems={fallbackItems} />;
+  return <SectorPageClient sector={sector} />;
 }
 
 /* 
