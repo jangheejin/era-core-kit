@@ -2834,6 +2834,37 @@ fieldset.form-group > legend.form-label{
   margin-top: 0.75rem;
 }
 
+@media (max-width: 720px) {
+  .dbItemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dbItemMain {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .dbActions {
+    width: 100%;
+  }
+
+  .dbActions .btnSmall {
+    flex: 1 1 auto;
+  }
+
+  .dbResultsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-actions--top,
+  .form-actions--editCaseStudy {
+    position: static;
+    top: auto;
+  }
+}
+
 /*tooltip for buttons and links*/
 /* .tooltip__trigger {
   position: relative;
