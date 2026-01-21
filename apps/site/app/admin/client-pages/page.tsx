@@ -155,10 +155,15 @@ export default function AdminClientPages() {
               (e.g., “Local Government” or “Energy”).
             </p>
             <ol className="muted type-small" style={{ marginTop: ".75rem", paddingLeft: "1.1rem" }}>
-              <li>Pick the categories/tags you want on the page.</li>
+              <li>Pick the category and/or tags you want on the page (you can combine both).</li>
               <li>Write the intro text for context.</li>
               <li>Save, then preview to share the link.</li>
             </ol>
+            <p className="muted type-small" style={{ marginTop: ".75rem" }}>
+              The Case Study Library is a database view: set filters there to preview a purely
+              filtered page without saving it. Client pages here are the “finalized” versions with
+              custom intros and shareable URLs.
+            </p>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
             <button className="btnSmall" type="button" onClick={resetForm}>
@@ -207,10 +212,10 @@ export default function AdminClientPages() {
             </p>
           </div>
           <div className="form-group">
-            <label className="form-label">Alternate preview path</label>
+            <label className="form-label">Database preview path</label>
             <p className="muted type-small">
-              In the Case Study Library, set a category filter and click “Preview client page” to
-              see how the live filtered page will look with current case studies.
+              In the Case Study Library, set category and tag filters, then click “Preview filtered
+              page” to see the live database-filtered view with current case studies.
             </p>
           </div>
         </div>
