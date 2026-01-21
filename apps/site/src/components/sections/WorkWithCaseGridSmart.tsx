@@ -26,21 +26,22 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
 }
 
 export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
-  const { items: fallbackItems, layout, heading, text, text2, itemsSource, maxItems } = props;
+  const { layout, heading, text, text2, itemsSource, maxItems } = props;
   const { items: adminItems } = useAdminCaseStudies();
 
   const items = useMemo(() => {
-    if (itemsSource !== "featured") return fallbackItems;
+    const publicItems = adminItems.filter(
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
+    );
 
-    const featured = adminItems
-      .filter((cs) => Boolean(cs.isPublic) && Boolean(cs.isFeaturedHome))
-      .map(toCaseGridItem);
+    const source =
+      itemsSource === "featured"
+        ? publicItems.filter((cs) => Boolean(cs.isFeaturedHome))
+        : publicItems;
 
-    const limited = typeof maxItems === "number" ? featured.slice(0, maxItems) : featured;
-
-    // If nothing is marked featured, fall back (so you don’t get a blank section by accident).
-    return limited.length ? limited : fallbackItems;
-  }, [adminItems, fallbackItems, itemsSource, maxItems]);
+    const mapped = source.map(toCaseGridItem);
+    return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
+  }, [adminItems, itemsSource, maxItems]);
 
   return (
     <section className="c-section">

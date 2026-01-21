@@ -45,6 +45,7 @@ import "@fontsource/oswald/600.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { type Metadata } from "next";
+import { Suspense } from "react";
 import { Providers } from "./Providers";
 import Eruda from "@/components/dev/Eruda";
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
@@ -101,7 +102,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="font-setup">
       <body>
-        <Eruda />
+        <Suspense fallback={null}>
+          <Eruda />
+        </Suspense>
         <Providers>
           <Header />
           {children}

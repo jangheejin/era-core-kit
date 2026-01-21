@@ -15,7 +15,6 @@
 import { SECTOR_ROUTE_SLUG, sectorFromRouteSlug, tagSlug } from "@kit/schema";
 import SectorPageView from "@/sectors/SectorPageView";
 import { TagPageClient } from "@/tag/TagPageClient";
-import { getCaseStudiesByTagRouteSlug } from "@/lib/caseStudies";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -34,9 +33,8 @@ export default async function RootSectorPage({
 
   const wanted = tagSlug(params.sector);
   if (!wanted) return notFound();
-  const fallbackItems = await getCaseStudiesByTagRouteSlug(wanted);
   return (
-    <TagPageClient tagSlugParam={params.sector} fallbackItems={fallbackItems} />
+    <TagPageClient tagSlugParam={params.sector} />
   );
 }
 

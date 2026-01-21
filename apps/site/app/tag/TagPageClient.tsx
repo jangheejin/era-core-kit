@@ -12,10 +12,8 @@ function matchesTag(cs: CaseStudyType, tagParamSlug: string) {
 
 export function TagPageClient({
   tagSlugParam,
-  fallbackItems,
 }: {
   tagSlugParam: string;
-  fallbackItems: CaseStudyType[];
 }) {
   const { items } = useAdminCaseStudies();
   const wanted = tagSlug(tagSlugParam);
@@ -24,9 +22,8 @@ export function TagPageClient({
     const publicItems = items.filter(
       (cs) => cs.isPublic && cs.status === "Published",
     );
-    const source = publicItems.length ? publicItems : fallbackItems;
-    return source.filter((cs) => matchesTag(cs, tagSlugParam));
-  }, [fallbackItems, items, tagSlugParam]);
+    return publicItems.filter((cs) => matchesTag(cs, tagSlugParam));
+  }, [items, tagSlugParam]);
 
   const displayTag =
     filtered

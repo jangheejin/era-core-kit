@@ -16,8 +16,7 @@ import React, {
 
 import {
   CaseStudy as CaseStudySchema,
-  CaseStudyInput,
-  CASE_STUDIES_FIXTURE,//the dummy entries for the demo cms database
+  CASE_STUDIES_FIXTURE,
   type CaseStudyType,
   SECTOR_VALUES,
   type SectorValue,
@@ -145,7 +144,7 @@ type AdminCaseStudyContextValue = {
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
 
-  /** Clears local overrides and returns to fixture baseline. */
+  /** Clears local overrides and returns to the demo baseline. */
   resetToBaseline: () => void;
 };
 
@@ -269,56 +268,6 @@ function saveLocal(items: CaseStudyType[]) {
   }
 }
 
-//function buildInitialItems(): CaseStudyType[] {
-function buildBaselineItems(): CaseStudyType[] {
-//  const stored = loadLocalValidated();
-  // baseline = fixture baseline (+ optional seed baseline), no window/localStorage
-  const bySlug = new Map<string, CaseStudyType>();
-
-  // baseline → overrides
-  for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-/*   for (const cs of SEED_CASE_STUDIES) {
-    if (!bySlug.has(cs.slug)) {
-      bySlug.set(cs.slug, cs);
-    }
-  } */
-//  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs); // optional (keeps RAW_SEEDS)
-  //for (const cs of stored) bySlug.set(cs.slug, cs);
-
-  // deterministic order: fixture order then stored-only
-  const order: string[] = [];
-  const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
-  for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  //for (const cs of SEED_CASE_STUDIES) push(cs.slug);
-  //for (const cs of stored) push(cs.slug);
-
-  return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
-}
-
-/**
- * Merge rules: fixture baseline → stored overrides
- * Ordering: fixture order first, then any stored-only slugs appended (deterministic)
- */
-function mergeFixtureWithStored(
-  stored: CaseStudyType[]): CaseStudyType[] {
-    const bySlug = new Map<string, CaseStudyType>();
-
-    for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-    for (const cs of stored) bySlug.set(cs.slug, cs); // overrides baseline
-
-    const order: string[] = [];
-    const push = (slug: string) => {
-      if (!order.includes(slug)) order.push(slug);
-    };
-
-    for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-    for (const cs of stored) push(cs.slug); // adds stored-only slugs
-
-    return order
-      .map((slug) => bySlug.get(slug))
-      .filter((x): x is CaseStudyType => Boolean(x));
-  }
-
 function slugify(s: string) {
   return s
     .toLowerCase()
@@ -328,38 +277,10 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-const BASELINE = buildBaselineItems();
-
-function mergeBaselineWithStored(baseline: CaseStudyType[], stored: CaseStudyType[]) {
-  const bySlug = new Map<string, CaseStudyType>();
-
-  //baseline first, then stored overrides
-  for (const cs of baseline) bySlug.set(cs.slug, cs);
-  for (const cs of stored) bySlug.set(cs.slug, cs);
-
-  const order: string[] = [];
-  const seen = new Set<string>();
-  const push = (slug: string) => { 
-    if (seen.has(slug)) return;
-      seen.add(slug);
-      order.push(slug);
-/*     if (!order.includes(slug)) order.push(slug); */ 
-  };
-
-  //STORED FIRST (preserves “newest first” because upsert puts new items first)
-  for (const cs of stored) push(cs.slug);
-
-  //then add whatever fixtures weren't in storage
-  for (const cs of baseline) push(cs.slug);
-
-  return order
-    .map((slug) => bySlug.get(slug))
-    /* .map((s) => bySlug.get(s)) */
-    .filter((x): x is CaseStudyType => Boolean(x));
-}
+const BASELINE: CaseStudyType[] = CASE_STUDIES_FIXTURE;
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
-  // Start from fixtures only to avoid SSR/CSR mismatch.
+  // Start from the fixture baseline to avoid SSR/CSR mismatch and seed storage.
   const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
   const [hydrated, setHydrated] = useState(false);
   /* const [items, setItems] = useState<CaseStudyType[]>(BASELINE); */
@@ -390,14 +311,16 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     //setItems(mergeFixtureWithStored(stored));
     /* console.log("!!!!Final loaded case studies:", items); */
 
-    //now hydrated effect always sets hydrated
     if (stored.length > 0) {
-      setItems(mergeBaselineWithStored(BASELINE, stored));
+      setItems(stored);
+    } else {
+      setItems(BASELINE);
+      saveLocal(BASELINE);
     }
     setHydrated(true);
   }, []);
 
-  // Persist any changes (this will store fixtures too but that’s OK for demo)
+  // Persist any changes (stored in-browser for demo)
   useEffect(() => {
     if (!hydrated) return;
     if (!hasUserEditsRef.current) return;
@@ -437,7 +360,8 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       try { window.localStorage.removeItem(STORAGE_KEY); } catch {}
     }
     hasUserEditsRef.current = false; // important: don’t re-persist baseline
-    setItems(CASE_STUDIES_FIXTURE);
+    setItems(BASELINE);
+    saveLocal(BASELINE);
   }, []);
 
 /*   const addCaseStudy = (cs: CaseStudyType) => {
