@@ -294,6 +294,10 @@ body > footer > div > p {
   .site-footer__nav {
     justify-content: flex-start;
   }
+  .site-footer__legal {
+    font-size: 0.65rem;
+    line-height: 1.3;
+  }
 /*   .site-footer__legal {
     grid-column: 1 / 1;
   } */
