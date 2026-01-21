@@ -16,6 +16,8 @@ import {
   type ChangeEvent,
 } from "react";
 
+import Image from "next/image";
+
 import {
   CaseStudy as CaseStudySchema,
   type CaseStudyInput,
@@ -419,10 +421,13 @@ export default function NewCaseStudyPage() {
             {heroImageUrl && (
               <div style={{ marginTop: "0.75rem" }}>
                 <p className="muted type-small">Preview</p>
-                <img
+                <Image
                   src={heroImageUrl}
                   alt="Hero preview"
+                  width={640}
+                  height={360}
                   style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+                  unoptimized
                 />
               </div>
             )}
