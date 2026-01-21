@@ -11,15 +11,10 @@ import "@styles/admin-cms.css";
 import { showAdvanced } from "@/lib/featureFlags";
 
 import { 
-  createContext,
-  useContext,
   useMemo,
   useState,
-  type ReactNode,
   type ChangeEvent,
 } from "react";
-
-import Link from "next/link";
 
 import {
   CaseStudy as CaseStudySchema,
@@ -31,7 +26,6 @@ import {
   CASE_STUDY_VISIBILITY_VALUES,
   DEFAULT_HERO_IMAGE_URL,
   deriveSummaryFromWriteUp,
-  plainTextToMdxPreservingLineBreaks,
 } from "@kit/schema";
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
@@ -40,7 +34,6 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-import { normalizeTagList } from "@kit/schema";
 
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false
@@ -119,21 +112,10 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-type Draft = Partial<CaseStudyInput>;
-
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;
   const t = s.trim();
   return t ? t : undefined;
-}
-
-function autoSummaryFromText(text: string, max = 180) {
-  const t = text.trim().replace(/\s+/g, " ");
-  if (!t) return "";
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trim() + "…";
 }
 
 export default function NewCaseStudyPage() {
@@ -144,7 +126,6 @@ export default function NewCaseStudyPage() {
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
 
-  const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
@@ -188,15 +169,12 @@ export default function NewCaseStudyPage() {
   const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
     useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
-  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isFeaturedHome] = useState(false);
+  const [isPublic] = useState(true);
   
   // form state
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
-  const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
-
-  // Flag to signal that core required fields have been completed (unlocks enhancements once the basics are there)
-  const hasCore = client.trim().length > 0 && writeUp.trim().length > 0;
+  const [brief] = useState("");          // “Preview blurb” (optional)
 
   // Derived fields (DO NOT put hooks inside other hooks)
   const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from toolbar
@@ -209,9 +187,8 @@ export default function NewCaseStudyPage() {
     return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
   }, [preview, bodyMDX]);
 
-  const slugBase = (client || title).trim(); // or just title if you're unifying them
+  const slugBase = client.trim();
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
-  const effectiveSlug = useMemo(() => slugify(slug.trim() || autoSlug), [slug, autoSlug]);
 
   const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
     //const bodyMDX = plainTextToMdxPreservingLineBreaks(writeUp);
@@ -358,7 +335,7 @@ export default function NewCaseStudyPage() {
         you can preview them individually or as part of a mock database of case studies, where you can 
         filter by client type, tags, etc. <br/><br/>
         The case study objects you create in this demo are stored only in your browser. 
-        They will remain viewable by you as long as you don't clear 
+        They will remain viewable by you as long as you don&apos;t clear 
         your cache/use incognito mode, but they are not connected to any persistent backend.
       </ContextBanner>
 
@@ -536,7 +513,7 @@ export default function NewCaseStudyPage() {
 
                 <p className="admin-hint">
                   OPTIONAL: Assign categories and tags so this case study can be used in custom websites for created exclusively for certain clients. Tags and categories are what allow filtering and searching.
-                  For example, you might tag a case study with "Public Sector" so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
+                  For example, you might tag a case study with &quot;Public Sector&quot; so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
                 </p>
               </div>
               <span className="admin-collapse__chevron" aria-hidden="true">
@@ -638,7 +615,13 @@ export default function NewCaseStudyPage() {
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
             <div className="form-field">
               <label className="form-label">Status</label>
-              <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
+              <select
+                className="input"
+                value={status}
+                onChange={(e) =>
+                  setStatus(e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number])
+                }
+              >
                 {CASE_STUDY_STATUS_VALUES.map((v) => (
                   <option key={v} value={v}>
                     {v}
@@ -653,7 +636,11 @@ export default function NewCaseStudyPage() {
               <select
                 className="input"
                 value={visibility}
-                onChange={(e) => setVisibility(e.target.value as any)}
+                onChange={(e) =>
+                  setVisibility(
+                    e.target.value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
+                  )
+                }
               >
                 {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
                   <option key={v} value={v}>
@@ -722,7 +709,7 @@ export default function NewCaseStudyPage() {
 
         <div className="card card-new mt">
           <h3>Validation</h3>
-          <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
+          <p>Check what needs to be added to/changed in your draft so you can &quot;publish&quot; it.</p>
           {validation.success ? (
             <p className="muted">✅ Valid (ready to save)</p>
           ) : (

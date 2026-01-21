@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import type { ComponentType } from "react";
 
 import type { LayoutBlock, BlockType } from "@kit/blocks";
 import {
@@ -27,7 +26,9 @@ import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/section
 
 //const blockComponentMap: Record<BlockType, ComponentType<any>> = {
 //const blockComponentMap: Partial<Record<BlockType, React.ComponentType<any>>> = {
-const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
+const blockComponents: Partial<
+  Record<BlockType, React.ComponentType<Record<string, unknown>>>
+> = {
   Hero,
   IntroWithImage,
   MissionText,
@@ -92,7 +93,9 @@ function renderBlock(block: LayoutBlock, key: string) {
     return null;
   }
 
-  return <Component key={key} {...(block as any).props} />;
+  const componentProps =
+    (block as LayoutBlock & { props?: Record<string, unknown> }).props ?? {};
+  return <Component key={key} {...componentProps} />;
 }
 
 /*

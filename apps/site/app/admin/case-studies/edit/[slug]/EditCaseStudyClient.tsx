@@ -21,7 +21,6 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
-import { ContextBanner } from "@/admin/components/ContextBanner";
 
 const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
 
@@ -83,11 +82,6 @@ function applyLink(textarea: HTMLTextAreaElement | null) {
   applyWrap(textarea, "[", "](https://)");
 }
 
-//helper for previewing and saving at same time
-function buildPreviewUrl(slug: string) {
-  return `/admin/case-studies/mock/${slug}`;
-}
-
 export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
 //  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
@@ -111,13 +105,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [sector, setSector] = useState<string>(""); // matches create page (allows empty)
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [tags, setTags] = useState<string>("");
-
-  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([
-    DEFAULT_SECTOR,
-  ])
-
-//  const [isPublic, setIsPublic] = useState(false);
-//  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
 
   // publishing (Draft / Published + Featured)
   type PublishStatus = "Draft" | "Published";
@@ -146,35 +133,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   );
   const maxFeatured = 6;
 
-  function addCategoryDraft() {
-    setCategoryDrafts((prev) => [...prev, ""]);
-  }
-
-  function setCategoryAt(index: number, value: SectorValue | "") {
-    setCategoryDrafts((prev) => prev.map((v, i) => (i === index ? value : v)));
-  }
-
-  function removeCategoryAt(index: number) {
-    setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
-    const out: SectorValue[] = [];
-    const seen = new Set<SectorValue>();
-    for (const d of drafts) {
-      if (!d) continue;
-      if (seen.has(d)) continue;
-      seen.add(d);
-      out.push(d);
-    }
-    return out.length ? out : [DEFAULT_SECTOR];
-  }
-
-  const selectedCategories = useMemo(
-    () => normalizeCategories(categoryDrafts),
-    [categoryDrafts],
-  );
-
   // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
     if (!cs || ready) return;
@@ -183,14 +141,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setWriteUp(cs.bodyMDX ?? "");
     setBrief(cs.brief ?? "");
 
-    const initialSectors = 
+    const initialSector =
       Array.isArray(cs.sectors) && cs.sectors.length > 0
-        ? cs.sectors: [DEFAULT_SECTOR];
-    setCategoryDrafts(initialSectors);
-
-/*     const initialSector = (cs.sectors?.[0] as SectorValue | undefined) ?? DEFAULT_SECTOR;
+        ? (cs.sectors[0] as SectorValue)
+        : DEFAULT_SECTOR;
     setSector(initialSector);
- */
 
     setTags(Array.isArray(cs.tags) ? cs.tags.join(", ") : "");
     setHeroImageUrl(cs.heroImageUrl ?? "");
@@ -254,7 +209,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       upsertCaseStudy(parsed.data);
       setFeaturedSaveState("saved");
       scheduleFeaturedSaveReset();
-    } catch (error) {
+    } catch {
       setIsFeaturedHome(previous);
       setFeaturedSaveState("error");
       scheduleFeaturedSaveReset();
@@ -297,7 +252,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     [slugDraft, autoSlug],
   );
 
-  const bannerRef = useRef<HTMLDivElement | null>(null);
   const writeUpRef = useRef<HTMLTextAreaElement | null>(null);
 
   //SINGLE candidateInput builder (nullable)
@@ -395,7 +349,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const baseBrief = cs.brief ?? "";
     const baseSector = (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
     const baseTags = Array.isArray(cs.tags) ? cs.tags.join(", ") : "";
-    const baseHero = cs.heroImageUrl ?? "";
 //    const basePublic = Boolean(cs.isPublic);
 //    const baseFeatured = Boolean(cs.isFeaturedHome);
 
