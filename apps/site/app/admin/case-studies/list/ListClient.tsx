@@ -12,6 +12,7 @@ import {
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
+  sectorRouteSlug,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
@@ -155,8 +156,8 @@ export default function ListClient() {
   // --- Filtered Page Preview (opens a category or single-tag page) ---
   const clientPagePreviewHref = useMemo(() => {
     if (categoryFilter) {
-      const seg = tagSlug(sectorLabel(categoryFilter));
-      return seg ? `/${seg}` : null;
+      const seg = sectorRouteSlug(categoryFilter);
+      return seg ? `/sectors/${seg}` : null;
     }
     if (tagFilterChips.length === 1 && tagFilterChips[0]) {
       const tagSeg = tagSlug(tagFilterChips[0]);
