@@ -229,8 +229,12 @@ const selectedCategories = useMemo(
     }
   }, [isPublished, isFeaturedHome]);
 
-  const availabilityPreset = "internal" as const;
-  const applyAvailabilityPreset = (_preset: "internal" | "clients" | "website") => {};
+  const [availabilityPreset, setAvailabilityPreset] = useState<"internal" | "clients" | "website">(
+    "internal",
+  );
+  const applyAvailabilityPreset = (preset: "internal" | "clients" | "website") => {
+    setAvailabilityPreset(preset);
+  };
 /*   type SharingPreset = "internal" | "clients" | "website" | "custom";
 
 function deriveSharingPreset(): SharingPreset {

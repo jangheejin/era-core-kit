@@ -397,22 +397,36 @@ export default function ListClient() {
         </div>
 
         {/* Client Page Preview */}
-        <div className="row listLensPage">
+        <div
+          className="row listLensPage"
+          style={{
+            alignItems: "stretch",
+            gap: ".75rem",
+            flexWrap: "wrap",
+            marginTop: ".5rem",
+          }}
+        >
           <button
             type="button"
-            className="btnSmall"
+            className="btnPrimary"
             onClick={openClientPagePreview}
             disabled={!clientPagePreviewHref}
             title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
+            style={{ minWidth: 220, padding: ".65rem 1.25rem" }}
           >
-            Client Page Preview
+            Preview client page
           </button>
 
-          <span className="muted type-small">
-            {clientPagePreviewHref
-              ? `Opens: ${clientPagePreviewHref}`
-              : "Select a category to preview its public page"}
-          </span>
+          <div className="c-stack" style={{ gap: ".25rem", minWidth: 240 }}>
+            <span className="type-small" style={{ fontWeight: 600 }}>
+              Choose a category filter, then preview the matching client page.
+            </span>
+            <span className="muted type-small">
+              {clientPagePreviewHref
+                ? `This opens the public page at ${clientPagePreviewHref}.`
+                : "Pick a category above to enable the preview button."}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -584,14 +598,18 @@ export default function ListClient() {
                             value={primary}
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
-                              const next = [v, ...sectors.filter((x) => x !== v)];
+                              const next = sectors.includes(v) ? sectors : [v, ...sectors];
                               updateMeta(cs.id, { sectors: next, primarySector: v });
                             }}
                           >
-                            {sectors.map((v) => (
-                              <option key={v} value={v}>
-                                {sectorLabel(v)}
-                              </option>
+                            {SECTOR_GROUPS.map((group) => (
+                              <optgroup key={group.id} label={group.label}>
+                                {group.values.map((v) => (
+                                  <option key={v} value={v}>
+                                    {sectorLabel(v)}
+                                  </option>
+                                ))}
+                              </optgroup>
                             ))}
                           </select>
                           <span className="muted type-small">Shown on cards.</span>
@@ -693,6 +711,16 @@ export default function ListClient() {
                       <p className="muted type-small" style={{ marginTop: 6 }}>
                         Only the first {maxFeatured} featured case studies appear on the homepage.
                       </p>
+                    </div>
+
+                    <div className="row" style={{ justifyContent: "flex-end" }}>
+                      <button
+                        className="btnSmall"
+                        type="button"
+                        onClick={() => setQuickEditId(null)}
+                      >
+                        Save changes
+                      </button>
                     </div>
                   </div>
                 )}
