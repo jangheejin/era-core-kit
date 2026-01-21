@@ -114,6 +114,10 @@ export default function ListClient() {
   const items = storeItems ?? [];
 
   const didAutoFixRef = useRef(false);
+  const [featuredSaveStateById, setFeaturedSaveStateById] = useState<
+    Record<string, "idle" | "saving" | "saved" | "error">
+  >({});
+  const featuredSaveTimersRef = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({});
 
   const searchParams = useSearchParams();
   const savedId = searchParams.get("saved");
@@ -157,10 +161,65 @@ export default function ListClient() {
 
   const [quickEditId, setQuickEditId] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      Object.values(featuredSaveTimersRef.current).forEach((timer) => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
+
+  function clearFeaturedSaveTimer(id: string) {
+    const existing = featuredSaveTimersRef.current[id];
+    if (existing) clearTimeout(existing);
+    featuredSaveTimersRef.current[id] = null;
+  }
+
+  function scheduleFeaturedSaveReset(id: string) {
+    clearFeaturedSaveTimer(id);
+    featuredSaveTimersRef.current[id] = setTimeout(() => {
+      setFeaturedSaveStateById((prev) => ({ ...prev, [id]: "idle" }));
+    }, 2000);
+  }
+
+  function setFeaturedSaveState(id: string, state: "idle" | "saving" | "saved" | "error") {
+    setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
+  }
+
+  function applyFeaturedQuickSave(
+    cs: CaseStudyType,
+    next: boolean,
+  ) {
+    setFeaturedSaveState(cs.id, "saving");
+    clearFeaturedSaveTimer(cs.id);
+    const updated = updateMeta(cs.id, {
+      isFeaturedHome: next,
+      status: "Published",
+      visibility: "Public",
+      isPublic: true,
+    });
+
+    if (updated) {
+      setFeaturedSaveState(cs.id, "saved");
+      scheduleFeaturedSaveReset(cs.id);
+      return;
+    }
+
+    updateMeta(cs.id, {
+      isFeaturedHome: cs.isFeaturedHome,
+      status: cs.status,
+      visibility: cs.visibility,
+      isPublic: cs.isPublic,
+    });
+    setFeaturedSaveState(cs.id, "error");
+    scheduleFeaturedSaveReset(cs.id);
+    window.alert("Could not update featured status. Please try again.");
+  }
+
   // Normalize + Zod-validate before saving
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
-    if (!existing) return;
+    if (!existing) return false;
 
     // gather sectors from: sectors[] / legacy sector / primarySector (if someone saved only that)
     const sectorsRaw =
@@ -204,10 +263,11 @@ export default function ListClient() {
     const res = CaseStudySchema.safeParse(candidate);
     if (!res.success) {
       console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
-      return;
+      return false;
     }
 
     upsertCaseStudy(res.data);
+    return true;
   }
 
   // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
@@ -399,6 +459,7 @@ export default function ListClient() {
 
             const isPublished = cs.status === "Published";
             const isFeatured = Boolean(cs.isFeaturedHome);
+            const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
 
             return (
               <div
@@ -607,17 +668,25 @@ export default function ListClient() {
                             type="checkbox"
                             checked={Boolean(cs.isFeaturedHome) && isPublished}
                             disabled={!isPublished}
-                            onChange={(e) =>
-                              updateMeta(cs.id, {
-                                isFeaturedHome: e.target.checked,
-                                status: "Published",
-                                visibility: "Public",
-                                isPublic: true,
-                              })
-                            }
+                            onChange={(e) => applyFeaturedQuickSave(cs, e.target.checked)}
                           />
                           <span className="type-small">
                             Feature on homepage ({featuredCount}/{maxFeatured})
+                            {featuredSaveState === "saving" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saving…
+                              </span>
+                            )}
+                            {featuredSaveState === "saved" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saved
+                              </span>
+                            )}
+                            {featuredSaveState === "error" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Save failed
+                              </span>
+                            )}
                           </span>
                         </label>
                       </div>

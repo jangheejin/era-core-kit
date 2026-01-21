@@ -230,7 +230,7 @@ const selectedCategories = useMemo(
   }, [isPublished, isFeaturedHome]);
 
   const availabilityPreset = "internal" as const;
-  const applyAvailabilityPreset = () => {};
+  const applyAvailabilityPreset = (_preset: "internal" | "clients" | "website") => {};
 /*   type SharingPreset = "internal" | "clients" | "website" | "custom";
 
 function deriveSharingPreset(): SharingPreset {
