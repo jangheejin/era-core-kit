@@ -341,9 +341,10 @@ h5.work-detail__sector {
 
   padding-block: 0.25rem 1.75rem; /* room for arrow */
   padding-inline: var(--space-2);
-  justify-content: center;
+  justify-content: flex-start;
 /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-2);
 
   scrollbar-width: thin;
   scrollbar-color: rgba(15, 23, 42, 0.35) transparent;
@@ -420,6 +421,26 @@ h5.work-detail__sector {
 @media (max-width: 640px) {
   .work-grid-nav {
     display: none;
+  }
+}
+
+@media (min-width: 960px) {
+  .work-grid {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .work-detail {
+    padding: var(--space-2);
+  }
+
+  .work-detail__top {
+    row-gap: var(--space-2);
+  }
+
+  .work-detail__media {
+    max-width: 100%;
   }
 }
 

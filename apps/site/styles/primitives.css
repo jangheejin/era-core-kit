@@ -23,7 +23,7 @@
   /*  max-width: 72rem;*/
   margin: 0 auto;
   /*padding-inline: var(--gutter, 1.5rem);*/
-  padding-inline: var(--space-4);
+  padding-inline: var(--gutter);
 }
 
 /* This will later become @apply p-4; */
@@ -34,6 +34,12 @@
     --space-2
   ); /*adjust space between homepage layout sections*/
   background: var(--bg);
+}
+
+@media (max-width: 720px) {
+  .c-container {
+    padding-inline: max(1rem, var(--gutter));
+  }
 }
 
 /*override for team page*/
