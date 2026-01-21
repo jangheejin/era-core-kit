@@ -149,16 +149,19 @@ export default function AdminClientPages() {
       </div>
 
       <div className="card mt">
-        <div className="row" style={{ justifyContent: "space-between", gap: "1rem" }}>
-          <div>
+        <div className="row" style={{ justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+          <div style={{ minWidth: 260 }}>
+            <h2 className="type-h3" style={{ marginBottom: ".35rem" }}>What are client pages?</h2>
             <p className="muted">
-              Create client-facing pages with optional intro text and filters. Use Markdown
-              formatting (bold/italic/underline/links) for the intro.
+              Client pages are curated landing pages that show a filtered set of case studies plus
+              an optional intro. Use them when you want a shareable URL for a specific audience
+              (e.g., “Local Government” or “Energy”).
             </p>
-            <p className="muted" style={{ marginTop: ".5rem" }}>
-              Tip: add or edit case study categories/tags in the Case Study Library, then use the
-              “Preview client page” button there to see the filtered public page.
-            </p>
+            <ol className="muted type-small" style={{ marginTop: ".75rem", paddingLeft: "1.1rem" }}>
+              <li>Pick the categories/tags you want on the page.</li>
+              <li>Write the intro text for context.</li>
+              <li>Save, then preview to share the link.</li>
+            </ol>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
             <button className="btnSmall" type="button" onClick={resetForm}>
@@ -180,155 +183,170 @@ export default function AdminClientPages() {
         </div>
       </div>
 
-      <div className="card mt">
-        <div className="form-group">
-          <label className="form-label">Existing pages</label>
-          <select
-            className="input"
-            value={selectedSlug ?? ""}
-            onChange={(e) => loadFrom(e.target.value)}
-          >
-            <option value="">Select a page…</option>
-            {pages.map((p) => (
-              <option key={p.slug} value={p.slug}>
-                {p.name} ({p.slug})
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="card mt">
-        <div className="form-group">
-          <label className="form-label">Page name</label>
-          <input className="input" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">URL slug</label>
-          <input
-            className="input"
-            value={desiredSlug}
-            onChange={(e) => setDesiredSlug(e.target.value)}
-            placeholder="client-page-slug"
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Category filter</label>
-          <select
-            className="input"
-            value={sector}
-            onChange={(e) => setSector(e.target.value as SectorValue | "")}
-          >
-            <option value="">No category filter</option>
-            {SECTOR_GROUPS.map((group) => (
-              <optgroup key={group.id} label={group.label}>
-                {group.values.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {sectorLabel(opt)}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Tags filter</label>
-          <input
-            className="input"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="Earmark, Pilot Program"
-          />
-          {tagChips.length ? (
-            <div className="client-links">
-              {tagChips.map((t) => (
-                <span key={t} className="chip chip--soft">
-                  {t}
-                </span>
+      <div
+        className="row"
+        style={{ gap: "1rem", marginTop: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}
+      >
+        <div className="card" style={{ flex: "1 1 280px", minWidth: 260 }}>
+          <div className="form-group">
+            <label className="form-label">Client pages library</label>
+            <select
+              className="input"
+              value={selectedSlug ?? ""}
+              onChange={(e) => loadFrom(e.target.value)}
+            >
+              <option value="">Select a page…</option>
+              {pages.map((p) => (
+                <option key={p.slug} value={p.slug}>
+                  {p.name} ({p.slug})
+                </option>
               ))}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Tag mode</label>
-          <select
-            className="input"
-            value={tagMode}
-            onChange={(e) => setTagMode(e.target.value as "any" | "all")}
-          >
-            <option value="any">Match any tag</option>
-            <option value="all">Match all tags</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Audience</label>
-          <select
-            className="input"
-            value={audience}
-            onChange={(e) => setAudience(e.target.value as "Public" | "ClientSafe")}
-          >
-            <option value="Public">Public</option>
-            <option value="ClientSafe">Client-safe</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Intro text (Markdown)</label>
-          <div className="editor">
-            <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
-              <button
-                className="editor__btn"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "**", "**")}
-              >
-                Bold
-              </button>
-              <button
-                className="editor__btn"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "*", "*")}
-              >
-                Italic
-              </button>
-              <button
-                className="editor__btn"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "<u>", "</u>")}
-              >
-                Underline
-              </button>
-              <button
-                className="editor__btn"
-                type="button"
-                onClick={() => applyLink(editorRef.current)}
-              >
-                🔗 Link
-              </button>
-            </div>
-            <textarea
-              ref={editorRef}
-              className="editor__textarea"
-              value={bodyMDX}
-              onChange={(e) => setBodyMDX(e.target.value)}
-              placeholder="Write a short intro for this client page…"
-            />
+            </select>
+            <p className="muted type-small" style={{ marginTop: ".5rem" }}>
+              This list is your saved client pages. Choose one to edit or start a new page.
+            </p>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Alternate preview path</label>
+            <p className="muted type-small">
+              In the Case Study Library, set a category filter and click “Preview client page” to
+              see how the live filtered page will look with current case studies.
+            </p>
           </div>
         </div>
 
-        <div className="form-actions">
-          <button className="btnPrimary" type="button" onClick={handleSave}>
-            {selected ? "Save changes" : "Create page"}
-          </button>
-          {selected ? (
-            <Link className="btn" href={`/admin/client-pages/mock/${selected.slug}`}>
-              Preview
-            </Link>
-          ) : null}
+        <div className="card" style={{ flex: "2 1 520px", minWidth: 320 }}>
+          <div className="form-group">
+            <label className="form-label">Page name</label>
+            <input className="input" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">URL slug</label>
+            <input
+              className="input"
+              value={desiredSlug}
+              onChange={(e) => setDesiredSlug(e.target.value)}
+              placeholder="client-page-slug"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Category filter</label>
+            <select
+              className="input"
+              value={sector}
+              onChange={(e) => setSector(e.target.value as SectorValue | "")}
+            >
+              <option value="">No category filter</option>
+              {SECTOR_GROUPS.map((group) => (
+                <optgroup key={group.id} label={group.label}>
+                  {group.values.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {sectorLabel(opt)}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Tags filter</label>
+            <input
+              className="input"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="Earmark, Pilot Program"
+            />
+            {tagChips.length ? (
+              <div className="client-links">
+                {tagChips.map((t) => (
+                  <span key={t} className="chip chip--soft">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Tag mode</label>
+            <select
+              className="input"
+              value={tagMode}
+              onChange={(e) => setTagMode(e.target.value as "any" | "all")}
+            >
+              <option value="any">Match any tag</option>
+              <option value="all">Match all tags</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Audience</label>
+            <select
+              className="input"
+              value={audience}
+              onChange={(e) => setAudience(e.target.value as "Public" | "ClientSafe")}
+            >
+              <option value="Public">Public</option>
+              <option value="ClientSafe">Client-safe</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Intro text (Markdown)</label>
+            <div className="editor">
+              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(editorRef.current, "**", "**")}
+                >
+                  Bold
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(editorRef.current, "*", "*")}
+                >
+                  Italic
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(editorRef.current, "<u>", "</u>")}
+                >
+                  Underline
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyLink(editorRef.current)}
+                >
+                  🔗 Link
+                </button>
+              </div>
+              <textarea
+                ref={editorRef}
+                className="editor__textarea"
+                value={bodyMDX}
+                onChange={(e) => setBodyMDX(e.target.value)}
+                placeholder="Write a short intro for this client page…"
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button className="btnPrimary" type="button" onClick={handleSave}>
+              {selected ? "Save changes" : "Create page"}
+            </button>
+            {selected ? (
+              <Link className="btn" href={`/admin/client-pages/mock/${selected.slug}`}>
+                Preview
+              </Link>
+            ) : null}
+          </div>
         </div>
       </div>
 
