@@ -9,6 +9,7 @@ import { showAdvanced } from "@/lib/featureFlags";
 import { 
   useMemo,
   useState,
+  useRef,
   type ChangeEvent,
 } from "react";
 
