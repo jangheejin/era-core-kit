@@ -36,6 +36,16 @@
   background: var(--bg);
 }
 
+.c-section-group {
+  display: grid;
+  gap: calc(var(--space-2) * 2);
+  padding-block: var(--space-2);
+}
+
+.c-section-group > .c-section {
+  padding-block: 0;
+}
+
 @media (max-width: 720px) {
   .c-container {
     padding-inline: max(1rem, var(--gutter));

@@ -18,6 +18,7 @@ export type GenericBlock<T extends keyof BlockComponentProps> = {
   type: T;
   props: BlockComponentProps[T];
   _key?: string;
+  groupId?: string;
 };
 
 // Props for ALL layout block components (not case study ones only)

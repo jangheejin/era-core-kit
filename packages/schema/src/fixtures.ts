@@ -34,7 +34,15 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+    tags: [
+      "geospatial",
+      "mapping",
+      "modernization",
+      "federal-engagement",
+      "Earmark",
+      "CDS",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/case1.webp",
 
@@ -100,7 +108,14 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+    tags: [
+      "nonprofit",
+      "geospatial",
+      "storytelling",
+      "dc",
+      "Pilot Program",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/case2.webp",
 
@@ -169,7 +184,15 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["procurement", "govcon", "strategy", "federal"],
+    tags: [
+      "procurement",
+      "govcon",
+      "strategy",
+      "federal",
+      "Earmark",
+      "CDS",
+      "S1",
+    ],
 
     heroImageUrl: "/img/case3.webp",
 
@@ -238,7 +261,13 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+    tags: [
+      "emergency",
+      "manufacturing",
+      "procurement",
+      "disaster-response",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/temp.svg",
 
@@ -303,7 +332,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Pilot Program"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -361,7 +390,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Earmark", "CDS", "Resilience"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -411,7 +440,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "S1"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -718,7 +747,15 @@ const SEEDS: CaseStudySeedInput[] = [
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
     brief:
       "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
-    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+    tags: [
+      "geospatial",
+      "mapping",
+      "modernization",
+      "federal-engagement",
+      "Earmark",
+      "CDS",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -736,7 +773,14 @@ const SEEDS: CaseStudySeedInput[] = [
       "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
     brief:
       "Helped NAPSG translate technical geospatial capabilities into accessible narratives for federal decision-makers, aligned to current priorities and usable in outreach.",
-    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+    tags: [
+      "nonprofit",
+      "geospatial",
+      "storytelling",
+      "dc",
+      "Pilot Program",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -756,7 +800,15 @@ const SEEDS: CaseStudySeedInput[] = [
       "Guiding a growing government contractor through the realities of federal procurement and engagement.",
     brief:
       "Advised Crucis on realistic entry points into the federal marketplace: procurement pathways, program alignment, and relationship-building with agencies and Hill staff.",
-    tags: ["procurement", "govcon", "strategy", "federal"],
+    tags: [
+      "procurement",
+      "govcon",
+      "strategy",
+      "federal",
+      "Earmark",
+      "CDS",
+      "S1",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -775,7 +827,13 @@ const SEEDS: CaseStudySeedInput[] = [
       "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
     brief:
       "Aligned emergency response manufacturing capabilities with federal program and procurement realities, focused on practical deployment in disaster-response contexts.",
-    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+    tags: [
+      "emergency",
+      "manufacturing",
+      "procurement",
+      "disaster-response",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -806,7 +864,7 @@ const SEEDS: CaseStudySeedInput[] = [
     summaryShort: "Placeholder public sector case study to keep filters populated.",
     brief:
       "A simple public sector example entry used to ensure the category filter never appears empty.",
-    tags: ["dummy", "public-sector"],
+    tags: ["dummy", "public-sector", "Earmark", "CDS", "Resilience"],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
@@ -830,7 +888,7 @@ const SEEDS: CaseStudySeedInput[] = [
     summaryShort: "Placeholder private sector case study to keep filters populated.",
     brief:
       "A simple private sector example entry used to ensure the category filter never appears empty.",
-    tags: ["dummy", "private-sector"],
+    tags: ["dummy", "private-sector", "S1"],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
@@ -845,7 +903,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     brief:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Pilot Program"],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
