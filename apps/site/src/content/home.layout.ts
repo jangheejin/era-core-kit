@@ -4,6 +4,7 @@ import type { LayoutBlock } from "@kit/blocks";
 export const homeLayout: LayoutBlock[] = [
   {
     type: "Hero",
+    groupId: "home-intro",
     props: {
       heading: "Welcome to a new era",
       subhead: "",
@@ -17,6 +18,7 @@ export const homeLayout: LayoutBlock[] = [
   },
   {
     type: "IntroWithImage",
+    groupId: "home-intro",
     props: {
       heading: "Your voice in Washington",
       text: "We are a federal advocacy and business consultant team with expertise in federal policy on Capitol Hill as well as robust experience working with industry, the federal government and its programmatic efforts across myriad departments and agencies.",
@@ -26,6 +28,7 @@ export const homeLayout: LayoutBlock[] = [
   },
   {
     type: "MissionText",
+    groupId: "home-intro",
     props: {
       heading: "Our Mission",
       text: "ERA Government Affairs is a federal advocacy and business consulting team with expertise in federal policy on Capitol Hill and extensive experience working with industry, the federal government, and relevant programmatic efforts across various departments and agencies.",
