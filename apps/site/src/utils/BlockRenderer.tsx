@@ -26,9 +26,7 @@ import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/section
 
 //const blockComponentMap: Record<BlockType, ComponentType<any>> = {
 //const blockComponentMap: Partial<Record<BlockType, React.ComponentType<any>>> = {
-const blockComponents: Partial<
-  Record<BlockType, React.ComponentType<Record<string, unknown>>>
-> = {
+const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
   Hero,
   IntroWithImage,
   MissionText,
