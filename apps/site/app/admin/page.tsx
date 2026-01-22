@@ -102,6 +102,12 @@ export default function AdminPage() {
                 views of selected case studies.
               </p>
             </div>
+            <div className="c-stack" style={{ gap: ".15rem" }}>
+              <Link href="/admin/team">Manage team bios</Link>
+              <p className="muted type-small explanation">
+                Update team member bios and photos that feed the public “Our Team” page.
+              </p>
+            </div>
           </div>
         </div>
       ) : (

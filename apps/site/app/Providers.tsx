@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { AdminCaseStudyProvider } from "./admin/AdminCaseStudyStore";
 import { AdminClientPageProvider } from "./admin/AdminClientPageStore";
+import { AdminTeamProvider } from "./admin/AdminTeamStore";
 import { MockCMSProvider } from '@/cms/mockCmsStore';
 
 /* export function Providers({ children }: { children: ReactNode }) {
@@ -19,7 +20,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <AdminCaseStudyProvider>
       <AdminClientPageProvider>
-        <MockCMSProvider>{children}</MockCMSProvider>
+        <AdminTeamProvider>
+          <MockCMSProvider>{children}</MockCMSProvider>
+        </AdminTeamProvider>
       </AdminClientPageProvider>
     </AdminCaseStudyProvider>
   );
