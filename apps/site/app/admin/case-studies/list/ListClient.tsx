@@ -493,7 +493,7 @@ export default function ListClient() {
                 : "Pick a category or a single tag above to enable the preview button."}
             </span>
             <span className="muted type-small">
-              For multi-tag or category + tag combinations, use Client Pages to build a final page.
+              For multi-tag or category + tag combinations, use Client Collections to build a final page.
             </span>
           </div>
         </div>

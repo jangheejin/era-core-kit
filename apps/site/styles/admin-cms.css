@@ -3086,6 +3086,27 @@ fieldset.form-group > legend.form-label{
 
 .tooltipArrow{ fill: #111; }
 
+.infoButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.infoButton:hover,
+.infoButton:focus-visible {
+  background: #f4f4f4;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
 .heroPreview {
   margin-top: 0.75rem;
   max-width: 360px; /* adjust down to make smaller */
