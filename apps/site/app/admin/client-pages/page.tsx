@@ -38,8 +38,14 @@ function applyLink(textarea: HTMLTextAreaElement | null) {
 }
 
 export default function AdminClientPages() {
-  const { pages, createPage, upsertPage, removePage, ensureUniqueSlug } =
-    useAdminClientPages();
+  const {
+    pages,
+    createPage,
+    upsertPage,
+    removePage,
+    ensureUniqueSlug,
+    resetPages,
+  } = useAdminClientPages();
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
     pages[0]?.slug ?? null
@@ -270,6 +276,11 @@ export default function AdminClientPages() {
               view with current case studies.
             </p>
           </div>
+          <div className="form-group">
+            <button className="btn-3" type="button" onClick={resetPages}>
+              Reset demo data
+            </button>
+          </div>
         </div>
 
         <div className="card" style={{ flex: "2 1 520px", minWidth: 320 }}>
@@ -406,7 +417,7 @@ export default function AdminClientPages() {
 
           <div className="form-actions">
             <button className="btnPrimary" type="button" onClick={handleSave}>
-              {selected ? "Save changes" : "Create page"}
+              {selected ? "Save Changes" : "Create Page"}
             </button>
             {selected ? (
               <Link

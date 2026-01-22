@@ -217,9 +217,6 @@ export default function AdminTeamPage() {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1 className="type-h2">Team Bio CMS</h1>
         <div className="row" style={{ gap: ".5rem" }}>
-          <button className="btn-3" type="button" onClick={resetToBaseline}>
-            Reset demo data
-          </button>
           {!editingId && (
             <button className="btnPrimary" type="button" onClick={startNewMember}>
               Add team member
@@ -272,6 +269,13 @@ export default function AdminTeamPage() {
               </div>
             </section>
           ))}
+        </div>
+      )}
+      {!editingId && (
+        <div className="row" style={{ justifyContent: "flex-end", marginTop: "1rem" }}>
+          <button className="btn-3" type="button" onClick={resetToBaseline}>
+            Reset demo data
+          </button>
         </div>
       )}
 
