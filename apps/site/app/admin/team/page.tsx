@@ -84,7 +84,6 @@ export default function AdminTeamPage() {
   const [uploadedLibrary, setUploadedLibrary] = useState<TeamImage[]>(() => loadImageLibrary());
   const [showMarkdownEditor, setShowMarkdownEditor] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const initialDraftRef = useRef<TeamMember | null>(null);
   const initialBioRef = useRef("");
 
   useEffect(() => {
@@ -120,7 +119,6 @@ export default function AdminTeamPage() {
     setDraft({ ...member });
     const nextBio = bioToText(member.bio);
     setBioDraft(nextBio);
-    initialDraftRef.current = { ...member };
     initialBioRef.current = nextBio;
     setSaveState("idle");
     setShowMarkdownEditor(false);
@@ -142,7 +140,6 @@ export default function AdminTeamPage() {
     setEditingId(id);
     setDraft(newMember);
     setBioDraft("");
-    initialDraftRef.current = { ...newMember };
     initialBioRef.current = "";
     setSaveState("idle");
     setShowMarkdownEditor(false);
@@ -200,16 +197,8 @@ export default function AdminTeamPage() {
     };
     upsertTeamMember(nextMember);
     setDraft(nextMember);
-    initialDraftRef.current = { ...nextMember };
     initialBioRef.current = bioDraft;
     setSaveState("saved");
-  }
-
-  function undoChanges() {
-    if (!initialDraftRef.current || !draft) return;
-    setDraft({ ...initialDraftRef.current });
-    setBioDraft(initialBioRef.current);
-    setSaveState("idle");
   }
 
   const isDirty = useMemo(() => {
@@ -235,7 +224,7 @@ export default function AdminTeamPage() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">Team Bio Library</h1>
+        <h1 className="type-h2">{editingId ? "Edit Team Bio" : "Team Bio Library"}</h1>
         <div className="row" style={{ gap: ".5rem" }}>
           {!editingId && (
             <button className="btnPrimary" type="button" onClick={startNewMember}>
@@ -309,89 +298,90 @@ export default function AdminTeamPage() {
                 Editing {draft.name || "New team member"}
               </h2>
             </div>
-
-          <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Name</label>
-              <input
-                className="input"
-                value={draft.name}
-                onChange={(e) => updateDraft({ name: e.target.value })}
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Role</label>
-              <input
-                className="input"
-                value={draft.title}
-                onChange={(e) => updateDraft({ title: e.target.value })}
-              />
-            </div>
-          </div>
-
-          <div className="team-photo-grid">
-            <div className="team-photo-controls">
-              <div className="form-row form-group team-photo-controls__row">
-                <div className="form-field">
-                  <label className="form-label">Select Photo from Image Library</label>
-                  <select
-                    className="input"
-                    value={draft.imageUrl ?? ""}
-                    onChange={(e) => setDraftImage(e.target.value)}
-                  >
-                    <option value="">No photo selected</option>
-                    {currentLibraryOption && (
-                      <option value={currentLibraryOption}>
-                        Current ({currentLibraryOption.split("/").pop() ?? currentLibraryOption})
-                      </option>
-                    )}
-                    {imageLibrary.map((entry) => (
-                      <option key={entry.url} value={entry.url}>
-                        {entry.label}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="muted type-small" style={{ marginTop: 6 }}>
-                    Choose from previously uploaded images or upload a new file below.
-                  </p>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Upload / replace photo</label>
-                  <input
-                    className="input"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handlePhotoUpload(e.target.files?.[0] ?? null)}
-                  />
-                  <p className="muted type-small" style={{ marginTop: 6 }}>
-                    {draft.imageUrl ? `Current photo: ${draft.imageUrl}` : "No photo selected yet."}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {currentPreviewUrl && (
-              <div className="team-photo-preview team-photo-preview--inline">
-                <img
-                  className="team-photo-preview__img"
-                  src={currentPreviewUrl}
-                  alt="Current photo"
+            <div className="form-row form-group">
+              <div className="form-field">
+                <label className="form-label">Name</label>
+                <input
+                  className="input"
+                  value={draft.name}
+                  onChange={(e) => updateDraft({ name: e.target.value })}
                 />
-                <span className="muted type-small">Preview of the current photo.</span>
               </div>
-            )}
-          </div>
-
-          {/* <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Photo URL (advanced)</label>
-              <input
-                className="input"
-                placeholder="/team/..."
-                value={draft.imageUrl ?? ""}
-                onChange={(e) => updateDraft({ imageUrl: e.target.value })}
-              />
+              <div className="form-field">
+                <label className="form-label">Role</label>
+                <input
+                  className="input"
+                  value={draft.title}
+                  onChange={(e) => updateDraft({ title: e.target.value })}
+                />
+              </div>
             </div>
-          </div> */}
+
+            <div className="team-photo-grid">
+              <div className="team-photo-controls">
+                <div className="form-row form-group team-photo-controls__row">
+                  <div className="form-field">
+                    <label className="form-label">Select Photo from Image Library</label>
+                    <select
+                      className="input"
+                      value={draft.imageUrl ?? ""}
+                      onChange={(e) => setDraftImage(e.target.value)}
+                    >
+                      <option value="">No photo selected</option>
+                      {currentLibraryOption && (
+                        <option value={currentLibraryOption}>
+                          Current ({currentLibraryOption.split("/").pop() ?? currentLibraryOption})
+                        </option>
+                      )}
+                      {imageLibrary.map((entry) => (
+                        <option key={entry.url} value={entry.url}>
+                          {entry.label}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="muted type-small" style={{ marginTop: 6 }}>
+                      Choose from previously uploaded images or upload a new file below.
+                    </p>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Upload / replace photo</label>
+                    <input
+                      className="input"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handlePhotoUpload(e.target.files?.[0] ?? null)}
+                    />
+                    <p className="muted type-small" style={{ marginTop: 6 }}>
+                      {draft.imageUrl
+                        ? `Current photo: ${draft.imageUrl}`
+                        : "No photo selected yet."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {currentPreviewUrl && (
+                <div className="team-photo-preview team-photo-preview--inline">
+                  <img
+                    className="team-photo-preview__img"
+                    src={currentPreviewUrl}
+                    alt="Current photo"
+                  />
+                  <span className="muted type-small">Preview of the current photo.</span>
+                </div>
+              )}
+            </div>
+
+            {/* <div className="form-row form-group">
+              <div className="form-field">
+                <label className="form-label">Photo URL (advanced)</label>
+                <input
+                  className="input"
+                  placeholder="/team/..."
+                  value={draft.imageUrl ?? ""}
+                  onChange={(e) => updateDraft({ imageUrl: e.target.value })}
+                />
+              </div>
+            </div> */}
 
             <div
               className={[
@@ -428,7 +418,10 @@ export default function AdminTeamPage() {
                 </div>
               ) : null}
               <div className="team-bio-preview team-bio-panel">
-                <div className="team-bio-preview__header">
+                <div
+                  className="team-bio-preview__header"
+                  style={{ justifyContent: "flex-start", gap: ".35rem" }}
+                >
                   <span>Preview</span>
                   <button
                     className="btnLink"
@@ -470,6 +463,7 @@ export default function AdminTeamPage() {
                     className="btnPrimary team-editor-action team-editor-action--draft"
                     type="button"
                     onClick={() => saveDraft("Draft")}
+                    style={{ background: "#fff" }}
                   >
                     Save draft
                   </button>
@@ -490,10 +484,12 @@ export default function AdminTeamPage() {
                   </button>
                   <span className="pill pill--status">{draft.status}</span>
                 </div>
-                <button className="btnSmall" type="button" onClick={undoChanges}>
-                  Undo
-                </button>
-                <button className="btnSmall" type="button" onClick={cancelEditing}>
+                <button
+                  className="btnPrimary team-editor-action team-editor-action--cancel"
+                  type="button"
+                  onClick={cancelEditing}
+                  style={{ background: "#fff" }}
+                >
                   Cancel
                 </button>
               </div>
