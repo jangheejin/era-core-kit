@@ -7,8 +7,7 @@ import { AdminClientPageProvider } from "./AdminClientPageStore";
 export default function AdminProviders({ children }: { children: ReactNode }) {
   return (
     <AdminCaseStudyProvider>
-      {/* <AdminClientPageProvider> */}
-        {children}
-      {/* </AdminClientPageProvider> */}
-    </AdminCaseStudyProvider>);
+      <AdminClientPageProvider>{children}</AdminClientPageProvider>
+    </AdminCaseStudyProvider>
+  );
 }

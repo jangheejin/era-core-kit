@@ -409,6 +409,9 @@ export default function ListClient() {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1 className="type-h2">Case Study Library</h1>
         <div className="row" style={{ gap: ".5rem" }}>
+          <Link className="btnPrimary" href="/admin/case-studies/new">
+            New case study
+          </Link>
           <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>

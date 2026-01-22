@@ -47,7 +47,7 @@ const NAV: NavItem[] = [
   },
   {
     href: "/admin/team",
-    label: "Team Bio Editor",
+    label: "Team Bios",
     match: (p) => p.startsWith("/admin/team"),
   },
   {
@@ -124,7 +124,7 @@ export function AdminTopNav() {
           {/*           <div className="adminTopNav__brand">
             Demo CMS
           </div> */}
-          <div className="adminTopNav__brand">Case Study CMS</div>
+          <div className="adminTopNav__brand">CMS Admin</div>
           {/* </Link> */}
           {/*           <Link href="/admin" className="adminTopNav__brandLink">
             Demo CMS
