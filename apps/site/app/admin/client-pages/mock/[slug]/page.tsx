@@ -59,7 +59,7 @@ export default function AdminClientPageMock({
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
         <h1 className="type-h2">Client page preview</h1>
         <div className="row">
-          <Link href="/admin/client-pages">Back to client collections</Link>
+          <Link href="/admin/client-pages">Back to client pages</Link>
           {page ? (
             <Link href={`/client-pages/${page.slug}`} target="_blank">
               Open public URL
