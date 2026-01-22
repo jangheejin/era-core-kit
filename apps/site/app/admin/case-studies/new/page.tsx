@@ -14,6 +14,8 @@ import {
   type ChangeEvent,
 } from "react";
 
+import Image from "next/image";
+
 import {
   CaseStudy as CaseStudySchema,
   type CaseStudyInput,
@@ -143,10 +145,10 @@ function removeCategoryAt(index: number) {
   setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
 }
 
-function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
+const selectedCategories = useMemo(() => {
   const out: SectorValue[] = [];
   const seen = new Set<SectorValue>();
-  for (const d of drafts) {
+  for (const d of categoryDrafts) {
     if (!d) continue;
     if (seen.has(d)) continue;
     seen.add(d);
@@ -155,12 +157,7 @@ function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
   /* return out; */
   /** TODO: CHANGE THIS BACK LATER*/
   return out.length ? out : [DEFAULT_SECTOR];
-}
-
-const selectedCategories = useMemo(
-  () => normalizeCategories(categoryDrafts),
-  [categoryDrafts, normalizeCategories],
-);
+}, [categoryDrafts]);
 
 
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
@@ -594,10 +591,13 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
             {heroImageUrl && (
               <div style={{ marginTop: "0.75rem" }}>
                 <p className="muted type-small">Preview</p>
-                <img
+                <Image
                   src={heroImageUrl}
                   alt="Hero preview"
+                  width={640}
+                  height={360}
                   style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+                  unoptimized
                 />
               </div>
             )}

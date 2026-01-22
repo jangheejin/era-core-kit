@@ -1,5 +1,6 @@
 // apps/site/app/our-team/page.tsx
 import "@styles/team.css";
+import Image from "next/image";
 
 type TeamMember = {
   name: string;
@@ -87,7 +88,13 @@ export default function OurTeamPage() {
                 >
                   {member.imageUrl && (
                     <div className="team-card__photo">
-                      <img src={member.imageUrl} alt={member.name} />
+                      <Image
+                        src={member.imageUrl}
+                        alt={member.name}
+                        width={320}
+                        height={320}
+                        unoptimized
+                      />
                     </div>
                   )}
 
@@ -133,7 +140,13 @@ export default function OurTeamPage() {
                     )} */}
                     <div className="team-card__photo">
                       {member.imageUrl && (
-                        <img src={member.imageUrl} alt={member.name} />
+                        <Image
+                          src={member.imageUrl}
+                          alt={member.name}
+                          width={320}
+                          height={320}
+                          unoptimized
+                        />
                       )}
                     </div>
 

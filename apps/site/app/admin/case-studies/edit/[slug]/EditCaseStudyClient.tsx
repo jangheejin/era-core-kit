@@ -4,6 +4,7 @@ import "@styles/admin-cms.css";
 import "@styles/admin-cms-buttons.css";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState, useRef, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
@@ -534,10 +535,13 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             {showHeroPreview ? (
               <div className="mt heroPreview">
                 <p className="muted type-small">Image Preview</p>
-                <img
+                <Image
                   className="heroImagePreview"
                   src={heroImageUrl}
                   alt="Hero preview"
+                  width={640}
+                  height={360}
+                  unoptimized
                 />
               </div>
             ) : null}
