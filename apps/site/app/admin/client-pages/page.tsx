@@ -282,8 +282,8 @@ export default function AdminClientPages() {
                           </span>
                           <span className="pill pill--status">
                             {page.filters.audience === "Public"
-                              ? "Public"
-                              : "Client-safe"}
+                              ? "Published"
+                              : "Draft"}
                           </span>
                         </div>
                         <span className="muted type-small">/{page.slug}</span>
@@ -449,7 +449,7 @@ export default function AdminClientPages() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Audience</label>
+            <label className="form-label">Status</label>
             <select
               className="input"
               value={audience}
@@ -457,8 +457,8 @@ export default function AdminClientPages() {
                 setAudience(e.target.value as "Public" | "ClientSafe")
               }
             >
-              <option value="Public">Public</option>
-              <option value="ClientSafe">Client-safe</option>
+              <option value="Public">Published</option>
+              <option value="ClientSafe">Draft</option>
             </select>
           </div>
 
