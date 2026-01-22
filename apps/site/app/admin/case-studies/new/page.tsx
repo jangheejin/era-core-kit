@@ -699,7 +699,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                 </label>
                 <p className="admin-hint">
                   {/* Pick one or more categories that best describe the primary focus of this case study. */}
-                  Pick one or more categories. These control where the case study appears in filtered client collections.
+                  Pick one or more categories. These control where the case study appears in filtered client pages.
                   {/* Select the primary client type (a.k.a. sector) for this case study. */}
                 </p>
 {/* ---------------------------------------------------------------- */}
@@ -881,7 +881,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                   />
                   <div className="radioText">
                     <div className="radioTitle">Client-visible</div>
-                    <div className="radioDesc">Visible in client collections. Not public.</div>
+                    <div className="radioDesc">Visible in client pages. Not public.</div>
                   </div>
                 </label>
 

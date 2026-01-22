@@ -96,9 +96,9 @@ export default function AdminPage() {
               </p>
             </div>
             <div className="c-stack" style={{ gap: ".15rem" }}>
-              <Link href="/admin/client-pages">Manage client collections</Link>
+              <Link href="/admin/client-pages">Manage client pages</Link>
               <p className="muted type-small explanation">
-                Build curated client collections from library filters with a custom intro. These are shareable, client-facing
+                Build curated client pages from library filters with a custom intro. These are shareable, client-facing
                 views of selected case studies.
               </p>
             </div>
