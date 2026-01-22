@@ -14,13 +14,19 @@ import React, {
   type ReactNode,
 } from "react";
 
-import { normalizeTagList, slugify, tagSlug, type SectorValue } from "@kit/schema";
+import {
+  normalizeTagList,
+  slugify,
+  tagSlug,
+  type SectorValue,
+  SECTOR_VALUES,
+} from "@kit/schema";
 
 export type ClientPageAudience = "Public" | "ClientSafe";
 export type ClientPageTagMode = "any" | "all";
 
 export type ClientPageFilters = {
-  sector: SectorValue | null;
+  sectors: SectorValue[];
   tags: string[]; // human-readable labels; compare via tagSlug()
   tagMode: ClientPageTagMode;
   audience: ClientPageAudience;
@@ -61,32 +67,32 @@ const DEFAULT_PAGES: ClientPage[] = (() => {
   const now = Date.now();
   return [
     {
-      id: "seed-defense-brief",
-      name: "Defense modernization brief",
-      slug: "defense-modernization-brief",
+      id: "seed-pilot-program",
+      name: "Pilot Program Case Studies",
+      slug: "pilot-program-case-studies",
       filters: {
-        sector: "Defense",
-        tags: ["Earmark", "Resilience"],
-        tagMode: "any",
-        audience: "ClientSafe",
-      },
-      bodyMDX:
-        "A focused view of modernization work, highlighting resilient systems and rapid delivery outcomes for defense stakeholders.",
-      createdAt: now - 1000 * 60 * 60 * 24 * 7,
-      updatedAt: now - 1000 * 60 * 60 * 24 * 3,
-    },
-    {
-      id: "seed-energy-infra",
-      name: "Energy infrastructure wins",
-      slug: "energy-infrastructure-wins",
-      filters: {
-        sector: "Energy",
-        tags: ["Pilot Program", "CDS"],
+        sectors: [],
+        tags: ["Pilot Program"],
         tagMode: "any",
         audience: "Public",
       },
       bodyMDX:
-        "Selected energy infrastructure case studies with pilot program momentum and CDS-backed results.",
+        "Case studies from pilot programs that highlight measurable results and delivery wins.",
+      createdAt: now - 1000 * 60 * 60 * 24 * 7,
+      updatedAt: now - 1000 * 60 * 60 * 24 * 3,
+    },
+    {
+      id: "seed-energy-resilience",
+      name: "Energy Resilience Case Studies",
+      slug: "energy-resilience-case-studies",
+      filters: {
+        sectors: ["Energy"],
+        tags: ["Resilience"],
+        tagMode: "any",
+        audience: "Public",
+      },
+      bodyMDX:
+        "Energy-focused work that demonstrates resilience outcomes across programs.",
       createdAt: now - 1000 * 60 * 60 * 24 * 10,
       updatedAt: now - 1000 * 60 * 60 * 24 * 2,
     },
@@ -107,27 +113,48 @@ function normalizeTagsStrict(input: string[]): string[] {
   return out;
 }
 
-function coerceFilters(raw: any): ClientPageFilters {
-  const sector =
-    typeof raw?.sector === "string" ? (raw.sector as SectorValue) : null;
+const SECTOR_SET = new Set(SECTOR_VALUES);
 
-  const tags = Array.isArray(raw?.tags)
-    ? normalizeTagsStrict(raw.tags.filter((x: any) => typeof x === "string"))
-    : [];
-
-  const tagMode: ClientPageTagMode = raw?.tagMode === "all" ? "all" : "any";
-  const audience: ClientPageAudience =
-    raw?.audience === "ClientSafe" ? "ClientSafe" : "Public";
-
-  return { sector, tags, tagMode, audience };
+function normalizeSectors(input: unknown): SectorValue[] {
+  if (!Array.isArray(input)) return [];
+  const out: SectorValue[] = [];
+  const seen = new Set<string>();
+  for (const raw of input) {
+    if (typeof raw !== "string") continue;
+    if (!SECTOR_SET.has(raw as SectorValue)) continue;
+    if (seen.has(raw)) continue;
+    seen.add(raw);
+    out.push(raw as SectorValue);
+  }
+  return out;
 }
 
-function coerceBodyMDX(raw: any): string {
+function coerceFilters(raw: unknown): ClientPageFilters {
+  const record = isPlainObject(raw) ? raw : {};
+  const fromList = normalizeSectors(record.sectors);
+  const legacySector = record.sector;
+  const sectors = fromList.length
+    ? fromList
+    : normalizeSectors(typeof legacySector === "string" ? [legacySector] : []);
+
+  const tagsRaw = record.tags;
+  const tags = Array.isArray(tagsRaw)
+    ? normalizeTagsStrict(tagsRaw.filter((x): x is string => typeof x === "string"))
+    : [];
+
+  const tagMode: ClientPageTagMode = record.tagMode === "all" ? "all" : "any";
+  const audience: ClientPageAudience =
+    record.audience === "ClientSafe" ? "ClientSafe" : "Public";
+
+  return { sectors, tags, tagMode, audience };
+}
+
+function coerceBodyMDX(raw: unknown): string {
   if (typeof raw === "string") return raw;
   return "";
 }
 
-function isPlainObject(x: any): x is Record<string, unknown> {
+function isPlainObject(x: unknown): x is Record<string, unknown> {
   return Boolean(x) && typeof x === "object" && !Array.isArray(x);
 }
 
@@ -253,7 +280,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       const slug = ensureUniqueSlug(desired);
 
       const filters: ClientPageFilters = {
-        sector: input.filters.sector ?? null,
+        sectors: normalizeSectors(input.filters.sectors ?? []),
         tags: normalizeTagsStrict(input.filters.tags ?? []),
         tagMode: input.filters.tagMode ?? "any",
         audience: input.filters.audience ?? "Public",

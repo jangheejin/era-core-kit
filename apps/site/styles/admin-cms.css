@@ -743,6 +743,20 @@ the user fills out)
   flex-wrap: wrap;
 }
 
+.form-actions__buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.client-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 280px;
+}
+
 .error {
   background: #ffe0e0;
   color: #b00020;
@@ -1557,6 +1571,23 @@ code {
   resize: vertical;
 
   box-sizing: border-box;
+}
+
+.editor-preview {
+  margin-top: 0.75rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(0,0,0,.02);
+}
+
+.editor-preview__header {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
 }
 
 
@@ -2827,6 +2858,7 @@ fieldset.form-group > legend.form-label{
 
 .dbProps { margin-top: .75rem; display:grid; gap:.6rem; }
 .dbPropLabel { font-size: .82rem; opacity: .7; margin-bottom: .25rem; }
+.dbPropValue { font-size: 0.95rem; }
 
 .dbPillRow { display:flex; gap:.35rem; flex-wrap:wrap; align-items:center; }
 .dbPillRow--secondary .pill { margin-left: 0; }
@@ -2910,10 +2942,106 @@ fieldset.form-group > legend.form-label{
 
 .team-editor-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.team-editor-title {
+  margin: 0;
+}
+
+.team-editor-actionsBar {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(0,0,0,.02);
+}
+
+.team-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.team-editor-actionColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: center;
+  min-width: 160px;
+}
+
+.team-editor-action {
+  min-width: 160px;
+  justify-content: center;
+}
+
+.team-editor-action--draft {
+  background: rgba(0,0,0,.06);
+}
+
+.team-editor-helper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: center;
+  align-items: center;
+}
+
+.team-order-field.is-hidden {
+  display: none;
+}
+
+.team-editor-actionColumn--toggle {
+  min-width: 140px;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-editor-footer {
+  margin-top: 1rem;
+}
+
+.team-basic-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.team-photo-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(0,0,0,.03);
+}
+
+.team-photo-section__header {
+  margin-bottom: 0.75rem;
+}
+
+.team-photo-section__header .type-h3 {
+  margin: 0 0 0.2rem;
+}
+
+.team-photo-grid {
+  display: grid;
+  gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.team-photo-controls__row {
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.team-photo-preview--inline {
+  margin-bottom: 0;
+  align-items: flex-start;
 }
 
 .team-photo-preview {
@@ -2933,7 +3061,89 @@ fieldset.form-group > legend.form-label{
 
 .team-form__wide textarea {
   width: 100%;
-  min-height: 220px;
+}
+
+.team-form__wide {
+  width: 100%;
+}
+
+.team-form__wide .form-field {
+  flex: 1 1 100%;
+  max-width: none;
+}
+
+.team-bio-grid {
+  --bio-panel-min-height: 260px;
+  display: grid;
+  gap: 1rem;
+}
+
+.team-bio-grid.is-preview-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.team-bio-panel {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.9);
+}
+
+.team-bio-panel--editor {
+  min-height: var(--bio-panel-min-height);
+  background: rgba(0,0,0,.02);
+}
+
+.team-bio-panel textarea {
+  min-height: var(--bio-panel-min-height);
+  height: 100%;
+}
+
+.team-bio-preview {
+  margin-top: 0;
+  background: rgba(0,0,0,.035);
+}
+
+.team-bio-preview__content {
+  min-height: 120px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,.7);
+  outline: none;
+  cursor: text;
+}
+
+.team-bio-preview__header {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.pill--status-complete {
+  background: rgba(64, 170, 120, 0.18);
+  border-color: rgba(64, 170, 120, 0.4);
+  color: #1b6b45;
+}
+
+@media (min-width: 900px) {
+  .team-photo-grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+}
+
+@media (min-width: 960px) {
+  .team-bio-grid.is-editing {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
 }
 
 .dbEditPanel {

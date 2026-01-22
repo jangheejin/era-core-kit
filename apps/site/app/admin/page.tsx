@@ -15,7 +15,7 @@ const LOGIN_KEY = "era_admin_logged_in_v1";
 
 export default function AdminPage() {
   console.log("AdminPage mounted");
-//  const { items, addCaseStudy } = useAdminCaseStudies();
+  //  const { items, addCaseStudy } = useAdminCaseStudies();
   const { items } = useAdminCaseStudies();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -44,7 +44,7 @@ export default function AdminPage() {
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h1>Demo CMS Dashboard</h1>
         <div className="row">
-          <span className="btnPrimary"> 
+          <span className="btnPrimary">
             <Link href="/">Public site</Link>
           </span>
           {isLoggedIn ? (
@@ -60,52 +60,64 @@ export default function AdminPage() {
       </div>
 
       <p className="muted">
-        This is a temporary demo CMS so you can click around and see how content editing might feel.<br /><br />
-{/*         Here, you can:<br /><br />
+        This is a temporary demo CMS so you can click around and see how content
+        editing might feel.
+        <br />
+        <br />
+        {/*         Here, you can:<br /><br />
         <ul>
           Create, edit, and preview case studies
           View a database containing all case studies
           Search and filter the database based on categories, tags, etc.
           Create Client Pages tailored to specific clients
         </ul> */}
-      
         {/* You can create and edit case studies (and preview them, both individually and as if they&apos;re part of a
         database), but changes are stored only in your browser. Nothing persists to a server backend yet.<br /><br />
         This is for preview purposes only. Your edits are saved in your browser and will stay there as long as you
         don&apos;t clear your cache/use incognito mode.<br /><br /> */}
-        The demo case study database currently contains <strong>{items.length}</strong> case studie{items.length === 1
-        ? "y" : "s"} stored in this browser. Publish and mark a case study as featured to see it appear on the public
-        homepage and archive views.
+        The demo case study database currently contains{" "}
+        <strong>{items.length}</strong> case studie
+        {items.length === 1 ? "y" : "s"} stored in this browser. Publish and
+        mark a case study as featured to see it appear on the public homepage
+        and archive views.
       </p>
 
       {isLoggedIn ? (
         <div className="card mt">
           <h2>Actions</h2>
-          <div className="c-stack" style={{ marginTop: ".75rem", gap: ".75rem" }}>
+          <div
+            className="c-stack"
+            style={{ marginTop: ".75rem", gap: ".75rem" }}
+          >
             <div className="c-stack" style={{ gap: ".15rem" }}>
               <Link href="/admin/case-studies/new">Create new case study</Link>
               <p className="muted type-small explanation">
-                Start a new case study in the Case Study Library, which is the master list that feeds every client
-                page and public view.
+                Start a new case study in the Case Study Library, which is the
+                master list that feeds every client page and public view.
               </p>
             </div>
             <div className="c-stack" style={{ gap: ".15rem" }}>
-              <Link href="/admin/case-studies/list">Browse case studies</Link>
+              <Link href="/admin/case-studies/list">
+                Manage Case Studies{/* Browse case studies */}
+              </Link>
               <p className="muted type-small explanation">
-                View the Case Study Library to filter, edit, and preview the database. This is content management.
+                View the Case Study Library to filter, edit, and preview the
+                database. This is content management.
               </p>
             </div>
             <div className="c-stack" style={{ gap: ".15rem" }}>
               <Link href="/admin/client-pages">Manage client pages</Link>
               <p className="muted type-small explanation">
-                Build curated client pages from library filters with a custom intro. These are shareable, client-facing
-                views of selected case studies.
+                Build curated client pages from library filters with a custom
+                intro. These are shareable, client-facing views of selected case
+                studies.
               </p>
             </div>
             <div className="c-stack" style={{ gap: ".15rem" }}>
               <Link href="/admin/team">Manage team bios</Link>
               <p className="muted type-small explanation">
-                Update team member bios and photos that feed the public “Our Team” page.
+                Update team member bios and photos that feed the public “Our
+                Team” page.
               </p>
             </div>
           </div>

@@ -8,14 +8,20 @@ import "@styles/admin-cms.css";
 import Link from "next/link";
 import { useMemo } from "react";
 
-import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
+import { normalizeTagList, tagSlug, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { Markdown } from "@/components/Markdown";
 
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
-function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
-  const { sector, tags, tagMode } = page.filters;
+type ClientPageFilterPreview = {
+  sectors?: SectorValue[];
+  tags?: string[];
+  tagMode?: "any" | "all";
+};
+
+function matchesClientPage(cs: CaseStudyType, page: { filters: ClientPageFilterPreview }) {
+  const { sectors, tags, tagMode } = page.filters;
 
   // public-only gating
   if (cs.status !== "Published") return false;
@@ -23,7 +29,10 @@ function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
   if (cs.visibility !== "Public") return false;
 
   // sector filter
-  if (sector && !(cs.sectors ?? []).includes(sector)) return false;
+  if (Array.isArray(sectors) && sectors.length) {
+    const csSectors = cs.sectors ?? [];
+    if (!sectors.some((sector) => csSectors.includes(sector))) return false;
+  }
 
   // tag filter
   const wanted = (tags ?? []).map(tagSlug).filter(Boolean);

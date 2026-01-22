@@ -38,12 +38,17 @@ function applyLink(textarea: HTMLTextAreaElement | null) {
 }
 
 export default function AdminClientPages() {
-  const { pages, createPage, upsertPage, removePage, ensureUniqueSlug } =
-    useAdminClientPages();
+  const {
+    pages,
+    createPage,
+    upsertPage,
+    removePage,
+    ensureUniqueSlug,
+    resetPages,
+  } = useAdminClientPages();
 
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    pages[0]?.slug ?? null
-  );
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const selected = useMemo(
     () => pages.find((p) => p.slug === selectedSlug) ?? null,
     [pages, selectedSlug]
@@ -51,7 +56,7 @@ export default function AdminClientPages() {
 
   const [name, setName] = useState("");
   const [desiredSlug, setDesiredSlug] = useState("");
-  const [sector, setSector] = useState<SectorValue | "">("");
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]);
   const [tags, setTags] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [audience, setAudience] = useState<"Public" | "ClientSafe">("Public");
@@ -68,6 +73,29 @@ export default function AdminClientPages() {
       ),
     [tags]
   );
+  const selectedCategories = useMemo(() => {
+    const out: SectorValue[] = [];
+    const seen = new Set<SectorValue>();
+    for (const d of categoryDrafts) {
+      if (!d) continue;
+      if (seen.has(d)) continue;
+      seen.add(d);
+      out.push(d);
+    }
+    return out;
+  }, [categoryDrafts]);
+
+  function addCategoryDraft() {
+    setCategoryDrafts((prev) => [...prev, ""]);
+  }
+
+  function setCategoryAt(index: number, value: SectorValue | "") {
+    setCategoryDrafts((prev) => prev.map((v, i) => (i === index ? value : v)));
+  }
+
+  function removeCategoryAt(index: number) {
+    setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
+  }
 
   function loadFrom(pageSlug: string) {
     const page = pages.find((p) => p.slug === pageSlug);
@@ -75,22 +103,33 @@ export default function AdminClientPages() {
     setSelectedSlug(page.slug);
     setName(page.name);
     setDesiredSlug(page.slug);
-    setSector(page.filters.sector ?? "");
+    setCategoryDrafts(page.filters.sectors.length ? [...page.filters.sectors] : [""]);
     setTags(page.filters.tags.join(", "));
     setTagMode(page.filters.tagMode);
     setAudience(page.filters.audience);
     setBodyMDX(page.bodyMDX ?? "");
+    setIsEditing(true);
   }
 
   function resetForm() {
     setSelectedSlug(null);
     setName("");
     setDesiredSlug("");
-    setSector("");
+    setCategoryDrafts([""]);
     setTags("");
     setTagMode("any");
     setAudience("Public");
     setBodyMDX("");
+  }
+
+  function startNew() {
+    resetForm();
+    setIsEditing(true);
+  }
+
+  function exitEditor() {
+    resetForm();
+    setIsEditing(false);
   }
 
   function handleSave() {
@@ -113,7 +152,7 @@ export default function AdminClientPages() {
         bodyMDX,
         filters: {
           ...selected.filters,
-          sector: sector || null,
+          sectors: selectedCategories,
           tags: nextTags,
           tagMode,
           audience,
@@ -128,7 +167,7 @@ export default function AdminClientPages() {
       name: name.trim() || "Client page",
       desiredSlug: desiredSlug || name,
       filters: {
-        sector: sector || null,
+        sectors: selectedCategories,
         tags: nextTags,
         tagMode,
         audience,
@@ -145,7 +184,11 @@ export default function AdminClientPages() {
         style={{ justifyContent: "space-between", marginTop: "1rem" }}
       >
         <h1 className="type-h2">Client pages</h1>
-        <Link href="/admin">Back to admin</Link>
+        {!isEditing ? (
+          <button className="btnPrimary" type="button" onClick={startNew}>
+            New client page
+          </button>
+        ) : null}
       </div>
 
       <div className="card mt">
@@ -181,20 +224,15 @@ export default function AdminClientPages() {
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={8}
-                      className="tooltipContent"
-                    >
-                      Client pages are curated, custom websites that show a
-                      collection of case studies, tailored for a specific
-                      audience, plus an optional intro.
-                      {/* Client collections are saved, curated filtered pages with
-                      an optional intro and shareable URL. */}
-                      <br />
-                      <br />
-                      The Case Study Library filters let you preview a live
-                      database view without saving it.
+                  <Tooltip.Content
+                    side="top"
+                    sideOffset={8}
+                    className="tooltipContent"
+                  >
+                      Client pages are curated collections of case studies for
+                      a specific audience, with optional intro text and a
+                      shareable URL. Use them when you want a tailored view
+                      beyond the main case study library.
                       <Tooltip.Arrow className="tooltipArrow" />
                     </Tooltip.Content>
                   </Tooltip.Portal>
@@ -202,77 +240,134 @@ export default function AdminClientPages() {
               </Tooltip.Provider>
             </div>
             <p className="muted">
-              Curated websites built from case study filters for a specific
-              audience.
+              Build a focused, client-facing page by choosing categories and
+              tags, adding a short intro, and setting a publishing status.
+              These pages are saved, editable, and shareable.
             </p>
-          </div>
-          <div className="row" style={{ gap: ".5rem" }}>
-            <button className="btnSmall" type="button" onClick={resetForm}>
-              New page
-            </button>
-            {selected ? (
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => {
-                  removePage(selected.slug);
-                  resetForm();
-                }}
-              >
-                Delete
-              </button>
-            ) : null}
           </div>
         </div>
       </div>
-
-      <div
-        className="row"
-        style={{
-          gap: "1rem",
-          marginTop: "1rem",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-        }}
-      >
-        <div
-          className="card"
-          style={{
-            flex: "1 1 280px",
-            minWidth: 260,
-            background: "var(--brand-lightest)",
-          }}
-        >
-          <div className="form-group">
-            <label className="form-label">Client Pages Library</label>
-            <select
-              className="input"
-              value={selectedSlug ?? ""}
-              onChange={(e) => loadFrom(e.target.value)}
-            >
-              <option value="">Select a page…</option>
-              {pages.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.name} ({p.slug})
-                </option>
-              ))}
-            </select>
-            <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-              This list is your saved client pages. Choose one to edit or start
-              a new page.
+      {!isEditing ? (
+        <div className="card mt">
+          <div className="dbResultsHeader">
+            <div className="dbResultsHeader__sort">
+              <h2 className="type-h2" style={{ marginBottom: 0 }}>
+                Client Pages Database
+              </h2>
+            </div>
+            <p className="muted dbResultsHeader__count">
+              Showing {pages.length} / {pages.length}
             </p>
           </div>
-          <div className="form-group">
-            <label className="form-label">Database preview path</label>
-            <p className="muted type-small">
-              In the Case Study Library, set category and tag filters, then
-              click “Preview filtered page” to see the live database-filtered
-              view with current case studies.
-            </p>
+          <p className="muted type-small" style={{ marginTop: ".5rem" }}>
+            This list is your saved client pages. Choose one to edit or start a
+            new page.
+          </p>
+          <div className="dbListGrid">
+            {pages.length ? (
+              pages.map((page) => {
+                const hasIntro = Boolean(page.bodyMDX?.trim());
+                return (
+                  <section key={page.slug} className="card dbItem">
+                    <div className="dbItemHeader">
+                      <div className="dbItemMain">
+                        <div className="dbItemClient">{page.name}</div>
+                        <div className="dbItemTitle">/{page.slug}</div>
+                      </div>
+                      <div className="dbActions">
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => loadFrom(page.slug)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => removePage(page.slug)}
+                        >
+                          Remove
+                        </button>
+                        <span className="pill pill--status">
+                          {page.filters.audience === "Public"
+                            ? "Published"
+                            : "Draft"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="dbSummary">
+                      {hasIntro
+                        ? "Intro text added."
+                        : "No intro text yet — add one to orient readers."}
+                    </div>
+                    <div className="dbProps">
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Last updated</div>
+                        <div className="dbPropValue">
+                          {new Date(page.updatedAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Created</div>
+                        <div className="dbPropValue">
+                          {new Date(page.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                );
+              })
+            ) : (
+              <p className="muted">No client pages yet.</p>
+            )}
+          </div>
+          <div
+            className="row"
+            style={{ justifyContent: "flex-end", marginTop: "1rem" }}
+          >
+            <button className="btn-3" type="button" onClick={resetPages}>
+              Reset demo data
+            </button>
           </div>
         </div>
-
-        <div className="card" style={{ flex: "2 1 520px", minWidth: 320 }}>
+      ) : (
+        <div className="card mt">
+          <div
+            className="row"
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "1rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <h2 className="type-h3" style={{ marginBottom: 0 }}>
+              {selected ? "Edit client page" : "Create client page"}
+            </h2>
+            <div className="row" style={{ gap: ".5rem" }}>
+              <button className="btnSmall" type="button" onClick={exitEditor}>
+                Back to list
+              </button>
+              {selected ? (
+                <button
+                  className="btnSmall"
+                  type="button"
+                  onClick={() => {
+                    removePage(selected.slug);
+                    exitEditor();
+                  }}
+                >
+                  Delete
+                </button>
+              ) : null}
+            </div>
+          </div>
+          <p className="muted" style={{ marginTop: ".5rem" }}>
+            Client pages combine categories and tags into a tailored, shareable
+            page. Add a clear name, an optional intro to orient readers, and set
+            the publishing status before saving.
+          </p>
           <div className="form-group">
             <label className="form-label">Page name</label>
             <input
@@ -280,6 +375,9 @@ export default function AdminClientPages() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              This is the internal title shown in the client pages list.
+            </p>
           </div>
 
           <div className="form-group">
@@ -290,36 +388,130 @@ export default function AdminClientPages() {
               onChange={(e) => setDesiredSlug(e.target.value)}
               placeholder="client-page-slug"
             />
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              Used in the URL. Keep it short and readable.
+            </p>
           </div>
 
           <div className="form-group">
-            <label className="form-label">Category filter</label>
-            <select
-              className="input"
-              value={sector}
-              onChange={(e) => setSector(e.target.value as SectorValue | "")}
-            >
-              <option value="">No category filter</option>
-              {SECTOR_GROUPS.map((group) => (
-                <optgroup key={group.id} label={group.label}>
-                  {group.values.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {sectorLabel(opt)}
-                    </option>
-                  ))}
-                </optgroup>
+            <div className="row" style={{ gap: ".5rem", alignItems: "center" }}>
+              <label className="form-label" style={{ marginBottom: 0 }}>
+                Categories
+              </label>
+              <Tooltip.Provider delayDuration={200}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      className="infoButton"
+                      type="button"
+                      aria-label="Categories help"
+                    >
+                      ?
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="top"
+                      sideOffset={8}
+                      className="tooltipContent"
+                    >
+                      Pick one or more categories. Case studies that match any
+                      selected category will be included.
+                      <Tooltip.Arrow className="tooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            </div>
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              Add multiple categories to broaden the results.
+            </p>
+            <div className="category-stack" style={{ marginTop: ".5rem" }}>
+              {categoryDrafts.map((v, idx) => (
+                <div key={idx} className="category-row">
+                  <select
+                    className="input"
+                    value={v}
+                    onChange={(e) => setCategoryAt(idx, e.target.value as SectorValue | "")}
+                    aria-label={idx === 0 ? "Primary category" : `Additional category ${idx + 1}`}
+                  >
+                    <option value="">Select a category…</option>
+                    {SECTOR_GROUPS.map((group) => (
+                      <optgroup key={group.id} label={group.label}>
+                        {group.values.map((opt) => (
+                          <option key={opt} value={opt}>
+                            {sectorLabel(opt)}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                  {idx > 0 && (
+                    <button
+                      type="button"
+                      className="btnLink"
+                      onClick={() => removeCategoryAt(idx)}
+                      aria-label={`Remove category ${idx + 1}`}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {idx === 0 ? (
+                    <span className="muted type-small">Primary category</span>
+                  ) : null}
+                  {idx > 0 && idx === categoryDrafts.length - 1 ? (
+                    <span className="muted type-small">Additional categories</span>
+                  ) : null}
+                </div>
               ))}
-            </select>
+              {categoryDrafts[categoryDrafts.length - 1] !== "" ? (
+                <button type="button" className="btnLink" onClick={addCategoryDraft}>
+                  + Add another category
+                </button>
+              ) : null}
+            </div>
           </div>
 
           <div className="form-group">
-            <label className="form-label">Tags filter</label>
+            <div className="row" style={{ gap: ".5rem", alignItems: "center" }}>
+              <label className="form-label" style={{ marginBottom: 0 }}>
+                Tags to include
+              </label>
+              <Tooltip.Provider delayDuration={200}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      className="infoButton"
+                      type="button"
+                      aria-label="Tags help"
+                    >
+                      ?
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="top"
+                      sideOffset={8}
+                      className="tooltipContent"
+                    >
+                      Enter one or more tags, separated by commas. These are
+                      matched against case study tags.
+                      <Tooltip.Arrow className="tooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            </div>
             <input
               className="input"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="Earmark, Pilot Program"
             />
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              Use existing tags or create new ones. The Tag Filter Mode below
+              controls how they are matched.
+            </p>
             {tagChips.length ? (
               <div className="client-links">
                 {tagChips.map((t) => (
@@ -332,7 +524,36 @@ export default function AdminClientPages() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Tag mode</label>
+            <div className="row" style={{ gap: ".5rem", alignItems: "center" }}>
+              <label className="form-label" style={{ marginBottom: 0 }}>
+                Tag Filter Mode
+              </label>
+              <Tooltip.Provider delayDuration={200}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      className="infoButton"
+                      type="button"
+                      aria-label="Tag filter mode help"
+                    >
+                      ?
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="top"
+                      sideOffset={8}
+                      className="tooltipContent"
+                    >
+                      Match any = include case studies with at least one tag.
+                      Match all = only include case studies that have every
+                      listed tag.
+                      <Tooltip.Arrow className="tooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            </div>
             <select
               className="input"
               value={tagMode}
@@ -344,21 +565,11 @@ export default function AdminClientPages() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Audience</label>
-            <select
-              className="input"
-              value={audience}
-              onChange={(e) =>
-                setAudience(e.target.value as "Public" | "ClientSafe")
-              }
-            >
-              <option value="Public">Public</option>
-              <option value="ClientSafe">Client-safe</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Intro text (Markdown)</label>
+            <label className="form-label">Intro Text (Optional)</label>
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              Use the formatting toolbar to style the intro. The preview shows
+              exactly how it will appear.
+            </p>
             <div className="editor">
               <div
                 className="editor__toolbar"
@@ -402,32 +613,72 @@ export default function AdminClientPages() {
                 placeholder="Write a short intro for this client page…"
               />
             </div>
+            <div className="editor-preview">
+              <div className="editor-preview__header">Preview</div>
+              <div className="c-markdown c-stack">
+                <Markdown>{bodyMDX || "Nothing to preview yet."}</Markdown>
+              </div>
+            </div>
           </div>
 
           <div className="form-actions">
-            <button className="btnPrimary" type="button" onClick={handleSave}>
-              {selected ? "Save changes" : "Create page"}
-            </button>
-            {selected ? (
-              <Link
-                className="btn"
-                href={`/admin/client-pages/mock/${selected.slug}`}
-              >
-                Preview
-              </Link>
-            ) : null}
+            <div className="client-status">
+              <div className="form-label">Status</div>
+              <div className="radioList" role="radiogroup" aria-label="Status">
+                <label
+                  className={`radioRow ${
+                    audience === "ClientSafe" ? "isSelected" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="client-page-status"
+                    checked={audience === "ClientSafe"}
+                    onChange={() => setAudience("ClientSafe")}
+                  />
+                  <div className="radioText">
+                    <div className="radioTitle">Draft</div>
+                    <div className="radioDesc">
+                      Save internally while you refine the page.
+                    </div>
+                  </div>
+                </label>
+                <label
+                  className={`radioRow ${
+                    audience === "Public" ? "isSelected" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="client-page-status"
+                    checked={audience === "Public"}
+                    onChange={() => setAudience("Public")}
+                  />
+                  <div className="radioText">
+                    <div className="radioTitle">Published</div>
+                    <div className="radioDesc">
+                      Visible on the public site and in previews.
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div className="form-actions__buttons">
+              <button className="btnPrimary" type="button" onClick={handleSave}>
+                {selected ? "Save Changes" : "Create Page"}
+              </button>
+              {selected ? (
+                <Link
+                  className="btn"
+                  href={`/admin/client-pages/mock/${selected.slug}`}
+                >
+                  Preview
+                </Link>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
-
-      {bodyMDX ? (
-        <div className="card mt">
-          <h2 className="type-h3">Preview</h2>
-          <div className="c-markdown c-stack">
-            <Markdown>{bodyMDX}</Markdown>
-          </div>
-        </div>
-      ) : null}
+      )}
     </main>
   );
 }

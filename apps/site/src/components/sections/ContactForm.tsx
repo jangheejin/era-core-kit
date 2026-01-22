@@ -39,25 +39,25 @@ export function ContactForm({
               <div className="field field--half">
                 <label className="type-label" htmlFor="email">
                   <div className="field-label">Email: </div>
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      id="email"
-                      name="email"
-                      required
-                    />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    id="email"
+                    name="email"
+                    required
+                  />
                 </label>
               </div>
 
               <div className="field field--full">
                 <label className="type-label" htmlFor="message">
                   <div className="field-label">Message: </div>
-                    <textarea
-                      placeholder="Message"
-                      id="message"
-                      name="message"
-                      required
-                    ></textarea>
+                  <textarea
+                    placeholder="Message"
+                    id="message"
+                    name="message"
+                    required
+                  ></textarea>
                 </label>
               </div>
             </div>
