@@ -41,10 +41,10 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
     mechanisms: [],
     jurisdictions: ["Federal"],
     tags: [
-      "geospatial",
+      /*       "geospatial",
       "mapping",
       "modernization",
-      "federal-engagement",
+      "federal-engagement", */
       "Earmark",
       "CDS",
       "Resilience",
@@ -123,10 +123,10 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
     mechanisms: [],
     jurisdictions: ["Federal"],
     tags: [
-      "nonprofit",
+      /*       "nonprofit",
       "geospatial",
       "storytelling",
-      "dc",
+      "dc", */
       "Pilot Program",
       "Resilience",
     ],
@@ -202,10 +202,10 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
     mechanisms: [],
     jurisdictions: ["Federal"],
     tags: [
-      "procurement",
+      /*       "procurement",
       "govcon",
       "strategy",
-      "federal",
+      "federal", */
       "Earmark",
       "CDS",
       "S1",
@@ -282,10 +282,10 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
     mechanisms: [],
     jurisdictions: ["Federal"],
     tags: [
-      "emergency",
+      /*       "emergency",
       "manufacturing",
       "procurement",
-      "disaster-response",
+      "disaster-response", */
       "Resilience",
     ],
 
@@ -352,7 +352,7 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft", "Pilot Program"],
+    tags: [/* "education", "draft",  */ "Pilot Program"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -426,7 +426,7 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft", "Earmark", "CDS", "Resilience"],
+    tags: [/* "education", "draft",  */ "Earmark", "CDS", "Resilience"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -492,7 +492,7 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft", "S1"],
+    tags: [/* "education", "draft",  */ "S1"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -819,10 +819,10 @@ const SEEDS: CaseStudySeedInput[] = [
     brief:
       "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
     tags: [
-      "geospatial",
+      /*       "geospatial",
       "mapping",
       "modernization",
-      "federal-engagement",
+      "federal-engagement", */
       "Earmark",
       "CDS",
       "Resilience",
@@ -851,10 +851,10 @@ const SEEDS: CaseStudySeedInput[] = [
     brief:
       "Helped NAPSG translate technical geospatial capabilities into accessible narratives for federal decision-makers, aligned to current priorities and usable in outreach.",
     tags: [
-      "nonprofit",
+      /*       "nonprofit",
       "geospatial",
       "storytelling",
-      "dc",
+      "dc", */
       "Pilot Program",
       "Resilience",
     ],
@@ -880,10 +880,10 @@ const SEEDS: CaseStudySeedInput[] = [
     brief:
       "Advised Crucis on realistic entry points into the federal marketplace: procurement pathways, program alignment, and relationship-building with agencies and Hill staff.",
     tags: [
-      "procurement",
+      /*       "procurement",
       "govcon",
       "strategy",
-      "federal",
+      "federal", */
       "Earmark",
       "CDS",
       "S1",
@@ -910,11 +910,11 @@ const SEEDS: CaseStudySeedInput[] = [
     brief:
       "Aligned emergency response manufacturing capabilities with federal program and procurement realities, focused on practical deployment in disaster-response contexts.",
     tags: [
-      "emergency",
+      "Resilience",
+      /*       "emergency",
       "manufacturing",
       "procurement",
-      "disaster-response",
-      "Resilience",
+      "disaster-response", */
     ],
     year: 2024,
     isFeaturedHome: true,
@@ -950,7 +950,7 @@ const SEEDS: CaseStudySeedInput[] = [
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
-  }, */
+  }, 
   {
     slug: "dummy-private-sector",
     title: "Dummy private sector case study",
@@ -971,11 +971,11 @@ const SEEDS: CaseStudySeedInput[] = [
       "Placeholder private sector case study to keep filters populated.",
     brief:
       "A simple private sector example entry used to ensure the category filter never appears empty.",
-    tags: ["dummy", "private-sector", "S1"],
+    tags: ["S1"],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
-  },
+  },*/
   {
     slug: "stemheads",
     title: "STEMheads (draft sample)",
@@ -986,7 +986,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     brief:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    tags: ["education", "draft", "Pilot Program"],
+    tags: ["Pilot Program" /*, "education", "draft",  */],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
