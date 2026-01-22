@@ -47,7 +47,7 @@ const NAV: NavItem[] = [
   },
   {
     href: "/admin/team",
-    label: "Team Bio CMS",
+    label: "Team Bio Editor",
     match: (p) => p.startsWith("/admin/team"),
   },
   {

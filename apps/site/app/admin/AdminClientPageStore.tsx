@@ -14,13 +14,19 @@ import React, {
   type ReactNode,
 } from "react";
 
-import { normalizeTagList, slugify, tagSlug, type SectorValue } from "@kit/schema";
+import {
+  normalizeTagList,
+  slugify,
+  tagSlug,
+  type SectorValue,
+  SECTOR_VALUES,
+} from "@kit/schema";
 
 export type ClientPageAudience = "Public" | "ClientSafe";
 export type ClientPageTagMode = "any" | "all";
 
 export type ClientPageFilters = {
-  sector: SectorValue | null;
+  sectors: SectorValue[];
   tags: string[]; // human-readable labels; compare via tagSlug()
   tagMode: ClientPageTagMode;
   audience: ClientPageAudience;
@@ -65,7 +71,7 @@ const DEFAULT_PAGES: ClientPage[] = (() => {
       name: "Pilot Program Case Studies",
       slug: "pilot-program-case-studies",
       filters: {
-        sector: null,
+        sectors: [],
         tags: ["Pilot Program"],
         tagMode: "any",
         audience: "Public",
@@ -80,7 +86,7 @@ const DEFAULT_PAGES: ClientPage[] = (() => {
       name: "Energy Resilience Case Studies",
       slug: "energy-resilience-case-studies",
       filters: {
-        sector: "Energy",
+        sectors: ["Energy"],
         tags: ["Resilience"],
         tagMode: "any",
         audience: "Public",
@@ -107,9 +113,27 @@ function normalizeTagsStrict(input: string[]): string[] {
   return out;
 }
 
+const SECTOR_SET = new Set(SECTOR_VALUES);
+
+function normalizeSectors(input: unknown): SectorValue[] {
+  if (!Array.isArray(input)) return [];
+  const out: SectorValue[] = [];
+  const seen = new Set<string>();
+  for (const raw of input) {
+    if (typeof raw !== "string") continue;
+    if (!SECTOR_SET.has(raw as SectorValue)) continue;
+    if (seen.has(raw)) continue;
+    seen.add(raw);
+    out.push(raw as SectorValue);
+  }
+  return out;
+}
+
 function coerceFilters(raw: any): ClientPageFilters {
-  const sector =
-    typeof raw?.sector === "string" ? (raw.sector as SectorValue) : null;
+  const fromList = normalizeSectors(raw?.sectors);
+  const sectors = fromList.length
+    ? fromList
+    : normalizeSectors(raw?.sector ? [raw.sector] : []);
 
   const tags = Array.isArray(raw?.tags)
     ? normalizeTagsStrict(raw.tags.filter((x: any) => typeof x === "string"))
@@ -119,7 +143,7 @@ function coerceFilters(raw: any): ClientPageFilters {
   const audience: ClientPageAudience =
     raw?.audience === "ClientSafe" ? "ClientSafe" : "Public";
 
-  return { sector, tags, tagMode, audience };
+  return { sectors, tags, tagMode, audience };
 }
 
 function coerceBodyMDX(raw: any): string {
@@ -253,7 +277,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       const slug = ensureUniqueSlug(desired);
 
       const filters: ClientPageFilters = {
-        sector: input.filters.sector ?? null,
+        sectors: normalizeSectors(input.filters.sectors ?? []),
         tags: normalizeTagsStrict(input.filters.tags ?? []),
         tagMode: input.filters.tagMode ?? "any",
         audience: input.filters.audience ?? "Public",

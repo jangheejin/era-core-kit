@@ -5,6 +5,7 @@ import "@styles/admin-cms.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MiniFormatBar } from "../components/MiniFormatBar";
 import { useAdminTeamMembers, type TeamMember } from "../AdminTeamStore";
+import { Markdown } from "@/components/Markdown";
 
 type TeamImage = {
   url: string;
@@ -215,7 +216,7 @@ export default function AdminTeamPage() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">Team Bio CMS</h1>
+        <h1 className="type-h2">Team Bio Editor</h1>
         <div className="row" style={{ gap: ".5rem" }}>
           {!editingId && (
             <button className="btnPrimary" type="button" onClick={startNewMember}>
@@ -394,7 +395,7 @@ export default function AdminTeamPage() {
             </div>
           )}
 
-          <div className="form-row form-group">
+          {/* <div className="form-row form-group">
             <div className="form-field">
               <label className="form-label">Photo URL (advanced)</label>
               <input
@@ -404,11 +405,11 @@ export default function AdminTeamPage() {
                 onChange={(e) => updateDraft({ imageUrl: e.target.value })}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="form-row form-group team-form__wide">
             <div className="form-field">
-              <label className="form-label">Bio (Markdown)</label>
+              <label className="form-label">Bio</label>
               <MiniFormatBar
                 textareaRef={textareaRef}
                 value={bioDraft}
@@ -428,8 +429,14 @@ export default function AdminTeamPage() {
                 }}
               />
               <p className="muted type-small" style={{ marginTop: 6 }}>
-                Separate paragraphs with a blank line. Markdown is supported.
+                Use the formatting buttons to style text. The preview below shows how it will look.
               </p>
+            </div>
+          </div>
+          <div className="team-bio-preview">
+            <div className="team-bio-preview__header">Preview</div>
+            <div className="c-markdown c-stack">
+              <Markdown>{bioDraft || "Nothing to preview yet."}</Markdown>
             </div>
           </div>
 
