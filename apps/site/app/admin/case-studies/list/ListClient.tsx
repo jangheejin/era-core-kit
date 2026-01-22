@@ -748,25 +748,6 @@ export default function ListClient() {
                         </div>
                       ) : null}
 
-                      <div className="dbPillRow">
-                        {sectors.map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            className="pill pill--cat pill--removable"
-                            onClick={() => {
-                              const nextRaw = sectors.filter((x) => x !== s);
-                              const next = nextRaw.length ? nextRaw : [DEFAULT_CATEGORY];
-                              const nextPrimary = next.includes(primary) ? primary : next[0];
-                              updateMeta(cs.id, { sectors: next, primarySector: nextPrimary });
-                            }}
-                            title="Remove category"
-                          >
-                            {sectorLabel(s)} <span className="pillX">×</span>
-                          </button>
-                        ))}
-                      </div>
-
                       <select
                         className="input input--tiny"
                         value=""
@@ -788,6 +769,26 @@ export default function ListClient() {
                           </optgroup>
                         ))}
                       </select>
+
+                      <div className="dbPillRow">
+                        {sectors.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            className="pill pill--cat pill--removable"
+                            onClick={() => {
+                              const nextRaw = sectors.filter((x) => x !== s);
+                              const next = nextRaw.length ? nextRaw : [DEFAULT_CATEGORY];
+                              const nextPrimary = next.includes(primary) ? primary : next[0];
+                              updateMeta(cs.id, { sectors: next, primarySector: nextPrimary });
+                            }}
+                            title="Remove category"
+                          >
+                            {sectorLabel(s)} <span className="pillX">×</span>
+                          </button>
+                        ))}
+                      </div>
+
                     </div>
 
                     <div className="dbEditBlock">

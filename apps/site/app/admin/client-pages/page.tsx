@@ -47,9 +47,8 @@ export default function AdminClientPages() {
     resetPages,
   } = useAdminClientPages();
 
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    pages[0]?.slug ?? null
-  );
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const selected = useMemo(
     () => pages.find((p) => p.slug === selectedSlug) ?? null,
     [pages, selectedSlug]
@@ -86,6 +85,7 @@ export default function AdminClientPages() {
     setTagMode(page.filters.tagMode);
     setAudience(page.filters.audience);
     setBodyMDX(page.bodyMDX ?? "");
+    setIsEditing(true);
   }
 
   function resetForm() {
@@ -97,6 +97,16 @@ export default function AdminClientPages() {
     setTagMode("any");
     setAudience("Public");
     setBodyMDX("");
+  }
+
+  function startNew() {
+    resetForm();
+    setIsEditing(true);
+  }
+
+  function exitEditor() {
+    resetForm();
+    setIsEditing(false);
   }
 
   function handleSave() {
@@ -213,61 +223,32 @@ export default function AdminClientPages() {
             </p>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
-            <button className="btnSmall" type="button" onClick={resetForm}>
-              New page
-            </button>
-            {selected ? (
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => {
-                  removePage(selected.slug);
-                  resetForm();
-                }}
-              >
-                Delete
+            {!isEditing ? (
+              <button className="btnSmall" type="button" onClick={startNew}>
+                New page
               </button>
-            ) : null}
+            ) : (
+              <button className="btnSmall" type="button" onClick={exitEditor}>
+                Back to list
+              </button>
+            )}
           </div>
         </div>
       </div>
-
-      <div
-        className="row"
-        style={{
-          gap: "1rem",
-          marginTop: "1rem",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-        }}
-      >
-        <div
-          className="card"
-          style={{
-            flex: "1 1 280px",
-            minWidth: 260,
-            background: "var(--brand-lightest)",
-          }}
-        >
-          <div className="form-group">
-            <label className="form-label">Client Pages Library</label>
-            <select
-              className="input"
-              value={selectedSlug ?? ""}
-              onChange={(e) => loadFrom(e.target.value)}
-            >
-              <option value="">Select a page…</option>
-              {pages.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.name} ({p.slug})
-                </option>
-              ))}
-            </select>
-            <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-              This list is your saved client pages. Choose one to edit or start
-              a new page.
-            </p>
+      {!isEditing ? (
+        <div className="card mt">
+          <div
+            className="row"
+            style={{ justifyContent: "space-between", alignItems: "center" }}
+          >
+            <h2 className="type-h3" style={{ marginBottom: 0 }}>
+              Client Pages Library
+            </h2>
           </div>
+          <p className="muted type-small" style={{ marginTop: ".5rem" }}>
+            This list is your saved client pages. Choose one to edit or start a
+            new page.
+          </p>
           <div className="form-group">
             <label className="form-label">Database preview path</label>
             <p className="muted type-small">
@@ -276,14 +257,127 @@ export default function AdminClientPages() {
               view with current case studies.
             </p>
           </div>
-          <div className="form-group">
+          <div className="c-stack mt">
+            {pages.length ? (
+              pages.map((page) => {
+                const pageTags = normalizeTagList(page.filters.tags ?? []);
+                return (
+                  <section key={page.slug} className="card card-new">
+                    <div
+                      className="row"
+                      style={{
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: "1rem",
+                      }}
+                    >
+                      <div className="c-stack" style={{ gap: ".35rem" }}>
+                        <div
+                          className="row"
+                          style={{ gap: ".5rem", alignItems: "center" }}
+                        >
+                          <span className="type-h3" style={{ margin: 0 }}>
+                            {page.name}
+                          </span>
+                          <span className="pill pill--status">
+                            {page.filters.audience === "Public"
+                              ? "Public"
+                              : "Client-safe"}
+                          </span>
+                        </div>
+                        <span className="muted type-small">/{page.slug}</span>
+                        <span className="muted type-small">
+                          Category:{" "}
+                          {page.filters.sector
+                            ? sectorLabel(page.filters.sector)
+                            : "All categories"}
+                        </span>
+                        <span className="muted type-small">
+                          Tag mode:{" "}
+                          {page.filters.tagMode === "all"
+                            ? "Match all tags"
+                            : "Match any tag"}
+                        </span>
+                        {pageTags.length ? (
+                          <div className="client-links">
+                            {pageTags.map((tag) => (
+                              <span key={tag} className="chip chip--soft">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="muted type-small">
+                            Tags: none
+                          </span>
+                        )}
+                      </div>
+                      <div className="row" style={{ gap: ".5rem" }}>
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => loadFrom(page.slug)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => removePage(page.slug)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </section>
+                );
+              })
+            ) : (
+              <p className="muted">No client pages yet.</p>
+            )}
+          </div>
+          <div
+            className="row"
+            style={{ justifyContent: "flex-end", marginTop: "1rem" }}
+          >
             <button className="btn-3" type="button" onClick={resetPages}>
               Reset demo data
             </button>
           </div>
         </div>
-
-        <div className="card" style={{ flex: "2 1 520px", minWidth: 320 }}>
+      ) : (
+        <div className="card mt">
+          <div
+            className="row"
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "1rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <h2 className="type-h3" style={{ marginBottom: 0 }}>
+              {selected ? "Edit client page" : "Create client page"}
+            </h2>
+            <div className="row" style={{ gap: ".5rem" }}>
+              <button className="btnSmall" type="button" onClick={exitEditor}>
+                Back to list
+              </button>
+              {selected ? (
+                <button
+                  className="btnSmall"
+                  type="button"
+                  onClick={() => {
+                    removePage(selected.slug);
+                    exitEditor();
+                  }}
+                >
+                  Delete
+                </button>
+              ) : null}
+            </div>
+          </div>
           <div className="form-group">
             <label className="form-label">Page name</label>
             <input
@@ -429,9 +523,9 @@ export default function AdminClientPages() {
             ) : null}
           </div>
         </div>
-      </div>
+      )}
 
-      {bodyMDX ? (
+      {isEditing && bodyMDX ? (
         <div className="card mt">
           <h2 className="type-h3">Preview</h2>
           <div className="c-markdown c-stack">

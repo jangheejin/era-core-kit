@@ -248,7 +248,7 @@ export default function AdminTeamPage() {
                       <span className="type-h3" style={{ margin: 0 }}>
                         {member.name}
                       </span>
-                      <span className="pill pill--status">{member.status}</span>
+                      <span className="pill pill--status">{normalizeStatus(member.status)}</span>
                     </div>
                     <span className="muted type-small">{member.title}</span>
                     {member.location && <span className="muted type-small">{member.location}</span>}
