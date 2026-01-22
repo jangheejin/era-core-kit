@@ -16,14 +16,15 @@ import { Markdown } from "@/components/Markdown";
 function applyWrap(
   textarea: HTMLTextAreaElement | null,
   before: string,
-  after: string,
+  after: string
 ) {
   if (!textarea) return;
   const start = textarea.selectionStart ?? 0;
   const end = textarea.selectionEnd ?? 0;
   const text = textarea.value;
   const selected = text.slice(start, end);
-  const next = text.slice(0, start) + before + selected + after + text.slice(end);
+  const next =
+    text.slice(0, start) + before + selected + after + text.slice(end);
   textarea.value = next;
   const cursor = start + before.length + selected.length + after.length;
   textarea.selectionStart = cursor;
@@ -36,20 +37,15 @@ function applyLink(textarea: HTMLTextAreaElement | null) {
 }
 
 export default function AdminClientPages() {
-  const {
-    pages,
-    createPage,
-    upsertPage,
-    removePage,
-    ensureUniqueSlug,
-  } = useAdminClientPages();
+  const { pages, createPage, upsertPage, removePage, ensureUniqueSlug } =
+    useAdminClientPages();
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    pages[0]?.slug ?? null,
+    pages[0]?.slug ?? null
   );
   const selected = useMemo(
     () => pages.find((p) => p.slug === selectedSlug) ?? null,
-    [pages, selectedSlug],
+    [pages, selectedSlug]
   );
 
   const [name, setName] = useState("");
@@ -67,9 +63,9 @@ export default function AdminClientPages() {
         tags
           .split(",")
           .map((t) => t.trim())
-          .filter(Boolean),
+          .filter(Boolean)
       ),
-    [tags],
+    [tags]
   );
 
   function loadFrom(pageSlug: string) {
@@ -101,11 +97,14 @@ export default function AdminClientPages() {
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean),
+        .filter(Boolean)
     );
 
     if (selected) {
-      const nextSlug = ensureUniqueSlug(desiredSlug || selected.slug, selected.id);
+      const nextSlug = ensureUniqueSlug(
+        desiredSlug || selected.slug,
+        selected.id
+      );
       upsertPage({
         ...selected,
         name: name.trim() || selected.name,
@@ -140,29 +139,54 @@ export default function AdminClientPages() {
 
   return (
     <main className="c-admin">
-      <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
+      <div
+        className="row"
+        style={{ justifyContent: "space-between", marginTop: "1rem" }}
+      >
         <h1 className="type-h2">Client pages</h1>
         <Link href="/admin">Back to admin</Link>
       </div>
 
       <div className="card mt">
-        <div className="row" style={{ justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+        <div
+          className="row"
+          style={{
+            justifyContent: "space-between",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
           <div style={{ minWidth: 260 }}>
-            <h2 className="type-h3" style={{ marginBottom: ".35rem" }}>What are client pages?</h2>
+            <h2 className="type-h3" style={{ marginBottom: ".35rem" }}>
+              What are client pages?
+            </h2>
             <p className="muted">
-              Client pages are curated landing pages that show a filtered set of case studies plus
+              Client pages are curated, custom websites that show a collection
+              of case studies tailored for a specific audience, plus an optional
+              intro.{" "}
+              {/* Create one when
+              you want a shareable URL for a specific audience. */}
+              {/* Client pages are curated landing pages that show a filtered set of case studies plus
               an optional intro. Use them when you want a shareable URL for a specific audience
-              (e.g., “Local Government” or “Energy”).
+              (e.g., “Local Government” or “Energy”). */}
             </p>
-            <ol className="muted type-small" style={{ marginTop: ".75rem", paddingLeft: "1.1rem" }}>
-              <li>Pick the category and/or tags you want on the page (you can combine both).</li>
+            <p className="muted">To create a new one:</p>
+            <ol
+              className="muted type-small"
+              style={{ marginTop: ".75rem", paddingLeft: "1.1rem" }}
+            >
+              <li>
+                Pick the category and/or tags you want on the page (you can
+                combine both).
+              </li>
               <li>Write the intro text for context.</li>
               <li>Save, then preview to share the link.</li>
             </ol>
-            <p className="muted type-small" style={{ marginTop: ".75rem" }}>
-              The Case Study Library is a database view: set filters there to preview a purely
-              filtered page without saving it. Client pages here are the “finalized” versions with
-              custom intros and shareable URLs.
+            <p className="muted" style={{ marginTop: ".75rem" }}>
+              The Case Study Library is a database view: set filters there to
+              preview a purely filtered page without saving it. Client pages
+              here are the “finalized” versions with custom intros and shareable
+              URLs.
             </p>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
@@ -187,11 +211,20 @@ export default function AdminClientPages() {
 
       <div
         className="row"
-        style={{ gap: "1rem", marginTop: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}
+        style={{
+          gap: "1rem",
+          marginTop: "1rem",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+        }}
       >
         <div
           className="card"
-          style={{ flex: "1 1 280px", minWidth: 260, background: "var(--brand-lightest)" }}
+          style={{
+            flex: "1 1 280px",
+            minWidth: 260,
+            background: "var(--brand-lightest)",
+          }}
         >
           <div className="form-group">
             <label className="form-label">Client pages library</label>
@@ -208,14 +241,16 @@ export default function AdminClientPages() {
               ))}
             </select>
             <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-              This list is your saved client pages. Choose one to edit or start a new page.
+              This list is your saved client pages. Choose one to edit or start
+              a new page.
             </p>
           </div>
           <div className="form-group">
             <label className="form-label">Database preview path</label>
             <p className="muted type-small">
-              In the Case Study Library, set category and tag filters, then click “Preview filtered
-              page” to see the live database-filtered view with current case studies.
+              In the Case Study Library, set category and tag filters, then
+              click “Preview filtered page” to see the live database-filtered
+              view with current case studies.
             </p>
           </div>
         </div>
@@ -223,7 +258,11 @@ export default function AdminClientPages() {
         <div className="card" style={{ flex: "2 1 520px", minWidth: 320 }}>
           <div className="form-group">
             <label className="form-label">Page name</label>
-            <input className="input" value={name} onChange={(e) => setName(e.target.value)} />
+            <input
+              className="input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
 
           <div className="form-group">
@@ -292,7 +331,9 @@ export default function AdminClientPages() {
             <select
               className="input"
               value={audience}
-              onChange={(e) => setAudience(e.target.value as "Public" | "ClientSafe")}
+              onChange={(e) =>
+                setAudience(e.target.value as "Public" | "ClientSafe")
+              }
             >
               <option value="Public">Public</option>
               <option value="ClientSafe">Client-safe</option>
@@ -302,7 +343,11 @@ export default function AdminClientPages() {
           <div className="form-group">
             <label className="form-label">Intro text (Markdown)</label>
             <div className="editor">
-              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
+              <div
+                className="editor__toolbar"
+                role="toolbar"
+                aria-label="Formatting"
+              >
                 <button
                   className="editor__btn"
                   type="button"
@@ -347,7 +392,10 @@ export default function AdminClientPages() {
               {selected ? "Save changes" : "Create page"}
             </button>
             {selected ? (
-              <Link className="btn" href={`/admin/client-pages/mock/${selected.slug}`}>
+              <Link
+                className="btn"
+                href={`/admin/client-pages/mock/${selected.slug}`}
+              >
                 Preview
               </Link>
             ) : null}
