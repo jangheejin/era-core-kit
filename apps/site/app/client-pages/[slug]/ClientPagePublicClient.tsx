@@ -14,7 +14,7 @@ import { Markdown } from "@/components/Markdown";
 import { useSearchParams } from "next/navigation";
 
 function matchesClientPage(cs: CaseStudyType, page: ClientPage) {
-  const { sector, tags, tagMode, audience } = page.filters;
+  const { sectors, tags, tagMode, audience } = page.filters;
 
   if (cs.status !== "Published") return false;
   if (audience === "Public") {
@@ -24,7 +24,10 @@ function matchesClientPage(cs: CaseStudyType, page: ClientPage) {
     return false;
   }
 
-  if (sector && !(cs.sectors ?? []).includes(sector)) return false;
+  if (Array.isArray(sectors) && sectors.length) {
+    const csSectors = cs.sectors ?? [];
+    if (!sectors.some((sector) => csSectors.includes(sector))) return false;
+  }
 
   const wanted = (tags ?? []).map(tagSlug).filter(Boolean);
   if (wanted.length) {
