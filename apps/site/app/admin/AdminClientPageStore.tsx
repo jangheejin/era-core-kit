@@ -129,29 +129,32 @@ function normalizeSectors(input: unknown): SectorValue[] {
   return out;
 }
 
-function coerceFilters(raw: any): ClientPageFilters {
-  const fromList = normalizeSectors(raw?.sectors);
+function coerceFilters(raw: unknown): ClientPageFilters {
+  const record = isPlainObject(raw) ? raw : {};
+  const fromList = normalizeSectors(record.sectors);
+  const legacySector = record.sector;
   const sectors = fromList.length
     ? fromList
-    : normalizeSectors(raw?.sector ? [raw.sector] : []);
+    : normalizeSectors(typeof legacySector === "string" ? [legacySector] : []);
 
-  const tags = Array.isArray(raw?.tags)
-    ? normalizeTagsStrict(raw.tags.filter((x: any) => typeof x === "string"))
+  const tagsRaw = record.tags;
+  const tags = Array.isArray(tagsRaw)
+    ? normalizeTagsStrict(tagsRaw.filter((x): x is string => typeof x === "string"))
     : [];
 
-  const tagMode: ClientPageTagMode = raw?.tagMode === "all" ? "all" : "any";
+  const tagMode: ClientPageTagMode = record.tagMode === "all" ? "all" : "any";
   const audience: ClientPageAudience =
-    raw?.audience === "ClientSafe" ? "ClientSafe" : "Public";
+    record.audience === "ClientSafe" ? "ClientSafe" : "Public";
 
   return { sectors, tags, tagMode, audience };
 }
 
-function coerceBodyMDX(raw: any): string {
+function coerceBodyMDX(raw: unknown): string {
   if (typeof raw === "string") return raw;
   return "";
 }
 
-function isPlainObject(x: any): x is Record<string, unknown> {
+function isPlainObject(x: unknown): x is Record<string, unknown> {
   return Boolean(x) && typeof x === "object" && !Array.isArray(x);
 }
 

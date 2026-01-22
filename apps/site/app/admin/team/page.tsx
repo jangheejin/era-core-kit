@@ -82,7 +82,10 @@ export default function AdminTeamPage() {
   const [bioDraft, setBioDraft] = useState("");
   const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
   const [uploadedLibrary, setUploadedLibrary] = useState<TeamImage[]>(() => loadImageLibrary());
+  const [showMarkdownEditor, setShowMarkdownEditor] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const initialDraftRef = useRef<TeamMember | null>(null);
+  const initialBioRef = useRef("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -115,8 +118,12 @@ export default function AdminTeamPage() {
   function startEditing(member: TeamMember) {
     setEditingId(member.id);
     setDraft({ ...member });
-    setBioDraft(bioToText(member.bio));
+    const nextBio = bioToText(member.bio);
+    setBioDraft(nextBio);
+    initialDraftRef.current = { ...member };
+    initialBioRef.current = nextBio;
     setSaveState("idle");
+    setShowMarkdownEditor(false);
   }
 
   function startNewMember() {
@@ -135,7 +142,10 @@ export default function AdminTeamPage() {
     setEditingId(id);
     setDraft(newMember);
     setBioDraft("");
+    initialDraftRef.current = { ...newMember };
+    initialBioRef.current = "";
     setSaveState("idle");
+    setShowMarkdownEditor(false);
   }
 
   function updateDraft(patch: Partial<TeamMember>) {
@@ -190,7 +200,16 @@ export default function AdminTeamPage() {
     };
     upsertTeamMember(nextMember);
     setDraft(nextMember);
+    initialDraftRef.current = { ...nextMember };
+    initialBioRef.current = bioDraft;
     setSaveState("saved");
+  }
+
+  function undoChanges() {
+    if (!initialDraftRef.current || !draft) return;
+    setDraft({ ...initialDraftRef.current });
+    setBioDraft(initialBioRef.current);
+    setSaveState("idle");
   }
 
   const isDirty = useMemo(() => {
@@ -216,7 +235,7 @@ export default function AdminTeamPage() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">Team Bio Editor</h1>
+        <h1 className="type-h2">Team Bio Library</h1>
         <div className="row" style={{ gap: ".5rem" }}>
           {!editingId && (
             <button className="btnPrimary" type="button" onClick={startNewMember}>
@@ -252,7 +271,6 @@ export default function AdminTeamPage() {
                       <span className="pill pill--status">{normalizeStatus(member.status)}</span>
                     </div>
                     <span className="muted type-small">{member.title}</span>
-                    {member.location && <span className="muted type-small">{member.location}</span>}
                   </div>
                 </div>
                 <div className="row" style={{ gap: ".5rem" }}>
@@ -281,34 +299,16 @@ export default function AdminTeamPage() {
       )}
 
       {editingId && draft && (
-        <section className="card mt">
-          <div className="team-editor-header">
-            <div>
-              <h2 className="type-h3" style={{ marginBottom: ".25rem" }}>
+        <>
+          <button className="btnLink" type="button" onClick={cancelEditing}>
+            ← Back to list
+          </button>
+          <section className="card mt">
+            <div className="team-editor-header">
+              <h2 className="type-h2 team-editor-title">
                 Editing {draft.name || "New team member"}
               </h2>
-              <div className="row" style={{ gap: ".5rem", alignItems: "center" }}>
-                <span className="pill pill--status">{draft.status}</span>
-                {isDirty ? (
-                  <span className="muted type-small">Unsaved changes</span>
-                ) : (
-                  <span className="muted type-small">All changes saved</span>
-                )}
-                {saveState === "saved" && <span className="muted type-small">Saved</span>}
-              </div>
             </div>
-            <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
-              <button className="btn-3" type="button" onClick={cancelEditing}>
-                Back to list
-              </button>
-              <button className="btnSmall" type="button" onClick={() => saveDraft("Draft")}>
-                Save draft
-              </button>
-              <button className="btnPrimary" type="button" onClick={() => saveDraft("Published")}>
-                Publish
-              </button>
-            </div>
-          </div>
 
           <div className="form-row form-group">
             <div className="form-field">
@@ -320,7 +320,7 @@ export default function AdminTeamPage() {
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Title</label>
+              <label className="form-label">Role</label>
               <input
                 className="input"
                 value={draft.title}
@@ -329,71 +329,57 @@ export default function AdminTeamPage() {
             </div>
           </div>
 
-          <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Location</label>
-              <input
-                className="input"
-                placeholder="Optional"
-                value={draft.location ?? ""}
-                onChange={(e) => updateDraft({ location: e.target.value })}
-              />
+          <div className="team-photo-grid">
+            <div className="team-photo-controls">
+              <div className="form-row form-group team-photo-controls__row">
+                <div className="form-field">
+                  <label className="form-label">Select Photo from Image Library</label>
+                  <select
+                    className="input"
+                    value={draft.imageUrl ?? ""}
+                    onChange={(e) => setDraftImage(e.target.value)}
+                  >
+                    <option value="">No photo selected</option>
+                    {currentLibraryOption && (
+                      <option value={currentLibraryOption}>
+                        Current ({currentLibraryOption.split("/").pop() ?? currentLibraryOption})
+                      </option>
+                    )}
+                    {imageLibrary.map((entry) => (
+                      <option key={entry.url} value={entry.url}>
+                        {entry.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="muted type-small" style={{ marginTop: 6 }}>
+                    Choose from previously uploaded images or upload a new file below.
+                  </p>
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Upload / replace photo</label>
+                  <input
+                    className="input"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handlePhotoUpload(e.target.files?.[0] ?? null)}
+                  />
+                  <p className="muted type-small" style={{ marginTop: 6 }}>
+                    {draft.imageUrl ? `Current photo: ${draft.imageUrl}` : "No photo selected yet."}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="form-field">
-              <label className="form-label">Order</label>
-              <input
-                className="input"
-                type="number"
-                value={draft.order}
-                onChange={(e) => updateDraft({ order: Number(e.target.value) })}
-              />
-            </div>
+            {currentPreviewUrl && (
+              <div className="team-photo-preview team-photo-preview--inline">
+                <img
+                  className="team-photo-preview__img"
+                  src={currentPreviewUrl}
+                  alt="Current photo"
+                />
+                <span className="muted type-small">Preview of the current photo.</span>
+              </div>
+            )}
           </div>
-
-          <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Photo library (/team/)</label>
-              <select
-                className="input"
-                value={draft.imageUrl ?? ""}
-                onChange={(e) => setDraftImage(e.target.value)}
-              >
-                <option value="">No photo selected</option>
-                {currentLibraryOption && (
-                  <option value={currentLibraryOption}>
-                    Current ({currentLibraryOption.split("/").pop() ?? currentLibraryOption})
-                  </option>
-                )}
-                {imageLibrary.map((entry) => (
-                  <option key={entry.url} value={entry.url}>
-                    {entry.label}
-                  </option>
-                ))}
-              </select>
-              <p className="muted type-small" style={{ marginTop: 6 }}>
-                Choose from previously uploaded /team/ assets or upload a new file below.
-              </p>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Upload / replace photo</label>
-              <input
-                className="input"
-                type="file"
-                accept="image/*"
-                onChange={(e) => handlePhotoUpload(e.target.files?.[0] ?? null)}
-              />
-              <p className="muted type-small" style={{ marginTop: 6 }}>
-                {draft.imageUrl ? `Current photo: ${draft.imageUrl}` : "No photo selected yet."}
-              </p>
-            </div>
-          </div>
-
-          {currentPreviewUrl && (
-            <div className="team-photo-preview" style={{ marginBottom: "1rem" }}>
-              <img className="team-photo-preview__img" src={currentPreviewUrl} alt="Current photo" />
-              <span className="muted type-small">Preview of the current photo.</span>
-            </div>
-          )}
 
           {/* <div className="form-row form-group">
             <div className="form-field">
@@ -407,48 +393,113 @@ export default function AdminTeamPage() {
             </div>
           </div> */}
 
-          <div className="form-row form-group team-form__wide">
-            <div className="form-field">
-              <label className="form-label">Bio</label>
-              <MiniFormatBar
-                textareaRef={textareaRef}
-                value={bioDraft}
-                onValueChange={(next) => {
-                  setBioDraft(next);
-                  updateDraft({ bio: textToBio(next) });
-                }}
-              />
-              <textarea
-                ref={textareaRef}
-                className="input"
-                rows={10}
-                value={bioDraft}
-                onChange={(e) => {
-                  setBioDraft(e.target.value);
-                  updateDraft({ bio: textToBio(e.target.value) });
-                }}
-              />
-              <p className="muted type-small" style={{ marginTop: 6 }}>
-                Use the formatting buttons to style text. The preview below shows how it will look.
-              </p>
+            <div
+              className={[
+                "form-group",
+                "team-form__wide",
+                "team-bio-grid",
+                showMarkdownEditor ? "is-editing" : "is-preview-only",
+              ].join(" ")}
+            >
+              {showMarkdownEditor ? (
+                <div className="form-field team-bio-panel team-bio-panel--editor">
+                  <label className="form-label">Bio (Markdown)</label>
+                  <MiniFormatBar
+                    textareaRef={textareaRef}
+                    value={bioDraft}
+                    onValueChange={(next) => {
+                      setBioDraft(next);
+                      updateDraft({ bio: textToBio(next) });
+                    }}
+                  />
+                  <textarea
+                    ref={textareaRef}
+                    className="input"
+                    rows={10}
+                    value={bioDraft}
+                    onChange={(e) => {
+                      setBioDraft(e.target.value);
+                      updateDraft({ bio: textToBio(e.target.value) });
+                    }}
+                  />
+                  <p className="muted type-small" style={{ marginTop: 6 }}>
+                    Markdown is hidden by default. Use Preview to see the rendered result.
+                  </p>
+                </div>
+              ) : null}
+              <div className="team-bio-preview team-bio-panel">
+                <div className="team-bio-preview__header">
+                  <span>Preview</span>
+                  <button
+                    className="btnLink"
+                    type="button"
+                    onClick={() => setShowMarkdownEditor((prev) => !prev)}
+                  >
+                    {showMarkdownEditor ? "Hide markdown" : "Edit markdown"}
+                  </button>
+                </div>
+                <div className="c-markdown c-stack">
+                  <Markdown>{bioDraft || "Nothing to preview yet."}</Markdown>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="team-bio-preview">
-            <div className="team-bio-preview__header">Preview</div>
-            <div className="c-markdown c-stack">
-              <Markdown>{bioDraft || "Nothing to preview yet."}</Markdown>
-            </div>
-          </div>
 
-          <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
-            <input
-              type="checkbox"
-              checked={Boolean(draft.isFounder)}
-              onChange={(e) => updateDraft({ isFounder: e.target.checked })}
-            />
-            <span className="type-small">Founder</span>
-          </label>
-        </section>
+            <div className="form-group team-order-field is-hidden">
+              <label className="form-label">Order</label>
+              <input
+                className="input input--tiny"
+                type="number"
+                value={draft.order}
+                onChange={(e) => updateDraft({ order: Number(e.target.value) })}
+              />
+            </div>
+
+            <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+              <input
+                type="checkbox"
+                checked={Boolean(draft.isFounder)}
+                onChange={(e) => updateDraft({ isFounder: e.target.checked })}
+              />
+              <span className="type-small">Founder</span>
+            </label>
+
+            <div className="team-editor-actionsBar">
+              <div className="team-editor-actions">
+                <div className="team-editor-actionColumn">
+                  <button
+                    className="btnPrimary team-editor-action team-editor-action--draft"
+                    type="button"
+                    onClick={() => saveDraft("Draft")}
+                  >
+                    Save draft
+                  </button>
+                  <div className="team-editor-helper">
+                    <span className="muted type-small">
+                      {isDirty ? "Unsaved changes" : "All changes saved"}
+                    </span>
+                    {saveState === "saved" && <span className="muted type-small">Saved</span>}
+                  </div>
+                </div>
+                <div className="team-editor-actionColumn">
+                  <button
+                    className="btnPrimary team-editor-action"
+                    type="button"
+                    onClick={() => saveDraft("Published")}
+                  >
+                    Publish
+                  </button>
+                  <span className="pill pill--status">{draft.status}</span>
+                </div>
+                <button className="btnSmall" type="button" onClick={undoChanges}>
+                  Undo
+                </button>
+                <button className="btnSmall" type="button" onClick={cancelEditing}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </section>
+        </>
       )}
     </main>
   );

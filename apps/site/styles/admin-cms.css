@@ -2942,10 +2942,73 @@ fieldset.form-group > legend.form-label{
 
 .team-editor-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.team-editor-title {
+  margin: 0;
+}
+
+.team-editor-actionsBar {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(0,0,0,.02);
+}
+
+.team-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.team-editor-actionColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  min-width: 160px;
+}
+
+.team-editor-action {
+  min-width: 160px;
+  justify-content: center;
+}
+
+.team-editor-action--draft {
+  background: rgba(0,0,0,.06);
+}
+
+.team-editor-helper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.team-order-field.is-hidden {
+  display: none;
+}
+
+.team-photo-grid {
+  display: grid;
+  gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.team-photo-controls__row {
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.team-photo-preview--inline {
+  margin-bottom: 0;
+  align-items: flex-start;
 }
 
 .team-photo-preview {
@@ -2965,7 +3028,6 @@ fieldset.form-group > legend.form-label{
 
 .team-form__wide textarea {
   width: 100%;
-  min-height: 220px;
 }
 
 .team-form__wide {
@@ -2977,12 +3039,36 @@ fieldset.form-group > legend.form-label{
   max-width: none;
 }
 
-.team-bio-preview {
-  margin-top: 1rem;
+.team-bio-grid {
+  --bio-panel-min-height: 260px;
+  display: grid;
+  gap: 1rem;
+}
+
+.team-bio-grid.is-preview-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.team-bio-panel {
+  min-height: var(--bio-panel-min-height);
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.9);
+}
+
+.team-bio-panel--editor {
   background: rgba(0,0,0,.02);
+}
+
+.team-bio-panel textarea {
+  min-height: var(--bio-panel-min-height);
+  height: 100%;
+}
+
+.team-bio-preview {
+  margin-top: 0;
+  height: 100%;
 }
 
 .team-bio-preview__header {
@@ -2990,8 +3076,26 @@ fieldset.form-group > legend.form-label{
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+@media (min-width: 900px) {
+  .team-photo-grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+}
+
+@media (min-width: 960px) {
+  .team-bio-grid.is-editing {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
 }
 
 .dbEditPanel {

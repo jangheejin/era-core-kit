@@ -184,6 +184,11 @@ export default function AdminClientPages() {
         style={{ justifyContent: "space-between", marginTop: "1rem" }}
       >
         <h1 className="type-h2">Client pages</h1>
+        {!isEditing ? (
+          <button className="btnPrimary" type="button" onClick={startNew}>
+            New client page
+          </button>
+        ) : null}
       </div>
 
       <div className="card mt">
@@ -239,17 +244,6 @@ export default function AdminClientPages() {
               tags, adding a short intro, and setting a publishing status.
               These pages are saved, editable, and shareable.
             </p>
-          </div>
-          <div className="row" style={{ gap: ".5rem" }}>
-            {!isEditing ? (
-              <button className="btnSmall" type="button" onClick={startNew}>
-                New page
-              </button>
-            ) : (
-              <button className="btnSmall" type="button" onClick={exitEditor}>
-                Back to list
-              </button>
-            )}
           </div>
         </div>
       </div>
