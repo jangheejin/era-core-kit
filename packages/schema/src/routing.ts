@@ -20,9 +20,29 @@ export function slugify(input: string): string {
  * - Store tags as human-readable strings (trimmed).
  * - Compare/filter/route using tagSlug(tag).
  */
+function standardizeTagCase(tag: string): string {
+  const cleaned = tag.trim().replace(/\s+/g, " ");
+  if (!cleaned) return "";
+
+  return cleaned
+    .split(" ")
+    .map((word) => {
+      const parts = word.split("-");
+      const normalizedParts = parts.map((part) => {
+        if (!part) return part;
+        const hasDigit = /\d/.test(part);
+        if (hasDigit || part === part.toUpperCase()) return part.toUpperCase();
+        const lower = part.toLowerCase();
+        return `${lower[0]?.toUpperCase() ?? ""}${lower.slice(1)}`;
+      });
+      return normalizedParts.join("-");
+    })
+    .join(" ");
+}
+
 export function normalizeTag(tag: string): string {
-  // minimal normalization: trim + collapse whitespace
-  return tag.trim().replace(/\s+/g, " ");
+  // standardized normalization: trim + collapse whitespace + enforce case
+  return standardizeTagCase(tag);
 }
 
 export function tagSlug(tag: string): string {

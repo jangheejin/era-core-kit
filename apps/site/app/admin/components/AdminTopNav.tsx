@@ -37,6 +37,7 @@ const NAV: NavItem[] = [
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
   { href: "/admin/case-studies/list", label: "Case Study Library", match: (p) => p.startsWith("/admin/case-studies") },
   { href: "/admin/client-pages", label: "Client Collections", match: (p) => p.startsWith("/admin/client-pages") },
+  { href: "/admin/team", label: "Team CMS", match: (p) => p.startsWith("/admin/team") },
   { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
 
@@ -58,6 +59,8 @@ function isActive(pathname: string, item: NavItem) {
     return pathname === "/admin/case-studies/list" || pathname.startsWith("/admin/case-studies/list/");
   if (item.href === "/admin/client-pages")
     return pathname === "/admin/client-pages" || pathname.startsWith("/admin/client-pages/");
+  if (item.href === "/admin/team")
+    return pathname === "/admin/team" || pathname.startsWith("/admin/team/");
   return pathname === item.href;
 }
 

@@ -12,7 +12,6 @@ import {
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
-  sectorRouteSlug,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
@@ -21,6 +20,7 @@ import {
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
+import { splitCategoryTags, isCategoryTag } from "@/lib/adminTags";
 
 import * as Tooltip from "@radix-ui/react-tooltip";
 
@@ -130,6 +130,7 @@ export default function ListClient() {
   const [tagFilter, setTagFilter] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [tagDrafts, setTagDrafts] = useState<Record<string, string>>({});
   const tagFilterChips = useMemo(
     () =>
       normalizeTagList(
@@ -146,7 +147,7 @@ export default function ListClient() {
       const tags = normalizeTagsStrict(toStringArray((item as any).tags));
       for (const tag of tags) {
         const slug = tagSlug(tag);
-        if (!slug || bySlug.has(slug)) continue;
+        if (!slug || isCategoryTag(tag) || bySlug.has(slug)) continue;
         bySlug.set(slug, tag);
       }
     }
@@ -199,6 +200,14 @@ export default function ListClient() {
       });
     };
   }, []);
+
+  useEffect(() => {
+    if (!quickEditId) return;
+    const current = items.find((item) => item.id === quickEditId);
+    if (!current) return;
+    const { visible } = splitCategoryTags(normalizeTagsStrict(toStringArray((current as any).tags)));
+    setTagDrafts((prev) => ({ ...prev, [current.id]: visible.join(", ") }));
+  }, [items, quickEditId]);
 
   function clearFeaturedSaveTimer(id: string) {
     const existing = featuredSaveTimersRef.current[id];
@@ -543,6 +552,11 @@ export default function ListClient() {
             const isPublished = cs.status === "Published";
             const isFeatured = Boolean(cs.isFeaturedHome);
             const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
+            const { visible: visibleTags, hidden: hiddenTags } = splitCategoryTags(
+              normalizeTagsStrict(toStringArray((cs as any).tags)),
+            );
+            const tagDraft = tagDrafts[cs.id] ?? visibleTags.join(", ");
+            const tagListId = `quick-edit-tag-options-${cs.id}`;
 
             return (
               <div
@@ -725,6 +739,47 @@ export default function ListClient() {
                           </optgroup>
                         ))}
                       </select>
+                    </div>
+
+                    <div className="dbEditBlock">
+                      <div className="dbEditBlockTitle">Tags (optional)</div>
+                      <p className="muted type-small" style={{ marginBottom: 8 }}>
+                        Auto-suggests existing tags. Tags are title-cased and duplicates are removed on save.
+                      </p>
+                      <input
+                        className="input input--tiny"
+                        placeholder="Add tags (comma-separated)"
+                        value={tagDraft}
+                        onChange={(e) =>
+                          setTagDrafts((prev) => ({ ...prev, [cs.id]: e.target.value }))
+                        }
+                        onBlur={(e) => {
+                          const nextTags = normalizeTagsStrict(
+                            e.target.value
+                              .split(",")
+                              .map((t) => t.trim())
+                              .filter(Boolean),
+                          );
+                          const merged = normalizeTagsStrict([...hiddenTags, ...nextTags]);
+                          updateMeta(cs.id, { tags: merged });
+                          setTagDrafts((prev) => ({ ...prev, [cs.id]: nextTags.join(", ") }));
+                        }}
+                        list={tagListId}
+                      />
+                      <datalist id={tagListId}>
+                        {availableTags.map((tag) => (
+                          <option key={tag} value={tag} />
+                        ))}
+                      </datalist>
+                      {visibleTags.length ? (
+                        <div className="dbPillRow" style={{ marginTop: 6 }}>
+                          {visibleTags.map((tag) => (
+                            <span key={tag} className="pill pill--muted">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
                     </div>
 
                     <div className="dbEditBlock">
