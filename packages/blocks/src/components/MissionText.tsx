@@ -1,7 +1,6 @@
 // packages/blocks/src/components/MissionText.tsx
 // REACT COMPONENT FOR MISSIONTEXT
 //'use client';
-import { ImageFigure } from "./ImageFigure";
 import type { MissionTextProps } from "../types";
 import { ClientAnimations } from "./ClientAnimations";
 /*
@@ -10,12 +9,7 @@ Hardcoded heading is "Our Mission" (could be made flexible if needed later)
 If you want to allow CMS control over the heading too, change props to { heading: string, text: string }
 */
 
-export function MissionText({
-  heading,
-  text,
-  text2,
-  imageUrl,
-}: MissionTextProps & { imageUrl: string }) {
+export function MissionText({ heading, text, text2 }: MissionTextProps) {
   return (
     <section className="c-section c-section--mission" id="mission">
       <div className="c-container c-stack">
