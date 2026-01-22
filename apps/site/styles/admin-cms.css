@@ -2829,6 +2829,9 @@ fieldset.form-group > legend.form-label{
 .dbPropLabel { font-size: .82rem; opacity: .7; margin-bottom: .25rem; }
 
 .dbPillRow { display:flex; gap:.35rem; flex-wrap:wrap; align-items:center; }
+.dbPillRow--secondary .pill { margin-left: 0; }
+.dbPillStack { display:flex; flex-direction:column; gap:.35rem; }
+.dbPropTooltipTarget { cursor: help; }
 
 .pill {
   display:inline-flex;
@@ -2851,6 +2854,11 @@ fieldset.form-group > legend.form-label{
 /*   margin-top:.5em; */
 /*   margin-bottom: 1.15em; */
   margin-bottom: .5em;
+}
+.pill--primary { font-weight: 700; }
+.pill--secondary {
+  background: rgba(0,0,0,.02);
+  opacity: .85;
 }
 
 .pill--removable {
@@ -2881,6 +2889,51 @@ fieldset.form-group > legend.form-label{
 .dbItem--editing {
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
+
+.mini-formatbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  padding: .35rem;
+  border-radius: 8px;
+  background: rgba(0,0,0,.04);
+}
+
+.mini-formatbar__btn {
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 999px;
+  padding: .2rem .6rem;
+  font-size: .8rem;
+  background: rgba(255,255,255,.9);
+}
+
+.team-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.team-photo-preview {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+}
+
+.team-photo-preview__img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(0,0,0,.03);
+}
+
+.team-form__wide textarea {
+  width: 100%;
+  min-height: 220px;
 }
 
 .dbEditPanel {

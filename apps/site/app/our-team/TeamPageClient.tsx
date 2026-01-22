@@ -9,8 +9,9 @@ export default function TeamPageClient() {
   const { items } = useAdminTeamMembers();
 
   const { founders, others } = useMemo(() => {
-    const foundersList = items.filter((member) => member.isFounder);
-    const othersList = items.filter((member) => !member.isFounder);
+    const published = items.filter((member) => member.status === "Published");
+    const foundersList = published.filter((member) => member.isFounder);
+    const othersList = published.filter((member) => !member.isFounder);
     return { founders: foundersList, others: othersList };
   }, [items]);
 

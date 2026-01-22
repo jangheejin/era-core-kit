@@ -53,7 +53,7 @@ function coerceSector(raw: unknown): SectorValue | null {
   if (!s) return null;
 
   // exact match
-  if (SECTOR_VALUES.includes(s as any)) return s as SectorValue;
+  if (SECTOR_VALUES.includes(s as SectorValue)) return s as SectorValue;
 
   // case-insensitive match
   const lower = s.toLowerCase();
@@ -86,6 +86,11 @@ function toStringArray(v: unknown): string[] {
   return parseCommaList(s);
 }
 
+function getLegacyValue(obj: unknown, key: string): unknown {
+  if (!obj || typeof obj !== "object") return undefined;
+  return (obj as Record<string, unknown>)[key];
+}
+
 function normalizeTagsStrict(list: string[]): string[] {
   const normalized = normalizeTagList(list);
   const seen = new Set<string>();
@@ -113,7 +118,7 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
 
 export default function ListClient() {
   const { items: storeItems, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
-  const items = storeItems ?? [];
+  const items = useMemo(() => storeItems ?? [], [storeItems]);
 
   const didAutoFixRef = useRef(false);
   const [featuredSaveStateById, setFeaturedSaveStateById] = useState<
@@ -130,7 +135,7 @@ export default function ListClient() {
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
   const [tagFilter, setTagFilter] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
-  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [statusFilter] = useState<string>("");
   const [tagDrafts, setTagDrafts] = useState<Record<string, string>>({});
   const tagFilterChips = useMemo(
     () =>
@@ -145,7 +150,7 @@ export default function ListClient() {
   const availableTags = useMemo(() => {
     const bySlug = new Map<string, string>();
     for (const item of items) {
-      const tags = normalizeTagsStrict(toStringArray((item as any).tags));
+      const tags = normalizeTagsStrict(toStringArray(getLegacyValue(item, "tags")));
       for (const tag of tags) {
         const slug = tagSlug(tag);
         if (!slug || isCategoryTag(tag) || bySlug.has(slug)) continue;
@@ -195,8 +200,9 @@ export default function ListClient() {
   const [quickEditId, setQuickEditId] = useState<string | null>(null);
 
   useEffect(() => {
+    const timers = featuredSaveTimersRef.current;
     return () => {
-      Object.values(featuredSaveTimersRef.current).forEach((timer) => {
+      Object.values(timers).forEach((timer) => {
         if (timer) clearTimeout(timer);
       });
     };
@@ -206,7 +212,9 @@ export default function ListClient() {
     if (!quickEditId) return;
     const current = items.find((item) => item.id === quickEditId);
     if (!current) return;
-    const { visible } = splitCategoryTags(normalizeTagsStrict(toStringArray((current as any).tags)));
+    const { visible } = splitCategoryTags(
+      normalizeTagsStrict(toStringArray(getLegacyValue(current, "tags"))),
+    );
     setTagDrafts((prev) => ({ ...prev, [current.id]: visible.join(", ") }));
   }, [items, quickEditId]);
 
@@ -264,15 +272,18 @@ export default function ListClient() {
 
     // gather sectors from: sectors[] / legacy sector / primarySector (if someone saved only that)
     const sectorsRaw =
-      (patch as any).sectors ??
-      (existing as any).sectors ??
-      (patch as any).sector ??
-      (existing as any).sector ??
+      getLegacyValue(patch, "sectors") ??
+      getLegacyValue(existing, "sectors") ??
+      getLegacyValue(patch, "sector") ??
+      getLegacyValue(existing, "sector") ??
       undefined;
 
-    const primaryRaw = (patch as any).primarySector ?? (existing as any).primarySector ?? undefined;
+    const primaryRaw =
+      getLegacyValue(patch, "primarySector") ??
+      getLegacyValue(existing, "primarySector") ??
+      undefined;
 
-    const tagsRaw = (patch as any).tags ?? (existing as any).tags;
+    const tagsRaw = getLegacyValue(patch, "tags") ?? getLegacyValue(existing, "tags");
 
     const sectorsNorm = normalizeSectorsStrict([
       ...toStringArray(sectorsRaw),
@@ -319,9 +330,9 @@ export default function ListClient() {
 
     const missing = items.filter((cs) => {
       const sectors = normalizeSectorsStrict([
-        ...toStringArray((cs as any).sectors),
-        ...toStringArray((cs as any).sector),
-        ...toStringArray((cs as any).primarySector),
+        ...toStringArray(getLegacyValue(cs, "sectors")),
+        ...toStringArray(getLegacyValue(cs, "sector")),
+        ...toStringArray(getLegacyValue(cs, "primarySector")),
       ]);
       return sectors.length === 0;
     });
@@ -342,12 +353,12 @@ export default function ListClient() {
 
     return items.filter((cs) => {
       const sectors = normalizeSectorsStrict([
-        ...toStringArray((cs as any).sectors),
-        ...toStringArray((cs as any).sector),
-        ...toStringArray((cs as any).primarySector),
+        ...toStringArray(getLegacyValue(cs, "sectors")),
+        ...toStringArray(getLegacyValue(cs, "sector")),
+        ...toStringArray(getLegacyValue(cs, "primarySector")),
       ]);
 
-      const tags = normalizeTagsStrict(toStringArray((cs as any).tags));
+      const tags = normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags")));
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
@@ -503,7 +514,7 @@ export default function ListClient() {
                 : "Pick a category or a single tag above to enable the preview button."}
             </span>
             <span className="muted type-small">
-              For multi-tag or category + tag combinations, use Client Collections to build a final page.
+              For multi-tag or category + tag combinations, use Client Pages to build a final page.
             </span>
           </div>
         </div>
@@ -538,15 +549,15 @@ export default function ListClient() {
             const isQuickEditing = quickEditId === cs.id;
 
             const sectorsRaw = normalizeSectorsStrict([
-              ...toStringArray((cs as any).sectors),
-              ...toStringArray((cs as any).sector),
-              ...toStringArray((cs as any).primarySector),
+              ...toStringArray(getLegacyValue(cs, "sectors")),
+              ...toStringArray(getLegacyValue(cs, "sector")),
+              ...toStringArray(getLegacyValue(cs, "primarySector")),
             ]);
 
             const sectors = sectorsRaw.length ? sectorsRaw : [DEFAULT_CATEGORY];
 
             const primary =
-              coerceSector((cs as any).primarySector) ??
+              coerceSector(getLegacyValue(cs, "primarySector")) ??
               sectors[0] ??
               DEFAULT_CATEGORY;
 
@@ -554,10 +565,11 @@ export default function ListClient() {
             const isFeatured = Boolean(cs.isFeaturedHome);
             const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
             const { visible: visibleTags, hidden: hiddenTags } = splitCategoryTags(
-              normalizeTagsStrict(toStringArray((cs as any).tags)),
+              normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags"))),
             );
             const tagDraft = tagDrafts[cs.id] ?? visibleTags.join(", ");
             const tagListId = `quick-edit-tag-options-${cs.id}`;
+            const secondarySectors = sectors.filter((sector) => sector !== primary);
 
             return (
               <div
@@ -626,33 +638,69 @@ export default function ListClient() {
                 {/* PROPERTY ROWS */}
                 {!isQuickEditing && (
                   <div className="dbProps">
-                    <div className="dbProp">
-                      <div className="dbPropLabel">Categories</div>
-                      <div className="dbPillRow">
-                        {sectors.length === 0 ? (
-                          <span className="pill pill--muted">Uncategorized</span>
-                        ) : (
-                          <>
-                            <span className="pill pill--cat">{sectorLabel(primary)}</span>
-                            {sectors.length > 1 && (
-                              <span className="pill pill--muted">+{sectors.length - 1} more</span>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </div>
+                    <Tooltip.Provider delayDuration={200}>
+                      <Tooltip.Root>
+                        <Tooltip.Trigger asChild>
+                          <div className="dbProp dbPropTooltipTarget">
+                            <div className="dbPropLabel">Categories</div>
+                            <div className="dbPillStack">
+                              {sectors.length === 0 ? (
+                                <div className="dbPillRow">
+                                  <span className="pill pill--muted">Uncategorized</span>
+                                </div>
+                              ) : (
+                                <>
+                                  <div className="dbPillRow">
+                                    <span className="pill pill--cat pill--primary">
+                                      {sectorLabel(primary)}
+                                    </span>
+                                  </div>
+                                  {secondarySectors.length > 0 && (
+                                    <div className="dbPillRow dbPillRow--secondary">
+                                      {secondarySectors.map((sector) => (
+                                        <span key={sector} className="pill pill--cat pill--secondary">
+                                          {sectorLabel(sector)}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </Tooltip.Trigger>
+                        <Tooltip.Portal>
+                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                            Click Change Settings to quick edit categories and publishing status.
+                            <Tooltip.Arrow className="tooltipArrow" />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    </Tooltip.Provider>
 
-                    <div className="dbProp">
-                      <div className="dbPropLabel">Publishing Status</div>
-                      <div className="dbPillRow">
-                        <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
-                          {isPublished ? "Published" : "Draft"}
-                        </span>
-                        {isFeatured ? (
-                          <span className="pill pill--audience">Featured</span>
-                        ) : null}
-                      </div>
-                    </div>
+                    <Tooltip.Provider delayDuration={200}>
+                      <Tooltip.Root>
+                        <Tooltip.Trigger asChild>
+                          <div className="dbProp dbPropTooltipTarget">
+                            <div className="dbPropLabel">Publishing Status</div>
+                            <div className="dbPillRow">
+                              <span
+                                className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}
+                              >
+                                {isPublished ? "Published" : "Draft"}
+                              </span>
+                              {isFeatured ? <span className="pill pill--audience">Featured</span> : null}
+                            </div>
+                          </div>
+                        </Tooltip.Trigger>
+                        <Tooltip.Portal>
+                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                            Click Change Settings to quick edit categories and publishing status.
+                            <Tooltip.Arrow className="tooltipArrow" />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    </Tooltip.Provider>
                   </div>
                 )}
 
