@@ -26,9 +26,6 @@ export function ContactForm({
   return (
     <section className="c-section contact" id="contact">
       <div className="c-container c-stack">
-        <p></p>
-        <p></p>
-        
         <h2 className="type-h2">{heading}</h2>
         {description && <p className="type-body">{description}</p>}
         <div className="contact-form-wrapper">

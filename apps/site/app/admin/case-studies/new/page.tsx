@@ -737,6 +737,12 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                           Remove
                         </button>
                       )}
+                      {idx === 0 ? (
+                        <span className="muted type-small">Primary Category</span>
+                      ) : null}
+                      {idx > 0 && idx === categoryDrafts.length - 1 ? (
+                        <span className="muted type-small">Additional Categories</span>
+                      ) : null}
                     </div>
                   ))}
 

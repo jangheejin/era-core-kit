@@ -8,18 +8,21 @@ import { useMemo } from "react";
 
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
-import { useAdminClientPages } from "../../admin/AdminClientPageStore";
+import { useAdminClientPages, type ClientPage } from "../../admin/AdminClientPageStore";
 import { Markdown } from "@/components/Markdown";
 
 import { useSearchParams } from "next/navigation";
-import { encode } from "punycode";
 
-function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
-  const { sector, tags, tagMode } = page.filters;
+function matchesClientPage(cs: CaseStudyType, page: ClientPage) {
+  const { sector, tags, tagMode, audience } = page.filters;
 
   if (cs.status !== "Published") return false;
-  if (!cs.isPublic) return false;
-  if (cs.visibility !== "Public") return false;
+  if (audience === "Public") {
+    if (!cs.isPublic) return false;
+    if (cs.visibility !== "Public") return false;
+  } else if (cs.visibility === "Internal") {
+    return false;
+  }
 
   if (sector && !(cs.sectors ?? []).includes(sector)) return false;
 
@@ -57,10 +60,7 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
     return items.filter((cs) => matchesClientPage(cs, page));
   }, [items, page]);
 
-  const isFew = items.length <= 2;
-
   if (!page) {
-//  if (!page || !page.published) {
     return (
       <main className="c-page">
         <div className="c-container c-stack">
