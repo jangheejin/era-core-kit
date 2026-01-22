@@ -24,9 +24,13 @@ import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/section
 // Map each allowed block type to its React component.
 // Note: lowercase aliases share the same component.
 
-//const blockComponentMap: Record<BlockType, ComponentType<any>> = {
-//const blockComponentMap: Partial<Record<BlockType, React.ComponentType<any>>> = {
-const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
+type BlockComponentMap = Partial<{
+  [K in BlockType]: React.ComponentType<
+    Extract<LayoutBlock, { type: K }>["props"]
+  >;
+}>;
+
+const blockComponents: BlockComponentMap = {
   Hero,
   IntroWithImage,
   MissionText,
@@ -84,16 +88,16 @@ function groupBlocks(blocks: LayoutBlock[]): BlockGroup[] {
 }
 
 function renderBlock(block: LayoutBlock, key: string) {
-  const Component = blockComponents[block.type as BlockType];
+  const Component = blockComponents[block.type] as
+    | React.ComponentType<typeof block.props>
+    | undefined;
 
   if (!Component) {
     console.warn("[BlockRenderer] Unknown block type:", block.type);
     return null;
   }
 
-  const componentProps =
-    (block as LayoutBlock & { props?: Record<string, unknown> }).props ?? {};
-  return <Component key={key} {...componentProps} />;
+  return <Component key={key} {...block.props} />;
 }
 
 /*

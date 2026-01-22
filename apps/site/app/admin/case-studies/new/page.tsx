@@ -157,7 +157,7 @@ const selectedCategories = useMemo(() => {
   /* return out; */
   /** TODO: CHANGE THIS BACK LATER*/
   return out.length ? out : [DEFAULT_SECTOR];
-}, [categoryDrafts]);
+}, [categoryDrafts, DEFAULT_SECTOR]);
 
 
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
