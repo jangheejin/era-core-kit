@@ -7,16 +7,14 @@ import "@styles/admin-cms.css";
 import { showAdvanced } from "@/lib/featureFlags";
 
 import { 
-  createContext,
-  useContext,
+  useEffect,
   useMemo,
   useState,
   useRef,
-  type ReactNode,
   type ChangeEvent,
 } from "react";
 
-import Link from "next/link";
+import Image from "next/image";
 
 import {
   CaseStudy as CaseStudySchema,
@@ -26,11 +24,8 @@ import {
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
-  CASE_STUDY_STATUS_VALUES,
-  CASE_STUDY_VISIBILITY_VALUES,
   DEFAULT_HERO_IMAGE_URL,
   deriveSummaryFromWriteUp,
-  plainTextToMdxPreservingLineBreaks,
 } from "@kit/schema";
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
@@ -39,14 +34,6 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-import { normalizeTagList } from "@kit/schema";
-
-const FLAT_CATEGORY_OPTIONS = SECTOR_GROUPS.flatMap((g) =>
-  g.values.map((v) => ({
-    value: v,
-    label: `${g.label}: ${sectorLabel(v)}`,
-  }))
-);
 
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false
@@ -77,6 +64,7 @@ if (!parsed.ok) {
   }
 }
 
+const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
 
 //export const showAdvanced = parsed.value;
 
@@ -89,33 +77,34 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-type Draft = Partial<CaseStudyInput>;
-
 function emptyToUndefined(s: unknown): string | undefined {
   if (typeof s !== "string") return undefined;
   const t = s.trim();
   return t ? t : undefined;
 }
 
-function autoSummaryFromText(text: string, max = 180) {
-  const t = text.trim().replace(/\s+/g, " ");
-  if (!t) return "";
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trim() + "…";
-}
-
 export default function NewCaseStudyPage() {
   const router = useRouter();
 
-  const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const { items: adminItems, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const featuredCount = useMemo(
+    () =>
+      adminItems.filter(
+        (cs) =>
+          cs.status === "Published" &&
+          cs.isPublic &&
+          cs.visibility === "Public" &&
+          cs.isFeaturedHome,
+      ).length,
+    [adminItems],
+  );
+  const maxFeatured = 6;
 
   const [id] = useState(() =>
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
 
-  const [title, setTitle] = useState("");
+  const [title] = useState("");
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
 /*   const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
@@ -156,10 +145,10 @@ function removeCategoryAt(index: number) {
   setCategoryDrafts((prev) => prev.filter((_, i) => i !== index));
 }
 
-function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
+const selectedCategories = useMemo(() => {
   const out: SectorValue[] = [];
   const seen = new Set<SectorValue>();
-  for (const d of drafts) {
+  for (const d of categoryDrafts) {
     if (!d) continue;
     if (seen.has(d)) continue;
     seen.add(d);
@@ -168,12 +157,7 @@ function normalizeCategories(drafts: Array<SectorValue | "">): SectorValue[] {
   /* return out; */
   /** TODO: CHANGE THIS BACK LATER*/
   return out.length ? out : [DEFAULT_SECTOR];
-}
-
-const selectedCategories = useMemo(
-  () => normalizeCategories(categoryDrafts),
-  [categoryDrafts],
-);
+}, [categoryDrafts, DEFAULT_SECTOR]);
 
 
 //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
@@ -212,48 +196,24 @@ const selectedCategories = useMemo(
     reader.readAsDataURL(file);
   }
   
-  // status, visibility (isFeaturedHome, isPublic)
-  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
-  const [visibility, setVisibility] =
-    useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
+  // publishing (Draft / Published + Featured)
+  type PublishStatus = "Draft" | "Published";
+  const [status, setStatus] = useState<PublishStatus>("Draft");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
-  const [isPublic, setIsPublic] = useState(false);
+  const isPublished = status === "Published";
 
-  //new helpers for status and visibility based on the simplified controls with 3 options 
-  //(internal draft, published public, and shared with clients)
-
-  type AvailabilityPreset = "internal" | "clients" | "website" | "custom";
-
-  function deriveAvailabilityPreset(): AvailabilityPreset {
-    if (!isPublic && !isFeaturedHome && status === "Draft" && visibility === "Internal") return "internal";
-    if (!isPublic && !isFeaturedHome && status === "Published" && visibility === "ClientSafe") return "clients";
-    if (isPublic && status === "Published" && visibility === "Public") return "website";
-    return "custom";
-  }
-
-  const availabilityPreset = deriveAvailabilityPreset();
-
-  function applyAvailabilityPreset(p: Exclude<AvailabilityPreset, "custom">) {
-    if (p === "internal") {
-      setStatus("Draft");
-      setVisibility("Internal");
-      setIsPublic(false);
+  useEffect(() => {
+    if (!isPublished && isFeaturedHome) {
       setIsFeaturedHome(false);
-      return;
     }
-    if (p === "clients") {
-      setStatus("Published");
-      setVisibility("ClientSafe");
-      setIsPublic(false);
-      setIsFeaturedHome(false);
-      return;
-    }
-    // website
-    setStatus("Published");
-    setVisibility("Public");
-    setIsPublic(true);
-    // keep isFeaturedHome as-is; user can toggle it
-  }
+  }, [isPublished, isFeaturedHome]);
+
+  const [availabilityPreset, setAvailabilityPreset] = useState<
+    "internal" | "clients" | "website" | "custom"
+  >("internal");
+  const applyAvailabilityPreset = (preset: "internal" | "clients" | "website" | "custom") => {
+    setAvailabilityPreset(preset);
+  };
 /*   type SharingPreset = "internal" | "clients" | "website" | "custom";
 
 function deriveSharingPreset(): SharingPreset {
@@ -290,13 +250,13 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
   // form state
   const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
-  const [brief, setBrief] = useState("");          // “Preview blurb” (optional)
+  const [brief] = useState("");          // “Preview blurb” (optional)
 
   // Flag to signal that core required fields have been completed (unlocks enhancements once the basics are there)
   const hasCore = client.trim().length > 0 && writeUp.trim().length > 0;
 
   // Derived fields (DO NOT put hooks inside other hooks)
-  const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from your toolbar
+  const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from toolbar
   const preview = useMemo(() => emptyToUndefined(brief), [brief]);
 
   // summaryShort is required by schema -> always compute it
@@ -309,8 +269,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
   const slugBase = effectiveTitle;
   /* const slugBase = (client || title).trim(); */ // or just title if you're unifying them
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
-  const effectiveSlug = useMemo(() => slugify(slug.trim() || autoSlug), [slug, autoSlug]);
-
   const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
     const displayName = client.trim(); // client name (required field)
     const effectiveTitle = title.trim() || displayName; // title falls back to client name if not set
@@ -324,6 +282,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       //sectors,
       /* sectors: sector ? [sector as SectorValue] : [], */
       sectors: selectedCategories,
+      primarySector: selectedCategories[0],
 
       year: year ? Number(year) : undefined,
       tags: tags.split(",").map(t => t.trim()).filter(Boolean),
@@ -343,22 +302,24 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       links: [],
   
       status,
-      visibility,
-      isFeaturedHome,
-      isPublic,
+      visibility: isPublished ? "Public" : "Internal",
+      isFeaturedHome: isPublished ? isFeaturedHome : false,
+      isPublic: isPublished,
     };
   }, [
       //id, title, slug, client, 
       id, client, slug,
       title,
       //sectors, year, tags, 
-      //sector, 
+      //sector,
       selectedCategories,
       year, tags,
       //brief, writeUp, 
       preview, summaryShortAuto, bodyMDX,
-      heroImageUrl, 
-      status, visibility, isFeaturedHome, isPublic
+      heroImageUrl,
+      status,
+      isFeaturedHome,
+      isPublished,
     ]);
 
   const validation = useMemo(
@@ -429,26 +390,28 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
   function SaveBar({ className }: { className: string }) {
     return (
-      <div className="row" style={{ gap: ".5rem" }}>
-        <button
-          className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
-          type="button"
-          onClick={handleSave}
-          disabled={!canSave}
-          title={!canSave ? "Fix validation errors first" : "Save"}
-        >
-          Save
-        </button>
+      <div className={className}>
+        <div className="row" style={{ gap: ".5rem" }}>
+          <button
+            className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
+            type="button"
+            onClick={handleSave}
+            disabled={!canSave}
+            title={!canSave ? "Fix validation errors first" : "Save"}
+          >
+            Save
+          </button>
 
-        <button
-          className="btn"
-          type="button"
-          onClick={handlePreview}
-          disabled={!canSave}
-          title={!canSave ? "Fix validation errors first" : "Preview"}
-        >
-          Preview
-        </button>
+          <button
+            className="btn"
+            type="button"
+            onClick={handlePreview}
+            disabled={!canSave}
+            title={!canSave ? "Fix validation errors first" : "Preview"}
+          >
+            Preview
+          </button>
+        </div>
       </div>
     )
   }
@@ -535,7 +498,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
         This is a demo template for creating/editing case studies. After creating a new case study,
         you can preview them individually or as part of a mock database of case studies, where you can 
         filter by client type, tags, etc. <br/><br/>
-        You can also see them on the public website if you set the status to "Published" and visibility to "Public"
+        You can also see them on the public website if you set the status to &quot;Published&quot;.
       </ContextBanner>
 
       {/* <div className="row mt1"> */}
@@ -628,10 +591,13 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
             {heroImageUrl && (
               <div style={{ marginTop: "0.75rem" }}>
                 <p className="muted type-small">Preview</p>
-                <img
+                <Image
                   src={heroImageUrl}
                   alt="Hero preview"
+                  width={640}
+                  height={360}
                   style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+                  unoptimized
                 />
               </div>
             )}
@@ -750,13 +716,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                       >
                         <option value="">Select a category…</option>
 
-                        {FLAT_CATEGORY_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-
-{/*                         {SECTOR_GROUPS.map((g) => (
+                        {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((opt) => (
                               <option key={opt} value={opt}>
@@ -764,7 +724,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                               </option>
                             ))}
                           </optgroup>
-                        ))} */}
+                        ))}
                       </select>
 
                       {idx > 0 && (
@@ -863,6 +823,41 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
               Who can see this, and whether it appears on the public website.
             </p> */}
             <div className="publishingPanel">
+              <div className="form-row form-group">
+                <div className="form-field">
+                  <label className="form-label">Status</label>
+                  <select
+                    className="input"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as PublishStatus)}
+                  >
+                    {PUBLISH_STATUS_VALUES.map((v) => (
+                      <option key={v} value={v}>
+                        {v}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Homepage feature</label>
+                  <label className="toggleRow">
+                    <input
+                      type="checkbox"
+                      checked={isFeaturedHome && isPublished}
+                      onChange={(e) => setIsFeaturedHome(e.target.checked)}
+                      disabled={!isPublished}
+                    />
+                    <span>
+                      <strong>Feature on homepage</strong>
+                    </span>
+                  </label>
+                  <p className="muted type-small" style={{ marginTop: 6 }}>
+                    Featured now: {featuredCount}/{maxFeatured}. Only the first {maxFeatured} appear on the homepage.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="publishingPanel" style={{ display: "none" }}>
               <div className="radioList" role="radiogroup" aria-label="Access and placement">
                 <label className={`radioRow ${availabilityPreset === "internal" ? "isSelected" : ""}`}>
                   <input
@@ -886,7 +881,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                   />
                   <div className="radioText">
                     <div className="radioTitle">Client-visible</div>
-                    <div className="radioDesc">Visible in client pages/collections. Not public.</div>
+                    <div className="radioDesc">Visible in client pages. Not public.</div>
                   </div>
                 </label>
 
@@ -931,8 +926,12 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                 <div className="form-row form-group" style={{ marginTop: ".75rem" }}>
                   <div className="form-field">
                     <label className="form-label">Workflow status</label>
-                    <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
-                      {CASE_STUDY_STATUS_VALUES.map((v) => (
+                    <select
+                      className="input"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value as PublishStatus)}
+                    >
+                      {PUBLISH_STATUS_VALUES.map((v) => (
                         <option key={v} value={v}>
                           {v === "InProgress" ? "In progress" : v === "NeedsReview" ? "Needs review" : v}
                         </option>
@@ -942,7 +941,15 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
                   <div className="form-field">
                     <label className="form-label">Access level</label>
-                    <select className="input" value={visibility} onChange={(e) => setVisibility(e.target.value as any)}>
+                    <select
+                      className="input"
+                      value={visibility}
+                      onChange={(e) =>
+                        setVisibility(
+                          e.target.value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
+                        )
+                      }
+                    >
                       {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
                         <option key={v} value={v}>
                           {v === "ClientSafe" ? "Client-safe" : v}
@@ -961,14 +968,26 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 {/*           <div className="form-row form-group">
             <div className="form-field">
               <label className="form-label">Status</label>
-              <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
-                {CASE_STUDY_STATUS_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
+              <select
+                className="input"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as PublishStatus)}
+              >
+                {PUBLISH_STATUS_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
 
             <div className="form-field">
               <label className="form-label">Visibility</label>
-              <select className="input" value={visibility} onChange={(e) => setVisibility(e.target.value as any)}>
+              <select
+                className="input"
+                value={visibility}
+                onChange={(e) =>
+                  setVisibility(
+                    e.target.value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
+                  )
+                }
+              >
                 {CASE_STUDY_VISIBILITY_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
@@ -1046,8 +1065,12 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
             <div className="form-field">
               <label className="form-label">Status</label>
-              <select className="input" value={status} onChange={(e) => setStatus(e.target.value as any)}>
-                {CASE_STUDY_STATUS_VALUES.map((v) => (
+              <select
+                className="input"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as PublishStatus)}
+              >
+                {PUBLISH_STATUS_VALUES.map((v) => (
                   <option key={v} value={v}>
                     {v}
                   </option>
@@ -1056,20 +1079,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
             </div>
 
             {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-            <div className="form-field">
-              <label className="form-label">Visibility</label>
-              <select
-                className="input"
-                value={visibility}
-                onChange={(e) => setVisibility(e.target.value as any)}
-              >
-                {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
           {/* <div style={{ marginTop: "1rem" }}> */}
@@ -1142,7 +1151,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
         <div className="card card-new mt">
           <h3>Validation</h3>
-          <p>Check what needs to be added to/changed in your draft so you can "publish" it.</p>
+          <p>Check what needs to be added to/changed in your draft so you can &quot;publish&quot; it.</p>
           {validation.success ? (
             <p className="muted">✅ Valid (ready to save)</p>
           ) : (

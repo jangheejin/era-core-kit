@@ -20,21 +20,35 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 // --------------------
 
 //export const CASE_STUDIES_FIXTURE_FULL: CaseStudy[] = [
-  const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
+const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
   {
     id: "cs-sanborn-appgeo",
-    title: "FAKETEMPORARYTITLE: Geospatial modernization and federal engagement",
+    title:
+      "FAKETEMPORARYTITLE: Geospatial modernization and federal engagement",
     slug: "sanborn-appgeo",
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
     sectors: [
-      "Geospatial", "GovContracting", "EmergencyMgmt", "PrivateSector", "Appropriations", "GrantFunding",
+      "Geospatial",
+      "GovContracting",
+      "EmergencyMgmt",
+      "PrivateSector",
+      "Appropriations",
+      "GrantFunding",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+    tags: [
+      "geospatial",
+      "mapping",
+      "modernization",
+      "federal-engagement",
+      "Earmark",
+      "CDS",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/case1.webp",
 
@@ -90,17 +104,32 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-napsg-foundation",
-    title: "(Temporary Title) Policy-facing storytelling for a technical nonprofit",
+    title:
+      "(Temporary Title) Policy-facing storytelling for a technical nonprofit",
     slug: "napsg-foundation",
     client: "NAPSG Foundation",
-//    sector: "Nonprofit",
-    sectors: ["Nonprofit", "GovContracting", "Geospatial", "PublicSector", "EmergencyMgmt", "Appropriations", "GrantFunding",
+    //    sector: "Nonprofit",
+    sectors: [
+      "Nonprofit",
+      "GovContracting",
+      "Geospatial",
+      "PublicSector",
+      "EmergencyMgmt",
+      "Appropriations",
+      "GrantFunding",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+    tags: [
+      "nonprofit",
+      "geospatial",
+      "storytelling",
+      "dc",
+      "Pilot Program",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/case2.webp",
 
@@ -156,20 +185,31 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
   {
     id: "cs-crucis",
-    title: "Temporary Title: Federal procurement strategy for a growing contractor",
+    title:
+      "Temporary Title: Federal procurement strategy for a growing contractor",
     slug: "crucis",
     client: "Crucis",
-//    sector: "GovContracting",
+    //    sector: "GovContracting",
     sectors: [
-      "GovContracting", "Industry", 
-      "Manufacturing", "PrivateSector",
+      "GovContracting",
+      "Industry",
+      "Manufacturing",
+      "PrivateSector",
       "Appropriations",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["procurement", "govcon", "strategy", "federal"],
+    tags: [
+      "procurement",
+      "govcon",
+      "strategy",
+      "federal",
+      "Earmark",
+      "CDS",
+      "S1",
+    ],
 
     heroImageUrl: "/img/case3.webp",
 
@@ -230,15 +270,24 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     client: "MKR Fabricators",
     //sector: "EmergencyMgmt",
     sectors: [
-      "EmergencyMgmt", "Manufacturing", "Defense",
-      "Industry", "PrivateSector",
+      "EmergencyMgmt",
+      "Manufacturing",
+      "Defense",
+      "Industry",
+      "PrivateSector",
       "Appropriations",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+    tags: [
+      "emergency",
+      "manufacturing",
+      "procurement",
+      "disaster-response",
+      "Resilience",
+    ],
 
     heroImageUrl: "/img/temp.svg",
 
@@ -288,7 +337,7 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     attachments: [],
     links: [],
 
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
 
@@ -297,13 +346,13 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     title: "Lorem Ipsum STEMheads",
     slug: "stemheads",
     client: "STEMheads",
-//    sector: "Education",
+    //    sector: "Education",
     sectors: ["Education", "Nonprofit"],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Pilot Program"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -313,8 +362,16 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
     outcomes: [
-      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+      {
+        label: "Outcome 1",
+        description:
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      },
+      {
+        label: "Outcome 2",
+        description:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      },
     ],
 
     evidence: [],
@@ -323,8 +380,16 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
 
     sections: [
-      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
-      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX: "Lorem ipsum dolor sit amet...",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX: "- Outcome 1\n- Outcome 2\n",
+      },
     ],
 
     attachments: [],
@@ -340,16 +405,28 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
     slug: "temp-public",
     client: "Dummy Public Sector Org",
     sectors: [
-      "Agriculture", "Energy", "Health", "Defense", "Transportation", "NaturalResources",
-      "PublicSector", "StateGovernment", "LocalGovernment", "TribalGovernment",
-      "Environment", "Infrastructure", "PublicWorks", "CivicTech",
-      "Appropriations", "GrantFunding",
+      "PublicSector",
+      "StateGovernment",
+      "LocalGovernment",
+      "TribalGovernment",
+      "GovContracting",
+      "Nonprofit",
+      "Environment",
+      "NaturalResources",
+      "Infrastructure",
+      "PublicWorks",
+      "Geospatial",
+      "Education",
+      "EmergencyMgmt",
+      "CivicTech",
+      "Appropriations",
+      "GrantFunding",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Earmark", "CDS", "Resilience"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -359,8 +436,16 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
     outcomes: [
-      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+      {
+        label: "Outcome 1",
+        description:
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      },
+      {
+        label: "Outcome 2",
+        description:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      },
     ],
 
     evidence: [],
@@ -369,29 +454,45 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
 
     sections: [
-      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
-      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX: "Lorem ipsum dolor sit amet...",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX: "- Outcome 1\n- Outcome 2\n",
+      },
     ],
 
     attachments: [],
     links: [],
 
-    isFeaturedHome: false,
+    isFeaturedHome: true,
     isPublic: true,
   },
   {
-    id: "cs-temp-public",
-    title: "Temporary Private Sector Case Study",
-    slug: "temp-public",
+    id: "cs-temp-private",
+    title: "Private Sector Case Study",
+    slug: "temp-private",
     client: "Dummy Private Sector Org",
     sectors: [
       "PrivateSector",
+      "Energy",
+      "Agriculture",
+      "Manufacturing",
+      "Industry",
+      "FinTech",
+      "Health",
+      "Defense",
+      "Transportation",
     ],
     year: 2024,
 
     mechanisms: [],
     jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "S1"],
 
     heroImageUrl: "/img/temp2.svg",
 
@@ -401,8 +502,16 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 
     outcomes: [
-      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+      {
+        label: "Outcome 1",
+        description:
+          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      },
+      {
+        label: "Outcome 2",
+        description:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      },
     ],
 
     evidence: [],
@@ -411,50 +520,16 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
       "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
 
     sections: [
-      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
-      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
-    ],
-
-    attachments: [],
-    links: [],
-
-    isFeaturedHome: false,
-    isPublic: true,
-  },
-  {
-    id: "cs-temp-public",
-    title: "Temporary Private Sector Case Study",
-    slug: "temp-public",
-    client: "Dummy Public Sector Org",
-    sectors: [
-      "PublicSector",
-    ],
-    year: 2024,
-
-    mechanisms: [],
-    jurisdictions: ["Federal"],
-    tags: ["education", "draft"],
-
-    heroImageUrl: "/img/temp2.svg",
-
-    summaryShort:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    brief:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-
-    outcomes: [
-      { label: "Outcome 1", description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-      { label: "Outcome 2", description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
-    ],
-
-    evidence: [],
-
-    bodyMDX:
-      "## Summary\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n",
-
-    sections: [
-      { id: "context", title: "Context", bodyMDX: "Lorem ipsum dolor sit amet..." },
-      { id: "impact", title: "Outcomes", bodyMDX: "- Outcome 1\n- Outcome 2\n" },
+      {
+        id: "context",
+        title: "Context",
+        bodyMDX: "Lorem ipsum dolor sit amet...",
+      },
+      {
+        id: "impact",
+        title: "Outcomes",
+        bodyMDX: "- Outcome 1\n- Outcome 2\n",
+      },
     ],
 
     attachments: [],
@@ -468,7 +543,13 @@ import { CaseStudySeedSchema, type CaseStudySeedInput } from "./seeds";
 
 /** Parsed canonical “full” fixtures (full schema output, defaults filled). */
 export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
-  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) => CaseStudySchema.parse(x));
+  CASE_STUDIES_FIXTURE_FULL_RAW.map((x) =>
+    CaseStudySchema.parse({
+      status: "Published",
+      visibility: "Public",
+      ...x,
+    })
+  );
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
   {
@@ -609,8 +690,7 @@ function seedToCaseStudy(seed: CaseStudySeed): CaseStudy {
   };
 } */
 
-
-/* INFLATE SEEDS (very bare bones case studies) TO FULL CASESTUDIES */ 
+/* INFLATE SEEDS (very bare bones case studies) TO FULL CASESTUDIES */
 /* 
 function normalize(seedInput: CaseStudySeed): CaseStudy {
   const seed = CaseStudySeedSchema.parse(seedInput);
@@ -661,26 +741,28 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
   const seed = CaseStudySeedSchema.parse(seedInput);
 
   const sectors =
-  Array.isArray((seed as any).sectors) && (seed as any).sectors.length
-    ? (seed as any).sectors
-    : (seed as any).sector
-      ? [(seed as any).sector]
-      : [];
+    Array.isArray((seed as any).sectors) && (seed as any).sectors.length
+      ? (seed as any).sectors
+      : (seed as any).sector
+        ? [(seed as any).sector]
+        : [];
 
   const summaryShort = (seed.summaryShort ?? seed.teaser ?? "").trim();
   const heroImageUrl = (seed.heroImageUrl ?? seed.imageUrl ?? "").trim();
 
   // These should never trigger because seeds schema superRefine enforces them,
   // but this makes TS and runtime robust.
-  if (!summaryShort) throw new Error(`Seed ${seed.slug} missing summaryShort/teaser`);
-  if (!heroImageUrl) throw new Error(`Seed ${seed.slug} missing heroImageUrl/imageUrl`);
+  if (!summaryShort)
+    throw new Error(`Seed ${seed.slug} missing summaryShort/teaser`);
+  if (!heroImageUrl)
+    throw new Error(`Seed ${seed.slug} missing heroImageUrl/imageUrl`);
 
   const candidate: CaseStudyInput = {
     id: `cs-${seed.slug}`,
     title: seed.title ?? seed.client ?? seed.slug,
     slug: seed.slug,
     client: seed.client,
-//    sectors: seed.sectors,
+    //    sectors: seed.sectors,
     sectors,
 
     year: seed.year,
@@ -705,9 +787,9 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
 
     // status/visibility intentionally omitted: defaults apply at parse-time
   };
-//  if (candidate.tags?.includes("seed")) {
-    const tagsArr = Array.isArray(candidate.tags) ? candidate.tags : [];
-    if (tagsArr.indexOf("seed") !== -1) {
+  //  if (candidate.tags?.includes("seed")) {
+  const tagsArr = Array.isArray(candidate.tags) ? candidate.tags : [];
+  if (tagsArr.indexOf("seed") !== -1) {
     console.error("❌ STILL FINDING A 'seed' TAG: ", candidate);
     throw new Error("Seed tag found where it should not exist");
     //process.exit(1);
@@ -716,7 +798,6 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
   return CaseStudySchema.parse(candidate);
 }
 
-  
 //const SEEDS: CaseStudySeed[] = [
 const SEEDS: CaseStudySeedInput[] = [
   {
@@ -725,16 +806,27 @@ const SEEDS: CaseStudySeedInput[] = [
     client: "Sanborn + AppGeo",
     //sector: "GovContracting",
     sectors: [
-      "GovContracting", "Geospatial", "EmergencyMgmt", 
+      "GovContracting",
+      "Geospatial",
+      "EmergencyMgmt",
       "PrivateSector",
-      "Appropriations", "GrantFunding",
+      "Appropriations",
+      "GrantFunding",
     ],
     heroImageUrl: "/img/case1.webp",
     summaryShort:
       "Supporting geospatial modernization and federal engagement for critical mapping and location intelligence.",
     brief:
       "Partnered with Sanborn and AppGeo to strengthen federal positioning, align capabilities with agency program needs, and support long-term contract and grant opportunities.",
-    tags: ["geospatial", "mapping", "modernization", "federal-engagement"],
+    tags: [
+      "geospatial",
+      "mapping",
+      "modernization",
+      "federal-engagement",
+      "Earmark",
+      "CDS",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -745,14 +837,27 @@ const SEEDS: CaseStudySeedInput[] = [
     client: "NAPSG Foundation",
     //sector: "Nonprofit",
     sectors: [
-      "Nonprofit", "Geospatial", "Nonprofit", "PublicSector", "EmergencyMgmt","Appropriations", "GrantFunding",
+      "Nonprofit",
+      "Geospatial",
+      "Nonprofit",
+      "PublicSector",
+      "EmergencyMgmt",
+      "Appropriations",
+      "GrantFunding",
     ],
     heroImageUrl: "/img/case2.webp",
     summaryShort:
       "Helping a nonprofit translate technical geospatial work into policy-relevant impact stories in DC.",
     brief:
       "Helped NAPSG translate technical geospatial capabilities into accessible narratives for federal decision-makers, aligned to current priorities and usable in outreach.",
-    tags: ["nonprofit", "geospatial", "storytelling", "dc"],
+    tags: [
+      "nonprofit",
+      "geospatial",
+      "storytelling",
+      "dc",
+      "Pilot Program",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -763,8 +868,10 @@ const SEEDS: CaseStudySeedInput[] = [
     client: "Crucis",
     //sector: "GovContracting",
     sectors: [
-      "GovContracting", "Industry", 
-      "Manufacturing", "PrivateSector",
+      "GovContracting",
+      "Industry",
+      "Manufacturing",
+      "PrivateSector",
       "Appropriations",
     ],
     heroImageUrl: "/img/case3.webp",
@@ -772,7 +879,15 @@ const SEEDS: CaseStudySeedInput[] = [
       "Guiding a growing government contractor through the realities of federal procurement and engagement.",
     brief:
       "Advised Crucis on realistic entry points into the federal marketplace: procurement pathways, program alignment, and relationship-building with agencies and Hill staff.",
-    tags: ["procurement", "govcon", "strategy", "federal"],
+    tags: [
+      "procurement",
+      "govcon",
+      "strategy",
+      "federal",
+      "Earmark",
+      "CDS",
+      "S1",
+    ],
     year: 2024,
     isFeaturedHome: true,
     isPublic: true,
@@ -782,8 +897,11 @@ const SEEDS: CaseStudySeedInput[] = [
     title: "Emergency response manufacturing alignment",
     client: "MKR Fabricators",
     sectors: [
-      "EmergencyMgmt", "Manufacturing", "Defense",
-      "Industry", "PrivateSector",
+      "EmergencyMgmt",
+      "Manufacturing",
+      "Defense",
+      "Industry",
+      "PrivateSector",
       "Appropriations",
     ],
     heroImageUrl: "/img/temp.svg",
@@ -791,9 +909,71 @@ const SEEDS: CaseStudySeedInput[] = [
       "Connecting real-world emergency response manufacturing needs with the federal ecosystem.",
     brief:
       "Aligned emergency response manufacturing capabilities with federal program and procurement realities, focused on practical deployment in disaster-response contexts.",
-    tags: ["emergency", "manufacturing", "procurement", "disaster-response"],
+    tags: [
+      "emergency",
+      "manufacturing",
+      "procurement",
+      "disaster-response",
+      "Resilience",
+    ],
     year: 2024,
     isFeaturedHome: true,
+    isPublic: true,
+  },
+  /*   {
+    slug: "dummy-public-sector",
+    title: "Dummy public sector case study",
+    client: "Dummy Public Sector",
+    sectors: [
+      "PublicSector",
+      "StateGovernment",
+      "LocalGovernment",
+      "TribalGovernment",
+      "GovContracting",
+      "Nonprofit",
+      "Environment",
+      "NaturalResources",
+      "Infrastructure",
+      "PublicWorks",
+      "Geospatial",
+      "Education",
+      "EmergencyMgmt",
+      "CivicTech",
+      "Appropriations",
+      "GrantFunding",
+    ],
+    heroImageUrl: "/img/temp.svg",
+    summaryShort: "Placeholder public sector case study to keep filters populated.",
+    brief:
+      "A simple public sector example entry used to ensure the category filter never appears empty.",
+    tags: ["dummy", "public-sector", "Earmark", "CDS", "Resilience"],
+    year: 2024,
+    isFeaturedHome: false,
+    isPublic: true,
+  }, */
+  {
+    slug: "dummy-private-sector",
+    title: "Dummy private sector case study",
+    client: "Dummy Private Sector",
+    sectors: [
+      "PrivateSector",
+      "Energy",
+      "Agriculture",
+      "Manufacturing",
+      "Industry",
+      "FinTech",
+      "Health",
+      "Defense",
+      "Transportation",
+    ],
+    heroImageUrl: "/img/temp2.svg",
+    summaryShort:
+      "Placeholder private sector case study to keep filters populated.",
+    brief:
+      "A simple private sector example entry used to ensure the category filter never appears empty.",
+    tags: ["dummy", "private-sector", "S1"],
+    year: 2024,
+    isFeaturedHome: false,
     isPublic: true,
   },
   {
@@ -806,7 +986,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     brief:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    tags: ["education", "draft"],
+    tags: ["education", "draft", "Pilot Program"],
     year: 2024,
     isFeaturedHome: false,
     isPublic: true,
@@ -852,13 +1032,15 @@ for (const cs of FULL_FROM_SEEDS) {
 export const CASE_STUDIES_FIXTURE: CaseStudyType[] = orderedFull;
 
 //lightweight “cards” version for the homepage later
-export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map((cs) => ({
-  ...cs,
-  brief: undefined,
-  outcomes: [],
-  bodyMDX: "",
-  sections: [],
-  evidence: [],
-  attachments: [],
-  links: [],
-}));
+export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map(
+  (cs) => ({
+    ...cs,
+    brief: undefined,
+    outcomes: [],
+    bodyMDX: "",
+    sections: [],
+    evidence: [],
+    attachments: [],
+    links: [],
+  })
+);

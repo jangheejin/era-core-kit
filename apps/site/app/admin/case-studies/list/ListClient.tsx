@@ -9,11 +9,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   CaseStudy as CaseStudySchema,
-  CASE_STUDY_STATUS_VALUES,
-  CASE_STUDY_VISIBILITY_VALUES,
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
+  sectorRouteSlug,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
@@ -24,13 +23,6 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
 import * as Tooltip from "@radix-ui/react-tooltip";
-
-const FLAT_CATEGORY_OPTIONS = SECTOR_GROUPS.flatMap((g) =>
-  g.values.map((v) => ({
-    value: v,
-    label: `${g.label}: ${sectorLabel(v)}`,
-  }))
-);
 
 // Demo-only: restore “auto-set a category if none selected”
 const DEMO_AUTO_DEFAULT_CATEGORY = true;
@@ -51,6 +43,8 @@ for (const v of SECTOR_VALUES as readonly SectorValue[]) {
   const slugFromLabel = tagSlug(sectorLabel(v));
   if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
 }
+
+const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
 
 function coerceSector(raw: unknown): SectorValue | null {
   if (typeof raw !== "string") return null;
@@ -116,16 +110,15 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
   return out.filter((v) => (seen.has(v) ? false : (seen.add(v), true)));
 }
 
-function visibilityLabel(v: string) {
-  if (v === "ClientSafe") return "Client-Viewable";
-  return v;
-}
-
 export default function ListClient() {
   const { items: storeItems, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
   const items = storeItems ?? [];
 
   const didAutoFixRef = useRef(false);
+  const [featuredSaveStateById, setFeaturedSaveStateById] = useState<
+    Record<string, "idle" | "saving" | "saved" | "error">
+  >({});
+  const featuredSaveTimersRef = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({});
 
   const searchParams = useSearchParams();
   const savedId = searchParams.get("saved");
@@ -134,15 +127,56 @@ export default function ListClient() {
   // filters
   const [q, setQ] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SectorValue | "">("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [statusFilter, setStatusFilter] = useState<string>("");
-  const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+  const tagFilterChips = useMemo(
+    () =>
+      normalizeTagList(
+        tagFilter
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+      ),
+    [tagFilter],
+  );
+  const availableTags = useMemo(() => {
+    const bySlug = new Map<string, string>();
+    for (const item of items) {
+      const tags = normalizeTagsStrict(toStringArray((item as any).tags));
+      for (const tag of tags) {
+        const slug = tagSlug(tag);
+        if (!slug || bySlug.has(slug)) continue;
+        bySlug.set(slug, tag);
+      }
+    }
+    return Array.from(bySlug.values()).sort((a, b) => a.localeCompare(b));
+  }, [items]);
+  const featuredCount = useMemo(
+    () =>
+      items.filter(
+        (cs) =>
+          cs.status === "Published" &&
+          cs.isPublic &&
+          cs.visibility === "Public" &&
+          cs.isFeaturedHome,
+      ).length,
+    [items],
+  );
+  const maxFeatured = 6;
 
-  // --- Client Page Preview (opens the filtered page) ---
+  // --- Filtered Page Preview (opens a category or single-tag page) ---
   const clientPagePreviewHref = useMemo(() => {
-    if (!categoryFilter) return null;
-    const seg = tagSlug(sectorLabel(categoryFilter));
-    return seg ? `/${seg}` : null;
-  }, [categoryFilter]);
+    if (categoryFilter) {
+      const seg = sectorRouteSlug(categoryFilter);
+      return seg ? `/sectors/${seg}` : null;
+    }
+    if (tagFilterChips.length === 1 && tagFilterChips[0]) {
+      const tagSeg = tagSlug(tagFilterChips[0]);
+      return tagSeg ? `/tag/${tagSeg}` : null;
+    }
+    return null;
+  }, [categoryFilter, tagFilterChips]);
 
   function openClientPagePreview() {
     if (!clientPagePreviewHref) return;
@@ -158,10 +192,65 @@ export default function ListClient() {
 
   const [quickEditId, setQuickEditId] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      Object.values(featuredSaveTimersRef.current).forEach((timer) => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
+
+  function clearFeaturedSaveTimer(id: string) {
+    const existing = featuredSaveTimersRef.current[id];
+    if (existing) clearTimeout(existing);
+    featuredSaveTimersRef.current[id] = null;
+  }
+
+  function scheduleFeaturedSaveReset(id: string) {
+    clearFeaturedSaveTimer(id);
+    featuredSaveTimersRef.current[id] = setTimeout(() => {
+      setFeaturedSaveStateById((prev) => ({ ...prev, [id]: "idle" }));
+    }, 2000);
+  }
+
+  function setFeaturedSaveState(id: string, state: "idle" | "saving" | "saved" | "error") {
+    setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
+  }
+
+  function applyFeaturedQuickSave(
+    cs: CaseStudyType,
+    next: boolean,
+  ) {
+    setFeaturedSaveState(cs.id, "saving");
+    clearFeaturedSaveTimer(cs.id);
+    const updated = updateMeta(cs.id, {
+      isFeaturedHome: next,
+      status: "Published",
+      visibility: "Public",
+      isPublic: true,
+    });
+
+    if (updated) {
+      setFeaturedSaveState(cs.id, "saved");
+      scheduleFeaturedSaveReset(cs.id);
+      return;
+    }
+
+    updateMeta(cs.id, {
+      isFeaturedHome: cs.isFeaturedHome,
+      status: cs.status,
+      visibility: cs.visibility,
+      isPublic: cs.isPublic,
+    });
+    setFeaturedSaveState(cs.id, "error");
+    scheduleFeaturedSaveReset(cs.id);
+    window.alert("Could not update featured status. Please try again.");
+  }
+
   // Normalize + Zod-validate before saving
   function updateMeta(id: string, patch: Partial<CaseStudyType>) {
     const existing = items.find((c) => c.id === id);
-    if (!existing) return;
+    if (!existing) return false;
 
     // gather sectors from: sectors[] / legacy sector / primarySector (if someone saved only that)
     const sectorsRaw =
@@ -205,10 +294,11 @@ export default function ListClient() {
     const res = CaseStudySchema.safeParse(candidate);
     if (!res.success) {
       console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
-      return;
+      return false;
     }
 
     upsertCaseStudy(res.data);
+    return true;
   }
 
   // Demo-only: if a record has no category, auto-assign DEFAULT_CATEGORY once.
@@ -238,6 +328,7 @@ export default function ListClient() {
 
   const filtered = useMemo(() => {
     const qq = q.toLowerCase().trim();
+    const wantedTags = tagFilterChips.map(tagSlug).filter(Boolean);
 
     return items.filter((cs) => {
       const sectors = normalizeSectorsStrict([
@@ -250,8 +341,15 @@ export default function ListClient() {
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
+      if (wantedTags.length) {
+        const tagSet = new Set(tagSlugs);
+        const match =
+          tagMode === "all"
+            ? wantedTags.every((t) => tagSet.has(t))
+            : wantedTags.some((t) => tagSet.has(t));
+        if (!match) return false;
+      }
       if (statusFilter && cs.status !== statusFilter) return false;
-      if (visibilityFilter && cs.visibility !== visibilityFilter) return false;
 
       if (!qq) return true;
 
@@ -267,7 +365,7 @@ export default function ListClient() {
 
       return hay.includes(qq);
     });
-  }, [items, q, categoryFilter, statusFilter, visibilityFilter]);
+  }, [items, q, categoryFilter, statusFilter, tagFilterChips, tagMode]);
 
   const sorted = useMemo(() => {
     const base = filtered ?? [];
@@ -283,7 +381,7 @@ export default function ListClient() {
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category, filter by visibility, and search.
+        This is a temporary demo CMS database. You can filter by category, tags, and search.
         Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
@@ -313,12 +411,7 @@ export default function ListClient() {
             onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
           >
             <option value="">Filter by category</option>
-            {FLAT_CATEGORY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-            {/* {SECTOR_GROUPS.map((g) => (
+            {SECTOR_GROUPS.map((g) => (
               <optgroup key={g.id} label={g.label}>
                 {g.values.map((v) => (
                   <option key={v} value={v}>
@@ -326,7 +419,30 @@ export default function ListClient() {
                   </option>
                 ))}
               </optgroup>
-            ))} */}
+            ))}
+          </select>
+
+          <input
+            className="input"
+            placeholder="Filter by tags (comma-separated)"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            style={{ minWidth: 220 }}
+            list="tag-filter-options"
+          />
+          <datalist id="tag-filter-options">
+            {availableTags.map((tag) => (
+              <option key={tag} value={tag} />
+            ))}
+          </datalist>
+
+          <select
+            className="input"
+            value={tagMode}
+            onChange={(e) => setTagMode(e.target.value as "any" | "all")}
+          >
+            <option value="any">Match any tag</option>
+            <option value="all">Match all tags</option>
           </select>
 
 {/*           <select
@@ -344,22 +460,42 @@ export default function ListClient() {
         </div>
 
         {/* Client Page Preview */}
-        <div className="row listLensPage">
+        <div
+          className="row listLensPage"
+          style={{
+            alignItems: "stretch",
+            gap: "1rem",
+            flexWrap: "wrap",
+            marginTop: "1.25rem",
+            padding: ".85rem 1rem",
+            borderRadius: 10,
+            background: "rgba(15, 52, 96, 0.06)",
+          }}
+        >
           <button
             type="button"
-            className="btnSmall"
+            className="btnPrimary"
             onClick={openClientPagePreview}
             disabled={!clientPagePreviewHref}
             title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
+            style={{ minWidth: 240, padding: ".85rem 1.5rem", fontSize: "1rem" }}
           >
-            Client Page Preview
+            Preview filtered page
           </button>
 
-          <span className="muted type-small">
-            {clientPagePreviewHref
-              ? `Opens: ${clientPagePreviewHref}`
-              : "Select a category to preview its public page"}
-          </span>
+          <div className="c-stack" style={{ gap: ".35rem", minWidth: 240 }}>
+            <span className="type-small" style={{ fontWeight: 700 }}>
+              Preview a filtered page (category or single-tag).
+            </span>
+            <span className="muted type-small">
+              {clientPagePreviewHref
+                ? `This opens the public page at ${clientPagePreviewHref}.`
+                : "Pick a category or a single tag above to enable the preview button."}
+            </span>
+            <span className="muted type-small">
+              For multi-tag or category + tag combinations, use Client Collections to build a final page.
+            </span>
+          </div>
         </div>
       </div>
 
@@ -405,7 +541,8 @@ export default function ListClient() {
               DEFAULT_CATEGORY;
 
             const isPublished = cs.status === "Published";
-            const vis = cs.visibility;
+            const isFeatured = Boolean(cs.isFeaturedHome);
+            const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
 
             return (
               <div
@@ -496,8 +633,9 @@ export default function ListClient() {
                         <span className={`pill pill--status ${isPublished ? "pill--published" : "pill--draft"}`}>
                           {isPublished ? "Published" : "Draft"}
                         </span>
-
-                        <span className="pill pill--audience">{visibilityLabel(vis)}</span>
+                        {isFeatured ? (
+                          <span className="pill pill--audience">Featured</span>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -529,14 +667,18 @@ export default function ListClient() {
                             value={primary}
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
-                              const next = [v, ...sectors.filter((x) => x !== v)];
+                              const next = sectors.includes(v) ? sectors : [v, ...sectors];
                               updateMeta(cs.id, { sectors: next, primarySector: v });
                             }}
                           >
-                            {sectors.map((v) => (
-                              <option key={v} value={v}>
-                                {sectorLabel(v)}
-                              </option>
+                            {SECTOR_GROUPS.map((group) => (
+                              <optgroup key={group.id} label={group.label}>
+                                {group.values.map((v) => (
+                                  <option key={v} value={v}>
+                                    {sectorLabel(v)}
+                                  </option>
+                                ))}
+                              </optgroup>
                             ))}
                           </select>
                           <span className="muted type-small">Shown on cards.</span>
@@ -573,16 +715,7 @@ export default function ListClient() {
                         }}
                       >
                         <option value="">Add category…</option>
-                        {FLAT_CATEGORY_OPTIONS.map((opt) => (
-                          <option
-                            key={opt.value}
-                            value={opt.value}
-                            disabled={sectors.includes(opt.value)}
-                          >
-                            {opt.label}
-                          </option>
-                        ))}
-{/*                         {SECTOR_GROUPS.map((g) => (
+                        {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((v) => (
                               <option key={v} value={v} disabled={sectors.includes(v)}>
@@ -590,7 +723,7 @@ export default function ListClient() {
                               </option>
                             ))}
                           </optgroup>
-                        ))} */}
+                        ))}
                       </select>
                     </div>
 
@@ -601,27 +734,62 @@ export default function ListClient() {
                         <select
                           className="input input--tiny"
                           value={cs.status}
-                          onChange={(e) => updateMeta(cs.id, { status: e.target.value as any })}
+                          onChange={(e) => {
+                            const nextStatus = e.target.value as CaseStudyType["status"];
+                            updateMeta(cs.id, {
+                              status: nextStatus,
+                              visibility: nextStatus === "Published" ? "Public" : "Internal",
+                              isPublic: nextStatus === "Published",
+                              isFeaturedHome: nextStatus === "Published" ? cs.isFeaturedHome : false,
+                            });
+                          }}
                         >
-                          {CASE_STUDY_STATUS_VALUES.map((v) => (
+                          {PUBLISH_STATUS_VALUES.map((v) => (
                             <option key={v} value={v}>
                               {v}
                             </option>
                           ))}
                         </select>
-
-                        <select
-                          className="input input--tiny"
-                          value={cs.visibility}
-                          onChange={(e) => updateMeta(cs.id, { visibility: e.target.value as any })}
-                        >
-                          {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                            <option key={v} value={v}>
-                              {visibilityLabel(v)}
-                            </option>
-                          ))}
-                        </select>
+                        <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                          <input
+                            type="checkbox"
+                            checked={Boolean(cs.isFeaturedHome) && isPublished}
+                            disabled={!isPublished}
+                            onChange={(e) => applyFeaturedQuickSave(cs, e.target.checked)}
+                          />
+                          <span className="type-small">
+                            Feature on homepage ({featuredCount}/{maxFeatured})
+                            {featuredSaveState === "saving" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saving…
+                              </span>
+                            )}
+                            {featuredSaveState === "saved" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saved
+                              </span>
+                            )}
+                            {featuredSaveState === "error" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Save failed
+                              </span>
+                            )}
+                          </span>
+                        </label>
                       </div>
+                      <p className="muted type-small" style={{ marginTop: 6 }}>
+                        Only the first {maxFeatured} featured case studies appear on the homepage.
+                      </p>
+                    </div>
+
+                    <div className="row" style={{ justifyContent: "flex-end" }}>
+                      <button
+                        className="btnSmall"
+                        type="button"
+                        onClick={() => setQuickEditId(null)}
+                      >
+                        Save changes
+                      </button>
                     </div>
                   </div>
                 )}

@@ -9,21 +9,18 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
+import { Markdown } from "@/components/Markdown";
 
-import { AdminTopNav } from "@/admin/components/AdminTopNav";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
 function matchesClientPage(cs: CaseStudyType, page: { filters: any }) {
-  const { sector, tags, tagMode, audience } = page.filters;
+  const { sector, tags, tagMode } = page.filters;
 
-  // visibility gating
+  // public-only gating
   if (cs.status !== "Published") return false;
-  if (audience === "Public") {
-    if (cs.visibility !== "Public") return false;
-  } else {
-    if (cs.visibility !== "Public" && cs.visibility !== "ClientSafe") return false;
-  }
+  if (!cs.isPublic) return false;
+  if (cs.visibility !== "Public") return false;
 
   // sector filter
   if (sector && !(cs.sectors ?? []).includes(sector)) return false;
@@ -59,8 +56,6 @@ export default function AdminClientPageMock({
 
   return (
     <main className="c-admin">
-      <AdminTopNav />
-
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
         <h1 className="type-h2">Client page preview</h1>
         <div className="row">
@@ -82,8 +77,13 @@ export default function AdminClientPageMock({
         <>
           <div className="card" style={{ marginTop: "1rem" }}>
             <h2 className="type-h3">{page.name}</h2>
+            {page.bodyMDX ? (
+              <div className="c-markdown c-stack">
+                <Markdown>{page.bodyMDX}</Markdown>
+              </div>
+            ) : null}
             <p className="muted">
-              Showing <strong>{filtered.length}</strong> case studies (Published + visibility-gated).
+              Showing <strong>{filtered.length}</strong> case studies (Published + public).
             </p>
           </div>
 

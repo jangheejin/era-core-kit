@@ -16,95 +16,105 @@ import React, {
 
 import {
   CaseStudy as CaseStudySchema,
-  CaseStudyInput,
-  CASE_STUDIES_FIXTURE,//the dummy entries for the demo cms database
+  CASE_STUDIES_FIXTURE,
   type CaseStudyType,
   SECTOR_VALUES,
   type SectorValue,
+  sectorLabel,
+  tagSlug,
 } from "@kit/schema";
 
 import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 const DEFAULT_SECTOR = SECTOR_VALUES[0] as SectorValue;
 
-function parseListishString(raw: string): string[] {
-  const t = String(raw).trim();
-  if (!t) return [];
-  if (t.startsWith("[") && t.endsWith("]")) {
-    try {
-      const parsed = JSON.parse(t);
-      if (Array.isArray(parsed)) {
-        return parsed.map((x) => String(x).trim()).filter(Boolean);
-      }
-    } catch {}
-  }
-  return t
-    .split(/[\n;]+/g)
-    .flatMap((chunk) => chunk.split(","))
-    .map((x) => x.replace(/^['"]|['"]$/g, "").trim())
-    .filter(Boolean);
+const SECTOR_LOOKUP = new Map<string, SectorValue>();
+
+for (const v of SECTOR_VALUES as readonly SectorValue[]) {
+  SECTOR_LOOKUP.set(v, v);
+  SECTOR_LOOKUP.set(v.toLowerCase(), v);
+
+  const slugFromValue = tagSlug(v);
+  if (slugFromValue) SECTOR_LOOKUP.set(slugFromValue, v);
+
+  const slugFromLabel = tagSlug(sectorLabel(v));
+  if (slugFromLabel) SECTOR_LOOKUP.set(slugFromLabel, v);
 }
 
-function coerceSectors(raw: unknown): string[] {
-  if (raw == null) return [];
-  if (typeof raw === "string") return parseListishString(raw);
-  if (Array.isArray(raw)) return raw.flatMap((x) => (typeof x === "string" ? parseListishString(x) : []));
+function coerceSector(raw: unknown): SectorValue | null {
+  if (typeof raw !== "string") return null;
+  const s = raw.trim();
+  if (!s) return null;
+
+  if (SECTOR_VALUES.includes(s as SectorValue)) return s as SectorValue;
+
+  const lower = s.toLowerCase();
+  const directLower = SECTOR_LOOKUP.get(lower);
+  if (directLower) return directLower;
+
+  const slug = tagSlug(s);
+  if (slug) {
+    const mapped = SECTOR_LOOKUP.get(slug);
+    if (mapped) return mapped;
+  }
+
+  return null;
+}
+
+function normalizeSectors(input: unknown): SectorValue[] {
+  if (Array.isArray(input)) {
+    return input.map(coerceSector).filter((v): v is SectorValue => Boolean(v));
+  }
+  if (typeof input === "string") {
+    const maybe = coerceSector(input);
+    return maybe ? [maybe] : [];
+  }
   return [];
 }
 
-function migrateEnsureNonEmptySectors(input: any) {
-  const allow = new Set(SECTOR_VALUES);
-  const DEFAULT = SECTOR_VALUES[0] as SectorValue;
-
-  const raw = input?.sectors ?? input?.categories ?? input?.category;
-  const tokens = coerceSectors(raw);
-  const cleaned = tokens.filter((t) => allow.has(t as SectorValue)) as SectorValue[];
-
-  if (cleaned.length > 0) return { ...input, sectors: cleaned };
-
-  if (typeof input?.sector === "string" && allow.has(input.sector as SectorValue)) {
-    return { ...input, sectors: [input.sector] };
-  }
-
-  if (typeof input?.primarySector === "string" && allow.has(input.primarySector as SectorValue)) {
-    return { ...input, sectors: [input.primarySector] };
-  }
-
-  return { ...input, sectors: [DEFAULT] };
-}
-
-
-function migrateEnsureAtLeastOneSector(input: any) {
-  const sectors = Array.isArray(input?.sectors) ? input.sectors : [];
-  const sector = typeof input?.sector === "string" ? input.sector : null;
-
-  if (sectors.length > 0) return input;
-  if (sector) return { ...input, sectors: [sector] };
-
-  // demo-only safety net
-  return { ...input, sectors: [DEFAULT_SECTOR] };
-}
-
-function migrateLegacySector(input: any) {
+function migrateLegacySector(input: unknown) {
   if (!input || typeof input !== "object") return input;
-  if (input.sectors == null && input.sector != null) {
-    input = { ...input, sectors: [input.sector] };
-    delete input.sector;
+  const record = input as Record<string, unknown>;
+  if (record.sectors == null && record.sector != null) {
+    const { sector, ...rest } = record;
+    return { ...rest, sectors: normalizeSectors(sector) };
   }
   return input;
 }
 
-function migrateHeroUrl(input: any) {
+function migratePrimarySector(input: unknown) {
   if (!input || typeof input !== "object") return input;
-  const raw = input.heroImageUrl ?? input.imageUrl;
+  const record = input as Record<string, unknown>;
+  if (record.sectors == null && record.primarySector != null) {
+    const { primarySector, ...rest } = record;
+    const sectors = normalizeSectors(primarySector);
+    return { ...rest, sectors, primarySector };
+  }
+  return input;
+}
+
+function ensureNonEmptySectors(input: unknown) {
+  if (!input || typeof input !== "object") return input;
+  const record = input as Record<string, unknown>;
+  const sectors = normalizeSectors(record.sectors);
+  const primary = normalizeSectors(record.primarySector);
+  const nextSectors = sectors.length ? sectors : primary.length ? primary : [DEFAULT_SECTOR];
+  const nextPrimary = primary[0] ?? nextSectors[0] ?? DEFAULT_SECTOR;
+  return { ...record, sectors: nextSectors, primarySector: nextPrimary };
+}
+
+function migrateHeroUrl(input: unknown) {
+  if (!input || typeof input !== "object") return input;
+  const record = input as Record<string, unknown>;
+  const raw = record.heroImageUrl ?? record.imageUrl;
   if (typeof raw !== "string" || raw.trim() === "") {
-    return { ...input, heroImageUrl: DEFAULT_HERO_IMAGE_URL };
+    return { ...record, heroImageUrl: DEFAULT_HERO_IMAGE_URL };
   }
   // only normalize when heroImageUrl  is missing AND raw is a string
-  if (!input.heroImageUrl && typeof raw === "string") {
-    return { ...input, heroImageUrl: raw };
+  if (!record.heroImageUrl && typeof raw === "string") {
+    return { ...record, heroImageUrl: raw };
   }
-  return input;
+  return record;
 }
 
 //migration that guarantees sectors is non-empty
@@ -132,7 +142,7 @@ function migrateHeroUrl(input: any) {
 type AdminCaseStudyContextValue = {
   items: CaseStudyType[];
 
-  /** Back-compat name (your existing API). */
+  /** Back-compat name (existing API). */
   addCaseStudy: (cs: CaseStudyType) => void;
 
   /** Preferred name (same behavior). */
@@ -145,7 +155,7 @@ type AdminCaseStudyContextValue = {
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
 
-  /** Clears local overrides and returns to fixture baseline. */
+  /** Clears local overrides and returns to the demo baseline. */
   resetToBaseline: () => void;
 };
 
@@ -225,15 +235,15 @@ function loadLocalValidated(): CaseStudyType[] {
 
     const ok: CaseStudyType[] = [];
     for (const item of parsed) {
-      const id = typeof item?.id === "string" ? item.id : "";
-
       //instead of ignoring any entries with seed tag (the outdated, oversimplified mock case studies)
       // now we ignore by ID prefix instead
       if (typeof item?.id === "string" && item.id.startsWith("seed-")) continue;
       /* if (item.tags?.includes("seed")) continue; */
 
       //const migrated = migrateLegacySector(item);
-      const migrated = migrateHeroUrl(migrateLegacySector(item));
+      const migrated = ensureNonEmptySectors(
+        migrateHeroUrl(migratePrimarySector(migrateLegacySector(item))),
+      );
 
       //now make it possible to ignore anything that's a seed record by id prefix (rather than tag. 
       // by tag will still work but will be phased out in the final cms)
@@ -246,9 +256,11 @@ function loadLocalValidated(): CaseStudyType[] {
       
       //comment out this debug stuff later
       else {
+        const itemId = typeof item?.id === "string" ? item.id : "unknown";
+        const itemSlug = typeof item?.slug === "string" ? item.slug : "unknown";
         console.warn(
           "[cms] Dropped invalid saved case study:",
-          { id: (item as any)?.id, slug: (item as any)?.slug },
+          { id: itemId, slug: itemSlug },
           res.error.flatten()
         );
       }
@@ -269,56 +281,6 @@ function saveLocal(items: CaseStudyType[]) {
   }
 }
 
-//function buildInitialItems(): CaseStudyType[] {
-function buildBaselineItems(): CaseStudyType[] {
-//  const stored = loadLocalValidated();
-  // baseline = fixture baseline (+ optional seed baseline), no window/localStorage
-  const bySlug = new Map<string, CaseStudyType>();
-
-  // baseline → overrides
-  for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-/*   for (const cs of SEED_CASE_STUDIES) {
-    if (!bySlug.has(cs.slug)) {
-      bySlug.set(cs.slug, cs);
-    }
-  } */
-//  for (const cs of SEED_CASE_STUDIES) bySlug.set(cs.slug, cs); // optional (keeps RAW_SEEDS)
-  //for (const cs of stored) bySlug.set(cs.slug, cs);
-
-  // deterministic order: fixture order then stored-only
-  const order: string[] = [];
-  const push = (slug: string) => { if (!order.includes(slug)) order.push(slug); };
-  for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-  //for (const cs of SEED_CASE_STUDIES) push(cs.slug);
-  //for (const cs of stored) push(cs.slug);
-
-  return order.map((s) => bySlug.get(s)).filter((x): x is CaseStudyType => Boolean(x));
-}
-
-/**
- * Merge rules: fixture baseline → stored overrides
- * Ordering: fixture order first, then any stored-only slugs appended (deterministic)
- */
-function mergeFixtureWithStored(
-  stored: CaseStudyType[]): CaseStudyType[] {
-    const bySlug = new Map<string, CaseStudyType>();
-
-    for (const cs of CASE_STUDIES_FIXTURE) bySlug.set(cs.slug, cs);
-    for (const cs of stored) bySlug.set(cs.slug, cs); // overrides baseline
-
-    const order: string[] = [];
-    const push = (slug: string) => {
-      if (!order.includes(slug)) order.push(slug);
-    };
-
-    for (const cs of CASE_STUDIES_FIXTURE) push(cs.slug);
-    for (const cs of stored) push(cs.slug); // adds stored-only slugs
-
-    return order
-      .map((slug) => bySlug.get(slug))
-      .filter((x): x is CaseStudyType => Boolean(x));
-  }
-
 function slugify(s: string) {
   return s
     .toLowerCase()
@@ -328,38 +290,31 @@ function slugify(s: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-const BASELINE = buildBaselineItems();
+const BASELINE: CaseStudyType[] = CASE_STUDIES_FIXTURE;
 
-function mergeBaselineWithStored(baseline: CaseStudyType[], stored: CaseStudyType[]) {
+function mergeBaselineWithStored(
+  baseline: CaseStudyType[],
+  stored: CaseStudyType[],
+): CaseStudyType[] {
   const bySlug = new Map<string, CaseStudyType>();
-
-  //baseline first, then stored overrides
   for (const cs of baseline) bySlug.set(cs.slug, cs);
   for (const cs of stored) bySlug.set(cs.slug, cs);
 
   const order: string[] = [];
-  const seen = new Set<string>();
-  const push = (slug: string) => { 
-    if (seen.has(slug)) return;
-      seen.add(slug);
-      order.push(slug);
-/*     if (!order.includes(slug)) order.push(slug); */ 
+  const push = (slug: string) => {
+    if (!order.includes(slug)) order.push(slug);
   };
 
-  //STORED FIRST (preserves “newest first” because upsert puts new items first)
-  for (const cs of stored) push(cs.slug);
-
-  //then add whatever fixtures weren't in storage
   for (const cs of baseline) push(cs.slug);
+  for (const cs of stored) push(cs.slug);
 
   return order
     .map((slug) => bySlug.get(slug))
-    /* .map((s) => bySlug.get(s)) */
     .filter((x): x is CaseStudyType => Boolean(x));
 }
 
 export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
-  // Start from fixtures only to avoid SSR/CSR mismatch.
+  // Start from the fixture baseline to avoid SSR/CSR mismatch and seed storage.
   const [items, setItems] = useState<CaseStudyType[]>(BASELINE);
   const [hydrated, setHydrated] = useState(false);
   /* const [items, setItems] = useState<CaseStudyType[]>(BASELINE); */
@@ -390,14 +345,16 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     //setItems(mergeFixtureWithStored(stored));
     /* console.log("!!!!Final loaded case studies:", items); */
 
-    //now hydrated effect always sets hydrated
     if (stored.length > 0) {
       setItems(mergeBaselineWithStored(BASELINE, stored));
+    } else {
+      setItems(BASELINE);
+      saveLocal(BASELINE);
     }
     setHydrated(true);
   }, []);
 
-  // Persist any changes (this will store fixtures too but that’s OK for demo)
+  // Persist any changes (stored in-browser for demo)
   useEffect(() => {
     if (!hydrated) return;
     if (!hasUserEditsRef.current) return;
@@ -437,7 +394,8 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       try { window.localStorage.removeItem(STORAGE_KEY); } catch {}
     }
     hasUserEditsRef.current = false; // important: don’t re-persist baseline
-    setItems(CASE_STUDIES_FIXTURE);
+    setItems(BASELINE);
+    saveLocal(BASELINE);
   }, []);
 
 /*   const addCaseStudy = (cs: CaseStudyType) => {

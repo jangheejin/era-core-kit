@@ -127,3 +127,23 @@ used by alternate case study view page */
   line-height: 1.55;
   opacity: .95;
 }
+
+@media (max-width: 720px) {
+  .csViewPage {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .csViewBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .csViewHeroImg {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .csViewKV {
+    grid-template-columns: 1fr;
+  }
+}

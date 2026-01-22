@@ -7,7 +7,7 @@ type Props = {
 };
 
 export function CaseStudyMetadata({ caseStudy }: Props) {
-  const { sectors, tags, status, visibility, slug } = caseStudy;
+  const { sectors, tags, status, slug, isFeaturedHome } = caseStudy;
 
   return (
     <div className="metadata-card">
@@ -36,8 +36,8 @@ export function CaseStudyMetadata({ caseStudy }: Props) {
           <dd>{status || "—"}</dd>
         </div>
         <div className="metadata-item">
-          <dt>Visibility:</dt>
-          <dd>{visibility || "—"}</dd>
+          <dt>Featured on homepage:</dt>
+          <dd>{isFeaturedHome ? "Yes" : "No"}</dd>
         </div>
         <div className="metadata-item metadata-slug">
           <dt>Slug:</dt>

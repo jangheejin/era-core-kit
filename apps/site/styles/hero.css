@@ -59,7 +59,7 @@
   /* max-width: clamp(180px, 22vw, 240px);  */ /* stays reasonable on big screens */
   /* max-width: 260px; */
   /* max-width: clamp(140px, 26vw, 260px); */
-  max-width: clamp(200px, 30vw, 260px);
+  max-width: clamp(160px, 22vw, 220px);
   /* max-width: min(260px, 40vw); */
   height: auto;
 }

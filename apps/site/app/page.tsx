@@ -39,7 +39,7 @@ export default function Home() {
       </section> */}
 
       {/* Contact section rendered explicitly, not via layout */}
-      {/* <ContactForm heading="We’re here to advance your interests" /> */}
+      <ContactForm heading="We’re here to advance your interests" />
     </main>
   );
 }

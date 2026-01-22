@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef } from "react";//needed for improved sticky header
+import { useLayoutEffect, useRef, useState } from "react";//needed for improved sticky header
 
 type NavItem = { 
   href: string; 
@@ -36,6 +36,7 @@ const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
   { href: "/admin/case-studies/list", label: "Case Study Library", match: (p) => p.startsWith("/admin/case-studies") },
+  { href: "/admin/client-pages", label: "Client Collections", match: (p) => p.startsWith("/admin/client-pages") },
   { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
 
@@ -62,6 +63,7 @@ function isActive(pathname: string, item: NavItem) {
 
 export function AdminTopNav() {
   const pathname = usePathname() ?? "";
+  const [navOpen, setNavOpen] = useState(false);
 
   //improved sticky header (appear below context banner, but stick to top)
   const headerRef = useRef<HTMLElement | null>(null);
@@ -106,7 +108,22 @@ export function AdminTopNav() {
           </Link> */}
         </div>
         <div className="adminTopNav__spacer" />
-        <nav className="adminTopNav__links" aria-label="Admin navigation">
+
+        <button
+          type="button"
+          className="adminTopNav__toggle"
+          aria-expanded={navOpen}
+          aria-controls="adminTopNavLinks"
+          onClick={() => setNavOpen((prev) => !prev)}
+        >
+          Menu
+        </button>
+        
+        <nav
+          id="adminTopNavLinks"
+          className={["adminTopNav__links", navOpen ? "is-open" : ""].join(" ")}
+          aria-label="Admin navigation"
+        >
           {NAV.map((item) => {
             const active = isActive(pathname, item);
             return (

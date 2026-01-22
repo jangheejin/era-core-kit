@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import type { ComponentType } from "react";
 
 import type { LayoutBlock, BlockType } from "@kit/blocks";
 import {
@@ -25,9 +24,13 @@ import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/section
 // Map each allowed block type to its React component.
 // Note: lowercase aliases share the same component.
 
-//const blockComponentMap: Record<BlockType, ComponentType<any>> = {
-//const blockComponentMap: Partial<Record<BlockType, React.ComponentType<any>>> = {
-const blockComponents: Partial<Record<BlockType, React.ComponentType<any>>> = {
+type BlockComponentMap = Partial<{
+  [K in BlockType]: React.ComponentType<
+    Extract<LayoutBlock, { type: K }>["props"]
+  >;
+}>;
+
+const blockComponents: BlockComponentMap = {
   Hero,
   IntroWithImage,
   MissionText,
@@ -61,6 +64,42 @@ type BlockRendererProps = {
   blocks: LayoutBlock[];
 };
 
+type BlockGroup = {
+  groupId?: string;
+  blocks: LayoutBlock[];
+};
+
+function groupBlocks(blocks: LayoutBlock[]): BlockGroup[] {
+  return blocks.reduce<BlockGroup[]>((groups, block) => {
+    if (!block.groupId) {
+      groups.push({ blocks: [block] });
+      return groups;
+    }
+
+    const lastGroup = groups[groups.length - 1];
+    if (lastGroup?.groupId === block.groupId) {
+      lastGroup.blocks.push(block);
+      return groups;
+    }
+
+    groups.push({ groupId: block.groupId, blocks: [block] });
+    return groups;
+  }, []);
+}
+
+function renderBlock(block: LayoutBlock, key: string) {
+  const Component = blockComponents[block.type] as
+    | React.ComponentType<typeof block.props>
+    | undefined;
+
+  if (!Component) {
+    console.warn("[BlockRenderer] Unknown block type:", block.type);
+    return null;
+  }
+
+  return <Component key={key} {...block.props} />;
+}
+
 /*
 export default function BlockRenderer({ block, index }: BlockRendererProps) {
   const Component = blockComponentMap[block.type];
@@ -76,21 +115,33 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
 }
 */
 export default function BlockRenderer({ blocks }: BlockRendererProps) {
+  const groups = groupBlocks(blocks);
+
   return (
     <>
-      {blocks.map((block, idx) => {
-        const Component = blockComponents[block.type as BlockType];
-
-        if (!Component) {
-          console.warn("[BlockRenderer] Unknown block type:", block.type);
-          return null;
+      {groups.flatMap((group, groupIndex) => {
+        if (!group.groupId) {
+          return group.blocks.map((block, idx) =>
+            renderBlock(
+              block,
+              block._key ?? `${block.type}-${groupIndex}-${idx}`,
+            ),
+          );
         }
 
         return (
-          <Component
-            key={block._key ?? `${block.type}-${idx}`}
-            {...(block as any).props}
-          />
+          <div
+            key={`group-${group.groupId}-${groupIndex}`}
+            className={`c-section-group c-section-group--${group.groupId}`}
+            data-section-group={group.groupId}
+          >
+            {group.blocks.map((block, idx) =>
+              renderBlock(
+                block,
+                block._key ?? `${block.type}-${groupIndex}-${idx}`,
+              ),
+            )}
+          </div>
         );
       })}
     </>

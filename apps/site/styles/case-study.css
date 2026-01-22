@@ -151,3 +151,13 @@ used by CaseStudyPublicClient*/
 .csLink:hover{
   text-decoration: underline;
 }
+
+@media (max-width: 720px) {
+  .csPage {
+    padding-block: var(--space-3);
+  }
+
+  .csLead {
+    font-size: 1rem;
+  }
+}

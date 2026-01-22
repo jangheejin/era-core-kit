@@ -1,7 +1,7 @@
 //apps/site/app/our-work/page.tsx
 
 // THIS IS NOW A SERVER PAGE that supplies data
-// - data comes from fixtures for now (demo version)
+// - data comes from the client-side demo CMS store (localStorage)
 // - later when the real CMS is finished, data will come from there
 //'use client';
 
@@ -11,67 +11,13 @@
 
 import '@styles/work.css';
 
-import { OurWorkClient, type WorkCase } from "./OurWorkClient";
-import { listPublicCaseStudies } from "@/features/caseStudies/publicRepo.server";
-
-import { useMemo } from "react";
-import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
-//import { DemoGate } from "./_demo/DemoGate"
-import { deriveSummaryFromWriteUp } from "@kit/schema"; // ✅ already exists in your repo
-
-
-function isDemoOn(v: unknown) {
-  if (typeof v === "string") return v === "1";
-  if (Array.isArray(v)) return v.includes("1");
-  return false;
-}
+import { OurWorkDataBridge } from "./OurWorkDataBridge";
 
 //function toWorkCase(cs: any, featured: boolean): WorkCase {
-function toWorkCase(cs: any): WorkCase {
-  const SECTOR_SEPARATOR = ", "; // or " · "
-  const sector = Array.isArray(cs?.sectors) ? cs.sectors.join(", ") : "";
-//  const sector = (cs.sectors ?? []).join(", ");
-  const client = (cs?.client ?? "").trim() || (cs?.title ?? "").trim() || cs.slug;
-  const summary =
-    (cs?.brief ?? "").trim() ||
-    (cs?.summaryShort ?? "").trim() ||
-    deriveSummaryFromWriteUp(String(cs?.bodyMDX ?? ""), 180) || // fallback
-    "";
-
-  return {
-    slug: cs.slug,
-    //sector: cs.sectors?.join(SECTOR_SEPARATOR) || "",
-    sector,
-    //client: cs.client?.trim() || cs.title?.trim() || cs.slug,
-    client,
-    //IMPORTANT
-    featured: !!cs?.isFeaturedHome,
-    //featured,
-    //summary: cs.brief?.trim() || cs.summaryShort?.trim() || "",
-    //hiding for now in order to simplify creation->publishing flow for client demo
-    summary/* : (cs?.brief ?? "").trim() || (cs?.summaryShort ?? "").trim() || "" */,
-    outcomes: Array.isArray(cs?.outcomes) ? cs.outcomes : undefined,
-/*     outcomes: Array.isArray(cs?.outcomes)
-      ? cs.outcomes.map((o: any) => ({
-          label: o?.label,
-          description: o?.description,
-        }))
-      : undefined, */
-    imageUrl: cs.heroImageUrl,
-  };
-}
-
 export default async function OurWorkPage() {
-/*   searchParams,
-}: {
-  searchParams?: { demo?: string | string[] };
-}) {
-  const demo = isDemoOn(searchParams?.demo); */
-  const items = (await listPublicCaseStudies()).map(toWorkCase);
-
   return (
     <div data-cms-ssr="1">
-      <OurWorkClient cases={items} basePath="/our-work" demo={false} />
+      <OurWorkDataBridge basePath="/our-work" />
     </div>
   );
 }

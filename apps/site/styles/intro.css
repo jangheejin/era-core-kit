@@ -2,17 +2,32 @@
 /* INTRO / IMAGE WITH TEXT   */
 /* ========================= */
 
+/* Never size the image column as `auto` in grid — it can shrink the text column. */
+.c-section--intro {
+  --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
+  --intro-figure-min: 200px;
+  --intro-figure-max: 300px;
+}
+
 /* Desktop / tablet: text | image */
 .c-section--intro .intro-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) auto; /* text | image-sized column */
-  column-gap: clamp(1.5rem, 4vw, 4.5rem); /* space between text and image */
-  align-items: center;
+  position: relative;
+  display: block;
+  column-gap: var(--intro-gap);
+  overflow: hidden;
   container-type: inline-size;
 }
 
 .c-section--intro .intro-copy {
+  min-width: 0;
   max-width: 47rem;
+}
+
+.c-section--intro.has-intro-image .intro-copy {
+  padding-right: calc(
+    clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)) +
+      var(--intro-gap)
+  );
 }
 
 /* Heading spacing under intro */
@@ -32,54 +47,55 @@
 }
 
 /* Image: desktop behavior */
-.c-section--intro .intro-image {
-  width: min(100%, clamp(200px, 32cqw, 360px));
-  justify-self: end;
+.c-section--intro.has-intro-image .intro-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(100%, clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)));
+  height: 100%;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
-  border-radius: var(--radius);
+  object-position: center -20px;
+  /* border-radius: var(--radius); */
+  max-height: none;
 }
 
 /* ========================= */
 /* MOBILE: < 580px → 1 col   */
 /* ========================= */
 
-@container (max-width: 42rem) {
-  .c-section--intro .intro-grid {
-    grid-template-columns: minmax(0, 1fr); /* single column stack */
-    row-gap: var(--space-3);
-  }
-
-  .c-section--intro .intro-image {
-    margin-top: var(--space-3);
-    justify-self: center; /* center the image block under the text */
-    width: min(100%, clamp(180px, 70cqw, 320px));
-  }
-
-  .c-section--intro .intro-image img {
-    width: 100%; /* scales with viewport but never “huge” */
+@media (max-width: 900px) {
+  .c-section--intro {
+    --intro-figure-min: 200px;
+    --intro-figure-max: 280px;
   }
 }
 
 @media (max-width: 720px) {
   .c-section--intro .intro-grid {
-    grid-template-columns: minmax(0, 1fr); /* single column stack */
+    display: grid;
+    grid-template-columns: 1fr;
     row-gap: var(--space-3);
   }
 
   .c-section--intro .intro-image {
+    position: static;
     margin-top: var(--space-3);
-    justify-self: center; /* center the image block under the text */
-    width: min(100%, clamp(180px, 70vw, 320px));
+    justify-self: center;
+    max-width: 360px;
+    width: 100%;
+    height: auto;
   }
 
   .c-section--intro .intro-image img {
-    width: 100%; /* scales with viewport but never “huge” */
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: none;
+    object-position: center -20px;
   }
 }

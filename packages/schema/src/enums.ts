@@ -311,11 +311,7 @@ export type LinkCategoryValue = (typeof LINK_CATEGORY_VALUES)[number];//for when
 // --------------------
 export const CASE_STUDY_STATUS_VALUES = [
   "Draft",//not ready to show to anyone
-  "InProgress",//being worked on, but can be viewed by internal team
-  "NeedsReview",
-  "Approved",//content is done but waiting for publication
-  "Published",//possible now to be publicly visible (still depends on Visibility flags)
-  "Archived",
+  "Published",//publicly visible (still depends on Visibility flags)
 ] as const;
 export type CaseStudyStatusValue = (typeof CASE_STUDY_STATUS_VALUES)[number];
 export const CaseStudyStatusSchema = z.enum(CASE_STUDY_STATUS_VALUES);

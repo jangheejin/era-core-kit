@@ -25,13 +25,15 @@
     "nukeclean": "pnpm run deepclean && rimraf pnpm-lock.yaml"
   },
   "devDependencies": {
+    "@eslint/config-helpers": "^0.5.1",
     "@types/node": "^20.14.9",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "concurrently": "^8.0.0",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "^14.2.5",
-    "prettier": "^3.3.3",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.33",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.2",
     "typescript": "5.6.2",

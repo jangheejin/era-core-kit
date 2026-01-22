@@ -26,11 +26,10 @@ ROOT TREE:
 
 import "@styles/tokens.css";
 import "@styles/primitives.css";
-import "@styles/casegrid.css";
-import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */ 
-import "@styles/primitives.css";
-import "@styles/casegrid.css";
+import "@styles/home.css"; /* for things that appear on all pages, like header navbvar, footer navbar */
 import "@styles/markdown.css";
+import "@styles/casegrid.css";
+import "@styles/contact.css";
 
 //import { Inter, Oswald } from 'next/font/google';
 //import { Inter, Oswald } from 'next/font/google/index';
@@ -46,8 +45,9 @@ import "@fontsource/oswald/600.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { type Metadata } from "next";
+import { Suspense } from "react";
 import { Providers } from "./Providers";
-
+import Eruda from "@/components/dev/Eruda";
 //const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
 //const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
 
@@ -99,7 +99,6 @@ export const viewport = {
   initialScale: 1,
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -108,6 +107,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="font-setup">
       <body>
+        <Suspense fallback={null}>
+          <Eruda />
+        </Suspense>
         <Providers>
           <Header />
           {children}

@@ -177,16 +177,19 @@
   position: relative; /*STACKING*/
   z-index: 1;   /* BELOW the .work-grid */
 
-  border-radius: 14px;
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
   border-top: 3px solid var(--brand);
-  background: var(--bg-2);
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   padding: var(--space-3);
   display: grid;
   row-gap: var(--space-3);
   /* margin-top: 0.75rem;  */
   margin-top: 1.6rem;      /* space below the strip */
   justify-items: start;    /* children hug content, no full-width stretch */
+  max-width: 980px;
+  margin-inline: auto;
 }
 
 /* ARROW: always visible, anchored to the detail panel */
@@ -239,6 +242,11 @@
 @media (max-width: 768px) {
   .work-detail__top {
     grid-template-columns: minmax(0, 1fr); /* stack on small screens */
+  }
+
+  .work-detail__media {
+    justify-self: stretch;
+    max-width: none;
   }
 }
 
@@ -333,9 +341,10 @@ h5.work-detail__sector {
 
   padding-block: 0.25rem 1.75rem; /* room for arrow */
   padding-inline: var(--space-2);
-  justify-content: center;
+  justify-content: flex-start;
 /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-2);
 
   scrollbar-width: thin;
   scrollbar-color: rgba(15, 23, 42, 0.35) transparent;
@@ -415,7 +424,27 @@ h5.work-detail__sector {
   }
 }
 
-/* Keep your active-card arrow as-is, just ensure it's inside .work-grid 
+@media (min-width: 960px) {
+  .work-grid {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .work-detail {
+    padding: var(--space-2);
+  }
+
+  .work-detail__top {
+    row-gap: var(--space-2);
+  }
+
+  .work-detail__media {
+    max-width: 100%;
+  }
+}
+
+/* Keep your active-card arrow as-is, just ensure it's inside .work-grid
 .work-card--active::after {
   content: '';
   position: absolute;

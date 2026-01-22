@@ -26,21 +26,30 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
 }
 
 export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
-  const { items: fallbackItems, layout, heading, text, text2, itemsSource, maxItems } = props;
+  const { layout, heading, text, text2, itemsSource, maxItems } = props;
   const { items: adminItems } = useAdminCaseStudies();
 
   const items = useMemo(() => {
-    if (itemsSource !== "featured") return fallbackItems;
+    const publicItems = adminItems.filter(
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
+    );
 
-    const featured = adminItems
-      .filter((cs) => Boolean(cs.isPublic) && Boolean(cs.isFeaturedHome))
-      .map(toCaseGridItem);
+    if (itemsSource !== "featured") {
+      return publicItems.map(toCaseGridItem);
+    }
 
-    const limited = typeof maxItems === "number" ? featured.slice(0, maxItems) : featured;
+    const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
+    let ordered = featured;
 
-    // If nothing is marked featured, fall back (so you don’t get a blank section by accident).
-    return limited.length ? limited : fallbackItems;
-  }, [adminItems, fallbackItems, itemsSource, maxItems]);
+    if (typeof maxItems === "number" && featured.length < maxItems) {
+      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
+      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
+      ordered = [...featured, ...filler];
+    }
+
+    const mapped = ordered.map(toCaseGridItem);
+    return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
+  }, [adminItems, itemsSource, maxItems]);
 
   return (
     <section className="c-section">

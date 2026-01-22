@@ -20,7 +20,7 @@ export async function getCaseStudies(): Promise<CaseStudyType[]> {
 
 export async function getPublicCaseStudies(): Promise<CaseStudyType[]> {
   const all = await getCaseStudies();
-  return all.filter((cs) => cs.isPublic);
+  return all.filter((cs) => cs.isPublic && cs.status === "Published");
 }
 
 export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyType | null> {

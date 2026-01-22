@@ -31,6 +31,7 @@ export type ClientPage = {
   name: string;
   slug: string;
   filters: ClientPageFilters;
+  bodyMDX: string;
   createdAt: number;
   updatedAt: number;
 };
@@ -55,6 +56,42 @@ const AdminClientPageContext =
   createContext<AdminClientPageContextValue | null>(null);
 
 const STORAGE_KEY = "era_admin_client_pages_v1";
+
+const DEFAULT_PAGES: ClientPage[] = (() => {
+  const now = Date.now();
+  return [
+    {
+      id: "seed-defense-brief",
+      name: "Defense modernization brief",
+      slug: "defense-modernization-brief",
+      filters: {
+        sector: "Defense",
+        tags: ["Earmark", "Resilience"],
+        tagMode: "any",
+        audience: "ClientSafe",
+      },
+      bodyMDX:
+        "A focused view of modernization work, highlighting resilient systems and rapid delivery outcomes for defense stakeholders.",
+      createdAt: now - 1000 * 60 * 60 * 24 * 7,
+      updatedAt: now - 1000 * 60 * 60 * 24 * 3,
+    },
+    {
+      id: "seed-energy-infra",
+      name: "Energy infrastructure wins",
+      slug: "energy-infrastructure-wins",
+      filters: {
+        sector: "Energy",
+        tags: ["Pilot Program", "CDS"],
+        tagMode: "any",
+        audience: "Public",
+      },
+      bodyMDX:
+        "Selected energy infrastructure case studies with pilot program momentum and CDS-backed results.",
+      createdAt: now - 1000 * 60 * 60 * 24 * 10,
+      updatedAt: now - 1000 * 60 * 60 * 24 * 2,
+    },
+  ];
+})();
 
 function normalizeTagsStrict(input: string[]): string[] {
   const list = normalizeTagList(input);
@@ -83,6 +120,11 @@ function coerceFilters(raw: any): ClientPageFilters {
     raw?.audience === "ClientSafe" ? "ClientSafe" : "Public";
 
   return { sector, tags, tagMode, audience };
+}
+
+function coerceBodyMDX(raw: any): string {
+  if (typeof raw === "string") return raw;
+  return "";
 }
 
 function isPlainObject(x: any): x is Record<string, unknown> {
@@ -114,6 +156,7 @@ function loadLocalValidated(): ClientPage[] {
         name: item.name,
         slug: item.slug,
         filters: coerceFilters(item.filters),
+        bodyMDX: coerceBodyMDX(item.bodyMDX),
         createdAt,
         updatedAt,
       });
@@ -138,7 +181,11 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = loadLocalValidated();
-    if (stored.length > 0) setPages(stored);
+    if (stored.length > 0) {
+      setPages(stored);
+      return;
+    }
+    setPages(DEFAULT_PAGES);
   }, []);
 
   useEffect(() => {
@@ -217,6 +264,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
         name,
         slug,
         filters,
+        bodyMDX: "",
         createdAt: now,
         updatedAt: now,
       };

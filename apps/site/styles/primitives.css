@@ -23,7 +23,7 @@
   /*  max-width: 72rem;*/
   margin: 0 auto;
   /*padding-inline: var(--gutter, 1.5rem);*/
-  padding-inline: var(--space-4);
+  padding-inline: var(--gutter);
 }
 
 /* This will later become @apply p-4; */
@@ -34,6 +34,39 @@
     --space-2
   ); /*adjust space between homepage layout sections*/
   background: var(--bg);
+}
+
+.c-section-group {
+  display: grid;
+  gap: calc(var(--space-2) * 2);
+  padding-block: var(--space-2);
+}
+
+.c-section-group > .c-section {
+  padding-block: 0;
+}
+
+@media (max-width: 720px) {
+  .c-container {
+    padding-inline: max(1rem, var(--gutter));
+  }
+}
+
+@media (max-width: 480px) {
+  .c-container {
+    padding-inline: 1rem;
+  }
+
+  .c-buttonRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .c-button,
+  .c-button:link,
+  .c-button:visited {
+    width: 100%;
+  }
 }
 
 /*override for team page*/
@@ -60,9 +93,11 @@
 
 /* Grid Layouts */
 .c-grid {
+  --min: 18rem;
   display: grid;
   gap: var(--space-3, 1.5rem);
-  grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr));
+/*   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min)), 1fr));
   container-type: inline-size;
 }
 
@@ -402,7 +437,7 @@ ol {
   /* pick a fraction of the line height for the gap */
   margin-top: 0.5em;
 
-  margin-block-start: 0.5em; /* ≈ half a line of your body text */
+  margin-block-start: 0.5em; /* ≈ half a line of the body text */
 }
 
 /* Optional enhancement for newer browsers only */
@@ -462,7 +497,7 @@ ol {
 }
 
 .c-section--mission .type-body {
-  max-width: 68ch;
+  max-width: none;
   white-space: normal;
   word-break: normal;
   overflow-wrap: normal;
@@ -493,7 +528,7 @@ ol {
   gap: var(--space-3);
 /*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
  */
-  /* decides what happens to leftover space 
+  /* decides what happens to leftover space
   justify-content: start;   *//* left align */
   /* or: justify-content: center; */ /* centered when few cards */
 
@@ -503,10 +538,12 @@ ol {
   --card-max: 24rem;
 
   /* auto-fit with a MAX column width + centered grid */
-  grid-template-columns: repeat(
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
+
+  /* grid-template-columns: repeat(
     auto-fit,
     minmax(min(var(--card-min), 100%), var(--card-max))
-  );
+  ); */
   justify-content: center;
 }
 
@@ -515,4 +552,10 @@ ol {
 }
 
 .section-space {
-  padding-top: var(--space-2x);}
+  padding-top: var(--space-2x);
+}
+
+/* Make grid/flex children allowed to shrink instead of forcing a wrap */
+:where(.c-grid > *, .intro-grid > *, .casegrid > *, .case-grid > *) {
+  min-width: 0;
+}

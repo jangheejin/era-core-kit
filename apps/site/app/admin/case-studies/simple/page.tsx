@@ -24,7 +24,7 @@ export default function SimpleCaseStudyPage() {
         </header>
 
         <section className="c-stack">
-          {/* This is your original simple creator */}
+          {/* This is the original simple creator */}
           <CMSDashboard />
         </section>
       </div>

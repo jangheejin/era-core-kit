@@ -6,7 +6,7 @@ It caps column width so 1-2 items don't scale up to be huge*/
 .case-grid--cards {
   --case-grid-min: 16rem;
   --case-grid-max: 24rem;
-  grid-template-columns: reapeat(
+  grid-template-columns: repeat(
     auto-fit,
     minmax(min(100%, var(--case-grid-min)), var(--case-grid-max))
   );
@@ -51,6 +51,17 @@ It caps column width so 1-2 items don't scale up to be huge*/
 
 .casegrid.layout-2 {
   grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 720px) {
+  .case-grid--cards {
+    --case-grid-min: 14rem;
+  }
+
+  .casegrid.layout-4,
+  .casegrid.layout-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* .casegrid.layout-2x2 {

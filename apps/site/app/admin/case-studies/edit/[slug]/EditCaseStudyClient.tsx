@@ -4,13 +4,16 @@ import "@styles/admin-cms.css";
 import "@styles/admin-cms-buttons.css";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState, useRef, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import {
   CaseStudy as CaseStudySchema,
   DEFAULT_HERO_IMAGE_URL,
+  SECTOR_GROUPS,
   SECTOR_VALUES,
+  sectorLabel,
   type SectorValue,
   deriveSummaryFromWriteUp,
   normalizeTagList,
@@ -19,7 +22,8 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
-import { ContextBanner } from "@/admin/components/ContextBanner";
+
+const PUBLISH_STATUS_VALUES = ["Draft", "Published"] as const;
 
 //helper to protect against slug collisions
 function slugify(s: string) {
@@ -37,16 +41,53 @@ function emptyToUndefined(s: unknown): string | undefined {
   return t ? t : undefined;
 }
 
-//helper for previewing and saving at same time
-function buildPreviewUrl(slug: string) {
-  return `/admin/case-studies/mock/${slug}`;
+//helper for the editor text area
+function applyWrap(
+  textarea: HTMLTextAreaElement | null,
+  before: string,
+  after: string,
+) {
+  if (!textarea) return;
+  const start = textarea.selectionStart ?? 0;
+  const end = textarea.selectionEnd ?? 0;
+  const text = textarea.value;
+  const selected = text.slice(start, end);
+  const next = text.slice(0, start) + before + selected + after + text.slice(end);
+  textarea.value = next;
+  const cursor = start + before.length + selected.length + after.length;
+  textarea.selectionStart = cursor;
+  textarea.selectionEnd = cursor;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function applyPrefix(textarea: HTMLTextAreaElement | null, prefix: string) {
+  if (!textarea) return;
+  const start = textarea.selectionStart ?? 0;
+  const end = textarea.selectionEnd ?? 0;
+  const text = textarea.value;
+  const selected = text.slice(start, end) || "item";
+  const lines = selected.split("\n");
+  const nextLines = lines.map((line) => (line.startsWith(prefix) ? line : prefix + line));
+  const next =
+    text.slice(0, start) +
+    nextLines.join("\n") +
+    text.slice(end);
+  textarea.value = next;
+  const cursor = start + nextLines.join("\n").length;
+  textarea.selectionStart = cursor;
+  textarea.selectionEnd = cursor;
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function applyLink(textarea: HTMLTextAreaElement | null) {
+  applyWrap(textarea, "[", "](https://)");
 }
 
 export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
 //  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
 //part one of protecting against slug collisions. update store destructure
-  const { getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const { items: adminItems, getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   // Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
@@ -66,17 +107,32 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
   const [tags, setTags] = useState<string>("");
 
-//  const [isPublic, setIsPublic] = useState(false);
-//  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
-
-  //3 publishing states 
-  type PublishState = "InternalDraft" | "ClientViewable" | "Homepage";
-  const [publishState, setPublishState] = useState<PublishState>("InternalDraft");
+  // publishing (Draft / Published + Featured)
+  type PublishStatus = "Draft" | "Published";
+  const [status, setStatus] = useState<PublishStatus>("Draft");
+  const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const isPublished = status === "Published";
+  const [featuredSaveState, setFeaturedSaveState] = useState<"idle" | "saving" | "saved" | "error">(
+    "idle",
+  );
+  const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   //part of protecting against slug collisions. slugDraft needs a state
   const [slugDraft, setSlugDraft] = useState("");
 
   const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
+  const featuredCount = useMemo(
+    () =>
+      adminItems.filter(
+        (item) =>
+          item.status === "Published" &&
+          item.isPublic &&
+          item.visibility === "Public" &&
+          item.isFeaturedHome,
+      ).length,
+    [adminItems],
+  );
+  const maxFeatured = 6;
 
   // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
@@ -86,7 +142,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     setWriteUp(cs.bodyMDX ?? "");
     setBrief(cs.brief ?? "");
 
-    const initialSector = (cs.sectors?.[0] as SectorValue | undefined) ?? DEFAULT_SECTOR;
+    const initialSector =
+      Array.isArray(cs.sectors) && cs.sectors.length > 0
+        ? (cs.sectors[0] as SectorValue)
+        : DEFAULT_SECTOR;
     setSector(initialSector);
 
     setTags(Array.isArray(cs.tags) ? cs.tags.join(", ") : "");
@@ -98,17 +157,66 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 //    setIsPublic(Boolean(cs.isPublic));
 //    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
 
-    const nextState: PublishState =
-      cs.visibility === "Public"
-        ? "Homepage"
-        : cs.visibility === "ClientSafe"
-          ? "ClientViewable"
-          : "InternalDraft";
-
-    setPublishState(nextState);
+    const nextStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    setStatus(nextStatus);
+    setIsFeaturedHome(nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false);
 
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
+
+  useEffect(() => {
+    if (!isPublished && isFeaturedHome) {
+      setIsFeaturedHome(false);
+    }
+  }, [isPublished, isFeaturedHome]);
+
+  useEffect(() => {
+    return () => {
+      clearFeaturedSaveTimer();
+    };
+  }, []);
+
+  function clearFeaturedSaveTimer() {
+    if (featuredSaveTimerRef.current) {
+      clearTimeout(featuredSaveTimerRef.current);
+      featuredSaveTimerRef.current = null;
+    }
+  }
+
+  function scheduleFeaturedSaveReset() {
+    clearFeaturedSaveTimer();
+    featuredSaveTimerRef.current = setTimeout(() => {
+      setFeaturedSaveState("idle");
+    }, 2000);
+  }
+
+  function applyFeaturedQuickSave(next: boolean) {
+    const previous = isFeaturedHome;
+    setIsFeaturedHome(next);
+    clearFeaturedSaveTimer();
+    setFeaturedSaveState("saving");
+
+    try {
+      if (!cs) {
+        throw new Error("Missing case study");
+      }
+
+      const candidate = { ...cs, isFeaturedHome: next };
+      const parsed = CaseStudySchema.safeParse(candidate);
+      if (!parsed.success) {
+        throw new Error("Invalid case study payload");
+      }
+
+      upsertCaseStudy(parsed.data);
+      setFeaturedSaveState("saved");
+      scheduleFeaturedSaveReset();
+    } catch {
+      setIsFeaturedHome(previous);
+      setFeaturedSaveState("error");
+      scheduleFeaturedSaveReset();
+      window.alert("Could not update featured status. Please try again.");
+    }
+  }
 
   function handleHeroImageFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -145,7 +253,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     [slugDraft, autoSlug],
   );
 
-  const bannerRef = useRef<HTMLDivElement | null>(null);
+  const writeUpRef = useRef<HTMLTextAreaElement | null>(null);
 
   //SINGLE candidateInput builder (nullable)
   const candidateInput = useMemo<CaseStudyInput | null>(() => {
@@ -169,28 +277,19 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         ? base.sectors
         : [DEFAULT_SECTOR];
 
-// one source of truth: publishState
-    const publishing =
-    publishState === "InternalDraft"
+    const publishing = isPublished
       ? {
+          visibility: "Public" as const,
+          status: "Published" as const,
+          isPublic: true,
+          isFeaturedHome: isFeaturedHome,
+        }
+      : {
           visibility: "Internal" as const,
           status: "Draft" as const,
           isPublic: false,
           isFeaturedHome: false,
-        }
-      : publishState === "ClientViewable"
-        ? {
-            visibility: "ClientSafe" as const,
-            status: "Published" as const,
-            isPublic: true,
-            isFeaturedHome: false,
-          }
-        : {
-            visibility: "Public" as const,
-            status: "Published" as const,
-            isPublic: true,
-            isFeaturedHome: true,
-          };
+        };
 
     return {
       ...base,
@@ -229,7 +328,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     heroImageUrl,
     //isPublic,
     //isFeaturedHome,
-    publishState,
+    isPublished,
+    isFeaturedHome,
     effectiveSlug,
     DEFAULT_SECTOR,
   ]);
@@ -250,16 +350,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const baseBrief = cs.brief ?? "";
     const baseSector = (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
     const baseTags = Array.isArray(cs.tags) ? cs.tags.join(", ") : "";
-    const baseHero = cs.heroImageUrl ?? "";
 //    const basePublic = Boolean(cs.isPublic);
 //    const baseFeatured = Boolean(cs.isFeaturedHome);
 
-    const basePublishState: PublishState =
-      cs.visibility === "Public"
-        ? "Homepage"
-        : cs.visibility === "ClientSafe"
-          ? "ClientViewable"
-          : "InternalDraft";
+    const baseStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    const baseFeatured = Boolean(cs.isFeaturedHome);
 
     const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
     const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
@@ -273,14 +368,17 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       //(heroImageUrl || "") !== (baseHero || "") ||
       heroNorm !== baseHeroNorm ||
       
-      publishState !== basePublishState
+      status !== baseStatus ||
+      (isPublished ? isFeaturedHome !== baseFeatured : false)
 //      isPublic !== basePublic ||
 //      isFeaturedHome !== baseFeatured
     );
   }, [
     cs, client, writeUp, brief, sector, tags, heroImageUrl, 
     //isPublic, isFeaturedHome, 
-    publishState,
+    status,
+    isPublished,
+    isFeaturedHome,
     DEFAULT_SECTOR
   ]);
 
@@ -382,12 +480,45 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             <p className="admin-hint">
               Write something about the case study here. Any format is OK (notes or a full write-up).
             </p>
-            <textarea
-              className="input"
-              style={{ minHeight: 220 }}
-              value={writeUp}
-              onChange={(e) => setWriteUp(e.currentTarget.value)}
-            />
+            <div className="editor">
+              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(writeUpRef.current, "**", "**")}
+                >
+                  Bold
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap(writeUpRef.current, "*", "*")}
+                >
+                  Italic
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyPrefix(writeUpRef.current, "- ")}
+                >
+                  Bullets
+                </button>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyLink(writeUpRef.current)}
+                >
+                  <span className="text-ul">🔗 Link</span>
+                </button>
+              </div>
+              <textarea
+                ref={writeUpRef}
+                className="editor__textarea"
+                value={writeUp}
+                onChange={(e) => setWriteUp(e.currentTarget.value)}
+                placeholder="Write the case study description…"
+              />
+            </div>
           </div>
 
           <div className="form-group">
@@ -404,10 +535,13 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             {showHeroPreview ? (
               <div className="mt heroPreview">
                 <p className="muted type-small">Image Preview</p>
-                <img
+                <Image
                   className="heroImagePreview"
                   src={heroImageUrl}
                   alt="Hero preview"
+                  width={640}
+                  height={360}
+                  unoptimized
                 />
               </div>
             ) : null}
@@ -444,15 +578,48 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
             <div className="form-group form-actions__publish">
               <label className="form-label">Publishing Status</label>
-              <select
-                className="input"
-                value={publishState}
-                onChange={(e) => setPublishState(e.currentTarget.value as PublishState)}
-              >
-                <option value="InternalDraft">Internal Draft</option>
-                <option value="ClientViewable">Client-Viewable</option>
-                <option value="Homepage">Published on Homepage</option>
-              </select>
+              <div className="form-row" style={{ gap: ".75rem", alignItems: "center" }}>
+                <select
+                  className="input"
+                  value={status}
+                  onChange={(e) => setStatus(e.currentTarget.value as PublishStatus)}
+                >
+                  {PUBLISH_STATUS_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+                <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={isFeaturedHome && isPublished}
+                    onChange={(e) => applyFeaturedQuickSave(e.target.checked)}
+                    disabled={!isPublished}
+                  />
+                  <span className="type-small">
+                    Feature on homepage ({featuredCount}/{maxFeatured})
+                    {featuredSaveState === "saving" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saving…
+                      </span>
+                    )}
+                    {featuredSaveState === "saved" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saved
+                      </span>
+                    )}
+                    {featuredSaveState === "error" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Save failed
+                      </span>
+                    )}
+                  </span>
+                </label>
+              </div>
+              <p className="muted type-small" style={{ marginTop: 6 }}>
+                Only the first {maxFeatured} featured case studies appear on the homepage.
+              </p>
             </div>
 
 
@@ -541,10 +708,14 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 onChange={onSectorChange}
               >
                 <option value="">Select a sector (client type)</option>
-                {SECTOR_VALUES.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
+                {SECTOR_GROUPS.map((g) => (
+                  <optgroup key={g.id} label={g.label}>
+                    {g.values.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {sectorLabel(opt)}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
             </div>

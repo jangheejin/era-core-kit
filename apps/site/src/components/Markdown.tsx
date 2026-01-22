@@ -23,7 +23,10 @@ export function Markdown({ children, className }: Props) {
 //export function Markdown({ children }: { children: string }) {
   return (
     <div className={`c-markdown c-stack ${className ?? ""}`}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={mdComponents}
+      >
         {children}
       </ReactMarkdown>
     </div>
