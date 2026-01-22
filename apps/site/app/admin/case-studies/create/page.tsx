@@ -10,11 +10,7 @@ import "@styles/admin-cms.css";
 
 import { showAdvanced } from "@/lib/featureFlags";
 
-import { 
-  useMemo,
-  useState,
-  type ChangeEvent,
-} from "react";
+import { useMemo, useState, type ChangeEvent } from "react";
 
 import Image from "next/image";
 
@@ -36,15 +32,16 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false
 function parseEnvFlag(raw: string | undefined, defaultValue: boolean) {
   const v = raw?.trim().toLowerCase();
   if (!v) return { ok: true as const, value: defaultValue };
 
-  if (["1", "true", "yes", "y", "on"].includes(v)) return { ok: true as const, value: true };
-  if (["0", "false", "no", "n", "off"].includes(v)) return { ok: true as const, value: false };
+  if (["1", "true", "yes", "y", "on"].includes(v))
+    return { ok: true as const, value: true };
+  if (["0", "false", "no", "n", "off"].includes(v))
+    return { ok: true as const, value: false };
 
   return { ok: false as const, value: defaultValue, raw };
 }
@@ -85,7 +82,6 @@ if (!parsed.ok) {
   );
   return defaultValue;
 } */
-
 
 /* function envFlag(name: string, defaultValue = false) {
   const v = process.env[name]?.trim().toLowerCase();
@@ -130,13 +126,12 @@ export default function NewCaseStudyPage() {
 
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
-//  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
-//  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+  //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
   /* const [sectors, setSectors] = useState<SectorValue[]>(["PublicSector"]); */
   const [sector, setSector] = useState<string>(""); // empty = none selected
 
-
-/*   function toggleSector(v: SectorValue) {
+  /*   function toggleSector(v: SectorValue) {
     setSectors((prev) =>
       prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
     );
@@ -144,8 +139,8 @@ export default function NewCaseStudyPage() {
 
   const [year, setYear] = useState<string>("2025");
   const [tags, setTags] = useState("");
-//  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this 
-//  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
+  //  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this
+  //  const [heroImageUrl, setHeroImageUrl] = useState("/img/case1.webp");
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
 
   //adding a change handler so users can upload an image
@@ -155,7 +150,7 @@ export default function NewCaseStudyPage() {
       setHeroImageUrl("");
       return;
     }
-  
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target?.result;
@@ -166,17 +161,18 @@ export default function NewCaseStudyPage() {
     };
     reader.readAsDataURL(file);
   }
-  
-//  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");//no longer let users see this
-  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
+
+  //  const [bodyMDX, setBodyMDX] = useState("## Summary\n\n");//no longer let users see this
+  const [status, setStatus] =
+    useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
     useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
   const [isFeaturedHome] = useState(false);
   const [isPublic] = useState(true);
-  
+
   // form state
-  const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
-  const [brief] = useState("");          // “Preview blurb” (optional)
+  const [writeUp, setWriteUp] = useState(""); // this replaces editing bodyMDX directly
+  const [brief] = useState(""); // “Preview blurb” (optional)
 
   // Derived fields (DO NOT put hooks inside other hooks)
   const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from toolbar
@@ -192,16 +188,17 @@ export default function NewCaseStudyPage() {
   const slugBase = client.trim();
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
 
-  const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
+  const candidateInput: CaseStudyInput = useMemo(() => {
+    //NO HOOKS CAN GO HERE
     //const bodyMDX = plainTextToMdxPreservingLineBreaks(writeUp);
     //const bodyMDX = writeUp; // writeUp is now “markdown with a toolbar”
-  
+
     //const preview = brief.trim() || undefined;
 
     //const summaryShort = preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
-//    const computedSummaryShort = useMemo(() => {
-//      return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
-//    }, [preview, bodyMDX]);
+    //    const computedSummaryShort = useMemo(() => {
+    //      return preview ?? deriveSummaryFromWriteUp(bodyMDX, 180);
+    //    }, [preview, bodyMDX]);
     const displayName = client.trim(); // the one true field
     return {
       id,
@@ -212,19 +209,22 @@ export default function NewCaseStudyPage() {
       client: emptyToUndefined(displayName),
       slug: slugify(slug || displayName),
       sectors: sector ? [sector as SectorValue] : [],
-//      sectors,
-//      sector,
+      //      sectors,
+      //      sector,
       year: year ? Number(year) : undefined,
-      tags: tags.split(",").map(t => t.trim()).filter(Boolean),
-  
-      brief: preview,//optional blurb
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+
+      brief: preview, //optional blurb
       summaryShort: summaryShortAuto, // required, auto-filled, ALWAYS a string (may be "" if nothing typed)
       //summaryShort: summaryShort.trim() || undefined,
       bodyMDX,
-  
+
       //heroImageUrl: heroImageUrl.trim() || undefined,
       heroImageUrl: emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL,
-  
+
       mechanisms: [],
       jurisdictions: [],
       outcomes: [],
@@ -232,78 +232,87 @@ export default function NewCaseStudyPage() {
       sections: [],
       attachments: [],
       links: [],
-  
+
       status,
       visibility,
       isFeaturedHome,
       isPublic,
     };
   }, [
-      //id, title, slug, client, 
-      id, client, slug,
-      //sectors, year, tags, 
-      sector, year, tags,
-      //brief, writeUp, 
-      preview, summaryShortAuto, bodyMDX,
-      heroImageUrl, 
-      status, visibility, isFeaturedHome, isPublic
-    ]);
+    //id, title, slug, client,
+    id,
+    client,
+    slug,
+    //sectors, year, tags,
+    sector,
+    year,
+    tags,
+    //brief, writeUp,
+    preview,
+    summaryShortAuto,
+    bodyMDX,
+    heroImageUrl,
+    status,
+    visibility,
+    isFeaturedHome,
+    isPublic,
+  ]);
 
-//  const candidateInput: CaseStudyInput = useMemo(
-//    () => ({
-//      id,
-////      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
-//      title: title.trim(),
-//      slug: slugify(slug || title),
-//      client: client.trim() || undefined,
-//      sectors,
-//      year: year ? Number(year) : undefined,
-//
-//      tags: tags
-//        .split(",")
-//        .map((t) => t.trim())
-//        .filter(Boolean),
-//        //.slice(0, 10),//limits the number of tags
-//
-//      summaryShort: summaryShort.trim(),
-//      brief: undefined,
-//
-//      //heroImageUrl: heroImageUrl.trim(),
-//      heroImageUrl: heroImageUrl.trim() || undefined,
-//
-//      mechanisms: [],
-//      jurisdictions: [],
-//      outcomes: [],
-//      evidence: [],
-//      bodyMDX: bodyMDX || "",
-//      sections: [],
-//      attachments: [],
-//      links: [],
-//
-//      status,
-//      visibility,
-//      isFeaturedHome,
-//      isPublic,
-//    }),
-//    [
-//      title,
-//      slug,
-//      client,
-//      sectors,
-//      year,
-//      tags,
-//      summaryShort,
-//      heroImageUrl,
-//      bodyMDX,
-//      status,
-//      visibility,
-//      isFeaturedHome,
-//      isPublic,
-//    ],
-//  );
+  //  const candidateInput: CaseStudyInput = useMemo(
+  //    () => ({
+  //      id,
+  ////      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+  //      title: title.trim(),
+  //      slug: slugify(slug || title),
+  //      client: client.trim() || undefined,
+  //      sectors,
+  //      year: year ? Number(year) : undefined,
+  //
+  //      tags: tags
+  //        .split(",")
+  //        .map((t) => t.trim())
+  //        .filter(Boolean),
+  //        //.slice(0, 10),//limits the number of tags
+  //
+  //      summaryShort: summaryShort.trim(),
+  //      brief: undefined,
+  //
+  //      //heroImageUrl: heroImageUrl.trim(),
+  //      heroImageUrl: heroImageUrl.trim() || undefined,
+  //
+  //      mechanisms: [],
+  //      jurisdictions: [],
+  //      outcomes: [],
+  //      evidence: [],
+  //      bodyMDX: bodyMDX || "",
+  //      sections: [],
+  //      attachments: [],
+  //      links: [],
+  //
+  //      status,
+  //      visibility,
+  //      isFeaturedHome,
+  //      isPublic,
+  //    }),
+  //    [
+  //      title,
+  //      slug,
+  //      client,
+  //      sectors,
+  //      year,
+  //      tags,
+  //      summaryShort,
+  //      heroImageUrl,
+  //      bodyMDX,
+  //      status,
+  //      visibility,
+  //      isFeaturedHome,
+  //      isPublic,
+  //    ],
+  //  );
 
   const validation = useMemo(
-    () => CaseStudySchema.safeParse(candidateInput), 
+    () => CaseStudySchema.safeParse(candidateInput),
     [candidateInput]
   );
 
@@ -320,7 +329,7 @@ export default function NewCaseStudyPage() {
     upsertCaseStudy(out);
     router.push(`/admin/case-studies/mock/${out.slug}`);
   }
-/*     if (!validatedCaseStudy) {
+  /*     if (!validatedCaseStudy) {
       setError("Please validate the case study before saving.");
       return;
     }
@@ -329,16 +338,19 @@ export default function NewCaseStudyPage() {
     router.push(`/admin/case-studies/mock/${validatedCaseStudy.slug}`);
   } */
 
-    // INPUT -> ZOD VALIDATION -> STORED AS PARSED OUTPUT -> PREVIEW PAGE
-   return (
+  // INPUT -> ZOD VALIDATION -> STORED AS PARSED OUTPUT -> PREVIEW PAGE
+  return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a demo template for creating/editing case studies. After creating a new case study,
-        you can preview them individually or as part of a mock database of case studies, where you can 
-        filter by client type, tags, etc. <br/><br/>
-        The case study objects you create in this demo are stored only in your browser. 
-        They will remain viewable by you as long as you don&apos;t clear 
-        your cache/use incognito mode, but they are not connected to any persistent backend.
+        This is a demo template for creating/editing case studies. After
+        creating a new case study, you can preview them individually or as part
+        of a mock database of case studies, where you can filter by client type,
+        tags, etc. <br />
+        <br />
+        The case study objects you create in this demo are stored only in your
+        browser. They will remain viewable by you as long as you don&apos;t
+        clear your cache/use incognito mode, but they are not connected to any
+        persistent backend.
       </ContextBanner>
 
       {/* <div className="row mt1"> */}
@@ -351,19 +363,18 @@ export default function NewCaseStudyPage() {
         </div>
       </div>
 
-{/* --------------------------------------------------------------------------------- */}
-{/* CORE (REQUIRED) CONTENT */}
-{/* --------------------------------------------------------------------------------- */}
+      {/* --------------------------------------------------------------------------------- */}
+      {/* CORE (REQUIRED) CONTENT */}
+      {/* --------------------------------------------------------------------------------- */}
 
-{/*       <div className="card card-new mt1"> */}
-      <section className="card card-new mt1"> 
+      {/*       <div className="card card-new mt1"> */}
+      <section className="card card-new mt1">
         {/* STEP 1 – BASIC DETAILS (always visible, minimum path) */}
         <div className="card card-new">
-{/*           <div className = "form-group">
+          {/*           <div className = "form-group">
             <label className="form-label">Title</label>
             <input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div> */}
-
           {/* <div className="form-field"> */}
           <div className="form-group">
             {/* Client name (used as title) */}
@@ -371,12 +382,12 @@ export default function NewCaseStudyPage() {
               Client Name{" "}
               <span className="admin-label-required">(required)</span>
             </label>
-            <input className="input" 
-              value={client} 
-              onChange={(e) => setClient(e.target.value)} 
+            <input
+              className="input"
+              value={client}
+              onChange={(e) => setClient(e.target.value)}
             />
           </div>
-
           {/* Case study write-up */}
           <div className="form-group" id="write-up-section">
             <label className="form-label">
@@ -385,7 +396,8 @@ export default function NewCaseStudyPage() {
               <span className="admin-label-required">(required)</span>
             </label>
             <p className="admin-hint">
-              Write something about the case study here. Any format is OK (it can be notes or a full write-up)
+              Write something about the case study here. Any format is OK (it
+              can be notes or a full write-up)
             </p>
             <textarea
               className="input"
@@ -394,7 +406,6 @@ export default function NewCaseStudyPage() {
               onChange={(e) => setWriteUp(e.target.value)}
             />
           </div>
-
           <div className="form-group">
             {/* OLD form for hero image. allowed URL input only. */}
             {/* <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
@@ -409,7 +420,8 @@ export default function NewCaseStudyPage() {
               <span className="admin-label-optional">(optional)</span>
             </label>
             <p className="admin-hint">
-              Provide an image for this case study. If you don’t add one, a default image default image will be used.
+              Provide an image for this case study. If you don’t add one, a
+              default image default image will be used.
             </p>
             <input
               id="heroImage"
@@ -432,11 +444,10 @@ export default function NewCaseStudyPage() {
               </div>
             )}
           </div>
-
           {/* STICKY SAVE BAR */}
           <div className="form-actions form-actions--top">
             <div className="form-actions__left">
-            {/* <div className="form-actions__right"> */}
+              {/* <div className="form-actions__right"> */}
 
               {/* Primary action – Save + Preview */}
               <button
@@ -444,19 +455,23 @@ export default function NewCaseStudyPage() {
                 type="button"
                 onClick={save}
                 disabled={!validation.success}
-                title={!validation.success ? "Fix validation errors first" : "Save"}
+                title={
+                  !validation.success ? "Fix validation errors first" : "Save"
+                }
               >
                 Save + Preview
               </button>
 
               <div className="save-status">
-                {validation.success ? "Ready to save." : "Can't save yet: Missing required fields (Client Name + Description)"}
+                {validation.success
+                  ? "Ready to save."
+                  : "Can't save yet: Missing required fields (Client Name + Description)"}
               </div>
             </div>
 
-{/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
-{/*         <div className="form-actions__toggles" aria-label="Publishing settings"> */}
-{/*           <button className="btn" type="button"
+            {/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
+            {/*         <div className="form-actions__toggles" aria-label="Publishing settings"> */}
+            {/*           <button className="btn" type="button"
             onClick={() => setSlug(slugify(slug || title))}
             title="Turn title into URL path"
           >
@@ -467,13 +482,13 @@ export default function NewCaseStudyPage() {
             Turn title into URL path
           </button> */}
 
-          {/* <div className="form-actions__left"> */}
+            {/* <div className="form-actions__left"> */}
             {/* optional: keep empty, or put other tools here */}
-          {/* </div> */}
+            {/* </div> */}
 
-{/* ************************************************************************* */}
-{/* TEMPORARILY HIDDEN FOR CLEANER DEMO UI: RE-ENABLE LATER, ESSENTIAL FEATURES */}
-{/*           <div className="form-actions__toggles" aria-label="Publishing settings">
+            {/* ************************************************************************* */}
+            {/* TEMPORARILY HIDDEN FOR CLEANER DEMO UI: RE-ENABLE LATER, ESSENTIAL FEATURES */}
+            {/*           <div className="form-actions__toggles" aria-label="Publishing settings">
               <label className="toggle-pill">
                 <input
                   type="checkbox"
@@ -492,33 +507,35 @@ export default function NewCaseStudyPage() {
                 <span>Client Viewable (not on homepage, but viewable by clients)</span>
               </label>
             </div> */}
-{/* ************************************************************************* */}
-        {/* </div> */}
+            {/* ************************************************************************* */}
+            {/* </div> */}
 
-          {/* </div> */}
-          </div> {/* end of form-actions div */}
-
-{/* end of card card-new div */}
-{/*         </div>
+            {/* </div> */}
+          </div>{" "}
+          {/* end of form-actions div */}
+          {/* end of card card-new div */}
+          {/*         </div>
       </section>  */}
-{/*       </div> */}
-{/* END OF CORE (REQUIRED) CONTENT */}
-
-
-{/* --------------------------------------------------------------------------------- */}
-{/* ADVANCED CONTENT */}
-{/*       <section className="card card-new mt1">  */}
-        {/* STEP 2 – CLIENT TYPE & TAGS (collapsible) */}
-{/*         <div className="card card-new"> */}
-</div>
-<div className="card card-new mt1">
+          {/*       </div> */}
+          {/* END OF CORE (REQUIRED) CONTENT */}
+          {/* --------------------------------------------------------------------------------- */}
+          {/* ADVANCED CONTENT */}
+          {/*       <section className="card card-new mt1">  */}
+          {/* STEP 2 – CLIENT TYPE & TAGS (collapsible) */}
+          {/*         <div className="card card-new"> */}
+        </div>
+        <div className="card card-new mt1">
           <details className="admin-collapse" open>
             <summary className="admin-collapse__summary">
               <div>
-
                 <p className="admin-hint">
-                  OPTIONAL: Assign categories and tags so this case study can be used in custom websites for created exclusively for certain clients. Tags and categories are what allow filtering and searching.
-                  For example, you might tag a case study with &quot;Public Sector&quot; so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
+                  OPTIONAL: Assign categories and tags so this case study can be
+                  used in custom websites for created exclusively for certain
+                  clients. Tags and categories are what allow filtering and
+                  searching. For example, you might tag a case study with
+                  &quot;Public Sector&quot; so it can appear in a custom page of
+                  all the public-sector–related case studies for potential new
+                  clients in that sector.
                 </p>
               </div>
               <span className="admin-collapse__chevron" aria-hidden="true">
@@ -527,15 +544,16 @@ export default function NewCaseStudyPage() {
             </summary>
 
             <div className="form-row form-group" id="sector">
-              <div className="form-field">          
+              <div className="form-field">
                 {/* <h2 className="cms-h3">Client type</h2> */}
                 <label className="form-label" htmlFor="sector">
                   Client Type
                   {/* Sectors */}
                 </label>
                 <p className="admin-hint">
-                  Select the primary sector (a.k.a. client type) for this case study.
-                </p>                
+                  Select the primary sector (a.k.a. client type) for this case
+                  study.
+                </p>
                 <select
                   id="sector"
                   className="input"
@@ -543,14 +561,13 @@ export default function NewCaseStudyPage() {
                   onChange={(e) => setSector(e.target.value)}
                 >
                   <option value="">Select a sector (client type)</option>
-                    {SECTOR_VALUES.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  
+                  {SECTOR_VALUES.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
                 </select>
-{/*                 <p className="muted type-small">
+                {/*                 <p className="muted type-small">
                   For now, pick one sector; in the final version, you'll be able to pick multiple.
                 </p> */}
               </div>
@@ -563,10 +580,11 @@ export default function NewCaseStudyPage() {
                   Tags
                 </label>
                 <p className="admin-hint">
-                  Short keywords that describe the work (e.g. <code>environment</code>,{" "}
-                  <code>local government</code>, <code>appropriations</code>).
-                  Tags combine with client type to create “collections” for specific clients.
-                  Separate tags with commas.
+                  Short keywords that describe the work (e.g.{" "}
+                  <code>environment</code>, <code>local government</code>,{" "}
+                  <code>appropriations</code>). Tags combine with client type to
+                  create “collections” for specific clients. Separate tags with
+                  commas.
                 </p>
                 <input
                   className="input"
@@ -575,25 +593,20 @@ export default function NewCaseStudyPage() {
                 />
               </div>
             </div>
-
-
-
           </details>
-
-
-</div>
+        </div>
       </section>
 
-{/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
+      {/* ADVANCED UI. set showAdvanced to 1 to make all this visible */}
       {showAdvanced && (
         <>
-        <fieldset className="form-group">
-          <legend className="form-label">Outcomes (advanced)</legend>
-          {/* outcomes editing UI here */}
-        </fieldset>
+          <fieldset className="form-group">
+            <legend className="form-label">Outcomes (advanced)</legend>
+            {/* outcomes editing UI here */}
+          </fieldset>
 
-        <div className="form-row form-group" id="sectors-checkboxes">
-{/*             <div className="form-field">
+          <div className="form-row form-group" id="sectors-checkboxes">
+            {/*             <div className="form-field">
               <label className="form-label">Sectors</label>
               <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
                 {SECTOR_VALUES.map((v) => (
@@ -611,7 +624,11 @@ export default function NewCaseStudyPage() {
 
             <div className="form-field form-field--small">
               <label className="form-label">Year</label>
-              <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
+              <input
+                className="input"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              />
             </div>
           </div>
 
@@ -624,7 +641,9 @@ export default function NewCaseStudyPage() {
                 className="input"
                 value={status}
                 onChange={(e) =>
-                  setStatus(e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number])
+                  setStatus(
+                    e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number]
+                  )
                 }
               >
                 {CASE_STUDY_STATUS_VALUES.map((v) => (
@@ -643,7 +662,8 @@ export default function NewCaseStudyPage() {
                 value={visibility}
                 onChange={(e) =>
                   setVisibility(
-                    e.target.value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
+                    e.target
+                      .value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
                   )
                 }
               >
@@ -659,11 +679,15 @@ export default function NewCaseStudyPage() {
           {/* <div style={{ marginTop: "1rem" }}> */}
           <div className="form-group">
             <label className="form-label">Tags (comma-separated)</label>
-            <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
+            <input
+              className="input"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
           </div>
 
           {/* <div style={{ marginTop: "1rem" }}> */}
-{/*           <div className="form-group">
+          {/*           <div className="form-group">
             <label className="form-label">Summary short (required)</label>
             <input
               className="input"
@@ -672,16 +696,14 @@ export default function NewCaseStudyPage() {
             />
           </div> */}
 
-{/*           OPTION: SHOW THE AUTO-GENERATED summaryShort
+          {/*           OPTION: SHOW THE AUTO-GENERATED summaryShort
           for now I'm removing it to reduce confusion */}
-{/*           <div className="form-group">
+          {/*           <div className="form-group">
             <label className="form-label">Summary short (auto)</label>
             <input className="input" value={summaryShortAuto} readOnly />
           </div> */}
 
-
-
-{/*           <div className="form-row">
+          {/*           <div className="form-row">
             <label className="row" style={{ gap: ".5rem" }}>
               <input
                 type="checkbox"
@@ -699,9 +721,13 @@ export default function NewCaseStudyPage() {
           </div>
  */}
           <div className="form-group">
-            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
-{/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
- */}            <input
+            <label className="form-label">
+              Unique identifier for URL path{" "}
+              <em>(defaults to client name if not set by user)</em>
+            </label>
+            {/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+             */}{" "}
+            <input
               className="input"
               value={slug}
               placeholder={autoSlug}
@@ -712,28 +738,29 @@ export default function NewCaseStudyPage() {
             />
           </div>
 
-        <div className="card card-new mt">
-          <h3>Validation</h3>
-          <p>Check what needs to be added to/changed in your draft so you can &quot;publish&quot; it.</p>
-          {validation.success ? (
-            <p className="muted">✅ Valid (ready to save)</p>
-          ) : (
-            <pre className="error">
-              ❌ Invalid
-              {"\n\n"}
-              {JSON.stringify(validation.error.format(), null, 2)}
-            </pre>
-          )}
-        </div>
+          <div className="card card-new mt">
+            <h3>Validation</h3>
+            <p>
+              Check what needs to be added to/changed in your draft so you can
+              &quot;publish&quot; it.
+            </p>
+            {validation.success ? (
+              <p className="muted">✅ Valid (ready to save)</p>
+            ) : (
+              <pre className="error">
+                ❌ Invalid
+                {"\n\n"}
+                {JSON.stringify(validation.error.format(), null, 2)}
+              </pre>
+            )}
+          </div>
         </>
       )}
 
-{/* END OF ADVANCED UI. */}
-
+      {/* END OF ADVANCED UI. */}
     </main>
   );
 }
-
 
 /* export default function NewCaseStudyForm() {
   //implementing the hook & router for the advanced builder
@@ -970,5 +997,3 @@ export default function NewCaseStudyPage() {
     setValidated(parsed);
     // DO NOT ADD OR PUSH YET!
   } */
-
-

@@ -1,6 +1,7 @@
 // app/admin/components/CaseStudyMetadata.tsx
 
 import { CaseStudyType } from "@kit/schema";
+import { filterCategoryTags } from "@/lib/adminTags";
 
 type Props = {
   caseStudy: CaseStudyType;
@@ -8,6 +9,7 @@ type Props = {
 
 export function CaseStudyMetadata({ caseStudy }: Props) {
   const { sectors, tags, status, slug, isFeaturedHome } = caseStudy;
+  const visibleTags = filterCategoryTags(tags ?? []);
 
   return (
     <div className="metadata-card">
@@ -20,8 +22,8 @@ export function CaseStudyMetadata({ caseStudy }: Props) {
         <div className="metadata-item">
           <dt>Tags:</dt>
           <dd className="metadata-tags">
-            {tags?.length ? (
-              tags.map((tag) => (
+            {visibleTags.length ? (
+              visibleTags.map((tag) => (
                 <span className="tag-pill" key={tag}>
                   {tag}
                 </span>

@@ -3,12 +3,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef, useState } from "react";//needed for improved sticky header
+import { useLayoutEffect, useRef, useState } from "react"; //needed for improved sticky header
 
-type NavItem = { 
-  href: string; 
-  label: string; 
-/*   activeIfStartsWith?: string; */
+type NavItem = {
+  href: string;
+  label: string;
+  /*   activeIfStartsWith?: string; */
   match?: (pathname: string) => boolean;
   kind?: "normal" | "primary";
 };
@@ -35,9 +35,27 @@ type NavItem = {
 const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
-  { href: "/admin/case-studies/list", label: "Case Study Library", match: (p) => p.startsWith("/admin/case-studies") },
-  { href: "/admin/client-pages", label: "Client Collections", match: (p) => p.startsWith("/admin/client-pages") },
-  { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
+  {
+    href: "/admin/case-studies/list",
+    label: "Case Study Library",
+    match: (p) => p.startsWith("/admin/case-studies"),
+  },
+  {
+    href: "/admin/client-pages",
+    label: "Client Pages",
+    match: (p) => p.startsWith("/admin/client-pages"),
+  },
+  {
+    href: "/admin/team",
+    label: "Team Bio CMS",
+    match: (p) => p.startsWith("/admin/team"),
+  },
+  {
+    href: "/admin/case-studies/new",
+    label: "+ New Case Study",
+    match: (p) => p.startsWith("/admin/case-studies/new"),
+    kind: "primary",
+  },
 ];
 
 /* function isActive(pathname: string, href: string) {
@@ -55,9 +73,17 @@ const NAV: NavItem[] = [
 function isActive(pathname: string, item: NavItem) {
   if (item.href === "/admin") return pathname === "/admin";
   if (item.href === "/admin/case-studies/list")
-    return pathname === "/admin/case-studies/list" || pathname.startsWith("/admin/case-studies/list/");
+    return (
+      pathname === "/admin/case-studies/list" ||
+      pathname.startsWith("/admin/case-studies/list/")
+    );
   if (item.href === "/admin/client-pages")
-    return pathname === "/admin/client-pages" || pathname.startsWith("/admin/client-pages/");
+    return (
+      pathname === "/admin/client-pages" ||
+      pathname.startsWith("/admin/client-pages/")
+    );
+  if (item.href === "/admin/team")
+    return pathname === "/admin/team" || pathname.startsWith("/admin/team/");
   return pathname === item.href;
 }
 
@@ -87,23 +113,20 @@ export function AdminTopNav() {
       window.removeEventListener("resize", setVar);
     };
   }, []);
-  
 
   return (
     <header ref={headerRef} className="adminTopNav">
-    {/* <div className="adminTopNav"> */}
+      {/* <div className="adminTopNav"> */}
       <div className="adminTopNav__inner">
         {/* <div className="adminTopNav__brand"> */}
         <div className="adminTopNav__left">
           {/* <Link href="/admin" className="adminTopNav__brand"> */}
-{/*           <div className="adminTopNav__brand">
+          {/*           <div className="adminTopNav__brand">
             Demo CMS
           </div> */}
-          <div className="adminTopNav__brand">
-            Case Study CMS
-          </div>
+          <div className="adminTopNav__brand">Case Study CMS</div>
           {/* </Link> */}
-{/*           <Link href="/admin" className="adminTopNav__brandLink">
+          {/*           <Link href="/admin" className="adminTopNav__brandLink">
             Demo CMS
           </Link> */}
         </div>
@@ -118,7 +141,7 @@ export function AdminTopNav() {
         >
           Menu
         </button>
-        
+
         <nav
           id="adminTopNavLinks"
           className={["adminTopNav__links", navOpen ? "is-open" : ""].join(" ")}
@@ -130,7 +153,7 @@ export function AdminTopNav() {
               <Link
                 key={item.href}
                 href={item.href}
-/*                 className={
+                /*                 className={
                   active ? "adminTopNav__link is-active" : "adminTopNav__link"
                 } */
                 aria-current={active ? "page" : undefined}
@@ -147,8 +170,8 @@ export function AdminTopNav() {
             );
           })}
         </nav>
-      
-{/*         <div className="adminTopNav__right">
+
+        {/*         <div className="adminTopNav__right">
           <Link className="adminTopNav__btn" href="/admin/case-studies/new">
             + New Case Study
           </Link>
@@ -157,9 +180,8 @@ export function AdminTopNav() {
             Public Site
           </Link>
         </div> */}
-
       </div>
-    {/* </div> */}
+      {/* </div> */}
     </header>
   );
 }
