@@ -686,8 +686,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           <summary className="admin-collapse__summary">
             <div>
               <p className="admin-hint">
-                {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client pages. */}
-                OPTIONAL: Assign categories so this case study can be used in custom client pages.
+                {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client collections. */}
+                OPTIONAL: Assign categories so this case study can be used in custom client collections.
               </p>
             </div>
             <span className="admin-collapse__chevron" aria-hidden="true">

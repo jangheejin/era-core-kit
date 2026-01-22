@@ -4,6 +4,7 @@
 import "@styles/admin-cms.css";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   SECTOR_GROUPS,
   sectorLabel,
@@ -141,28 +142,35 @@ export default function AdminClientPages() {
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
-        <h1 className="type-h2">Client pages</h1>
+        <h1 className="type-h2">Client collections</h1>
         <Link href="/admin">Back to admin</Link>
       </div>
 
       <div className="card mt">
         <div className="row" style={{ justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
           <div style={{ minWidth: 260 }}>
-            <h2 className="type-h3" style={{ marginBottom: ".35rem" }}>What are client pages?</h2>
+            <div className="row" style={{ alignItems: "center", gap: ".5rem", marginBottom: ".35rem" }}>
+              <h2 className="type-h3" style={{ marginBottom: 0 }}>What are client collections?</h2>
+              <Tooltip.Provider delayDuration={200}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button className="infoButton" type="button" aria-label="What are client collections?">
+                      ?
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                      Client collections are saved, curated filtered pages with an optional intro and shareable URL.
+                      <br />
+                      The Case Study Library filters let you preview a live database view without saving it.
+                      <Tooltip.Arrow className="tooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+            </div>
             <p className="muted">
-              Client pages are curated landing pages that show a filtered set of case studies plus
-              an optional intro. Use them when you want a shareable URL for a specific audience
-              (e.g., “Local Government” or “Energy”).
-            </p>
-            <ol className="muted type-small" style={{ marginTop: ".75rem", paddingLeft: "1.1rem" }}>
-              <li>Pick the category and/or tags you want on the page (you can combine both).</li>
-              <li>Write the intro text for context.</li>
-              <li>Save, then preview to share the link.</li>
-            </ol>
-            <p className="muted type-small" style={{ marginTop: ".75rem" }}>
-              The Case Study Library is a database view: set filters there to preview a purely
-              filtered page without saving it. Client pages here are the “finalized” versions with
-              custom intros and shareable URLs.
+              Curated landing pages built from case study filters for a specific audience.
             </p>
           </div>
           <div className="row" style={{ gap: ".5rem" }}>
@@ -194,7 +202,7 @@ export default function AdminClientPages() {
           style={{ flex: "1 1 280px", minWidth: 260, background: "var(--brand-lightest)" }}
         >
           <div className="form-group">
-            <label className="form-label">Client pages library</label>
+            <label className="form-label">Client collections library</label>
             <select
               className="input"
               value={selectedSlug ?? ""}
@@ -208,7 +216,7 @@ export default function AdminClientPages() {
               ))}
             </select>
             <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-              This list is your saved client pages. Choose one to edit or start a new page.
+              This list is your saved client collections. Choose one to edit or start a new page.
             </p>
           </div>
           <div className="form-group">

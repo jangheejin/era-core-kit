@@ -36,7 +36,7 @@ const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
   { href: "/admin/case-studies/list", label: "Case Study Library", match: (p) => p.startsWith("/admin/case-studies") },
-  { href: "/admin/client-pages", label: "Client Pages", match: (p) => p.startsWith("/admin/client-pages") },
+  { href: "/admin/client-pages", label: "Client Collections", match: (p) => p.startsWith("/admin/client-pages") },
   { href: "/admin/case-studies/new", label: "+ New Case Study", match: (p) => p.startsWith("/admin/case-studies/new"), kind: "primary" },
 ];
 
