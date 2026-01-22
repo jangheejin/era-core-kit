@@ -224,9 +224,11 @@ export default function AdminTeamPage() {
 
   return (
     <main className="c-admin">
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">{editingId ? "Edit Team Bio" : "Team Bio Library"}</h1>
-        <div className="row" style={{ gap: ".5rem" }}>
+      <div className="admin-page-header">
+        <h1 className="type-h2 admin-page-title">
+          {editingId ? "Edit Team Bio" : "Team Bio Library"}
+        </h1>
+        <div className="admin-page-actions">
           {!editingId && (
             <button className="btnPrimary" type="button" onClick={startNewMember}>
               Add team member
@@ -241,53 +243,75 @@ export default function AdminTeamPage() {
       </p>
 
       {!editingId && (
-        <div className="c-stack mt">
-          {sorted.map((member) => (
-            <section key={member.id} className="card card-new">
-              <div className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
-                <div className="row" style={{ gap: "1rem", alignItems: "center", flex: 1 }}>
-                  {member.imageUrl && (
-                    <img
-                      className="team-photo-preview__img"
-                      src={previewMap.get(member.imageUrl) ?? member.imageUrl}
-                      alt={`${member.name} photo`}
-                    />
-                  )}
-                  <div className="c-stack" style={{ gap: ".25rem" }}>
-                    <div className="row" style={{ gap: ".5rem", alignItems: "center", flexWrap: "wrap" }}>
-                      <span className="type-h3" style={{ margin: 0 }}>
-                        {member.name}
-                      </span>
-                      <span
-                        className={[
-                          "pill",
-                          "pill--status",
-                          normalizeStatus(member.status) === "Published"
-                            ? "pill--status-complete"
-                            : "",
-                        ].join(" ")}
-                      >
-                        {normalizeStatus(member.status)}
-                      </span>
+        <div className="card mt">
+          <div className="dbResultsHeader">
+            <div className="dbResultsHeader__sort">
+              <span className="muted type-small">Library view</span>
+            </div>
+            <p className="muted dbResultsHeader__count">
+              Showing {sorted.length} / {sorted.length}
+            </p>
+          </div>
+          <div className="dbListGrid">
+            {sorted.map((member) => {
+              const status = normalizeStatus(member.status);
+              const isPublished = status === "Published";
+              return (
+                <section key={member.id} className="card dbItem">
+                  <div className="dbItemHeader">
+                    <div className="dbItemMain">
+                      <div className="row" style={{ gap: "0.75rem", alignItems: "center" }}>
+                        {member.imageUrl && (
+                          <img
+                            className="team-photo-preview__img"
+                            src={previewMap.get(member.imageUrl) ?? member.imageUrl}
+                            alt={`${member.name} photo`}
+                          />
+                        )}
+                        <div className="c-stack" style={{ gap: ".15rem" }}>
+                          <div className="dbItemClient">{member.name}</div>
+                          <div className="dbItemTitle">{member.title}</div>
+                        </div>
+                      </div>
                     </div>
-                    <span className="muted type-small">{member.title}</span>
+                    <div className="dbActions">
+                      <button className="btnSmall" type="button" onClick={() => startEditing(member)}>
+                        Edit
+                      </button>
+                      <button
+                        className="btnSmall"
+                        type="button"
+                        onClick={() => removeTeamMember(member.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="row" style={{ gap: ".5rem" }}>
-                  <button className="btnSmall" type="button" onClick={() => startEditing(member)}>
-                    Edit
-                  </button>
-                  <button
-                    className="btnSmall"
-                    type="button"
-                    onClick={() => removeTeamMember(member.id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </section>
-          ))}
+                  <div className="dbSummary">
+                    {member.bio?.[0] ? member.bio[0] : "No bio yet — add a short summary."}
+                  </div>
+                  <div className="dbProps">
+                    <div className="dbProp">
+                      <div className="dbPropLabel">Publishing Status</div>
+                      <div className="dbPillRow">
+                        <span
+                          className={`pill pill--status ${
+                            isPublished ? "pill--published" : "pill--draft"
+                          }`}
+                        >
+                          {status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="dbProp">
+                      <div className="dbPropLabel">Location</div>
+                      <div className="dbPropValue">{member.location || "Not set"}</div>
+                    </div>
+                  </div>
+                </section>
+              );
+            })}
+          </div>
         </div>
       )}
       {!editingId && (
@@ -505,13 +529,13 @@ export default function AdminTeamPage() {
                     Publish
                   </button>
                   <span
-                    className={[
-                      "pill",
-                      "pill--status",
-                      draft.status === "Published" ? "pill--status-complete" : "",
-                    ].join(" ")}
+                    className={`pill pill--status ${
+                      normalizeStatus(draft.status) === "Published"
+                        ? "pill--published"
+                        : "pill--draft"
+                    }`}
                   >
-                    {draft.status}
+                    {normalizeStatus(draft.status)}
                   </span>
                 </div>
                 <div className="team-editor-actionColumn team-editor-actionColumn--toggle">

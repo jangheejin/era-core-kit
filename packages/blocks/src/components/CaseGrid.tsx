@@ -19,7 +19,9 @@ function normalizeLayout(layout?: string) {
   return layout;
 }
 
-function pickSingleSector(item: any) {
+type CaseGridItem = CaseGridProps["items"][number];
+
+function pickSingleSector(item: CaseGridItem) {
   // Strictly pick ONE label
   if (item.primarySectorReadable) return item.primarySectorReadable;
   if (item.primarySector) return String(item.primarySector);

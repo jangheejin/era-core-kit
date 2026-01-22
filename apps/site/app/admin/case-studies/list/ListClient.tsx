@@ -406,9 +406,9 @@ export default function ListClient() {
         Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1 className="type-h2">Case Study Library</h1>
-        <div className="row" style={{ gap: ".5rem" }}>
+      <div className="admin-page-header">
+        <h1 className="type-h2 admin-page-title">Case Study Library</h1>
+        <div className="admin-page-actions">
           <Link className="btnPrimary" href="/admin/case-studies/new">
             New case study
           </Link>
