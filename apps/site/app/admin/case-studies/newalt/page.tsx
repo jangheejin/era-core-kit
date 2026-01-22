@@ -6,12 +6,7 @@ import "@styles/admin-cms.css";
 
 import { showAdvanced } from "@/lib/featureFlags";
 
-import { 
-  useMemo,
-  useState,
-  useRef,
-  type ChangeEvent,
-} from "react";
+import { useMemo, useState, useRef, type ChangeEvent } from "react";
 
 import Image from "next/image";
 
@@ -33,15 +28,16 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
-
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false
 function parseEnvFlag(raw: string | undefined, defaultValue: boolean) {
   const v = raw?.trim().toLowerCase();
   if (!v) return { ok: true as const, value: defaultValue };
 
-  if (["1", "true", "yes", "y", "on"].includes(v)) return { ok: true as const, value: true };
-  if (["0", "false", "no", "n", "off"].includes(v)) return { ok: true as const, value: false };
+  if (["1", "true", "yes", "y", "on"].includes(v))
+    return { ok: true as const, value: true };
+  if (["0", "false", "no", "n", "off"].includes(v))
+    return { ok: true as const, value: false };
 
   return { ok: false as const, value: defaultValue, raw };
 }
@@ -62,7 +58,6 @@ if (!parsed.ok) {
     console.warn(msg);
   }
 }
-
 
 //export const showAdvanced = parsed.value;
 
@@ -91,13 +86,12 @@ export default function NewCaseStudyPage() {
 
   const [slug, setSlug] = useState("");
   const [client, setClient] = useState("");
-//  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
-//  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
+  //  const [sector, setSector] = useState<(typeof SECTOR_VALUES)[number]>(SECTOR_VALUES[0]);
+  //  const [sectors, setSectors] = useState<SectorValue[]>(["GovContracting"]);
   /* const [sectors, setSectors] = useState<SectorValue[]>(["PublicSector"]); */
   const [sector, setSector] = useState<string>(""); // empty = none selected
 
-
-/*   function toggleSector(v: SectorValue) {
+  /*   function toggleSector(v: SectorValue) {
     setSectors((prev) =>
       prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v],
     );
@@ -105,7 +99,7 @@ export default function NewCaseStudyPage() {
 
   const [year, setYear] = useState<string>("2025");
   const [tags, setTags] = useState("");
-//  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this 
+  //  const [summaryShort, setSummaryShort] = useState("");//no longer let users see this
   const [heroImageUrl, setHeroImageUrl] = useState<string>("");
 
   //adding a change handler so users can upload an image
@@ -115,7 +109,7 @@ export default function NewCaseStudyPage() {
       setHeroImageUrl("");
       return;
     }
-  
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target?.result;
@@ -126,16 +120,17 @@ export default function NewCaseStudyPage() {
     };
     reader.readAsDataURL(file);
   }
-  
-  const [status, setStatus] = useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
+
+  const [status, setStatus] =
+    useState<(typeof CASE_STUDY_STATUS_VALUES)[number]>("Draft");
   const [visibility, setVisibility] =
     useState<(typeof CASE_STUDY_VISIBILITY_VALUES)[number]>("Internal");
   const [isFeaturedHome] = useState(false);
   const [isPublic] = useState(true);
-  
+
   // form state
-  const [writeUp, setWriteUp] = useState("");      // this replaces editing bodyMDX directly
-  const [brief] = useState("");          // “Preview blurb” (optional)
+  const [writeUp, setWriteUp] = useState(""); // this replaces editing bodyMDX directly
+  const [brief] = useState(""); // “Preview blurb” (optional)
 
   // Derived fields (DO NOT put hooks inside other hooks)
   const bodyMDX = useMemo(() => writeUp, [writeUp]); // writeUp already contains markdown from toolbar
@@ -149,7 +144,8 @@ export default function NewCaseStudyPage() {
 
   const slugBase = client.trim(); // or just title if you're unifying them
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
-  const candidateInput: CaseStudyInput = useMemo(() => {//NO HOOKS CAN GO HERE
+  const candidateInput: CaseStudyInput = useMemo(() => {
+    //NO HOOKS CAN GO HERE
     const displayName = client.trim(); // the one true field
     return {
       id,
@@ -157,16 +153,19 @@ export default function NewCaseStudyPage() {
       client: emptyToUndefined(displayName),
       slug: slugify(slug || displayName),
       sectors: sector ? [sector as SectorValue] : [],
-//      sectors,
+      //      sectors,
       year: year ? Number(year) : undefined,
-      tags: tags.split(",").map(t => t.trim()).filter(Boolean),
-  
-      brief: preview,//optional blurb
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+
+      brief: preview, //optional blurb
       summaryShort: summaryShortAuto, // required, auto-filled, ALWAYS a string (may be "" if nothing typed)
       bodyMDX,
-  
+
       heroImageUrl: emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL,
-  
+
       mechanisms: [],
       jurisdictions: [],
       outcomes: [],
@@ -174,25 +173,34 @@ export default function NewCaseStudyPage() {
       sections: [],
       attachments: [],
       links: [],
-  
+
       status,
       visibility,
       isFeaturedHome,
       isPublic,
     };
   }, [
-      //id, title, slug, client, 
-      id, client, slug,
-      //sectors, year, tags, 
-      sector, year, tags,
-      //brief, writeUp, 
-      preview, summaryShortAuto, bodyMDX,
-      heroImageUrl, 
-      status, visibility, isFeaturedHome, isPublic
-    ]);
+    //id, title, slug, client,
+    id,
+    client,
+    slug,
+    //sectors, year, tags,
+    sector,
+    year,
+    tags,
+    //brief, writeUp,
+    preview,
+    summaryShortAuto,
+    bodyMDX,
+    heroImageUrl,
+    status,
+    visibility,
+    isFeaturedHome,
+    isPublic,
+  ]);
 
   const validation = useMemo(
-    () => CaseStudySchema.safeParse(candidateInput), 
+    () => CaseStudySchema.safeParse(candidateInput),
     [candidateInput]
   );
 
@@ -225,17 +233,17 @@ export default function NewCaseStudyPage() {
   function applyWrap(left: string, right: string) {
     const el = writeUpRef.current;
     if (!el) return;
-  
+
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
-  
+
     const before = writeUp.slice(0, start);
     const selected = writeUp.slice(start, end);
     const after = writeUp.slice(end);
-  
+
     const next = `${before}${left}${selected || "text"}${right}${after}`;
     setWriteUp(next);
-  
+
     // restore selection around original selection
     requestAnimationFrame(() => {
       el.focus();
@@ -244,23 +252,23 @@ export default function NewCaseStudyPage() {
       el.setSelectionRange(cursorStart, cursorEnd);
     });
   }
-  
+
   function applyPrefix(prefix: string) {
     const el = writeUpRef.current;
     if (!el) return;
-  
+
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
-  
+
     const before = writeUp.slice(0, start);
     const selected = writeUp.slice(start, end) || "item";
     const after = writeUp.slice(end);
-  
+
     const lines = selected.split("\n").map((l) => (l.trim() ? prefix + l : l));
     const next = `${before}${lines.join("\n")}${after}`;
     setWriteUp(next);
   }
-  
+
   function applyLink() {
     const url = prompt("Paste the URL:");
     if (!url) return;
@@ -269,15 +277,17 @@ export default function NewCaseStudyPage() {
 
   const writeUpRef = useRef<HTMLTextAreaElement | null>(null); //for the formatting toolbar (no markdown required)
 
-
-    // INPUT -> ZOD VALIDATION -> STORED AS PARSED OUTPUT -> PREVIEW PAGE
-   return (
+  // INPUT -> ZOD VALIDATION -> STORED AS PARSED OUTPUT -> PREVIEW PAGE
+  return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a demo template for creating/editing case studies. After creating a new case study,
-        you can preview them individually or as part of a mock database of case studies, where you can 
-        filter by client type, tags, etc. <br/><br/>
-        You can also see them on the public website if you set the status to &quot;Published&quot; and visibility to &quot;Public&quot;
+        This is a demo template for creating/editing case studies. After
+        creating a new case study, you can preview them individually or as part
+        of a mock database of case studies, where you can filter by client type,
+        tags, etc. <br />
+        <br />
+        You can also see them on the public website if you set the status to
+        &quot;Published&quot; and visibility to &quot;Public&quot;
       </ContextBanner>
 
       {/* <div className="row mt1"> */}
@@ -289,17 +299,17 @@ export default function NewCaseStudyPage() {
           <a href="#client-views">Client Views</a>
         </div>
       </div>
-      
-{/* --------------------------------------------------------------------------------- */}
-{/* CORE (REQUIRED) CONTENT */}
-{/* --------------------------------------------------------------------------------- */}
-      <div className="card card-new mt1 card--core"> 
+
+      {/* --------------------------------------------------------------------------------- */}
+      {/* CORE (REQUIRED) CONTENT */}
+      {/* --------------------------------------------------------------------------------- */}
+      <div className="card card-new mt1 card--core">
         {/* BASIC DETAILS (always visible, minimum path; only required steps) */}
         <section aria-labelledby="write-title">
-{/*           <h2 className="section-title-step" id="write-title">1) Write (required)</h2> */}
+          {/*           <h2 className="section-title-step" id="write-title">1) Write (required)</h2> */}
           <p className="section-kicker">
-            Minimum to create a case study: <strong>Client Name</strong> + <strong>Full write-up</strong>.
-            Everything else is optional.
+            Minimum to create a case study: <strong>Client Name</strong> +{" "}
+            <strong>Full write-up</strong>. Everything else is optional.
           </p>
 
           <div className="form-group">
@@ -307,9 +317,10 @@ export default function NewCaseStudyPage() {
               Client Name{" "}
               <span className="admin-label-required">(required)</span>
             </label>
-            <input className="input" 
-              value={client} 
-              onChange={(e) => setClient(e.target.value)} 
+            <input
+              className="input"
+              value={client}
+              onChange={(e) => setClient(e.target.value)}
             />
           </div>
 
@@ -321,22 +332,43 @@ export default function NewCaseStudyPage() {
               <span className="admin-label-required">(required)</span>
             </label>
             <p className="admin-hint">
-              Write something about the case study here. Any format is OK (it can be notes or a full write-up)
+              Write something about the case study here. Any format is OK (it
+              can be notes or a full write-up)
             </p>
 
             {/* Small formatting toolbar. TODO: make it better */}
             <div className="editor">
-              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
-                <button className="editor__btn" type="button" onClick={() => applyWrap("**", "**")}>
+              <div
+                className="editor__toolbar"
+                role="toolbar"
+                aria-label="Formatting"
+              >
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap("**", "**")}
+                >
                   Bold
                 </button>
-                <button className="editor__btn" type="button" onClick={() => applyWrap("*", "*")}>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyWrap("*", "*")}
+                >
                   Italic
                 </button>
-                <button className="editor__btn" type="button" onClick={() => applyPrefix("- ")}>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyPrefix("- ")}
+                >
                   Bullets
                 </button>
-                <button className="editor__btn" type="button" onClick={() => applyLink()}>
+                <button
+                  className="editor__btn"
+                  type="button"
+                  onClick={() => applyLink()}
+                >
                   <span className="text-ul">🔗 Link</span>
                 </button>
               </div>
@@ -357,7 +389,8 @@ export default function NewCaseStudyPage() {
               <span className="admin-label-optional">(optional)</span>
             </label>
             <p className="admin-hint">
-              Provide an image for this case study. If you don’t add one, a default image default image will be used.
+              Provide an image for this case study. If you don’t add one, a
+              default image default image will be used.
             </p>
             <div className="image-upload">
               <input
@@ -382,7 +415,7 @@ export default function NewCaseStudyPage() {
             )}
 
             {/* Always show a preview (fallback to default) */}
-{/*             <div style={{ marginTop: "0.75rem" }}>
+            {/*             <div style={{ marginTop: "0.75rem" }}>
               <p className="muted type-small">Preview</p>
               <img
                 src={heroImageUrl || DEFAULT_HERO_IMAGE_URL}
@@ -391,68 +424,83 @@ export default function NewCaseStudyPage() {
               />
             </div> */}
           </div>
-{/* --------------------------------------------------------------------------------- */}
-{/* END OF CORE (REQUIRED) CONTENT */}
-{/* --------------------------------------------------------------------------------- */}
-          
-        {/* ORGANIZE, TAG, CATEGORIZE (optional, collapsible) */}
-        <details className="admin-disclosure" id="organize">
-          <summary className="admin-disclosure__summary">
-            <div>
-{/*               <h2 className="section-title" style={{ margin:0 }}>
+          {/* --------------------------------------------------------------------------------- */}
+          {/* END OF CORE (REQUIRED) CONTENT */}
+          {/* --------------------------------------------------------------------------------- */}
+
+          {/* ORGANIZE, TAG, CATEGORIZE (optional, collapsible) */}
+          <details className="admin-disclosure" id="organize">
+            <summary className="admin-disclosure__summary">
+              <div>
+                {/*               <h2 className="section-title" style={{ margin:0 }}>
                 2) Organize, tag, categorize (optional)
               </h2> */}
-          {/* STICKY SAVE BAR */}
-          <div className="form-actions form-actions--underEditor">
-              <div className="form-actions__left">
-              {/* <div className="form-actions__right"> */}
+                {/* STICKY SAVE BAR */}
+                <div className="form-actions form-actions--underEditor">
+                  <div className="form-actions__left">
+                    {/* <div className="form-actions__right"> */}
 
-                {/* Primary action – Save + Preview */}
-                <button
-                  className="btnPrimary"
-                  type="button"
-                  onClick={save}
-                  disabled={!validation.success}
-                  title={!validation.success ? "Fix validation errors first" : "Save"}
-                >
-                  Save + Preview
-                </button>
+                    {/* Primary action – Save + Preview */}
+                    <button
+                      className="btnPrimary"
+                      type="button"
+                      onClick={save}
+                      disabled={!validation.success}
+                      title={
+                        !validation.success
+                          ? "Fix validation errors first"
+                          : "Save"
+                      }
+                    >
+                      Save + Preview
+                    </button>
 
-                <div className="save-status">
-                  {validation.success ? "Ready to save." : "Can't save yet: Missing required fields (Client Name + Description)"}
+                    <div className="save-status">
+                      {validation.success
+                        ? "Ready to save."
+                        : "Can't save yet: Missing required fields (Client Name + Description)"}
+                    </div>
+                  </div>
                 </div>
-              </div>
-          </div>
-          {/* END OF STICKY SAVE BAR */}
+                {/* END OF STICKY SAVE BAR */}
 
-              <label className="form-label-larger" htmlFor="heroImage">
-                OPTIONAL FEATURES
-              </label>
-            </div>
-            <span className="muted">Expand</span>
-          </summary>
-          
-          <div className="form-row form-group" id="sector">
+                <label className="form-label-larger" htmlFor="heroImage">
+                  OPTIONAL FEATURES
+                </label>
+              </div>
+              <span className="muted">Expand</span>
+            </summary>
+
+            <div className="form-row form-group" id="sector">
               <div className="admin-disclosure__hint">
-                  You can choose to add categories and tags to this case study so it can be used in custom websites created exclusively for specific clients. 
-                  Tags and categories act like filters.<br /><br />
-
-                  {/* <p className="section-kicker" style={{ marginTop: "0.75rem" }}> */}
-                  <strong>Tags</strong> and <strong>Sectors</strong> create browse pages like
-                  <code> /tag/legislation </code>and<code>{" "} /sector/nonprofit</code>.<br /><br />
+                You can choose to add categories and tags to this case study so
+                it can be used in custom websites created exclusively for
+                specific clients. Tags and categories act like filters.
+                <br />
+                <br />
+                {/* <p className="section-kicker" style={{ marginTop: "0.75rem" }}> */}
+                <strong>Tags</strong> and <strong>Sectors</strong> create browse
+                pages like
+                <code> /tag/legislation </code>and
+                <code> /sector/nonprofit</code>.<br />
+                <br />
                 {/* </p> */}
-                  For example, you might tag a case study with &quot;Public Sector&quot; so it can appear in a custom page of all the public-sector–related case studies for potential new clients in that sector.
-                  {/* Maybe say something about ability to search? */}
+                For example, you might tag a case study with &quot;Public
+                Sector&quot; so it can appear in a custom page of all the
+                public-sector–related case studies for potential new clients in
+                that sector.
+                {/* Maybe say something about ability to search? */}
               </div>
-              <div className="form-field">          
+              <div className="form-field">
                 {/* <h2 className="cms-h3">Client type</h2> */}
                 <label className="form-label" htmlFor="sector">
                   Client Type / Sector
                   {/* Sectors */}
                 </label>
                 <p className="admin-hint">
-                  Select the primary client type (a.k.a. sector) for this case study.
-                </p>                
+                  Select the primary client type (a.k.a. sector) for this case
+                  study.
+                </p>
                 <select
                   id="sector"
                   className="input"
@@ -460,29 +508,30 @@ export default function NewCaseStudyPage() {
                   onChange={(e) => setSector(e.target.value)}
                 >
                   <option value="">Select a client type (sector)</option>
-                    {SECTOR_VALUES.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
+                  {SECTOR_VALUES.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
                 </select>
-{/*                 <p className="muted type-small">
+                {/*                 <p className="muted type-small">
                   For now, pick one sector; in the final version, you'll be able to pick multiple.
                 </p> */}
               </div>
-          </div>
+            </div>
 
-          <div className="form-row form-group" id="tags">
+            <div className="form-row form-group" id="tags">
               <div className="form-field">
                 {/* <h2 className="cms-h3">Tags</h2> */}
                 <label className="form-label" htmlFor="tags">
                   Tags
                 </label>
                 <p className="admin-hint">
-                  Short keywords that describe the work (e.g. <code>environment</code>,{" "}
-                  <code>local government</code>, <code>appropriations</code>).
-                  Tags are another way to create filter pages and “collections” for specific clients.
-                  Separate tags with commas.
+                  Short keywords that describe the work (e.g.{" "}
+                  <code>environment</code>, <code>local government</code>,{" "}
+                  <code>appropriations</code>). Tags are another way to create
+                  filter pages and “collections” for specific clients. Separate
+                  tags with commas.
                 </p>
                 <input
                   className="input"
@@ -497,54 +546,74 @@ export default function NewCaseStudyPage() {
                     .map((t) => t.trim())
                     .filter(Boolean)
                     .map((t) => (
-                      <span key={t} className="chip chip--soft">{t}</span>
+                      <span key={t} className="chip chip--soft">
+                        {t}
+                      </span>
                     ))}
                 </div>
               </div>
-          </div>
-
-          <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Status</label>
-              <select className="input" value={status} onChange={handleStatusChange}>
-                {CASE_STUDY_STATUS_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
-              </select>
             </div>
 
-            <div className="form-field">
-              <label className="form-label">Visibility</label>
-              <select className="input" value={visibility} onChange={handleVisibilityChange}>
-                {CASE_STUDY_VISIBILITY_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
-              </select>
+            <div className="form-row form-group">
+              <div className="form-field">
+                <label className="form-label">Status</label>
+                <select
+                  className="input"
+                  value={status}
+                  onChange={handleStatusChange}
+                >
+                  {CASE_STUDY_STATUS_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-field">
+                <label className="form-label">Visibility</label>
+                <select
+                  className="input"
+                  value={visibility}
+                  onChange={handleVisibilityChange}
+                >
+                  {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className="form-group">
-            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
-            <input
-              className="input"
-              value={slug}
-              placeholder={autoSlug}
-              onChange={(e) => setSlug(e.target.value)}
-              onBlur={() => {
-                if (!slug.trim() && autoSlug) setSlug(autoSlug);
-              }}
-            />
-          </div>
+            <div className="form-group">
+              <label className="form-label">
+                Unique identifier for URL path{" "}
+                <em>(defaults to client name if not set by user)</em>
+              </label>
+              <input
+                className="input"
+                value={slug}
+                placeholder={autoSlug}
+                onChange={(e) => setSlug(e.target.value)}
+                onBlur={() => {
+                  if (!slug.trim() && autoSlug) setSlug(autoSlug);
+                }}
+              />
+            </div>
 
-          
-{/* --------------------------------------------------------------------------------- */}
+            {/* --------------------------------------------------------------------------------- */}
 
-{/* ADVANCED UI. Keep truly advanced stuff behind showAdvanced for now. set showAdvanced to 1 to make all this visible */}
-      {showAdvanced && (
-        <>
-        <fieldset className="form-group">
-          <legend className="form-label">Outcomes (advanced)</legend>
-          {/* outcomes editing UI here */}
-        </fieldset>
+            {/* ADVANCED UI. Keep truly advanced stuff behind showAdvanced for now. set showAdvanced to 1 to make all this visible */}
+            {showAdvanced && (
+              <>
+                <fieldset className="form-group">
+                  <legend className="form-label">Outcomes (advanced)</legend>
+                  {/* outcomes editing UI here */}
+                </fieldset>
 
-        <div className="form-row form-group" id="sectors-checkboxes">
-{/*             <div className="form-field">
+                <div className="form-row form-group" id="sectors-checkboxes">
+                  {/*             <div className="form-field">
               <label className="form-label">Sectors</label>
               <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
                 {SECTOR_VALUES.map((v) => (
@@ -560,51 +629,63 @@ export default function NewCaseStudyPage() {
               </div>
             </div> */}
 
-            <div className="form-field form-field--small">
-              <label className="form-label">Year</label>
-              <input className="input" value={year} onChange={(e) => setYear(e.target.value)} />
-            </div>
-          </div>
+                  <div className="form-field form-field--small">
+                    <label className="form-label">Year</label>
+                    <input
+                      className="input"
+                      value={year}
+                      onChange={(e) => setYear(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-          {/* <div className="row" style={{ marginTop: "1rem" }}> */}
-          <div className="form-row form-group">
-            {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-            <div className="form-field">
-              <label className="form-label">Status</label>
-              <select className="input" value={status} onChange={handleStatusChange}>
-                {CASE_STUDY_STATUS_VALUES.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {/* <div className="row" style={{ marginTop: "1rem" }}> */}
+                <div className="form-row form-group">
+                  {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+                  <div className="form-field">
+                    <label className="form-label">Status</label>
+                    <select
+                      className="input"
+                      value={status}
+                      onChange={handleStatusChange}
+                    >
+                      {CASE_STUDY_STATUS_VALUES.map((v) => (
+                        <option key={v} value={v}>
+                          {v}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-            {/* <div style={{ flex: 1, minWidth: 220 }}> */}
-            <div className="form-field">
-              <label className="form-label">Visibility</label>
-              <select
-                className="input"
-                value={visibility}
-                onChange={handleVisibilityChange}
-              >
-                {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+                  {/* <div style={{ flex: 1, minWidth: 220 }}> */}
+                  <div className="form-field">
+                    <label className="form-label">Visibility</label>
+                    <select
+                      className="input"
+                      value={visibility}
+                      onChange={handleVisibilityChange}
+                    >
+                      {CASE_STUDY_VISIBILITY_VALUES.map((v) => (
+                        <option key={v} value={v}>
+                          {v}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-          {/* <div style={{ marginTop: "1rem" }}> */}
-          <div className="form-group">
-            <label className="form-label">Tags (comma-separated)</label>
-            <input className="input" value={tags} onChange={(e) => setTags(e.target.value)} />
-          </div>
+                {/* <div style={{ marginTop: "1rem" }}> */}
+                <div className="form-group">
+                  <label className="form-label">Tags (comma-separated)</label>
+                  <input
+                    className="input"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                  />
+                </div>
 
-          {/* <div style={{ marginTop: "1rem" }}> */}
-{/*           <div className="form-group">
+                {/* <div style={{ marginTop: "1rem" }}> */}
+                {/*           <div className="form-group">
             <label className="form-label">Summary short (required)</label>
             <input
               className="input"
@@ -613,16 +694,14 @@ export default function NewCaseStudyPage() {
             />
           </div> */}
 
-{/*           OPTION: SHOW THE AUTO-GENERATED summaryShort
+                {/*           OPTION: SHOW THE AUTO-GENERATED summaryShort
           for now I'm removing it to reduce confusion */}
-{/*           <div className="form-group">
+                {/*           <div className="form-group">
             <label className="form-label">Summary short (auto)</label>
             <input className="input" value={summaryShortAuto} readOnly />
           </div> */}
 
-
-
-{/*           <div className="form-row">
+                {/*           <div className="form-row">
             <label className="row" style={{ gap: ".5rem" }}>
               <input
                 type="checkbox"
@@ -639,49 +718,58 @@ export default function NewCaseStudyPage() {
             </label>
           </div>
  */}
-          <div className="form-group">
-            <label className="form-label">Unique identifier for URL path <em>(defaults to client name if not set by user)</em></label>
-{/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
- */}            <input
-              className="input"
-              value={slug}
-              placeholder={autoSlug}
-              onChange={(e) => setSlug(e.target.value)}
-              onBlur={() => {
-                if (!slug.trim() && autoSlug) setSlug(autoSlug);
-              }}
-            />
-          </div>
+                <div className="form-group">
+                  <label className="form-label">
+                    Unique identifier for URL path{" "}
+                    <em>(defaults to client name if not set by user)</em>
+                  </label>
+                  {/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
+                   */}{" "}
+                  <input
+                    className="input"
+                    value={slug}
+                    placeholder={autoSlug}
+                    onChange={(e) => setSlug(e.target.value)}
+                    onBlur={() => {
+                      if (!slug.trim() && autoSlug) setSlug(autoSlug);
+                    }}
+                  />
+                </div>
 
-        <div className="card card-new mt">
-          <h3>Validation</h3>
-          <p>Check what needs to be added to/changed in your draft so you can &quot;publish&quot; it.</p>
-          {validation.success ? (
-            <p className="muted">✅ Valid (ready to save)</p>
-          ) : (
-            <pre className="error">
-              ❌ Invalid
-              {"\n\n"}
-              {JSON.stringify(validation.error.format(), null, 2)}
-            </pre>
-          )}
-        </div>
-        </>
-      )}
+                <div className="card card-new mt">
+                  <h3>Validation</h3>
+                  <p>
+                    Check what needs to be added to/changed in your draft so you
+                    can &quot;publish&quot; it.
+                  </p>
+                  {validation.success ? (
+                    <p className="muted">✅ Valid (ready to save)</p>
+                  ) : (
+                    <pre className="error">
+                      ❌ Invalid
+                      {"\n\n"}
+                      {JSON.stringify(validation.error.format(), null, 2)}
+                    </pre>
+                  )}
+                </div>
+              </>
+            )}
 
-{/* END OF ADVANCED UI. */}
-        </details>
-      
-
-
+            {/* END OF ADVANCED UI. */}
+          </details>
         </section>
       </div>
     </main>
   );
 }
-{/*         <div className="form-actions__cluster" aria-label="Publishing + save"> */}
-{/*         <div className="form-actions__toggles" aria-label="Publishing settings"> */}
-{/*           <button className="btn" type="button"
+{
+  /*         <div className="form-actions__cluster" aria-label="Publishing + save"> */
+}
+{
+  /*         <div className="form-actions__toggles" aria-label="Publishing settings"> */
+}
+{
+  /*           <button className="btn" type="button"
             onClick={() => setSlug(slugify(slug || title))}
             title="Turn title into URL path"
           >
@@ -690,15 +778,27 @@ export default function NewCaseStudyPage() {
             title="Turn title into URL path"
           >
             Turn title into URL path
-          </button> */}
+          </button> */
+}
 
-          {/* <div className="form-actions__left"> */}
-            {/* optional: keep empty, or put other tools here */}
-          {/* </div> */}
+{
+  /* <div className="form-actions__left"> */
+}
+{
+  /* optional: keep empty, or put other tools here */
+}
+{
+  /* </div> */
+}
 
-{/* ************************************************************************* */}
-{/* TEMPORARILY HIDDEN FOR CLEANER DEMO UI: RE-ENABLE LATER, ESSENTIAL FEATURES */}
-{/*           <div className="form-actions__toggles" aria-label="Publishing settings">
+{
+  /* ************************************************************************* */
+}
+{
+  /* TEMPORARILY HIDDEN FOR CLEANER DEMO UI: RE-ENABLE LATER, ESSENTIAL FEATURES */
+}
+{
+  /*           <div className="form-actions__toggles" aria-label="Publishing settings">
               <label className="toggle-pill">
                 <input
                   type="checkbox"
@@ -716,16 +816,35 @@ export default function NewCaseStudyPage() {
                 />
                 <span>Client Viewable (not on homepage, but viewable by clients)</span>
               </label>
-            </div> */}
-{/* ************************************************************************* */}
-        {/* </div> */}
+            </div> */
+}
+{
+  /* ************************************************************************* */
+}
+{
+  /* </div> */
+}
 
-          {/* </div> */}
-          {/* </div> */} {/* end of form-actions div */}
+{
+  /* </div> */
+}
+{
+  /* </div> */
+}
+{
+  /* end of form-actions div */
+}
 
-{/* end of card card-new div */}
-{/*         </div>
-      </section>  */}
-{/*       </div> */}
-{/* END OF CORE (REQUIRED) CONTENT */}
-
+{
+  /* end of card card-new div */
+}
+{
+  /*         </div>
+      </section>  */
+}
+{
+  /*       </div> */
+}
+{
+  /* END OF CORE (REQUIRED) CONTENT */
+}
