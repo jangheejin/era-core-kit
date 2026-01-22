@@ -2972,7 +2972,7 @@ fieldset.form-group > legend.form-label{
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  align-items: flex-start;
+  align-items: center;
   min-width: 160px;
 }
 
@@ -2989,10 +2989,43 @@ fieldset.form-group > legend.form-label{
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  text-align: center;
+  align-items: center;
 }
 
 .team-order-field.is-hidden {
   display: none;
+}
+
+.team-editor-actionColumn--toggle {
+  min-width: 140px;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-editor-footer {
+  margin-top: 1rem;
+}
+
+.team-basic-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.team-photo-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(0,0,0,.03);
+}
+
+.team-photo-section__header {
+  margin-bottom: 0.75rem;
+}
+
+.team-photo-section__header .type-h3 {
+  margin: 0 0 0.2rem;
 }
 
 .team-photo-grid {
@@ -3050,7 +3083,6 @@ fieldset.form-group > legend.form-label{
 }
 
 .team-bio-panel {
-  min-height: var(--bio-panel-min-height);
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,.12);
@@ -3058,6 +3090,7 @@ fieldset.form-group > legend.form-label{
 }
 
 .team-bio-panel--editor {
+  min-height: var(--bio-panel-min-height);
   background: rgba(0,0,0,.02);
 }
 
@@ -3068,7 +3101,16 @@ fieldset.form-group > legend.form-label{
 
 .team-bio-preview {
   margin-top: 0;
-  height: 100%;
+  background: rgba(0,0,0,.035);
+}
+
+.team-bio-preview__content {
+  min-height: 120px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,.7);
+  outline: none;
+  cursor: text;
 }
 
 .team-bio-preview__header {
@@ -3082,6 +3124,12 @@ fieldset.form-group > legend.form-label{
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+.pill--status-complete {
+  background: rgba(64, 170, 120, 0.18);
+  border-color: rgba(64, 170, 120, 0.4);
+  color: #1b6b45;
 }
 
 @media (min-width: 900px) {
