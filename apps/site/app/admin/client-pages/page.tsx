@@ -167,7 +167,7 @@ export default function AdminClientPages() {
               }}
             >
               <h2 className="type-h3" style={{ marginBottom: 0 }}>
-                What are client collections?
+                What are client pages?
               </h2>
               <Tooltip.Provider delayDuration={200}>
                 <Tooltip.Root>
@@ -175,7 +175,7 @@ export default function AdminClientPages() {
                     <button
                       className="infoButton"
                       type="button"
-                      aria-label="What are client collections?"
+                      aria-label="What are client pages?"
                     >
                       ?
                     </button>
@@ -186,8 +186,12 @@ export default function AdminClientPages() {
                       sideOffset={8}
                       className="tooltipContent"
                     >
-                      Client collections are saved, curated filtered pages with
-                      an optional intro and shareable URL.
+                      Client pages are curated, custom websites that show a
+                      collection of case studies, tailored for a specific
+                      audience, plus an optional intro.
+                      {/* Client collections are saved, curated filtered pages with
+                      an optional intro and shareable URL. */}
+                      <br />
                       <br />
                       The Case Study Library filters let you preview a live
                       database view without saving it.
@@ -198,7 +202,7 @@ export default function AdminClientPages() {
               </Tooltip.Provider>
             </div>
             <p className="muted">
-              Curated landing pages built from case study filters for a specific
+              Curated websites built from case study filters for a specific
               audience.
             </p>
           </div>
@@ -240,7 +244,7 @@ export default function AdminClientPages() {
           }}
         >
           <div className="form-group">
-            <label className="form-label">Client collections library</label>
+            <label className="form-label">Client Pages Library</label>
             <select
               className="input"
               value={selectedSlug ?? ""}
