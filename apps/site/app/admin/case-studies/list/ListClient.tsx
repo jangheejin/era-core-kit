@@ -12,6 +12,7 @@ import {
   SECTOR_GROUPS,
   SECTOR_VALUES,
   sectorLabel,
+  sectorRouteSlug,
   type SectorValue,
   type CaseStudyType,
   normalizeTagList,
