@@ -68,10 +68,6 @@ export default function AdminPage() {
             content editing might feel. Changes are stored only in this browser
             (localStorage).
           </p>
-          <p className="muted">
-            Publish and mark a case study as featured to see it appear on the
-            public homepage and archive views.
-          </p>
         </div>
         <div className="admin-dashboard__stats">
           <div className="admin-stat">

@@ -117,14 +117,20 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
 }
 
 export default function ListClient() {
-  const { items: storeItems, resetToBaseline, upsertCaseStudy } = useAdminCaseStudies();
+  const {
+    items: storeItems,
+    resetToBaseline,
+    upsertCaseStudy,
+  } = useAdminCaseStudies();
   const items = useMemo(() => storeItems ?? [], [storeItems]);
 
   const didAutoFixRef = useRef(false);
   const [featuredSaveStateById, setFeaturedSaveStateById] = useState<
     Record<string, "idle" | "saving" | "saved" | "error">
   >({});
-  const featuredSaveTimersRef = useRef<Record<string, ReturnType<typeof setTimeout> | null>>({});
+  const featuredSaveTimersRef = useRef<
+    Record<string, ReturnType<typeof setTimeout> | null>
+  >({});
 
   const searchParams = useSearchParams();
   const savedId = searchParams.get("saved");
@@ -143,14 +149,16 @@ export default function ListClient() {
         tagFilter
           .split(",")
           .map((t) => t.trim())
-          .filter(Boolean),
+          .filter(Boolean)
       ),
-    [tagFilter],
+    [tagFilter]
   );
   const availableTags = useMemo(() => {
     const bySlug = new Map<string, string>();
     for (const item of items) {
-      const tags = normalizeTagsStrict(toStringArray(getLegacyValue(item, "tags")));
+      const tags = normalizeTagsStrict(
+        toStringArray(getLegacyValue(item, "tags"))
+      );
       for (const tag of tags) {
         const slug = tagSlug(tag);
         if (!slug || isCategoryTag(tag) || bySlug.has(slug)) continue;
@@ -166,9 +174,9 @@ export default function ListClient() {
           cs.status === "Published" &&
           cs.isPublic &&
           cs.visibility === "Public" &&
-          cs.isFeaturedHome,
+          cs.isFeaturedHome
       ).length,
-    [items],
+    [items]
   );
   const maxFeatured = 6;
 
@@ -213,7 +221,7 @@ export default function ListClient() {
     const current = items.find((item) => item.id === quickEditId);
     if (!current) return;
     const { visible } = splitCategoryTags(
-      normalizeTagsStrict(toStringArray(getLegacyValue(current, "tags"))),
+      normalizeTagsStrict(toStringArray(getLegacyValue(current, "tags")))
     );
     setTagDrafts((prev) => ({ ...prev, [current.id]: visible.join(", ") }));
   }, [items, quickEditId]);
@@ -231,14 +239,14 @@ export default function ListClient() {
     }, 2000);
   }
 
-  function setFeaturedSaveState(id: string, state: "idle" | "saving" | "saved" | "error") {
+  function setFeaturedSaveState(
+    id: string,
+    state: "idle" | "saving" | "saved" | "error"
+  ) {
     setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
   }
 
-  function applyFeaturedQuickSave(
-    cs: CaseStudyType,
-    next: boolean,
-  ) {
+  function applyFeaturedQuickSave(cs: CaseStudyType, next: boolean) {
     setFeaturedSaveState(cs.id, "saving");
     clearFeaturedSaveTimer(cs.id);
     const updated = updateMeta(cs.id, {
@@ -283,7 +291,8 @@ export default function ListClient() {
       getLegacyValue(existing, "primarySector") ??
       undefined;
 
-    const tagsRaw = getLegacyValue(patch, "tags") ?? getLegacyValue(existing, "tags");
+    const tagsRaw =
+      getLegacyValue(patch, "tags") ?? getLegacyValue(existing, "tags");
 
     const sectorsNorm = normalizeSectorsStrict([
       ...toStringArray(sectorsRaw),
@@ -294,9 +303,10 @@ export default function ListClient() {
 
     // primarySector must be in sectorsFinal
     const primaryCoerced = coerceSector(primaryRaw);
-    const primarySector: SectorValue = primaryCoerced && sectorsFinal.includes(primaryCoerced)
-      ? primaryCoerced
-      : sectorsFinal[0] ?? DEFAULT_CATEGORY;
+    const primarySector: SectorValue =
+      primaryCoerced && sectorsFinal.includes(primaryCoerced)
+        ? primaryCoerced
+        : (sectorsFinal[0] ?? DEFAULT_CATEGORY);
 
     const sectorsFixed = sectorsFinal.includes(primarySector)
       ? sectorsFinal
@@ -314,7 +324,10 @@ export default function ListClient() {
 
     const res = CaseStudySchema.safeParse(candidate);
     if (!res.success) {
-      console.warn("[admin] refusing to save invalid CaseStudy", res.error.format());
+      console.warn(
+        "[admin] refusing to save invalid CaseStudy",
+        res.error.format()
+      );
       return false;
     }
 
@@ -340,7 +353,10 @@ export default function ListClient() {
     if (missing.length === 0) return;
 
     for (const cs of missing) {
-      updateMeta(cs.id, { sectors: [DEFAULT_CATEGORY], primarySector: DEFAULT_CATEGORY });
+      updateMeta(cs.id, {
+        sectors: [DEFAULT_CATEGORY],
+        primarySector: DEFAULT_CATEGORY,
+      });
     }
 
     didAutoFixRef.current = true;
@@ -358,7 +374,9 @@ export default function ListClient() {
         ...toStringArray(getLegacyValue(cs, "primarySector")),
       ]);
 
-      const tags = normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags")));
+      const tags = normalizeTagsStrict(
+        toStringArray(getLegacyValue(cs, "tags"))
+      );
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
       if (categoryFilter && !sectors.includes(categoryFilter)) return false;
@@ -395,29 +413,35 @@ export default function ListClient() {
     const arr = [...base];
 
     if (sortMode === "Oldest") return arr.reverse();
-    if (sortMode === "AtoZ") return arr.sort((a, b) => clientLabelForSort(a).localeCompare(clientLabelForSort(b)));
-    return arr.sort((a, b) => clientLabelForSort(b).localeCompare(clientLabelForSort(a)));
+    if (sortMode === "AtoZ")
+      return arr.sort((a, b) =>
+        clientLabelForSort(a).localeCompare(clientLabelForSort(b))
+      );
+    return arr.sort((a, b) =>
+      clientLabelForSort(b).localeCompare(clientLabelForSort(a))
+    );
   }, [filtered, sortMode]);
 
   return (
     <main className="c-admin">
       <ContextBanner view="preview">
-        This is a temporary demo CMS database. You can filter by category, tags, and search.
-        Changes are stored only in your browser (localStorage).
+        This is a temporary demo CMS database. You can filter by category, tags,
+        and search. Changes are stored only in your browser (localStorage).
       </ContextBanner>
 
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">Case Study Library</h1>
         <div className="admin-page-actions">
-          <button className="btn-3" type="button" onClick={resetToBaseline}>
-            Reset demo data
-          </button>
           <Link className="btnPrimary" href="/admin/case-studies/new">
             New case study
           </Link>
         </div>
       </div>
-
+      <div className="admin-page-actions reset">
+        <button className="btn-3" type="button" onClick={resetToBaseline}>
+          Reset demo data
+        </button>
+      </div>
       {/* FILTER BAR */}
       <div className="card mt">
         <div className="row filterMenus">
@@ -432,7 +456,9 @@ export default function ListClient() {
           <select
             className="input"
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value as SectorValue | "")}
+            onChange={(e) =>
+              setCategoryFilter(e.target.value as SectorValue | "")
+            }
           >
             <option value="">Filter by category</option>
             {SECTOR_GROUPS.map((g) => (
@@ -469,7 +495,7 @@ export default function ListClient() {
             <option value="all">Match all tags</option>
           </select>
 
-{/*           <select
+          {/*           <select
             className="input"
             value={visibilityFilter}
             onChange={(e) => setVisibilityFilter(e.target.value)}
@@ -501,8 +527,16 @@ export default function ListClient() {
             className="btnPrimary"
             onClick={openClientPagePreview}
             disabled={!clientPagePreviewHref}
-            title={!clientPagePreviewHref ? "Select a category first" : "Open in a new tab"}
-            style={{ minWidth: 240, padding: ".85rem 1.5rem", fontSize: "1rem" }}
+            title={
+              !clientPagePreviewHref
+                ? "Select a category first"
+                : "Open in a new tab"
+            }
+            style={{
+              minWidth: 240,
+              padding: ".85rem 1.5rem",
+              fontSize: "1rem",
+            }}
           >
             Preview filtered page
           </button>
@@ -517,7 +551,8 @@ export default function ListClient() {
                 : "Pick a category or a single tag above to enable the preview button."}
             </span>
             <span className="muted type-small">
-              For multi-tag or category + tag combinations, use Client Pages to build a final page.
+              For multi-tag or category + tag combinations, use Client Pages to
+              build a final page.
             </span>
           </div>
         </div>
@@ -548,7 +583,8 @@ export default function ListClient() {
         <div className="dbListGrid">
           {sorted.map((cs) => {
             const isHighlighted = cs.id === savedId || cs.id === editId;
-            const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
+            const clientLabel =
+              (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
             const isQuickEditing = quickEditId === cs.id;
 
             const sectorsRaw = normalizeSectorsStrict([
@@ -567,19 +603,26 @@ export default function ListClient() {
             const isPublished = cs.status === "Published";
             const isFeatured = Boolean(cs.isFeaturedHome);
             const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
-            const { visible: visibleTags, hidden: hiddenTags } = splitCategoryTags(
-              normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags"))),
-            );
+            const { visible: visibleTags, hidden: hiddenTags } =
+              splitCategoryTags(
+                normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags")))
+              );
             const tagDraft = tagDrafts[cs.id] ?? visibleTags.join(", ");
             const tagListId = `quick-edit-tag-options-${cs.id}`;
-            const secondarySectors = sectors.filter((sector) => sector !== primary);
+            const secondarySectors = sectors.filter(
+              (sector) => sector !== primary
+            );
 
             return (
               <div
                 key={cs.id}
                 id={`cs-${cs.id}`}
                 className={`card dbItem ${isQuickEditing ? "dbItem--editing" : ""}`}
-                style={isHighlighted ? { outline: "2px solid var(--brand)", outlineOffset: 2 } : undefined}
+                style={
+                  isHighlighted
+                    ? { outline: "2px solid var(--brand)", outlineOffset: 2 }
+                    : undefined
+                }
               >
                 <div className="dbItemHeader">
                   <div className="dbItemMain">
@@ -598,13 +641,21 @@ export default function ListClient() {
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
-                          <Link className="btnSmall" href={`/admin/case-studies/edit/${cs.slug}`}>
+                          <Link
+                            className="btnSmall"
+                            href={`/admin/case-studies/edit/${cs.slug}`}
+                          >
                             Edit
                           </Link>
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
-                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
-                            Open full editor to edit the content of this case study
+                          <Tooltip.Content
+                            side="top"
+                            sideOffset={8}
+                            className="tooltipContent"
+                          >
+                            Open full editor to edit the content of this case
+                            study
                             <Tooltip.Arrow className="tooltipArrow" />
                           </Tooltip.Content>
                         </Tooltip.Portal>
@@ -618,7 +669,11 @@ export default function ListClient() {
                             className="btnSmall hasTooltip changeSettings"
                             type="button"
                             data-tooltip="Edit categories & change status"
-                            onClick={() => setQuickEditId((prev) => (prev === cs.id ? null : cs.id))}
+                            onClick={() =>
+                              setQuickEditId((prev) =>
+                                prev === cs.id ? null : cs.id
+                              )
+                            }
                             aria-expanded={isQuickEditing}
                           >
                             {isQuickEditing ? "Close" : "Change Settings"}
@@ -626,7 +681,11 @@ export default function ListClient() {
                         </Tooltip.Trigger>
 
                         <Tooltip.Portal>
-                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
+                          <Tooltip.Content
+                            side="top"
+                            sideOffset={8}
+                            className="tooltipContent"
+                          >
                             Edit categories & change status
                             <Tooltip.Arrow className="tooltipArrow" />
                           </Tooltip.Content>
@@ -649,7 +708,9 @@ export default function ListClient() {
                             <div className="dbPillStack">
                               {sectors.length === 0 ? (
                                 <div className="dbPillRow">
-                                  <span className="pill pill--muted">Uncategorized</span>
+                                  <span className="pill pill--muted">
+                                    Uncategorized
+                                  </span>
                                 </div>
                               ) : (
                                 <>
@@ -661,7 +722,10 @@ export default function ListClient() {
                                   {secondarySectors.length > 0 && (
                                     <div className="dbPillRow dbPillRow--secondary">
                                       {secondarySectors.map((sector) => (
-                                        <span key={sector} className="pill pill--cat pill--secondary">
+                                        <span
+                                          key={sector}
+                                          className="pill pill--cat pill--secondary"
+                                        >
                                           {sectorLabel(sector)}
                                         </span>
                                       ))}
@@ -673,8 +737,13 @@ export default function ListClient() {
                           </div>
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
-                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
-                            Click Change Settings to quick edit categories and publishing status.
+                          <Tooltip.Content
+                            side="top"
+                            sideOffset={8}
+                            className="tooltipContent"
+                          >
+                            Click Change Settings to quick edit categories,
+                            tags, and publishing status.
                             <Tooltip.Arrow className="tooltipArrow" />
                           </Tooltip.Content>
                         </Tooltip.Portal>
@@ -692,13 +761,22 @@ export default function ListClient() {
                               >
                                 {isPublished ? "Published" : "Draft"}
                               </span>
-                              {isFeatured ? <span className="pill pill--audience">Featured</span> : null}
+                              {isFeatured ? (
+                                <span className="pill pill--audience">
+                                  Featured
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
-                          <Tooltip.Content side="top" sideOffset={8} className="tooltipContent">
-                            Click Change Settings to quick edit categories and publishing status.
+                          <Tooltip.Content
+                            side="top"
+                            sideOffset={8}
+                            className="tooltipContent"
+                          >
+                            Click Change Settings to quick edit categories and
+                            publishing status.
                             <Tooltip.Arrow className="tooltipArrow" />
                           </Tooltip.Content>
                         </Tooltip.Portal>
@@ -709,12 +787,19 @@ export default function ListClient() {
 
                 {/* EDIT PANEL */}
                 {isQuickEditing && (
-                  <div className="dbEditPanel" aria-label={`Editing ${clientLabel}`}>
+                  <div
+                    className="dbEditPanel"
+                    aria-label={`Editing ${clientLabel}`}
+                  >
                     <div className="dbEditBlock">
                       <div className="dbEditBlockTitle">Edit Categories</div>
 
-                      <div className="muted type-small" style={{ marginBottom: 8 }}>
-                        Click a category to remove it. Use the dropdown to add another.
+                      <div
+                        className="muted type-small"
+                        style={{ marginBottom: 8 }}
+                      >
+                        Click a category to remove it. Use the dropdown to add
+                        another.
                       </div>
 
                       {sectors.length > 0 ? (
@@ -733,8 +818,13 @@ export default function ListClient() {
                             value={primary}
                             onChange={(e) => {
                               const v = e.target.value as SectorValue;
-                              const next = sectors.includes(v) ? sectors : [v, ...sectors];
-                              updateMeta(cs.id, { sectors: next, primarySector: v });
+                              const next = sectors.includes(v)
+                                ? sectors
+                                : [v, ...sectors];
+                              updateMeta(cs.id, {
+                                sectors: next,
+                                primarySector: v,
+                              });
                             }}
                           >
                             {SECTOR_GROUPS.map((group) => (
@@ -747,7 +837,9 @@ export default function ListClient() {
                               </optgroup>
                             ))}
                           </select>
-                          <span className="muted type-small">Shown on cards.</span>
+                          <span className="muted type-small">
+                            Shown on cards.
+                          </span>
                         </div>
                       ) : null}
 
@@ -758,14 +850,21 @@ export default function ListClient() {
                           const v = e.target.value as "" | SectorValue;
                           if (!v) return;
                           if (sectors.includes(v)) return;
-                          updateMeta(cs.id, { sectors: [...sectors, v], primarySector: primary });
+                          updateMeta(cs.id, {
+                            sectors: [...sectors, v],
+                            primarySector: primary,
+                          });
                         }}
                       >
                         <option value="">Add category…</option>
                         {SECTOR_GROUPS.map((g) => (
                           <optgroup key={g.id} label={g.label}>
                             {g.values.map((v) => (
-                              <option key={v} value={v} disabled={sectors.includes(v)}>
+                              <option
+                                key={v}
+                                value={v}
+                                disabled={sectors.includes(v)}
+                              >
                                 {sectorLabel(v)}
                               </option>
                             ))}
@@ -781,9 +880,16 @@ export default function ListClient() {
                             className="pill pill--cat pill--removable"
                             onClick={() => {
                               const nextRaw = sectors.filter((x) => x !== s);
-                              const next = nextRaw.length ? nextRaw : [DEFAULT_CATEGORY];
-                              const nextPrimary = next.includes(primary) ? primary : next[0];
-                              updateMeta(cs.id, { sectors: next, primarySector: nextPrimary });
+                              const next = nextRaw.length
+                                ? nextRaw
+                                : [DEFAULT_CATEGORY];
+                              const nextPrimary = next.includes(primary)
+                                ? primary
+                                : next[0];
+                              updateMeta(cs.id, {
+                                sectors: next,
+                                primarySector: nextPrimary,
+                              });
                             }}
                             title="Remove category"
                           >
@@ -791,31 +897,44 @@ export default function ListClient() {
                           </button>
                         ))}
                       </div>
-
                     </div>
 
                     <div className="dbEditBlock">
                       <div className="dbEditBlockTitle">Tags (optional)</div>
-                      <p className="muted type-small" style={{ marginBottom: 8 }}>
-                        Auto-suggests existing tags. Tags are title-cased and duplicates are removed on save.
+                      <p
+                        className="muted type-small"
+                        style={{ marginBottom: 8 }}
+                      >
+                        Auto-suggests existing tags.{" "}
+                        {/* Tags are title-cased and
+                        duplicates are removed on save. */}
                       </p>
                       <input
                         className="input input--tiny"
                         placeholder="Add tags (comma-separated)"
                         value={tagDraft}
                         onChange={(e) =>
-                          setTagDrafts((prev) => ({ ...prev, [cs.id]: e.target.value }))
+                          setTagDrafts((prev) => ({
+                            ...prev,
+                            [cs.id]: e.target.value,
+                          }))
                         }
                         onBlur={(e) => {
                           const nextTags = normalizeTagsStrict(
                             e.target.value
                               .split(",")
                               .map((t) => t.trim())
-                              .filter(Boolean),
+                              .filter(Boolean)
                           );
-                          const merged = normalizeTagsStrict([...hiddenTags, ...nextTags]);
+                          const merged = normalizeTagsStrict([
+                            ...hiddenTags,
+                            ...nextTags,
+                          ]);
                           updateMeta(cs.id, { tags: merged });
-                          setTagDrafts((prev) => ({ ...prev, [cs.id]: nextTags.join(", ") }));
+                          setTagDrafts((prev) => ({
+                            ...prev,
+                            [cs.id]: nextTags.join(", "),
+                          }));
                         }}
                         list={tagListId}
                       />
@@ -838,17 +957,27 @@ export default function ListClient() {
                     <div className="dbEditBlock">
                       <div className="dbEditBlockTitle">Publishing Status</div>
 
-                      <div className="row" style={{ gap: ".5rem", flexWrap: "wrap" }}>
+                      <div
+                        className="row"
+                        style={{ gap: ".5rem", flexWrap: "wrap" }}
+                      >
                         <select
                           className="input input--tiny"
                           value={cs.status}
                           onChange={(e) => {
-                            const nextStatus = e.target.value as CaseStudyType["status"];
+                            const nextStatus = e.target
+                              .value as CaseStudyType["status"];
                             updateMeta(cs.id, {
                               status: nextStatus,
-                              visibility: nextStatus === "Published" ? "Public" : "Internal",
+                              visibility:
+                                nextStatus === "Published"
+                                  ? "Public"
+                                  : "Internal",
                               isPublic: nextStatus === "Published",
-                              isFeaturedHome: nextStatus === "Published" ? cs.isFeaturedHome : false,
+                              isFeaturedHome:
+                                nextStatus === "Published"
+                                  ? cs.isFeaturedHome
+                                  : false,
                             });
                           }}
                         >
@@ -858,12 +987,17 @@ export default function ListClient() {
                             </option>
                           ))}
                         </select>
-                        <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                        <label
+                          className="row"
+                          style={{ gap: ".4rem", alignItems: "center" }}
+                        >
                           <input
                             type="checkbox"
                             checked={Boolean(cs.isFeaturedHome) && isPublished}
                             disabled={!isPublished}
-                            onChange={(e) => applyFeaturedQuickSave(cs, e.target.checked)}
+                            onChange={(e) =>
+                              applyFeaturedQuickSave(cs, e.target.checked)
+                            }
                           />
                           <span className="type-small">
                             Feature on homepage ({featuredCount}/{maxFeatured})
@@ -885,8 +1019,13 @@ export default function ListClient() {
                           </span>
                         </label>
                       </div>
-                      <p className="muted type-small" style={{ marginTop: 6 }}>
-                        Only the first {maxFeatured} featured case studies appear on the homepage.
+                      <p className="muted type-small mt">
+                        Publish and mark a case study as featured to see it
+                        appear on the public homepage and archive views.
+                      </p>
+                      <p className="muted type-small" style={{ marginTop: 8 }}>
+                        Only the first {maxFeatured} featured case studies
+                        appear on the homepage.
                       </p>
                     </div>
 
