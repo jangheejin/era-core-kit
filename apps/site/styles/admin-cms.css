@@ -3663,7 +3663,7 @@ fieldset.form-group > legend.form-label{
 } */
 .heroImagePreview {
   display: block;
-  width: 360px;
+/*   width: 360px; */
   max-height: 200px;
   object-fit: cover;
   border-radius: 8;
@@ -3808,6 +3808,9 @@ hr.dot {
   color: #667085;
 }
 
+/* .mt.heroPreview > img {
+  max-width: 360px;
+} */
 /* div.work-mobile > section > div.work-spotlight__text > a {
 
 } */

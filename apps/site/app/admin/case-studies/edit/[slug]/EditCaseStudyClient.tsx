@@ -569,8 +569,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                   className="heroImagePreview"
                   src={heroImageUrl}
                   alt="Hero preview"
-                  width={640}
-                  height={360}
+                  width={272.81}
+                  height={153.455625}
                   unoptimized
                 />
               </div>
