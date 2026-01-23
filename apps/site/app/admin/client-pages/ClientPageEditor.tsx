@@ -165,7 +165,16 @@ export default function ClientPageEditor({ slug }: Props) {
     });
 
     return current !== baseline;
-  }, [name, desiredSlug, selected, selectedCategories, tags, tagMode, status, bodyMDX]);
+  }, [
+    name,
+    desiredSlug,
+    selected,
+    selectedCategories,
+    tags,
+    tagMode,
+    status,
+    bodyMDX,
+  ]);
 
   function handleSave(nextStatus: ClientPageStatus) {
     const nextTags = normalizeTagList(
@@ -272,9 +281,12 @@ export default function ClientPageEditor({ slug }: Props) {
 
       <div className="card mt">
         <p className="muted" style={{ marginTop: 0 }}>
-          Client pages combine categories and tags into a tailored, shareable
+          Build a focused, client-facing page by choosing categories and tags to
+          create a filtered collection of case studies. You can optionally add
+          an introduction. These pages are saved, editable, and shareable.
+          {/* Client pages combine categories and tags into a tailored, shareable
           page. Add a clear name, an optional intro to orient readers, and set
-          the publishing status before saving.
+          the publishing status before saving. */}
         </p>
         <div className="form-group">
           <label className="form-label">Page name</label>
@@ -458,8 +470,14 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         ) : null}
 
-        <div className="row" style={{ justifyContent: "space-between", marginTop: "1.5rem" }}>
-          <div className="row" style={{ gap: ".75rem", alignItems: "flex-start" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", marginTop: "1.5rem" }}
+        >
+          <div
+            className="row"
+            style={{ gap: ".75rem", alignItems: "flex-start" }}
+          >
             <div className="team-editor-actionColumn">
               <button
                 className="btnPrimary"

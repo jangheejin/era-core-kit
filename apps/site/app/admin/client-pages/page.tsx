@@ -70,9 +70,12 @@ export default function AdminClientPages() {
               </Tooltip.Provider>
             </div>
             <p className="muted">
-              Build a focused, client-facing page by choosing categories and
+              Client pages combine categories and tags into a tailored,
+              shareable page. Add a clear name, an optional intro to orient
+              readers, and set the publishing status before saving.
+              {/* Build a focused, client-facing page by choosing categories and
               tags, adding a short intro, and setting a publishing status. These
-              pages are saved, editable, and shareable.
+              pages are saved, editable, and shareable. */}
             </p>
           </div>
         </div>
