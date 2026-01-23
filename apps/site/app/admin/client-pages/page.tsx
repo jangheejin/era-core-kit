@@ -81,16 +81,19 @@ export default function AdminClientPages() {
       <div className="card mt">
         <div className="dbResultsHeader">
           <div className="dbResultsHeader__sort">
-            <span className="muted type-small">Library view</span>
+            <span className="muted type-small">
+              <b>Library View</b>: This list contains your saved client pages.
+              Choose one to edit or start a new page.
+            </span>
           </div>
           <p className="muted dbResultsHeader__count">
             Showing {pages.length} / {pages.length}
           </p>
         </div>
-        <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-          This list is your saved client pages. Choose one to edit or start a
+        {/* <p className="muted type-small" style={{ marginTop: ".5rem" }}>
+          This list contains your saved client pages. Choose one to edit or start a
           new page.
-        </p>
+        </p> */}
         <div className="dbListGrid">
           {pages.length ? (
             pages.map((page) => {
