@@ -2658,10 +2658,10 @@ fieldset.form-group > legend.form-label{
 }
  */
 
- .adminTopNav {
+.adminTopNav {
   position: sticky;
-  top: 0;
-  z-index: 50;
+  top: var(--siteHeaderH, 0px);
+  z-index: 1000;
   /* background: rgba(245, 245, 247, 0.92); */
   background: #4d8bff;
   backdrop-filter: blur(10px);
@@ -2942,6 +2942,16 @@ fieldset.form-group > legend.form-label{
   .adminTopNav__pill {
     width: 100%;
     justify-content: center;
+  }
+
+  .admin-page-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-page-actions .btn,
+  .admin-page-actions .btnPrimary {
+    width: auto;
   }
 
   .dbItemHeader,
@@ -3601,7 +3611,7 @@ fieldset.form-group > legend.form-label{
 /* Make the top nav actually be the top sticky thing */
 .adminTopNav {
   position: sticky;
-  top: 0;
+  top: var(--siteHeaderH, 0px);
   z-index: 1000;
   /*background: white;*/
 }

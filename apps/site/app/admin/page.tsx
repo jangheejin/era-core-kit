@@ -46,9 +46,6 @@ export default function AdminPage() {
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">Demo CMS Dashboard</h1>
         <div className="admin-page-actions">
-          <Link className="btnPrimary" href="/">
-            Public site
-          </Link>
           {isLoggedIn ? (
             <button className="btn" type="button" onClick={logout}>
               Log out
