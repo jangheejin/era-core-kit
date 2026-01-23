@@ -409,12 +409,12 @@ export default function ListClient() {
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">Case Study Library</h1>
         <div className="admin-page-actions">
-          <Link className="btnPrimary" href="/admin/case-studies/new">
-            New case study
-          </Link>
           <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>
+          <Link className="btnPrimary" href="/admin/case-studies/new">
+            New case study
+          </Link>
         </div>
       </div>
 

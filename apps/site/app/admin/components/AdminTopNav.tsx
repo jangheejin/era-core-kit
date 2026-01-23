@@ -50,12 +50,6 @@ const NAV: NavItem[] = [
     label: "Team Bios",
     match: (p) => p.startsWith("/admin/team"),
   },
-  {
-    href: "/admin/case-studies/new",
-    label: "+ New Case Study",
-    match: (p) => p.startsWith("/admin/case-studies/new"),
-    kind: "primary",
-  },
 ];
 
 /* function isActive(pathname: string, href: string) {
@@ -98,6 +92,9 @@ export function AdminTopNav() {
   const pathname = usePathname() ?? "";
   const [navOpen, setNavOpen] = useState(false);
   const contextLabel = getContextLabel(pathname);
+  const createActive =
+    pathname.startsWith("/admin/case-studies/new") ||
+    pathname.startsWith("/admin/client-pages/new");
 
   //improved sticky header (appear below context banner, but stick to top)
   const headerRef = useRef<HTMLElement | null>(null);
@@ -177,6 +174,25 @@ export function AdminTopNav() {
               </Link>
             );
           })}
+          <details className="adminTopNav__create">
+            <summary
+              className={[
+                "adminTopNav__pill",
+                "is-primary",
+                createActive ? "is-active" : "",
+              ].join(" ")}
+            >
+              + Create
+            </summary>
+            <div className="adminTopNav__createMenu">
+              <Link className="adminTopNav__createLink" href="/admin/case-studies/new">
+                New case study
+              </Link>
+              <Link className="adminTopNav__createLink" href="/admin/client-pages/new">
+                New client page
+              </Link>
+            </div>
+          </details>
         </nav>
 
         {/*         <div className="adminTopNav__right">
