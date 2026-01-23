@@ -58,7 +58,7 @@ export default function ClientPageEditor({ slug }: Props) {
 
   const [name, setName] = useState("");
   const [desiredSlug, setDesiredSlug] = useState("");
-  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">([
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([
     "",
   ]);
   const [tags, setTags] = useState("");
