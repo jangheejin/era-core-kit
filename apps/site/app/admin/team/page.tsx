@@ -320,6 +320,7 @@ export default function AdminTeamPage() {
                         onClick={() => removeTeamMember(member.id)}
                       >
                         Remove
+                        {/* Delete */}
                       </button>
                     </div>
                   </div>
@@ -524,7 +525,9 @@ export default function AdminTeamPage() {
                     type="button"
                     onClick={() => setShowMarkdownEditor((prev) => !prev)}
                   >
-                    {showMarkdownEditor ? "Hide text" : "Edit text"}
+                    {showMarkdownEditor
+                      ? "Hide text"
+                      : "Open Markdown Text Editor"}
                   </button>
                 </div>
                 <div
