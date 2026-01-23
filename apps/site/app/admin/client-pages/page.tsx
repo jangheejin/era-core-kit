@@ -102,9 +102,14 @@ export default function AdminClientPages() {
               const categories = page.filters.sectors;
               const primaryCategory = categories[0];
               const secondaryCategories = categories.slice(1);
-              const isPublished = page.filters.audience === "Public";
+              const isPublished = page.status === "Published";
+              const showCategories =
+                categories.length > 0 || tagsList.length === 0;
               return (
-                <section key={page.slug} className="card dbItem">
+                <section
+                  key={page.slug}
+                  className="card dbItem dbItem--clientPage"
+                >
                   <div className="dbItemHeader">
                     <div className="dbItemMain">
                       <div className="dbItemClient">{page.name}</div>
@@ -139,40 +144,42 @@ export default function AdminClientPages() {
                       : "No intro text yet — add one to orient readers."}
                   </div>
                   <div className="dbProps">
-                    <div className="dbProp">
-                      <div className="dbPropLabel">Categories</div>
-                      <div className="dbPillStack">
-                        {categories.length === 0 ? (
-                          <div className="dbPillRow">
-                            <span className="pill pill--muted">
-                              No categories
-                            </span>
-                          </div>
-                        ) : (
-                          <>
-                            {primaryCategory ? (
-                              <div className="dbPillRow">
-                                <span className="pill pill--cat pill--primary">
-                                  {sectorLabel(primaryCategory)}
-                                </span>
-                              </div>
-                            ) : null}
-                            {secondaryCategories.length > 0 && (
-                              <div className="dbPillRow dbPillRow--secondary">
-                                {secondaryCategories.map((sector) => (
-                                  <span
-                                    key={sector}
-                                    className="pill pill--cat pill--secondary"
-                                  >
-                                    {sectorLabel(sector)}
+                    {showCategories && (
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Categories</div>
+                        <div className="dbPillStack">
+                          {categories.length === 0 ? (
+                            <div className="dbPillRow">
+                              <span className="pill pill--muted">
+                                No categories
+                              </span>
+                            </div>
+                          ) : (
+                            <>
+                              {primaryCategory ? (
+                                <div className="dbPillRow">
+                                  <span className="pill pill--cat pill--primary">
+                                    {sectorLabel(primaryCategory)}
                                   </span>
-                                ))}
-                              </div>
-                            )}
-                          </>
-                        )}
+                                </div>
+                              ) : null}
+                              {secondaryCategories.length > 0 && (
+                                <div className="dbPillRow dbPillRow--secondary">
+                                  {secondaryCategories.map((sector) => (
+                                    <span
+                                      key={sector}
+                                      className="pill pill--cat pill--secondary"
+                                    >
+                                      {sectorLabel(sector)}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="dbProp">
                       <div className="dbPropLabel">Tags</div>
                       <div className="dbPillRow">
@@ -187,23 +194,18 @@ export default function AdminClientPages() {
                         )}
                       </div>
                     </div>
-                    {/*                     <div className="dbProp">
+                    <div className="dbProp">
                       <div className="dbPropLabel">Publishing Status</div>
-                        <div className="dbPillRow">
-                          <span
-                            className={`pill pill--status ${
-                              isPublished ? "pill--published" : "pill--draft"
-                            }`}
-                          >
-                            {isPublished ? "Published" : "Draft"}
-                          </span>
-                          <span className="pill pill--muted">
-                            {page.filters.audience === "Public"
-                              ? "Public"
-                              : "Client safe"}
-                          </span>
-                        </div>
-                      </div> */}
+                      <div className="dbPillRow">
+                        <span
+                          className={`pill pill--status ${
+                            isPublished ? "pill--published" : "pill--draft"
+                          }`}
+                        >
+                          {isPublished ? "Published" : "Draft"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div className="dbProps dbProps--inline">
                     <div className="dbProp">
