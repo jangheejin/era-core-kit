@@ -28,9 +28,6 @@ function pickSingleSector(item: CaseGridItem) {
 
   if (Array.isArray(item.sectors) && item.sectors.length) return String(item.sectors[0]);
 
-  // Back-compat with old shape
-  if (item.sector) return String(item.sector);
-
   // Last resort: if someone only provided a readable string, take the first chunk
   if (typeof item.sectorsReadable === "string" && item.sectorsReadable.trim()) {
     return item.sectorsReadable.split("·")[0].split(",")[0].trim();
