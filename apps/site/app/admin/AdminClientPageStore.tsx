@@ -22,20 +22,20 @@ import {
   SECTOR_VALUES,
 } from "@kit/schema";
 
-export type ClientPageAudience = "Public" | "ClientSafe";
+export type ClientPageStatus = "Draft" | "Published";
 export type ClientPageTagMode = "any" | "all";
 
 export type ClientPageFilters = {
   sectors: SectorValue[];
   tags: string[]; // human-readable labels; compare via tagSlug()
   tagMode: ClientPageTagMode;
-  audience: ClientPageAudience;
 };
 
 export type ClientPage = {
   id: string;
   name: string;
   slug: string;
+  status: ClientPageStatus;
   filters: ClientPageFilters;
   bodyMDX: string;
   createdAt: number;
@@ -48,6 +48,7 @@ type AdminClientPageContextValue = {
   createPage: (input: {
     name: string;
     desiredSlug?: string;
+    status?: ClientPageStatus;
     filters: Partial<ClientPageFilters>;
   }) => ClientPage;
 
@@ -69,12 +70,12 @@ const DEFAULT_PAGES: ClientPage[] = (() => {
     {
       id: "seed-pilot-program",
       name: "Pilot Program Case Studies",
-      slug: "pilot-program-case-studies",
+      slug: "pilot-programs",
+      status: "Published",
       filters: {
         sectors: [],
         tags: ["Pilot Program"],
         tagMode: "any",
-        audience: "Public",
       },
       bodyMDX:
         "Case studies from pilot programs that highlight measurable results and delivery wins.",
@@ -84,12 +85,12 @@ const DEFAULT_PAGES: ClientPage[] = (() => {
     {
       id: "seed-energy-resilience",
       name: "Energy Resilience Case Studies",
-      slug: "energy-resilience-case-studies",
+      slug: "energy-resilience",
+      status: "Published",
       filters: {
         sectors: ["Energy"],
         tags: ["Resilience"],
         tagMode: "any",
-        audience: "Public",
       },
       bodyMDX:
         "Energy-focused work that demonstrates resilience outcomes across programs.",
@@ -129,6 +130,13 @@ function normalizeSectors(input: unknown): SectorValue[] {
   return out;
 }
 
+function coerceStatus(raw: unknown): ClientPageStatus {
+  if (raw === "Published" || raw === "Draft") return raw;
+  if (raw === "Public") return "Published";
+  if (raw === "ClientSafe") return "Draft";
+  return "Draft";
+}
+
 function coerceFilters(raw: unknown): ClientPageFilters {
   const record = isPlainObject(raw) ? raw : {};
   const fromList = normalizeSectors(record.sectors);
@@ -139,14 +147,14 @@ function coerceFilters(raw: unknown): ClientPageFilters {
 
   const tagsRaw = record.tags;
   const tags = Array.isArray(tagsRaw)
-    ? normalizeTagsStrict(tagsRaw.filter((x): x is string => typeof x === "string"))
+    ? normalizeTagsStrict(
+        tagsRaw.filter((x): x is string => typeof x === "string")
+      )
     : [];
 
   const tagMode: ClientPageTagMode = record.tagMode === "all" ? "all" : "any";
-  const audience: ClientPageAudience =
-    record.audience === "ClientSafe" ? "ClientSafe" : "Public";
 
-  return { sectors, tags, tagMode, audience };
+  return { sectors, tags, tagMode };
 }
 
 function coerceBodyMDX(raw: unknown): string {
@@ -177,11 +185,18 @@ function loadLocalValidated(): ClientPage[] {
         typeof item.createdAt === "number" ? item.createdAt : Date.now();
       const updatedAt =
         typeof item.updatedAt === "number" ? item.updatedAt : createdAt;
+      const status = coerceStatus(
+        (item as Record<string, unknown>).status ??
+          (isPlainObject(item.filters)
+            ? (item.filters as Record<string, unknown>).audience
+            : undefined)
+      );
 
       ok.push({
         id: item.id,
         name: item.name,
         slug: item.slug,
+        status,
         filters: coerceFilters(item.filters),
         bodyMDX: coerceBodyMDX(item.bodyMDX),
         createdAt,
@@ -221,18 +236,23 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
 
   const getBySlug = useCallback(
     (slug: string) => pages.find((p) => p.slug === slug),
-    [pages],
+    [pages]
   );
 
   const ensureUniqueSlug = useCallback(
     (desiredSlug: string, currentId?: string) => {
-      const base = slugify(desiredSlug || "client-page");
+      const rawBase = slugify(desiredSlug || "client-page");
+      const stripped = rawBase
+        .replace(/(^|-)case-studies(-|$)/g, "$1")
+        .replace(/-+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      const base = stripped || "client-page";
       let candidate = base;
       let n = 2;
 
       const conflicts = (slug: string) =>
         pages.some(
-          (p) => p.slug === slug && (currentId ? p.id !== currentId : true),
+          (p) => p.slug === slug && (currentId ? p.id !== currentId : true)
         );
 
       while (conflicts(candidate)) {
@@ -240,7 +260,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       }
       return candidate;
     },
-    [pages],
+    [pages]
   );
 
   const upsertPage = useCallback((page: ClientPage) => {
@@ -267,6 +287,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
     (input: {
       name: string;
       desiredSlug?: string;
+      status?: ClientPageStatus;
       filters: Partial<ClientPageFilters>;
     }) => {
       const now = Date.now();
@@ -283,13 +304,13 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
         sectors: normalizeSectors(input.filters.sectors ?? []),
         tags: normalizeTagsStrict(input.filters.tags ?? []),
         tagMode: input.filters.tagMode ?? "any",
-        audience: input.filters.audience ?? "Public",
       };
 
       const page: ClientPage = {
         id,
         name,
         slug,
+        status: input.status ?? "Draft",
         filters,
         bodyMDX: "",
         createdAt: now,
@@ -299,7 +320,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       upsertPage(page);
       return page;
     },
-    [ensureUniqueSlug, upsertPage],
+    [ensureUniqueSlug, upsertPage]
   );
 
   const value = useMemo<AdminClientPageContextValue>(
@@ -312,7 +333,15 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       ensureUniqueSlug,
       resetPages,
     }),
-    [pages, createPage, upsertPage, removePage, getBySlug, ensureUniqueSlug, resetPages],
+    [
+      pages,
+      createPage,
+      upsertPage,
+      removePage,
+      getBySlug,
+      ensureUniqueSlug,
+      resetPages,
+    ]
   );
 
   return (
@@ -326,7 +355,7 @@ export function useAdminClientPages() {
   const ctx = useContext(AdminClientPageContext);
   if (!ctx) {
     throw new Error(
-      "useAdminClientPages must be used within <AdminClientPageProvider>",
+      "useAdminClientPages must be used within <AdminClientPageProvider>"
     );
   }
   return ctx;

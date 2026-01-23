@@ -80,8 +80,8 @@ export default function TeamPageClient() {
               <div className="team-grid">
                 {others.map((member) => (
                   <article key={member.id} className="team-card">
-                    <div className="team-card__photo">
-                      {member.imageUrl && (
+                    {member.imageUrl && (
+                      <div className="team-card__photo">
                         <Image
                           src={member.imageUrl}
                           alt={member.name}
@@ -89,8 +89,8 @@ export default function TeamPageClient() {
                           height={320}
                           unoptimized
                         />
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     <div className="team-card__body">
                       <h3 className="type-h3">{member.name}</h3>

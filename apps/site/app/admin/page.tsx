@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 //import { useMockCMS } from "./mockCMS";
 import { useAdminCaseStudies } from "./AdminCaseStudyStore";
+import { useAdminClientPages } from "./AdminClientPageStore";
 
 //import { CASE_STUDIES_FIXTURE } from '@kit/schema';
 
@@ -17,6 +18,7 @@ export default function AdminPage() {
   console.log("AdminPage mounted");
   //  const { items, addCaseStudy } = useAdminCaseStudies();
   const { items } = useAdminCaseStudies();
+  const { pages } = useAdminClientPages();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="c-admin">
+    <main className="c-admin admin-dashboard">
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">Demo CMS Dashboard</h1>
         <div className="admin-page-actions">
@@ -59,84 +61,82 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <p className="muted">
-        This is a temporary demo CMS so you can click around and see how content
-        editing might feel.
-        <br />
-        <br />
-        {/*         Here, you can:<br /><br />
-        <ul>
-          Create, edit, and preview case studies
-          View a database containing all case studies
-          Search and filter the database based on categories, tags, etc.
-          Create Client Pages tailored to specific clients
-        </ul> */}
-        {/* You can create and edit case studies (and preview them, both individually and as if they&apos;re part of a
-        database), but changes are stored only in your browser. Nothing persists to a server backend yet.<br /><br />
-        This is for preview purposes only. Your edits are saved in your browser and will stay there as long as you
-        don&apos;t clear your cache/use incognito mode.<br /><br /> */}
-        The demo case study database currently contains{" "}
-        <strong>{items.length}</strong> case studie
-        {items.length === 1 ? "y" : "s"} stored in this browser. Publish and
-        mark a case study as featured to see it appear on the public homepage
-        and archive views.
-      </p>
-
-      {isLoggedIn ? (
-        <div className="card mt">
-          <h2>Actions</h2>
-          <div
-            className="c-stack"
-            style={{ marginTop: ".75rem" /* , gap: ".75rem" */ }}
-          >
-            <div className="c-stack" /* style={{ gap: ".15rem" }} */>
-              <Link href="/admin/case-studies/list">
-                Manage Case Studies{/* Browse case studies */}
-              </Link>
-              <p className="muted type-small explanation">
-                View the Case Study Library to filter, edit, and preview all
-                case studies. This is content management.
-              </p>
-              <Link href="/admin/case-studies/new">Create new case study</Link>
-              <p className="muted type-small explanation">
-                Start a new case study in the Case Study Library, which is the
-                master list that feeds every client page and public view.
-              </p>
-            </div>
-            {/* <hr className="dot" /> */}
-            {/* <div className="c-stack" style={{ gap: ".15rem" }}> 
-              <Link href="/admin/case-studies/new">Create new case study</Link>
-              <p className="muted type-small explanation">
-                Start a new case study in the Case Study Library, which is the
-                master list that feeds every client page and public view.
-              </p>
-            </div>*/}
-            <div className="c-stack" /*  style={{ gap: ".15rem" }} */>
-              <Link href="/admin/client-pages">Manage client pages</Link>
-              <p className="muted type-small explanation">
-                View the Client Page Library. Client pages are custom websites
-                tailored to specific clients. They contain a curated selection
-                of case studies.
-                {/* Build curated client pages from library filters with a custom
-                intro. These are shareable, client-facing views of selected case
-                studies. */}
-              </p>
-              <Link href="/admin/client-pages">Create new client page</Link>
-              <p className="muted type-small explanation">
-                Build a new curated client page from library filters with an
-                optional custom intro. This is a shareable, client-facing view
-                of selected case studies.
-              </p>
-            </div>
-            <div className="c-stack" /* style={{ gap: ".15rem" }} */>
-              <Link href="/admin/team">Manage team bios</Link>
-              <p className="muted type-small explanation">
-                Update team member bios and photos that feed the public “Our
-                Team” page.
-              </p>
+      <section className="card mt admin-dashboard__hero">
+        <div className="admin-dashboard__hero-body">
+          <p className="muted">
+            This is a temporary demo CMS so you can click around and see how
+            content editing might feel. Changes are stored only in this browser
+            (localStorage).
+          </p>
+        </div>
+        <div className="admin-dashboard__stats">
+          <div className="admin-stat">
+            <div className="admin-stat__label">Case studies</div>
+            <div className="admin-stat__value">{items.length}</div>
+            <div className="admin-stat__meta">
+              {/* (6/8 featured on homepage) */}
             </div>
           </div>
+          <div className="admin-stat">
+            <div className="admin-stat__label">Client pages</div>
+            <div className="admin-stat__value">{pages.length}</div>
+            {/* <div className="admin-stat__meta">Saved audiences</div> */}
+          </div>
         </div>
+      </section>
+
+      {isLoggedIn ? (
+        <section className="admin-dashboard__grid mt">
+          <article className="card admin-dashboard__card">
+            <div className="admin-dashboard__card-header">
+              <h2 className="type-h3">Case studies</h2>
+              <span className="pill pill--muted">Library</span>
+            </div>
+            <p className="muted">
+              Review, filter, and edit every case study in the shared library.
+            </p>
+            <div className="admin-dashboard__card-actions">
+              <Link className="btnPrimary" href="/admin/case-studies/list">
+                Open library
+              </Link>
+              <Link className="btn" href="/admin/case-studies/new">
+                New case study
+              </Link>
+            </div>
+          </article>
+          <article className="card admin-dashboard__card">
+            <div className="admin-dashboard__card-header">
+              <h2 className="type-h3">Client pages</h2>
+              <span className="pill pill--muted">Curated</span>
+            </div>
+            <p className="muted">
+              Build client-specific pages from saved filters and a short intro.
+            </p>
+            <div className="admin-dashboard__card-actions">
+              <Link className="btnPrimary" href="/admin/client-pages">
+                View client pages
+              </Link>
+              <Link className="btn" href="/admin/client-pages/new">
+                New client page
+              </Link>
+            </div>
+          </article>
+          <article className="card admin-dashboard__card">
+            <div className="admin-dashboard__card-header">
+              <h2 className="type-h3">Team bios</h2>
+              <span className="pill pill--muted">Public page</span>
+            </div>
+            <p className="muted">
+              Update team member bios and photos that feed the public “Our Team”
+              page.
+            </p>
+            <div className="admin-dashboard__card-actions">
+              <Link className="btnPrimary" href="/admin/team">
+                Manage team
+              </Link>
+            </div>
+          </article>
+        </section>
       ) : (
         <div className="card mt">
           <h2>Locked</h2>

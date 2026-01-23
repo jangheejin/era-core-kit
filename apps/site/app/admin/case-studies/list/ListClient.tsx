@@ -431,7 +431,7 @@ export default function ListClient() {
 
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">Case Study Library</h1>
-        <div className="admin-page-actions">
+        <div className="admin-page-actions admin-page-actions--stacked">
           <Link className="btnPrimary" href="/admin/case-studies/new">
             New case study
           </Link>
@@ -440,7 +440,6 @@ export default function ListClient() {
           </button>
         </div>
       </div>
-
       {/* FILTER BAR */}
       <div className="card mt">
         <div className="row filterMenus">
@@ -699,55 +698,86 @@ export default function ListClient() {
                 {/* PROPERTY ROWS */}
                 {!isQuickEditing && (
                   <div className="dbProps">
-                    <Tooltip.Provider delayDuration={200}>
-                      <Tooltip.Root>
-                        <Tooltip.Trigger asChild>
-                          <div className="dbProp dbPropTooltipTarget">
-                            <div className="dbPropLabel">Categories</div>
-                            <div className="dbPillStack">
-                              {sectors.length === 0 ? (
-                                <div className="dbPillRow">
-                                  <span className="pill pill--muted">
-                                    Uncategorized
-                                  </span>
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="dbPillRow">
-                                    <span className="pill pill--cat pill--primary">
-                                      {sectorLabel(primary)}
-                                    </span>
-                                  </div>
-                                  {secondarySectors.length > 0 && (
-                                    <div className="dbPillRow dbPillRow--secondary">
-                                      {secondarySectors.map((sector) => (
-                                        <span
-                                          key={sector}
-                                          className="pill pill--cat pill--secondary"
-                                        >
-                                          {sectorLabel(sector)}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                            </div>
+                    <div className="dbProp">
+                      <div className="dbPropLabel">Categories</div>
+                      <div className="dbPillStack dbCategoryRows">
+                        {sectors.length === 0 ? (
+                          <div className="dbPillRow">
+                            <span className="pill pill--muted">
+                              Uncategorized
+                            </span>
                           </div>
-                        </Tooltip.Trigger>
-                        <Tooltip.Portal>
-                          <Tooltip.Content
-                            side="top"
-                            sideOffset={8}
-                            className="tooltipContent"
-                          >
-                            Click Change Settings to quick edit categories and
-                            publishing status.
-                            <Tooltip.Arrow className="tooltipArrow" />
-                          </Tooltip.Content>
-                        </Tooltip.Portal>
-                      </Tooltip.Root>
-                    </Tooltip.Provider>
+                        ) : (
+                          <>
+                            <Tooltip.Provider delayDuration={200}>
+                              <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                  <div className="dbCategoryRow">
+                                    <span className="dbCategoryLabel">
+                                      Primary Category:
+                                    </span>
+                                    <div className="dbPillRow">
+                                      <span className="pill pill--cat pill--primary">
+                                        {sectorLabel(primary)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                  <Tooltip.Content
+                                    side="top"
+                                    sideOffset={8}
+                                    className="tooltipContent"
+                                  >
+                                    The primary category is the main sector
+                                    shown on cards and summaries. Click Change
+                                    Settings to quick edit categories, tags, and
+                                    publishing status.
+                                    <Tooltip.Arrow className="tooltipArrow" />
+                                  </Tooltip.Content>
+                                </Tooltip.Portal>
+                              </Tooltip.Root>
+                            </Tooltip.Provider>
+                            {secondarySectors.length > 0 && (
+                              <Tooltip.Provider delayDuration={200}>
+                                <Tooltip.Root>
+                                  <Tooltip.Trigger asChild>
+                                    <div className="dbCategoryRow">
+                                      <span className="dbCategoryLabel">
+                                        Additional Categories:
+                                      </span>
+                                      <div className="dbPillRow dbPillRow--secondary">
+                                        {secondarySectors.map((sector) => (
+                                          <span
+                                            key={sector}
+                                            className="pill pill--cat pill--secondary"
+                                          >
+                                            {sectorLabel(sector)}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content
+                                      side="top"
+                                      sideOffset={8}
+                                      className="tooltipContent"
+                                    >
+                                      Additional categories capture secondary
+                                      sectors that also apply. Click Change
+                                      Settings to quick edit categories, tags,
+                                      and publishing status.
+                                      <Tooltip.Arrow className="tooltipArrow" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
 
                     <Tooltip.Provider delayDuration={200}>
                       <Tooltip.Root>
@@ -904,8 +934,9 @@ export default function ListClient() {
                         className="muted type-small"
                         style={{ marginBottom: 8 }}
                       >
-                        Auto-suggests existing tags. Tags are title-cased and
-                        duplicates are removed on save.
+                        Auto-suggests existing tags.{" "}
+                        {/* Tags are title-cased and
+                        duplicates are removed on save. */}
                       </p>
                       <input
                         className="input input--tiny"
@@ -1017,7 +1048,11 @@ export default function ListClient() {
                           </span>
                         </label>
                       </div>
-                      <p className="muted type-small" style={{ marginTop: 6 }}>
+                      <p className="muted type-small mt">
+                        Publish and mark a case study as featured to see it
+                        appear on the public homepage and archive views.
+                      </p>
+                      <p className="muted type-small" style={{ marginTop: 8 }}>
                         Only the first {maxFeatured} featured case studies
                         appear on the homepage.
                       </p>

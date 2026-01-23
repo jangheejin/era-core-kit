@@ -73,6 +73,7 @@ export function OurWorkClient({
   }
 
   const detailHref = `${basePath}/${selected.slug}${demo ? "?demo=1" : ""}`;
+  const spotlight = selected ?? featured[0];
 
   return (
     <main>
@@ -90,6 +91,41 @@ export function OurWorkClient({
           <p className="type-body work-grid__label">
             Select a case study to view its story below
           </p>
+
+          {spotlight && (
+            <div className="work-mobile">
+              <section className="work-spotlight" aria-label="Featured case study">
+                <div className="work-spotlight__text">
+                  <p className="type-small work-spotlight__label">Spotlight</p>
+                  <h2 className="type-h2 work-spotlight__title">{spotlight.client}</h2>
+                  <p className="type-body work-spotlight__summary">{spotlight.summary}</p>
+                  <a href={detailHref} className="c-button c-button--alt2 work-spotlight__link">
+                    View full case study
+                  </a>
+                </div>
+                {spotlight.imageUrl && (
+                  <div className="work-spotlight__media">
+                    <img src={spotlight.imageUrl} alt={spotlight.client} loading="lazy" />
+                  </div>
+                )}
+              </section>
+              <div className="work-mobile-grid" aria-label="Case study grid">
+                {featured.map((cs) => (
+                  <a key={cs.slug} href={`${basePath}/${cs.slug}${demo ? "?demo=1" : ""}`} className="work-mobile-card">
+                    {cs.imageUrl && (
+                      <div className="work-mobile-card__media">
+                        <img src={cs.imageUrl} alt={cs.client} loading="lazy" />
+                      </div>
+                    )}
+                    <div className="work-mobile-card__body">
+                      <h3 className="type-h3 work-mobile-card__title">{cs.client}</h3>
+                      <p className="type-small work-mobile-card__summary">{cs.summary}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="work-grid-shell">
             <button

@@ -81,6 +81,11 @@
     row-gap: var(--space-3);
   }
 
+  .c-section--intro.has-intro-image .intro-copy {
+    padding-right: 0;
+    max-width: none;
+  }
+
   .c-section--intro .intro-image {
     position: static;
     margin-top: var(--space-3);

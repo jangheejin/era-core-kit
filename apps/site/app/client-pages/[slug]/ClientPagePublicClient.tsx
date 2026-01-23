@@ -14,15 +14,12 @@ import { Markdown } from "@/components/Markdown";
 import { useSearchParams } from "next/navigation";
 
 function matchesClientPage(cs: CaseStudyType, page: ClientPage) {
-  const { sectors, tags, tagMode, audience } = page.filters;
+  const { sectors, tags, tagMode } = page.filters;
 
+  if (page.status !== "Published") return false;
   if (cs.status !== "Published") return false;
-  if (audience === "Public") {
-    if (!cs.isPublic) return false;
-    if (cs.visibility !== "Public") return false;
-  } else if (cs.visibility === "Internal") {
-    return false;
-  }
+  if (!cs.isPublic) return false;
+  if (cs.visibility !== "Public") return false;
 
   if (Array.isArray(sectors) && sectors.length) {
     const csSectors = cs.sectors ?? [];
@@ -70,6 +67,25 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
           <h1 className="type-h2">Client page not found</h1>
           <p className="muted">
             No client page exists with slug: <code>{slug}</code>
+          </p>
+          <Link href="/admin/client-pages">Go to admin</Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (page.status !== "Published") {
+    return (
+      <main className="c-page">
+        <div className="c-container c-stack">
+          {safeBack ? (
+            <Link href={safeBack} className="muted">
+              {backLabel}
+            </Link>
+          ) : null}
+          <h1 className="type-h2">{page.name}</h1>
+          <p className="muted">
+            This client page is saved as a draft and is not yet published.
           </p>
           <Link href="/admin/client-pages">Go to admin</Link>
         </div>
