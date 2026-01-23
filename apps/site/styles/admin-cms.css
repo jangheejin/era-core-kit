@@ -99,6 +99,7 @@ the user fills out)
   font-family: var(--font-heading);
   text-transform: uppercase;
   font-size: var(--fs-h4);
+  text-align: center;
 }
 .btnSave {
   background: var(--brand-lighter-2);
@@ -3518,3 +3519,9 @@ flex-wrap: wrap;
 .muted.type-small.explanation{
   margin-top:.3em;
 }
+
+button.adminTopNav__toggle {
+  display: flex; align-items: center;
+  }
+  
+  
