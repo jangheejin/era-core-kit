@@ -65,8 +65,9 @@ export default function AdminPage() {
         <div className="admin-dashboard__hero-body">
           <p className="muted">
             This is a temporary demo CMS so you can click around and see how
-            content editing might feel. Changes are stored only in this browser
-            (localStorage).
+            content editing might feel.{" "}
+            {/* Changes are stored only in this browser
+            (localStorage). */}
           </p>
         </div>
         <div className="admin-dashboard__stats">
