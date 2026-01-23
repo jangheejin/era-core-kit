@@ -35,9 +35,14 @@ type NavItem = {
 const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
-  {
+  /*   {
     href: "/admin/case-studies/list",
     label: "Case Study Library",
+    match: (p) => p.startsWith("/admin/case-studies"),
+  }, */
+  {
+    href: "/admin/case-studies/list",
+    label: "Case Studies",
     match: (p) => p.startsWith("/admin/case-studies"),
   },
   {
