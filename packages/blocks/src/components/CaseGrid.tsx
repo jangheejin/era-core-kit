@@ -30,7 +30,9 @@ function pickSingleSector(item: CaseGridItem) {
 
   // Last resort: if someone only provided a readable string, take the first chunk
   if (typeof item.sectorsReadable === "string" && item.sectorsReadable.trim()) {
-    return item.sectorsReadable.split("·")[0].split(",")[0].trim();
+    const firstSegment = item.sectorsReadable.split("·")[0] ?? "";
+    const firstLabel = firstSegment.split(",")[0] ?? "";
+    return firstLabel.trim();
   }
 
   return "";
