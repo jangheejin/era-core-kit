@@ -59,8 +59,8 @@ export default function AdminClientPages() {
                       sideOffset={8}
                       className="tooltipContent"
                     >
-                      Client pages are curated collections of case studies for
-                      a specific audience, with optional intro text and a
+                      Client pages are curated collections of case studies for a
+                      specific audience, with optional intro text and a
                       shareable URL. Use them when you want a tailored view
                       beyond the main case study library.
                       <Tooltip.Arrow className="tooltipArrow" />
@@ -141,7 +141,9 @@ export default function AdminClientPages() {
                       <div className="dbPillStack">
                         {categories.length === 0 ? (
                           <div className="dbPillRow">
-                            <span className="pill pill--muted">No categories</span>
+                            <span className="pill pill--muted">
+                              No categories
+                            </span>
                           </div>
                         ) : (
                           <>
@@ -192,11 +194,11 @@ export default function AdminClientPages() {
                         >
                           {isPublished ? "Published" : "Draft"}
                         </span>
-                        <span className="pill pill--muted">
+                        {/*                         <span className="pill pill--muted">
                           {page.filters.audience === "Public"
                             ? "Public"
                             : "Client safe"}
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   </div>
@@ -221,7 +223,10 @@ export default function AdminClientPages() {
             <p className="muted">No client pages yet.</p>
           )}
         </div>
-        <div className="row" style={{ justifyContent: "flex-end", marginTop: "1rem" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "flex-end", marginTop: "1rem" }}
+        >
           <button className="btn-3" type="button" onClick={resetPages}>
             Reset demo data
           </button>
