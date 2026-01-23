@@ -426,7 +426,8 @@ export default function ListClient() {
     <main className="c-admin">
       <ContextBanner view="preview">
         This is a temporary demo CMS database. You can filter by category, tags,
-        and search. Changes are stored only in your browser (localStorage).
+        and search.
+        {/*  Changes are stored only in your browser (localStorage). */}
       </ContextBanner>
 
       <div className="admin-page-header">
