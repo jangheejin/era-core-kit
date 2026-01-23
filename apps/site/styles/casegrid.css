@@ -18,6 +18,10 @@ It caps column width so 1-2 items don't scale up to be huge*/
   justify-content: center;
 }
 
+#case-studies {
+  padding-bottom: var(--space-2);
+}
+
 .case-study-card__link {
   display: block;
   text-decoration: none;

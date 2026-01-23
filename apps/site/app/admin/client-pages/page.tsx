@@ -179,11 +179,8 @@ export default function AdminClientPages() {
 
   return (
     <main className="c-admin">
-      <div
-        className="row"
-        style={{ justifyContent: "space-between", marginTop: "1rem" }}
-      >
-        <h1 className="type-h2">Client pages</h1>
+      <div className="admin-page-header">
+        <h1 className="type-h2 admin-page-title">Client Page Library</h1>
         {!isEditing ? (
           <button className="btnPrimary" type="button" onClick={startNew}>
             New client page
@@ -251,9 +248,7 @@ export default function AdminClientPages() {
         <div className="card mt">
           <div className="dbResultsHeader">
             <div className="dbResultsHeader__sort">
-              <h2 className="type-h2" style={{ marginBottom: 0 }}>
-                Client Pages Database
-              </h2>
+              <span className="muted type-small">Library view</span>
             </div>
             <p className="muted dbResultsHeader__count">
               Showing {pages.length} / {pages.length}
@@ -267,6 +262,11 @@ export default function AdminClientPages() {
             {pages.length ? (
               pages.map((page) => {
                 const hasIntro = Boolean(page.bodyMDX?.trim());
+                const tagsList = normalizeTagList(page.filters.tags);
+                const categories = page.filters.sectors;
+                const primaryCategory = categories[0];
+                const secondaryCategories = categories.slice(1);
+                const isPublished = page.filters.audience === "Public";
                 return (
                   <section key={page.slug} className="card dbItem">
                     <div className="dbItemHeader">
@@ -275,6 +275,13 @@ export default function AdminClientPages() {
                         <div className="dbItemTitle">/{page.slug}</div>
                       </div>
                       <div className="dbActions">
+                        <Link
+                          className="btnSmall"
+                          href={`/admin/client-pages/mock/${page.slug}`}
+                          target="_blank"
+                        >
+                          Preview
+                        </Link>
                         <button
                           className="btnSmall"
                           type="button"
@@ -289,11 +296,6 @@ export default function AdminClientPages() {
                         >
                           Remove
                         </button>
-                        <span className="pill pill--status">
-                          {page.filters.audience === "Public"
-                            ? "Published"
-                            : "Draft"}
-                        </span>
                       </div>
                     </div>
                     <div className="dbSummary">
@@ -302,6 +304,66 @@ export default function AdminClientPages() {
                         : "No intro text yet — add one to orient readers."}
                     </div>
                     <div className="dbProps">
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Categories</div>
+                        <div className="dbPillStack">
+                          {categories.length === 0 ? (
+                            <div className="dbPillRow">
+                              <span className="pill pill--muted">No categories</span>
+                            </div>
+                          ) : (
+                            <>
+                              {primaryCategory ? (
+                                <div className="dbPillRow">
+                                  <span className="pill pill--cat pill--primary">
+                                    {sectorLabel(primaryCategory)}
+                                  </span>
+                                </div>
+                              ) : null}
+                              {secondaryCategories.length > 0 && (
+                                <div className="dbPillRow dbPillRow--secondary">
+                                  {secondaryCategories.map((sector) => (
+                                    <span key={sector} className="pill pill--cat pill--secondary">
+                                      {sectorLabel(sector)}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Tags</div>
+                        <div className="dbPillRow">
+                          {tagsList.length ? (
+                            tagsList.map((tag) => (
+                              <span key={tag} className="pill pill--muted">
+                                {tag}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="pill pill--muted">No tags</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="dbProp">
+                        <div className="dbPropLabel">Publishing Status</div>
+                        <div className="dbPillRow">
+                          <span
+                            className={`pill pill--status ${
+                              isPublished ? "pill--published" : "pill--draft"
+                            }`}
+                          >
+                            {isPublished ? "Published" : "Draft"}
+                          </span>
+                          <span className="pill pill--muted">
+                            {page.filters.audience === "Public" ? "Public" : "Client safe"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="dbProps dbProps--inline">
                       <div className="dbProp">
                         <div className="dbPropLabel">Last updated</div>
                         <div className="dbPropValue">

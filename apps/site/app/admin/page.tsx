@@ -41,12 +41,12 @@ export default function AdminPage() {
 
   return (
     <main className="c-admin">
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h1>Demo CMS Dashboard</h1>
-        <div className="row">
-          <span className="btnPrimary">
-            <Link href="/">Public site</Link>
-          </span>
+      <div className="admin-page-header">
+        <h1 className="type-h2 admin-page-title">Demo CMS Dashboard</h1>
+        <div className="admin-page-actions">
+          <Link className="btnPrimary" href="/">
+            Public site
+          </Link>
           {isLoggedIn ? (
             <button className="btn" type="button" onClick={logout}>
               Log out
@@ -87,33 +87,48 @@ export default function AdminPage() {
           <h2>Actions</h2>
           <div
             className="c-stack"
-            style={{ marginTop: ".75rem", gap: ".75rem" }}
+            style={{ marginTop: ".75rem" /* , gap: ".75rem" */ }}
           >
-            <div className="c-stack" style={{ gap: ".15rem" }}>
+            <div className="c-stack" /* style={{ gap: ".15rem" }} */>
+              <Link href="/admin/case-studies/list">
+                Manage Case Studies{/* Browse case studies */}
+              </Link>
+              <p className="muted type-small explanation">
+                View the Case Study Library to filter, edit, and preview all
+                case studies. This is content management.
+              </p>
               <Link href="/admin/case-studies/new">Create new case study</Link>
               <p className="muted type-small explanation">
                 Start a new case study in the Case Study Library, which is the
                 master list that feeds every client page and public view.
               </p>
             </div>
-            <div className="c-stack" style={{ gap: ".15rem" }}>
-              <Link href="/admin/case-studies/list">
-                Manage Case Studies{/* Browse case studies */}
-              </Link>
+            {/* <hr className="dot" /> */}
+            {/* <div className="c-stack" style={{ gap: ".15rem" }}> 
+              <Link href="/admin/case-studies/new">Create new case study</Link>
               <p className="muted type-small explanation">
-                View the Case Study Library to filter, edit, and preview the
-                database. This is content management.
+                Start a new case study in the Case Study Library, which is the
+                master list that feeds every client page and public view.
               </p>
-            </div>
-            <div className="c-stack" style={{ gap: ".15rem" }}>
+            </div>*/}
+            <div className="c-stack" /*  style={{ gap: ".15rem" }} */>
               <Link href="/admin/client-pages">Manage client pages</Link>
               <p className="muted type-small explanation">
-                Build curated client pages from library filters with a custom
+                View the Client Page Library. Client pages are custom websites
+                tailored to specific clients. They contain a curated selection
+                of case studies.
+                {/* Build curated client pages from library filters with a custom
                 intro. These are shareable, client-facing views of selected case
-                studies.
+                studies. */}
+              </p>
+              <Link href="/admin/client-pages">Create new client page</Link>
+              <p className="muted type-small explanation">
+                Build a new curated client page from library filters with an
+                optional custom intro. This is a shareable, client-facing view
+                of selected case studies.
               </p>
             </div>
-            <div className="c-stack" style={{ gap: ".15rem" }}>
+            <div className="c-stack" /* style={{ gap: ".15rem" }} */>
               <Link href="/admin/team">Manage team bios</Link>
               <p className="muted type-small explanation">
                 Update team member bios and photos that feed the public “Our

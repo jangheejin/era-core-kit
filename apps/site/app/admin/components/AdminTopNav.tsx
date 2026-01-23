@@ -32,19 +32,22 @@ type NavItem = {
    { href: "/admin/client-pages", label: "Client Pages" },
 ]; */
 
-const NAV: NavItem[] = [
-  { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
-  /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
-  /*   {
+/* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
+/*   {
     href: "/admin/case-studies/list",
     label: "Case Study Library",
     match: (p) => p.startsWith("/admin/case-studies"),
   }, */
+
+const NAV: NavItem[] = [
+  { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
+  /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
   {
     href: "/admin/case-studies/list",
     label: "Case Studies",
     match: (p) => p.startsWith("/admin/case-studies"),
   },
+
   {
     href: "/admin/client-pages",
     label: "Client Pages",
@@ -92,9 +95,17 @@ function isActive(pathname: string, item: NavItem) {
   return pathname === item.href;
 }
 
+function getContextLabel(pathname: string) {
+  if (pathname.startsWith("/admin/case-studies")) return "Case Studies CMS";
+  if (pathname.startsWith("/admin/client-pages")) return "Client Page CMS";
+  if (pathname.startsWith("/admin/team")) return "Team Bios CMS";
+  return "CMS Admin";
+}
+
 export function AdminTopNav() {
   const pathname = usePathname() ?? "";
   const [navOpen, setNavOpen] = useState(false);
+  const contextLabel = getContextLabel(pathname);
 
   //improved sticky header (appear below context banner, but stick to top)
   const headerRef = useRef<HTMLElement | null>(null);
@@ -129,7 +140,13 @@ export function AdminTopNav() {
           {/*           <div className="adminTopNav__brand">
             Demo CMS
           </div> */}
+
           <div className="adminTopNav__brand">CMS Admin</div>
+
+          <div className="adminTopNav__brand">
+            {contextLabel ?? "CMS Admin"}
+          </div>
+
           {/* </Link> */}
           {/*           <Link href="/admin" className="adminTopNav__brandLink">
             Demo CMS
