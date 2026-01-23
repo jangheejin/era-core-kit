@@ -45,14 +45,15 @@ function emptyToUndefined(s: unknown): string | undefined {
 function applyWrap(
   textarea: HTMLTextAreaElement | null,
   before: string,
-  after: string,
+  after: string
 ) {
   if (!textarea) return;
   const start = textarea.selectionStart ?? 0;
   const end = textarea.selectionEnd ?? 0;
   const text = textarea.value;
   const selected = text.slice(start, end);
-  const next = text.slice(0, start) + before + selected + after + text.slice(end);
+  const next =
+    text.slice(0, start) + before + selected + after + text.slice(end);
   textarea.value = next;
   const cursor = start + before.length + selected.length + after.length;
   textarea.selectionStart = cursor;
@@ -67,11 +68,10 @@ function applyPrefix(textarea: HTMLTextAreaElement | null, prefix: string) {
   const text = textarea.value;
   const selected = text.slice(start, end) || "item";
   const lines = selected.split("\n");
-  const nextLines = lines.map((line) => (line.startsWith(prefix) ? line : prefix + line));
-  const next =
-    text.slice(0, start) +
-    nextLines.join("\n") +
-    text.slice(end);
+  const nextLines = lines.map((line) =>
+    line.startsWith(prefix) ? line : prefix + line
+  );
+  const next = text.slice(0, start) + nextLines.join("\n") + text.slice(end);
   textarea.value = next;
   const cursor = start + nextLines.join("\n").length;
   textarea.selectionStart = cursor;
@@ -85,9 +85,14 @@ function applyLink(textarea: HTMLTextAreaElement | null) {
 
 export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const router = useRouter();
-//  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
-//part one of protecting against slug collisions. update store destructure
-  const { items: adminItems, getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  //  const { getBySlug, upsertCaseStudy } = useAdminCaseStudies();
+  //part one of protecting against slug collisions. update store destructure
+  const {
+    items: adminItems,
+    getBySlug,
+    upsertCaseStudy,
+    ensureUniqueSlug,
+  } = useAdminCaseStudies();
 
   // Always call hooks unconditionally
   const cs = useMemo(() => getBySlug(slug), [getBySlug, slug]);
@@ -112,15 +117,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   const [status, setStatus] = useState<PublishStatus>("Draft");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
   const isPublished = status === "Published";
-  const [featuredSaveState, setFeaturedSaveState] = useState<"idle" | "saving" | "saved" | "error">(
-    "idle",
+  const [featuredSaveState, setFeaturedSaveState] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
+  const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
   );
-  const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   //part of protecting against slug collisions. slugDraft needs a state
   const [slugDraft, setSlugDraft] = useState("");
 
-  const showHeroPreview = Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
+  const showHeroPreview =
+    Boolean(heroImageUrl) && heroImageUrl !== DEFAULT_HERO_IMAGE_URL;
   const featuredCount = useMemo(
     () =>
       adminItems.filter(
@@ -128,9 +136,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           item.status === "Published" &&
           item.isPublic &&
           item.visibility === "Public" &&
-          item.isFeaturedHome,
+          item.isFeaturedHome
       ).length,
-    [adminItems],
+    [adminItems]
   );
   const maxFeatured = 6;
 
@@ -154,12 +162,15 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     //hydrate slugDraft once (part of protecting against slug collisions)
     setSlugDraft(cs.slug);
 
-//    setIsPublic(Boolean(cs.isPublic));
-//    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
+    //    setIsPublic(Boolean(cs.isPublic));
+    //    setIsFeaturedHome(Boolean(cs.isFeaturedHome));
 
-    const nextStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    const nextStatus: PublishStatus =
+      cs.status === "Published" ? "Published" : "Draft";
     setStatus(nextStatus);
-    setIsFeaturedHome(nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false);
+    setIsFeaturedHome(
+      nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false
+    );
 
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
@@ -245,12 +256,12 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   //compute an "effective slug" to protect against slug collisions
   const autoSlug = useMemo(
     () => slugify(client || cs?.title || cs?.slug || ""),
-    [client, cs?.title, cs?.slug],
+    [client, cs?.title, cs?.slug]
   );
-  
+
   const effectiveSlug = useMemo(
     () => slugify(slugDraft.trim() || autoSlug),
-    [slugDraft, autoSlug],
+    [slugDraft, autoSlug]
   );
 
   const writeUpRef = useRef<HTMLTextAreaElement | null>(null);
@@ -266,12 +277,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean),
+        .filter(Boolean)
     );
 
     //sectors fallback
-    const nextSectors: SectorValue[] =
-    sector
+    const nextSectors: SectorValue[] = sector
       ? [sector as SectorValue]
       : Array.isArray(base.sectors) && base.sectors.length > 0
         ? base.sectors
@@ -296,7 +306,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
       // keep route stable during edit. new: protect against slug collisions
       slug: effectiveSlug || base.slug,
-//      slug: base.slug,
+      //      slug: base.slug,
 
       title: displayName || base.title || base.slug,
       client: emptyToUndefined(displayName),
@@ -305,7 +315,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       brief: previewBlurb,
       summaryShort: summaryShortAuto,
 
-//      sectors: sector ? [sector as SectorValue] : [],
+      //      sectors: sector ? [sector as SectorValue] : [],
 
       sectors: nextSectors,
 
@@ -313,7 +323,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
       heroImageUrl: emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL,
 
-/*       isPublic,
+      /*       isPublic,
       isFeaturedHome: isPublic ? isFeaturedHome : false, */
       ...publishing,
     };
@@ -348,15 +358,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const baseClient = (cs.client ?? cs.title ?? "").trim();
     const baseWriteUp = cs.bodyMDX ?? "";
     const baseBrief = cs.brief ?? "";
-    const baseSector = (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
+    const baseSector =
+      (cs.sectors?.[0] as string | undefined) ?? String(DEFAULT_SECTOR);
     const baseTags = Array.isArray(cs.tags) ? cs.tags.join(", ") : "";
-//    const basePublic = Boolean(cs.isPublic);
-//    const baseFeatured = Boolean(cs.isFeaturedHome);
+    //    const basePublic = Boolean(cs.isPublic);
+    //    const baseFeatured = Boolean(cs.isFeaturedHome);
 
-    const baseStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
+    const baseStatus: PublishStatus =
+      cs.status === "Published" ? "Published" : "Draft";
     const baseFeatured = Boolean(cs.isFeaturedHome);
 
-    const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
+    const baseHeroNorm =
+      emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
     const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
 
     return (
@@ -367,23 +380,28 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       tags.trim() !== baseTags.trim() ||
       //(heroImageUrl || "") !== (baseHero || "") ||
       heroNorm !== baseHeroNorm ||
-      
       status !== baseStatus ||
       (isPublished ? isFeaturedHome !== baseFeatured : false)
-//      isPublic !== basePublic ||
-//      isFeaturedHome !== baseFeatured
+      //      isPublic !== basePublic ||
+      //      isFeaturedHome !== baseFeatured
     );
   }, [
-    cs, client, writeUp, brief, sector, tags, heroImageUrl, 
-    //isPublic, isFeaturedHome, 
+    cs,
+    client,
+    writeUp,
+    brief,
+    sector,
+    tags,
+    heroImageUrl,
+    //isPublic, isFeaturedHome,
     status,
     isPublished,
     isFeaturedHome,
-    DEFAULT_SECTOR
+    DEFAULT_SECTOR,
   ]);
 
   // to make preview always save as well, need to make saveOnly return the saved object or null
-    //  function saveOnly() {
+  //  function saveOnly() {
   function saveOnly(): CaseStudyType | null {
     if (!candidateInput) return null;
 
@@ -398,7 +416,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       return null;
     }
 
-/*     const parsed = CaseStudySchema.safeParse(candidateInput);
+    /*     const parsed = CaseStudySchema.safeParse(candidateInput);
     if (!parsed.success) {
       alert("Can't save yet. Required fields missing (Client + Content).");
       return null;
@@ -417,7 +435,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   function previewNow() {
     const out = saveOnly();
     if (!out) return;
-//    router.push(`/admin/case-studies/mock/${out.slug}`);
+    //    router.push(`/admin/case-studies/mock/${out.slug}`);
     window.open(
       `/admin/case-studies/mock/${out.slug}`,
       "_blank",
@@ -425,7 +443,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     );
   }
 
-/*   function previewOnly() {
+  /*   function previewOnly() {
     router.push(`/admin/case-studies/mock/${slug}`);
   } */
 
@@ -443,10 +461,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
   return (
     <main className="c-admin">
-{/*       <ContextBanner view="preview"> */}
-{/*         You’re editing a demo case study stored in your browser. Save commits changes to the local demo store.
+      {/*       <ContextBanner view="preview"> */}
+      {/*         You’re editing a demo case study stored in your browser. Save commits changes to the local demo store.
         Preview shows what the public-facing template looks like. */}
-{/*         You’re editing a demo case study stored in your browser.
+      {/*         You’re editing a demo case study stored in your browser.
       </ContextBanner> */}
 
       <div className="form-header">
@@ -460,11 +478,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       </div>
 
       <section className="card card-new mt1">
-        
         <div className="card card-new">
           <div className="form-group">
             <label className="form-label">
-              Client Name <span className="admin-label-required">(required)</span>
+              Client Name{" "}
+              <span className="admin-label-required">(required)</span>
             </label>
             <input
               className="input"
@@ -475,13 +493,19 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
           <div className="form-group" id="write-up-section">
             <label className="form-label">
-              Description <span className="admin-label-required">(required)</span>
+              Description{" "}
+              <span className="admin-label-required">(required)</span>
             </label>
             <p className="admin-hint">
-              Write something about the case study here. Any format is OK (notes or a full write-up).
+              Write something about the case study here. Any format is OK (notes
+              or a full write-up).
             </p>
             <div className="editor">
-              <div className="editor__toolbar" role="toolbar" aria-label="Formatting">
+              <div
+                className="editor__toolbar"
+                role="toolbar"
+                aria-label="Formatting"
+              >
                 <button
                   className="editor__btn"
                   type="button"
@@ -523,12 +547,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
           <div className="form-group">
             <label className="form-label" htmlFor="heroImage">
-              Upload an image <span className="admin-label-optional">(optional)</span>
+              Upload an image{" "}
+              <span className="admin-label-optional">(optional)</span>
             </label>
             <p className="admin-hint">
               If you don’t add one, a default image will be used.
             </p>
-            <input id="heroImage" type="file" accept="image/*" onChange={handleHeroImageFileChange} />
+            <input
+              id="heroImage"
+              type="file"
+              accept="image/*"
+              onChange={handleHeroImageFileChange}
+            />
 
             {/* {heroImageUrl ? ( */}
             {/* do not show preview of hero unless it's something other than default */}
@@ -555,13 +585,20 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 type="button"
                 onClick={saveOnly}
                 disabled={!canSave}
-                title={!canSave ? "Fix validation errors first" : "Save changes"}
+                title={
+                  !canSave ? "Fix validation errors first" : "Save changes"
+                }
               >
                 Save
               </button>
 
               {/* <button className="btn" type="button" onClick={previewOnly}> */}
-              <button className="btn" type="button" onClick={previewNow} disabled={!canSave}>
+              <button
+                className="btn"
+                type="button"
+                onClick={previewNow}
+                disabled={!canSave}
+              >
                 Preview
               </button>
 
@@ -578,11 +615,16 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
             <div className="form-group form-actions__publish">
               <label className="form-label">Publishing Status</label>
-              <div className="form-row" style={{ gap: ".75rem", alignItems: "center" }}>
+              <div
+                className="form-row"
+                style={{ gap: ".75rem", alignItems: "center" }}
+              >
                 <select
                   className="input"
                   value={status}
-                  onChange={(e) => setStatus(e.currentTarget.value as PublishStatus)}
+                  onChange={(e) =>
+                    setStatus(e.currentTarget.value as PublishStatus)
+                  }
                 >
                   {PUBLISH_STATUS_VALUES.map((v) => (
                     <option key={v} value={v}>
@@ -590,7 +632,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                     </option>
                   ))}
                 </select>
-                <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                <label
+                  className="row"
+                  style={{ gap: ".4rem", alignItems: "center" }}
+                >
                   <input
                     type="checkbox"
                     checked={isFeaturedHome && isPublished}
@@ -618,10 +663,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 </label>
               </div>
               <p className="muted type-small" style={{ marginTop: 6 }}>
-                Only the first {maxFeatured} featured case studies appear on the homepage.
+                Only the first {maxFeatured} featured case studies appear on the
+                homepage.
               </p>
             </div>
-
 
             {/* <div style={{ flex: 1 }} />
 
@@ -654,7 +699,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               </button>
             </div> */}
 
-{/*             <button
+            {/*             <button
               type="button"
               className={`pillToggle ${isPublic ? "pillToggle--on" : ""}`}
               onClick={() => {
@@ -687,7 +732,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             <div>
               <p className="admin-hint">
                 {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client pages. */}
-                OPTIONAL: Assign categories so this case study can be used in custom client pages.
+                OPTIONAL: Assign categories so this case study can be used in
+                custom client pages.
               </p>
             </div>
             <span className="admin-collapse__chevron" aria-hidden="true">
@@ -721,7 +767,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             </div>
           </div>
 
-{/*           <div className="form-row form-group" id="setSlug">
+          {/*           <div className="form-row form-group" id="setSlug">
             <div className="form-field">
               <label className="form-label">URL slug</label>
               <p className="admin-hint">Leave blank to auto-generate from client name.</p>
@@ -743,9 +789,10 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 Tags
               </label>
               <p className="admin-hint">
-                Add short keywords that describe the case study. Separate tags with commas. Examples:{" "}
-                <code>Earmark</code>, <code>Pilot Program</code>, <code>CDS</code>,{" "}
-                <code>S1</code>, <code>Resilience</code>.
+                Add short keywords that describe the case study. Separate tags
+                with commas. Examples: <code>Earmark</code>,{" "}
+                <code>Pilot Program</code>, <code>CDS</code>, <code>S1</code>,{" "}
+                <code>Resilience</code>.
               </p>
               <input
                 id="tagsInput"
@@ -756,10 +803,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               />
             </div>
           </div>
-
         </details>
       </div>
-{/* 
+      {/* 
       <div className="card card-new mt1">
         <h3>Validation</h3>
         {validation?.success ? (
@@ -771,7 +817,6 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           </pre>
         )}
       </div> */}
-
     </main>
   );
 }
