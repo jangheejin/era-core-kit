@@ -9,6 +9,8 @@
 .work-layout {
   display: grid;
   row-gap: var(--space-3);
+  max-width: 980px;
+  margin-inline: auto;
 }
 
 .work-header {
@@ -38,6 +40,94 @@
   font-size: var(--fs-h2b);
   margin-block:0;
 /*   margin-bottom:0.75rem; */
+}
+
+/* Mobile spotlight + grid (hidden on desktop) */
+.work-mobile {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.work-spotlight {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.work-spotlight__label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.work-spotlight__title {
+  margin: 0;
+}
+
+.work-spotlight__summary {
+  margin: 0.5rem 0 0 0;
+}
+
+.work-spotlight__media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.work-spotlight__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.work-mobile-grid {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.work-mobile-card {
+  display: grid;
+  grid-template-columns: minmax(0, 96px) minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+}
+
+.work-mobile-card__media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.work-mobile-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.work-mobile-card__title {
+  margin: 0;
+}
+
+.work-mobile-card__summary {
+  margin: 0.3rem 0 0 0;
+  opacity: 0.75;
 }
 
 /* ========================= */
@@ -441,6 +531,16 @@ h5.work-detail__sector {
 
   .work-detail__media {
     max-width: 100%;
+  }
+
+  .work-grid-shell,
+  .work-grid__label,
+  .work-detail {
+    display: none;
+  }
+
+  .work-mobile {
+    display: flex;
   }
 }
 
