@@ -171,6 +171,16 @@ the user fills out)
   align-items: center;
 }
 
+.admin-page-actions--stacked {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.admin-page-actions--stacked .btn-3 {
+  min-width: 180px;
+}
+
 .admin-dashboard {
   display: flex;
   flex-direction: column;
@@ -2691,7 +2701,8 @@ fieldset.form-group > legend.form-label{
   text-transform: uppercase;
   letter-spacing: 0.06em;
   /* font-size: 0.9rem; */
-  font-size:1rem;
+  font-size: clamp(0.95rem, 1.1vw + 0.6rem, 1.35rem);
+  line-height: 1.1;
   opacity: 0.85;
   white-space: nowrap;
   margin-right: 0.25rem;
@@ -3019,15 +3030,37 @@ fieldset.form-group > legend.form-label{
 .dbPropValue { font-size: 0.95rem; }
 
 .dbProps--inline {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 1.25rem;
-  row-gap: 0.6rem;
+  grid-template-columns: repeat(2, max-content);
+  column-gap: 0.75rem;
+  row-gap: 0.35rem;
 }
 
 .dbPillRow { display:flex; gap:.35rem; flex-wrap:wrap; align-items:center; margin-top:1rem;}
 .dbPillRow--secondary .pill { margin-left: 0; }
 .dbPillStack { display:flex; flex-direction:column; gap:.35rem; }
 .dbPropTooltipTarget { cursor: help; }
+
+.dbCategoryRows {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.dbCategoryRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dbCategoryLabel {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.dbCategoryRow .dbPillRow {
+  margin-top: 0;
+}
 
 .pill {
   display:inline-flex;
@@ -3327,6 +3360,12 @@ fieldset.form-group > legend.form-label{
   }
 }
 
+@media (max-width: 640px) {
+  .team-basic-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .dbEditPanel {
   display: grid;
   /* gap: .85rem; */
@@ -3410,6 +3449,20 @@ fieldset.form-group > legend.form-label{
   margin-top: 0.75rem;
 }
 
+.dbItem--clientPage {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+.dbItem--clientPage .dbSummary {
+  margin-top: 0.35rem;
+}
+
+.dbItem--clientPage .dbProps {
+  gap: 0.45rem;
+}
+
 @media (max-width: 720px) {
   .dbItemHeader {
     flex-direction: column;
@@ -3442,6 +3495,19 @@ fieldset.form-group > legend.form-label{
   .form-actions--editCaseStudy {
     position: static;
     top: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-page-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .admin-page-actions {
+    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -3714,9 +3780,3 @@ hr.dot {
   color: #667085;
 }
 
-.admin-page-actions.reset{
-  display: flex; 
-  justify-content: flex-end;
-  margin-top: .5rem;
-  margin-bottom: 0;
-}

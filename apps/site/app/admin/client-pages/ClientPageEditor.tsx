@@ -13,31 +13,12 @@ import {
   type SectorValue,
   normalizeTagList,
 } from "@kit/schema";
-import { useAdminClientPages } from "@/admin/AdminClientPageStore";
+import {
+  useAdminClientPages,
+  type ClientPageStatus,
+} from "@/admin/AdminClientPageStore";
 import { Markdown } from "@/components/Markdown";
-
-function applyWrap(
-  textarea: HTMLTextAreaElement | null,
-  before: string,
-  after: string
-) {
-  if (!textarea) return;
-  const start = textarea.selectionStart ?? 0;
-  const end = textarea.selectionEnd ?? 0;
-  const text = textarea.value;
-  const selected = text.slice(start, end);
-  const next =
-    text.slice(0, start) + before + selected + after + text.slice(end);
-  textarea.value = next;
-  const cursor = start + before.length + selected.length + after.length;
-  textarea.selectionStart = cursor;
-  textarea.selectionEnd = cursor;
-  textarea.dispatchEvent(new Event("input", { bubbles: true }));
-}
-
-function applyLink(textarea: HTMLTextAreaElement | null) {
-  applyWrap(textarea, "[", "](https://)");
-}
+import { MiniFormatBar } from "../components/MiniFormatBar";
 
 type Props = {
   slug?: string;
@@ -58,9 +39,10 @@ export default function ClientPageEditor({ slug }: Props) {
   );
   const [tags, setTags] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
-  const [audience, setAudience] = useState<"Public" | "ClientSafe">("Public");
+  const [status, setStatus] = useState<ClientPageStatus>("Draft");
   const [bodyMDX, setBodyMDX] = useState("");
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
+  const showSlugField = false;
 
   const selected = useMemo(
     () => (slug ? (getBySlug(slug) ?? null) : null),
@@ -107,7 +89,7 @@ export default function ClientPageEditor({ slug }: Props) {
     setCategoryDrafts([""]);
     setTags("");
     setTagMode("any");
-    setAudience("Public");
+    setStatus("Draft");
     setBodyMDX("");
   }
 
@@ -121,7 +103,7 @@ export default function ClientPageEditor({ slug }: Props) {
     );
     setTags(page.filters.tags.join(", "));
     setTagMode(page.filters.tagMode);
-    setAudience(page.filters.audience);
+    setStatus(page.status);
     setBodyMDX(page.bodyMDX ?? "");
     return true;
   }
@@ -142,7 +124,50 @@ export default function ClientPageEditor({ slug }: Props) {
     setNotFound(!ok);
   }, [getBySlug, slug]);
 
-  function handleSave() {
+  const isDirty = useMemo(() => {
+    const nextTags = normalizeTagList(
+      tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+    );
+    const current = JSON.stringify({
+      name: name.trim(),
+      slug: desiredSlug.trim() || (selected?.slug ?? ""),
+      sectors: selectedCategories,
+      tags: nextTags,
+      tagMode,
+      status,
+      bodyMDX: bodyMDX.trim(),
+    });
+
+    if (!selected) {
+      const empty = JSON.stringify({
+        name: "",
+        slug: "",
+        sectors: [],
+        tags: [],
+        tagMode: "any",
+        status: "Draft",
+        bodyMDX: "",
+      });
+      return current !== empty;
+    }
+
+    const baseline = JSON.stringify({
+      name: selected.name.trim(),
+      slug: selected.slug,
+      sectors: selected.filters.sectors,
+      tags: selected.filters.tags,
+      tagMode: selected.filters.tagMode,
+      status: selected.status,
+      bodyMDX: selected.bodyMDX.trim(),
+    });
+
+    return current !== baseline;
+  }, [name, desiredSlug, selected, selectedCategories, tags, tagMode, status, bodyMDX]);
+
+  function handleSave(nextStatus: ClientPageStatus) {
     const nextTags = normalizeTagList(
       tags
         .split(",")
@@ -159,19 +184,25 @@ export default function ClientPageEditor({ slug }: Props) {
         ...selected,
         name: name.trim() || selected.name,
         slug: nextSlug,
+        status: nextStatus,
         bodyMDX,
         filters: {
           ...selected.filters,
           sectors: selectedCategories,
           tags: nextTags,
           tagMode,
-          audience,
         },
         updatedAt: Date.now(),
       };
       upsertPage(nextPage);
+      setStatus(nextStatus);
       if (nextSlug !== slug) {
         router.replace(`/admin/client-pages/edit/${nextSlug}`);
+      }
+      if (nextStatus === "Draft") {
+        window.alert(
+          "Draft saved. This saves your work but does not publish the page. Clients can only see published pages."
+        );
       }
       return;
     }
@@ -179,15 +210,21 @@ export default function ClientPageEditor({ slug }: Props) {
     const created = createPage({
       name: name.trim() || "Client page",
       desiredSlug: desiredSlug || name,
+      status: nextStatus,
       filters: {
         sectors: selectedCategories,
         tags: nextTags,
         tagMode,
-        audience,
       },
     });
     upsertPage({ ...created, bodyMDX, updatedAt: Date.now() });
+    setStatus(nextStatus);
     router.replace(`/admin/client-pages/edit/${created.slug}`);
+    if (nextStatus === "Draft") {
+      window.alert(
+        "Draft saved. This saves your work but does not publish the page. Clients can only see published pages."
+      );
+    }
   }
 
   if (notFound) {
@@ -251,18 +288,20 @@ export default function ClientPageEditor({ slug }: Props) {
           </p>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">URL slug</label>
-          <input
-            className="input"
-            value={desiredSlug}
-            onChange={(e) => setDesiredSlug(e.target.value)}
-            placeholder="client-page-slug"
-          />
-          <p className="muted type-small" style={{ marginTop: 6 }}>
-            Used in the URL. Keep it short and readable.
-          </p>
-        </div>
+        {showSlugField ? (
+          <div className="form-group">
+            <label className="form-label">URL slug</label>
+            <input
+              className="input"
+              value={desiredSlug}
+              onChange={(e) => setDesiredSlug(e.target.value)}
+              placeholder="client-page-slug"
+            />
+            <p className="muted type-small" style={{ marginTop: 6 }}>
+              Used in the URL. Keep it short and readable.
+            </p>
+          </div>
+        ) : null}
 
         <div className="form-group">
           <div className="row" style={{ gap: ".5rem", alignItems: "center" }}>
@@ -389,62 +428,13 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         </div>
 
-        {/*         <div className="form-group">
-          <label className="form-label">Publishing status</label>
-          <div className="row">
-            <label className="radioLabel">
-              <input
-                type="radio"
-                checked={audience === "Public"}
-                onChange={() => setAudience("Public")}
-              />
-              Public
-            </label>
-            <label className="radioLabel">
-              <input
-                type="radio"
-                checked={audience === "ClientSafe"}
-                onChange={() => setAudience("ClientSafe")}
-              />
-              Client safe
-            </label>
-          </div>
-        </div> */}
-
         <div className="form-group">
-          <div className="row" style={{ justifyContent: "space-between" }}>
-            <label className="form-label">Intro / context</label>
-            <div className="row" style={{ gap: ".35rem" }}>
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "**", "**")}
-              >
-                Bold
-              </button>
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "*", "*")}
-              >
-                Italic
-              </button>
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => applyWrap(editorRef.current, "\n- ", "")}
-              >
-                List
-              </button>
-              <button
-                className="btnSmall"
-                type="button"
-                onClick={() => applyLink(editorRef.current)}
-              >
-                Link
-              </button>
-            </div>
-          </div>
+          <label className="form-label">Intro / context</label>
+          <MiniFormatBar
+            textareaRef={editorRef}
+            value={bodyMDX}
+            onValueChange={(next) => setBodyMDX(next)}
+          />
           <textarea
             ref={editorRef}
             className="input"
@@ -468,25 +458,52 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         ) : null}
 
-        <div
-          className="row"
-          style={{ justifyContent: "space-between", marginTop: "1.5rem" }}
-        >
-          <div className="row" style={{ gap: ".5rem" }}>
-            <button className="btnPrimary" type="button" onClick={handleSave}>
-              Save client page
-            </button>
-            {selected ? (
+        <div className="row" style={{ justifyContent: "space-between", marginTop: "1.5rem" }}>
+          <div className="row" style={{ gap: ".75rem", alignItems: "flex-start" }}>
+            <div className="team-editor-actionColumn">
               <button
-                className="btn"
+                className="btnPrimary"
                 type="button"
-                onClick={() => {
-                  removePage(selected.slug);
-                  router.push("/admin/client-pages");
-                }}
+                onClick={() => handleSave("Draft")}
+                title="Save your work without publishing. Drafts are not visible to clients."
               >
-                Delete
+                Save draft
               </button>
+              <span className="muted type-small">
+                {isDirty ? "Unsaved changes" : "All changes saved"}
+              </span>
+            </div>
+            <div className="team-editor-actionColumn">
+              <button
+                className="btnPrimary"
+                type="button"
+                onClick={() => handleSave("Published")}
+                title="Publish this page so clients can view it."
+              >
+                Publish
+              </button>
+              <span
+                className={`pill pill--status ${
+                  status === "Published" ? "pill--published" : "pill--draft"
+                }`}
+              >
+                {status}
+              </span>
+            </div>
+            {selected ? (
+              <div className="team-editor-actionColumn">
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => {
+                    removePage(selected.slug);
+                    router.push("/admin/client-pages");
+                  }}
+                  title="Permanently delete this client page."
+                >
+                  Delete
+                </button>
+              </div>
             ) : null}
           </div>
         </div>

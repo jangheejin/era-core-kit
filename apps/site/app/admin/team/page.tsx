@@ -69,6 +69,10 @@ function normalizeStatus(
   return status ?? "Draft";
 }
 
+function formatStatusLabel(status: TeamMember["status"] | undefined) {
+  return normalizeStatus(status) === "Published" ? "Published" : "Hidden";
+}
+
 function serializeMember(member: TeamMember) {
   return JSON.stringify({
     id: member.id,
@@ -84,8 +88,7 @@ function serializeMember(member: TeamMember) {
 }
 
 export default function AdminTeamPage() {
-  const { items, upsertTeamMember, removeTeamMember, resetToBaseline } =
-    useAdminTeamMembers();
+  const { items, upsertTeamMember, resetToBaseline } = useAdminTeamMembers();
   const sorted = useMemo(() => items, [items]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<TeamMember | null>(null);
@@ -266,7 +269,8 @@ export default function AdminTeamPage() {
 
       <p className="muted type-small" style={{ marginTop: ".5rem" }}>
         Use the list view to open a team member. Changes are only saved when you
-        click Save Draft or Publish.
+        click Save Draft or Publish. Use “Hidden” to remove someone from the
+        public site without deleting their bio.
       </p>
 
       {!editingId && (
@@ -283,6 +287,7 @@ export default function AdminTeamPage() {
             {sorted.map((member) => {
               const status = normalizeStatus(member.status);
               const isPublished = status === "Published";
+              const displayStatus = formatStatusLabel(status);
               return (
                 <section key={member.id} className="card dbItem">
                   <div className="dbItemHeader">
@@ -317,10 +322,15 @@ export default function AdminTeamPage() {
                       <button
                         className="btnSmall"
                         type="button"
-                        onClick={() => removeTeamMember(member.id)}
+                        onClick={() =>
+                          upsertTeamMember({
+                            ...member,
+                            status: "Draft",
+                          })
+                        }
+                        title="Hide this team member from the public site without deleting their bio."
                       >
-                        Remove
-                        {/* Delete */}
+                        {isPublished ? "Hide" : "Hidden"}
                       </button>
                     </div>
                   </div>
@@ -338,7 +348,7 @@ export default function AdminTeamPage() {
                             isPublished ? "pill--published" : "pill--draft"
                           }`}
                         >
-                          {status}
+                          {displayStatus}
                         </span>
                       </div>
                     </div>
@@ -524,6 +534,7 @@ export default function AdminTeamPage() {
                     className="btnLink"
                     type="button"
                     onClick={() => setShowMarkdownEditor((prev) => !prev)}
+                    title="Edit text directly here (plain text only). For bold, italics, or links, open the Markdown editor."
                   >
                     {showMarkdownEditor
                       ? "Hide text"
@@ -593,7 +604,7 @@ export default function AdminTeamPage() {
                         : "pill--draft"
                     }`}
                   >
-                    {normalizeStatus(draft.status)}
+                    {formatStatusLabel(draft.status)}
                   </span>
                 </div>
                 <div className="team-editor-actionColumn team-editor-actionColumn--toggle">
