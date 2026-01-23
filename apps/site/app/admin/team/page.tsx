@@ -33,7 +33,10 @@ function textToBio(value: string) {
 }
 
 function sanitizeFilename(name: string) {
-  const cleaned = name.trim().replace(/\s+/g, "-").replace(/[^\w.-]/g, "");
+  const cleaned = name
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w.-]/g, "");
   return cleaned || "team-photo";
 }
 
@@ -48,15 +51,21 @@ function loadImageLibrary(): TeamImage[] {
       .filter((entry) => entry && typeof entry.url === "string")
       .map((entry) => ({
         url: entry.url,
-        label: typeof entry.label === "string" ? entry.label : entry.url.split("/").pop() ?? entry.url,
-        previewUrl: typeof entry.previewUrl === "string" ? entry.previewUrl : undefined,
+        label:
+          typeof entry.label === "string"
+            ? entry.label
+            : (entry.url.split("/").pop() ?? entry.url),
+        previewUrl:
+          typeof entry.previewUrl === "string" ? entry.previewUrl : undefined,
       }));
   } catch {
     return [];
   }
 }
 
-function normalizeStatus(status: TeamMember["status"] | undefined): TeamMember["status"] {
+function normalizeStatus(
+  status: TeamMember["status"] | undefined
+): TeamMember["status"] {
   return status ?? "Draft";
 }
 
@@ -75,13 +84,16 @@ function serializeMember(member: TeamMember) {
 }
 
 export default function AdminTeamPage() {
-  const { items, upsertTeamMember, removeTeamMember, resetToBaseline } = useAdminTeamMembers();
+  const { items, upsertTeamMember, removeTeamMember, resetToBaseline } =
+    useAdminTeamMembers();
   const sorted = useMemo(() => items, [items]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<TeamMember | null>(null);
   const [bioDraft, setBioDraft] = useState("");
   const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
-  const [uploadedLibrary, setUploadedLibrary] = useState<TeamImage[]>(() => loadImageLibrary());
+  const [uploadedLibrary, setUploadedLibrary] = useState<TeamImage[]>(() =>
+    loadImageLibrary()
+  );
   const [showMarkdownEditor, setShowMarkdownEditor] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const initialBioRef = useRef("");
@@ -89,7 +101,10 @@ export default function AdminTeamPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem(IMAGE_LIBRARY_KEY, JSON.stringify(uploadedLibrary));
+    window.localStorage.setItem(
+      IMAGE_LIBRARY_KEY,
+      JSON.stringify(uploadedLibrary)
+    );
   }, [uploadedLibrary]);
 
   const imageLibrary = useMemo(() => {
@@ -104,7 +119,9 @@ export default function AdminTeamPage() {
         });
       }
     }
-    return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label));
+    return Array.from(map.values()).sort((a, b) =>
+      a.label.localeCompare(b.label)
+    );
   }, [uploadedLibrary, items]);
 
   const previewMap = useMemo(() => {
@@ -126,7 +143,8 @@ export default function AdminTeamPage() {
   }
 
   function startNewMember() {
-    const id = typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now());
+    const id =
+      typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now());
     const newMember: TeamMember = {
       id,
       name: "New team member",
@@ -162,7 +180,10 @@ export default function AdminTeamPage() {
     if (!draft) return;
     const previousUrl = draft.imageUrl;
     if (previousUrl && previousUrl.startsWith("/team/")) {
-      rememberImage({ url: previousUrl, label: previousUrl.split("/").pop() ?? previousUrl });
+      rememberImage({
+        url: previousUrl,
+        label: previousUrl.split("/").pop() ?? previousUrl,
+      });
     }
     updateDraft({ imageUrl: nextUrl });
   }
@@ -214,11 +235,13 @@ export default function AdminTeamPage() {
     return serializeMember(original) !== serializeMember(normalizedDraft);
   }, [draft, bioDraft, items]);
 
-  const currentPreviewUrl =
-    draft?.imageUrl ? previewMap.get(draft.imageUrl) ?? draft.imageUrl : null;
+  const currentPreviewUrl = draft?.imageUrl
+    ? (previewMap.get(draft.imageUrl) ?? draft.imageUrl)
+    : null;
 
   const currentLibraryOption =
-    draft?.imageUrl && !imageLibrary.some((entry) => entry.url === draft.imageUrl)
+    draft?.imageUrl &&
+    !imageLibrary.some((entry) => entry.url === draft.imageUrl)
       ? draft.imageUrl
       : null;
 
@@ -230,7 +253,11 @@ export default function AdminTeamPage() {
         </h1>
         <div className="admin-page-actions">
           {!editingId && (
-            <button className="btnPrimary" type="button" onClick={startNewMember}>
+            <button
+              className="btnPrimary"
+              type="button"
+              onClick={startNewMember}
+            >
               Add team member
             </button>
           )}
@@ -238,8 +265,8 @@ export default function AdminTeamPage() {
       </div>
 
       <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-        Use the list view to open a team member. Changes are only saved when you click Save
-        Draft or Publish.
+        Use the list view to open a team member. Changes are only saved when you
+        click Save Draft or Publish.
       </p>
 
       {!editingId && (
@@ -260,11 +287,16 @@ export default function AdminTeamPage() {
                 <section key={member.id} className="card dbItem">
                   <div className="dbItemHeader">
                     <div className="dbItemMain">
-                      <div className="row" style={{ gap: "0.75rem", alignItems: "center" }}>
+                      <div
+                        className="row"
+                        style={{ gap: "0.75rem", alignItems: "center" }}
+                      >
                         {member.imageUrl && (
                           <img
                             className="team-photo-preview__img"
-                            src={previewMap.get(member.imageUrl) ?? member.imageUrl}
+                            src={
+                              previewMap.get(member.imageUrl) ?? member.imageUrl
+                            }
                             alt={`${member.name} photo`}
                           />
                         )}
@@ -275,7 +307,11 @@ export default function AdminTeamPage() {
                       </div>
                     </div>
                     <div className="dbActions">
-                      <button className="btnSmall" type="button" onClick={() => startEditing(member)}>
+                      <button
+                        className="btnSmall"
+                        type="button"
+                        onClick={() => startEditing(member)}
+                      >
                         Edit
                       </button>
                       <button
@@ -288,7 +324,9 @@ export default function AdminTeamPage() {
                     </div>
                   </div>
                   <div className="dbSummary">
-                    {member.bio?.[0] ? member.bio[0] : "No bio yet — add a short summary."}
+                    {member.bio?.[0]
+                      ? member.bio[0]
+                      : "No bio yet — add a short summary."}
                   </div>
                   <div className="dbProps">
                     <div className="dbProp">
@@ -304,8 +342,8 @@ export default function AdminTeamPage() {
                       </div>
                     </div>
                     <div className="dbProp">
-                      <div className="dbPropLabel">Location</div>
-                      <div className="dbPropValue">{member.location || "Not set"}</div>
+                      {/*<div className="dbPropLabel">Location</div>
+                       <div className="dbPropValue">{member.location || "Not set"}</div> */}
                     </div>
                   </div>
                 </section>
@@ -315,7 +353,10 @@ export default function AdminTeamPage() {
         </div>
       )}
       {!editingId && (
-        <div className="row" style={{ justifyContent: "flex-end", marginTop: "1rem" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "flex-end", marginTop: "1rem" }}
+        >
           <button className="btn-3" type="button" onClick={resetToBaseline}>
             Reset demo data
           </button>
@@ -363,7 +404,9 @@ export default function AdminTeamPage() {
                 <div className="team-photo-controls">
                   <div className="form-row form-group team-photo-controls__row">
                     <div className="form-field">
-                      <label className="form-label">Select Photo from Image Library</label>
+                      <label className="form-label">
+                        Select Photo from Image Library
+                      </label>
                       <select
                         className="input"
                         value={draft.imageUrl ?? ""}
@@ -372,7 +415,10 @@ export default function AdminTeamPage() {
                         <option value="">No photo selected</option>
                         {currentLibraryOption && (
                           <option value={currentLibraryOption}>
-                            Current ({currentLibraryOption.split("/").pop() ?? currentLibraryOption})
+                            Current (
+                            {currentLibraryOption.split("/").pop() ??
+                              currentLibraryOption}
+                            )
                           </option>
                         )}
                         {imageLibrary.map((entry) => (
@@ -382,16 +428,21 @@ export default function AdminTeamPage() {
                         ))}
                       </select>
                       <p className="muted type-small" style={{ marginTop: 6 }}>
-                        Choose from previously uploaded images or upload a new file below.
+                        Choose from previously uploaded images or upload a new
+                        file below.
                       </p>
                     </div>
                     <div className="form-field">
-                      <label className="form-label">Upload / replace photo</label>
+                      <label className="form-label">
+                        Upload / replace photo
+                      </label>
                       <input
                         className="input"
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handlePhotoUpload(e.target.files?.[0] ?? null)}
+                        onChange={(e) =>
+                          handlePhotoUpload(e.target.files?.[0] ?? null)
+                        }
                       />
                       <p className="muted type-small" style={{ marginTop: 6 }}>
                         {draft.imageUrl
@@ -408,7 +459,9 @@ export default function AdminTeamPage() {
                       src={currentPreviewUrl}
                       alt="Current photo"
                     />
-                    <span className="muted type-small">Preview of the current photo.</span>
+                    <span className="muted type-small">
+                      Preview of the current photo.
+                    </span>
                   </div>
                 )}
               </div>
@@ -517,7 +570,9 @@ export default function AdminTeamPage() {
                     <span className="muted type-small">
                       {isDirty ? "Unsaved changes" : "All changes saved"}
                     </span>
-                    {saveState === "saved" && <span className="muted type-small">Saved</span>}
+                    {saveState === "saved" && (
+                      <span className="muted type-small">Saved</span>
+                    )}
                   </div>
                 </div>
                 <div className="team-editor-actionColumn">
@@ -539,11 +594,16 @@ export default function AdminTeamPage() {
                   </span>
                 </div>
                 <div className="team-editor-actionColumn team-editor-actionColumn--toggle">
-                  <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                  <label
+                    className="row"
+                    style={{ gap: ".4rem", alignItems: "center" }}
+                  >
                     <input
                       type="checkbox"
                       checked={Boolean(draft.isFounder)}
-                      onChange={(e) => updateDraft({ isFounder: e.target.checked })}
+                      onChange={(e) =>
+                        updateDraft({ isFounder: e.target.checked })
+                      }
                     />
                     <span className="type-small">Founder</span>
                   </label>

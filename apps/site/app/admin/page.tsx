@@ -77,12 +77,14 @@ export default function AdminPage() {
           <div className="admin-stat">
             <div className="admin-stat__label">Case studies</div>
             <div className="admin-stat__value">{items.length}</div>
-            <div className="admin-stat__meta">Stored in this browser</div>
+            <div className="admin-stat__meta">
+              {/* (6/8 featured on homepage) */}
+            </div>
           </div>
           <div className="admin-stat">
             <div className="admin-stat__label">Client pages</div>
             <div className="admin-stat__value">{pages.length}</div>
-            <div className="admin-stat__meta">Saved audiences</div>
+            {/* <div className="admin-stat__meta">Saved audiences</div> */}
           </div>
         </div>
       </section>
