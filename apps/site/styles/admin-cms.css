@@ -3182,6 +3182,34 @@ fieldset.form-group > legend.form-label{
   justify-content: flex-start;
 }
 
+/* Client page editor action bar: center stacked actions on small viewports */
+.c-admin .client-page-editor__actionsBar {
+  margin-top: 1.5rem;
+}
+
+.c-admin .client-page-editor__actions {
+  align-items: flex-start;
+}
+
+@media (max-width: 520px) {
+  .c-admin .client-page-editor__actions {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .c-admin .client-page-editor__actions .team-editor-actionColumn {
+    width: min(360px, 100%);
+    min-width: 0;
+  }
+
+  .c-admin .client-page-editor__actions .btnPrimary,
+  .c-admin .client-page-editor__actions .btn {
+    width: 100%;
+  }
+}
+
 .team-editor-actionColumn {
   display: flex;
   flex-direction: column;

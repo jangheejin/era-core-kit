@@ -470,14 +470,16 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         ) : null}
 
-        <div
+        <div className="row client-page-editor__actionsBar">
+          <div className="row client-page-editor__actions">
+            {/* <div
           className="row"
           style={{ justifyContent: "space-between", marginTop: "1.5rem" }}
         >
           <div
             className="row"
             style={{ gap: ".75rem", alignItems: "flex-start" }}
-          >
+          > */}
             <div className="team-editor-actionColumn">
               <button
                 className="btnPrimary"
@@ -524,7 +526,9 @@ export default function ClientPageEditor({ slug }: Props) {
               </div>
             ) : null}
           </div>
+          {/* row */}
         </div>
+        {/* row */}
       </div>
     </main>
   );
