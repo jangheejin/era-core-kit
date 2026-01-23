@@ -426,7 +426,8 @@ export default function ListClient() {
     <main className="c-admin">
       <ContextBanner view="preview">
         This is a temporary demo CMS database. You can filter by category, tags,
-        and search. Changes are stored only in your browser (localStorage).
+        and search.
+        {/*  Changes are stored only in your browser (localStorage). */}
       </ContextBanner>
 
       <div className="admin-page-header">
@@ -729,8 +730,10 @@ export default function ListClient() {
                                     sideOffset={8}
                                     className="tooltipContent"
                                   >
-                                    The primary category is the main sector shown on cards and summaries.
-                                    Click Change Settings to quick edit categories, tags, and publishing status.
+                                    The primary category is the main sector
+                                    shown on cards and summaries. Click Change
+                                    Settings to quick edit categories, tags, and
+                                    publishing status.
                                     <Tooltip.Arrow className="tooltipArrow" />
                                   </Tooltip.Content>
                                 </Tooltip.Portal>
@@ -762,8 +765,10 @@ export default function ListClient() {
                                       sideOffset={8}
                                       className="tooltipContent"
                                     >
-                                      Additional categories capture secondary sectors that also apply.
-                                      Click Change Settings to quick edit categories, tags, and publishing status.
+                                      Additional categories capture secondary
+                                      sectors that also apply. Click Change
+                                      Settings to quick edit categories, tags,
+                                      and publishing status.
                                       <Tooltip.Arrow className="tooltipArrow" />
                                     </Tooltip.Content>
                                   </Tooltip.Portal>
