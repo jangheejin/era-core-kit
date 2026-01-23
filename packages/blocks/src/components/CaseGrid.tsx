@@ -19,15 +19,14 @@ function normalizeLayout(layout?: string) {
   return layout;
 }
 
-function pickSingleSector(item: any) {
+type CaseGridItem = CaseGridProps["items"][number];
+
+function pickSingleSector(item: CaseGridItem) {
   // Strictly pick ONE label
   if (item.primarySectorReadable) return item.primarySectorReadable;
   if (item.primarySector) return String(item.primarySector);
 
   if (Array.isArray(item.sectors) && item.sectors.length) return String(item.sectors[0]);
-
-  // Back-compat with old shape
-  if (item.sector) return String(item.sector);
 
   // Last resort: if someone only provided a readable string, take the first chunk
   if (typeof item.sectorsReadable === "string" && item.sectorsReadable.trim()) {

@@ -151,6 +151,26 @@ the user fills out)
 .c-admin h4 {font-weight:400;}
 .c-admin .muted { opacity: 0.7; }
 
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.admin-page-title {
+  margin: 0;
+}
+
+.admin-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .cms-console {
   background: #F3F4F6;
   border: 1px solid #D1D5DB;
@@ -2861,6 +2881,12 @@ fieldset.form-group > legend.form-label{
 .dbPropLabel { font-size: .82rem; opacity: .7; margin-bottom: .25rem; }
 .dbPropValue { font-size: 0.95rem; }
 
+.dbProps--inline {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.25rem;
+  row-gap: 0.6rem;
+}
+
 .dbPillRow { display:flex; gap:.35rem; flex-wrap:wrap; align-items:center; }
 .dbPillRow--secondary .pill { margin-left: 0; }
 .dbPillStack { display:flex; flex-direction:column; gap:.35rem; }
@@ -2876,6 +2902,23 @@ fieldset.form-group > legend.form-label{
   background: rgba(255,255,255,.8);
   font-size: .82rem;
   line-height: 1.1;
+}
+
+.pill--status {
+  font-weight: 600;
+  border-color: rgba(0,0,0,.18);
+}
+
+.pill--published {
+  background: rgba(64, 170, 120, 0.18);
+  border-color: rgba(64, 170, 120, 0.4);
+  color: #1b6b45;
+}
+
+.pill--draft {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.16);
+  color: #1f2937;
 }
 
 .pill--muted { opacity: .7; }
@@ -3251,6 +3294,10 @@ fieldset.form-group > legend.form-label{
   .dbResultsHeader {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .dbProps--inline {
+    grid-template-columns: 1fr;
   }
 
   .form-actions--top,
