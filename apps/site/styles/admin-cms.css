@@ -3127,6 +3127,120 @@ fieldset.form-group > legend.form-label{
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.team-editor-title {
+  margin: 0;
+}
+
+.team-editor-actionsBar {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(0,0,0,.02);
+}
+
+.team-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* Client page editor action bar: center stacked actions on small viewports */
+.c-admin .client-page-editor__actionsBar {
+  margin-top: 1.5rem;
+}
+
+.c-admin .client-page-editor__actions {
+  align-items: flex-start;
+}
+
+@media (max-width: 520px) {
+  .c-admin .client-page-editor__actions {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .c-admin .client-page-editor__actions .team-editor-actionColumn {
+    width: min(360px, 100%);
+    min-width: 0;
+  }
+
+  .c-admin .client-page-editor__actions .btnPrimary,
+  .c-admin .client-page-editor__actions .btn {
+    width: 100%;
+  }
+}
+
+.team-editor-actionColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: center;
+  min-width: 160px;
+}
+
+.team-editor-action {
+  min-width: 160px;
+  justify-content: center;
+}
+
+.team-editor-action--draft {
+  background: rgba(0,0,0,.06);
+}
+
+.team-editor-helper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: center;
+  align-items: center;
+}
+
+.team-order-field.is-hidden {
+  display: none;
+}
+
+.team-editor-actionColumn--toggle {
+  min-width: 140px;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-editor-footer {
+  margin-top: 1rem;
+}
+
+.team-basic-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.team-photo-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(0,0,0,.03);
+}
+
+.team-photo-section__header {
+  margin-bottom: 0.75rem;
+}
+
+.team-photo-section__header .type-h3 {
+  margin: 0 0 0.2rem;
+}
+
+.team-photo-grid {
+  display: grid;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -3652,3 +3766,6 @@ hr.dot {
   color: #667085;
 }
 
+/* div.work-mobile > section > div.work-spotlight__text > a {
+
+} */

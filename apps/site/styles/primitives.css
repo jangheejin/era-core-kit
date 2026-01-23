@@ -120,6 +120,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  max-width: 100%;
+
   gap: 0.4rem;
 
   padding: 0.6rem 1.2rem;
