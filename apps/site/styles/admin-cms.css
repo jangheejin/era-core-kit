@@ -3569,6 +3569,9 @@ flex-wrap: wrap;
 
 button.adminTopNav__toggle {
   display: flex; align-items: center;
-  }
+}
   
-  
+hr.dot {
+  border-top: 1px dotted;
+  color: #667085;
+}
