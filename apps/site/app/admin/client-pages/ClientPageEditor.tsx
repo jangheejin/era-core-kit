@@ -45,29 +45,27 @@ type Props = {
 
 export default function ClientPageEditor({ slug }: Props) {
   const router = useRouter();
-  const {
-    createPage,
-    upsertPage,
-    removePage,
-    ensureUniqueSlug,
-    getBySlug,
-  } = useAdminClientPages();
+  const { createPage, upsertPage, removePage, ensureUniqueSlug, getBySlug } =
+    useAdminClientPages();
 
   const [notFound, setNotFound] = useState(false);
   const loadedSlugRef = useRef<string | null>(null);
 
   const [name, setName] = useState("");
   const [desiredSlug, setDesiredSlug] = useState("");
-  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([
-    "",
-  ]);
+  const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>(
+    [""]
+  );
   const [tags, setTags] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [audience, setAudience] = useState<"Public" | "ClientSafe">("Public");
   const [bodyMDX, setBodyMDX] = useState("");
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const selected = useMemo(() => (slug ? getBySlug(slug) ?? null : null), [getBySlug, slug]);
+  const selected = useMemo(
+    () => (slug ? (getBySlug(slug) ?? null) : null),
+    [getBySlug, slug]
+  );
 
   const tagChips = useMemo(
     () =>
@@ -118,7 +116,9 @@ export default function ClientPageEditor({ slug }: Props) {
     if (!page) return false;
     setName(page.name);
     setDesiredSlug(page.slug);
-    setCategoryDrafts(page.filters.sectors.length ? [...page.filters.sectors] : [""]);
+    setCategoryDrafts(
+      page.filters.sectors.length ? [...page.filters.sectors] : [""]
+    );
     setTags(page.filters.tags.join(", "));
     setTagMode(page.filters.tagMode);
     setAudience(page.filters.audience);
@@ -151,7 +151,10 @@ export default function ClientPageEditor({ slug }: Props) {
     );
 
     if (selected) {
-      const nextSlug = ensureUniqueSlug(desiredSlug || selected.slug, selected.id);
+      const nextSlug = ensureUniqueSlug(
+        desiredSlug || selected.slug,
+        selected.id
+      );
       const nextPage = {
         ...selected,
         name: name.trim() || selected.name,
@@ -200,8 +203,8 @@ export default function ClientPageEditor({ slug }: Props) {
         </div>
         <div className="card mt">
           <p className="muted">
-            The client page you requested doesn&apos;t exist in this browser&apos;s
-            demo store.
+            The client page you requested doesn&apos;t exist in this
+            browser&apos;s demo store.
           </p>
         </div>
       </main>
@@ -303,7 +306,11 @@ export default function ClientPageEditor({ slug }: Props) {
                   onChange={(e) =>
                     setCategoryAt(idx, e.target.value as SectorValue | "")
                   }
-                  aria-label={idx === 0 ? "Primary category" : `Additional category ${idx + 1}`}
+                  aria-label={
+                    idx === 0
+                      ? "Primary category"
+                      : `Additional category ${idx + 1}`
+                  }
                 >
                   <option value="">Select a category…</option>
                   {SECTOR_GROUPS.map((group) => (
@@ -382,7 +389,7 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         </div>
 
-        <div className="form-group">
+        {/*         <div className="form-group">
           <label className="form-label">Publishing status</label>
           <div className="row">
             <label className="radioLabel">
@@ -402,7 +409,7 @@ export default function ClientPageEditor({ slug }: Props) {
               Client safe
             </label>
           </div>
-        </div>
+        </div> */}
 
         <div className="form-group">
           <div className="row" style={{ justifyContent: "space-between" }}>
@@ -461,7 +468,10 @@ export default function ClientPageEditor({ slug }: Props) {
           </div>
         ) : null}
 
-        <div className="row" style={{ justifyContent: "space-between", marginTop: "1.5rem" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", marginTop: "1.5rem" }}
+        >
           <div className="row" style={{ gap: ".5rem" }}>
             <button className="btnPrimary" type="button" onClick={handleSave}>
               Save client page

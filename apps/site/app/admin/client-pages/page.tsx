@@ -187,23 +187,23 @@ export default function AdminClientPages() {
                         )}
                       </div>
                     </div>
-                    <div className="dbProp">
+                    {/*                     <div className="dbProp">
                       <div className="dbPropLabel">Publishing Status</div>
-                      <div className="dbPillRow">
-                        <span
-                          className={`pill pill--status ${
-                            isPublished ? "pill--published" : "pill--draft"
-                          }`}
-                        >
-                          {isPublished ? "Published" : "Draft"}
-                        </span>
-                        {/*                         <span className="pill pill--muted">
-                          {page.filters.audience === "Public"
-                            ? "Public"
-                            : "Client safe"}
-                        </span> */}
-                      </div>
-                    </div>
+                        <div className="dbPillRow">
+                          <span
+                            className={`pill pill--status ${
+                              isPublished ? "pill--published" : "pill--draft"
+                            }`}
+                          >
+                            {isPublished ? "Published" : "Draft"}
+                          </span>
+                          <span className="pill pill--muted">
+                            {page.filters.audience === "Public"
+                              ? "Public"
+                              : "Client safe"}
+                          </span>
+                        </div>
+                      </div> */}
                   </div>
                   <div className="dbProps dbProps--inline">
                     <div className="dbProp">
