@@ -26,6 +26,16 @@
 .work-header__intro {
   margin-top: 0.75rem;
 }
+
+/* Swap CTA copy on small viewports */
+.work-linkText--mobile { display: none; }
+.work-linkText--desktop { display: inline; }
+
+@media (max-width: 720px) {
+  .work-linkText--desktop { display: none; }
+  .work-linkText--mobile { display: inline; }
+}
+
 /* .work-header__intro {
   margin-bottom:0;
 } */
@@ -481,14 +491,20 @@ h5.work-detail__sector {
     background-color 120ms ease-out;
 }
 
-/* Slight nudge left/right – you can tweak these */
-.work-grid-nav--left {
-  left: -0.75rem;
-}
+/* Slight nudge left/right – can tweak these */
 
+.work-grid-nav--left {
+  left: 0.5rem;
+}
+.work-grid-nav--right {
+  right: 0.5rem;
+}
+/*.work-grid-nav--left {
+ left: -0.75rem; 
+}
 .work-grid-nav--right {
   right: -0.75rem;
-}
+}*/
 
 .work-grid-nav:hover {
   transform: translateY(-50%) translateY(-1px);

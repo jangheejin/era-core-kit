@@ -65,6 +65,12 @@
   max-height: none;
 }
 
+.c-section--intro.has-intro-image .intro-image {
+  position: static;
+  margin-top: var(--space-3);
+  justify-self: center;
+}
+
 /* ========================= */
 /* MOBILE: < 580px → 1 col   */
 /* ========================= */

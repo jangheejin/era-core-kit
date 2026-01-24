@@ -79,7 +79,7 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="admin-stat">
-            <div className="admin-stat__label">Client pages</div>
+            <div className="admin-stat__label">Case Study Collections</div>
             <div className="admin-stat__value">{pages.length}</div>
             {/* <div className="admin-stat__meta">Saved audiences</div> */}
           </div>
@@ -107,7 +107,7 @@ export default function AdminPage() {
           </article>
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
-              <h2 className="type-h3">Client pages</h2>
+              <h2 className="type-h3">Case Study Collections</h2>
               <span className="pill pill--muted">Curated</span>
             </div>
             <p className="muted">
@@ -115,7 +115,7 @@ export default function AdminPage() {
             </p>
             <div className="admin-dashboard__card-actions">
               <Link className="btnPrimary" href="/admin/client-pages">
-                View client pages
+                Manage Case Study Collections
               </Link>
               <Link className="btn" href="/admin/client-pages/new">
                 New client page

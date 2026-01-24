@@ -33,7 +33,7 @@ export const homeLayout: LayoutBlock[] = [
       heading: "Our Mission",
       text: "ERA Government Affairs is a federal advocacy and business consulting team with expertise in federal policy on Capitol Hill and extensive experience working with industry, the federal government, and relevant programmatic efforts across various departments and agencies.",
       text2:
-        "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
+        "Our mission is to develop and maintain a close relationship with our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
     },
   },
   {
@@ -184,7 +184,7 @@ export const homeLayout: LayoutBlock[] = [
   },*/
 ];
 export const workTextProps = {
-  heading: "Our Work",
+  heading: "Our Experience",
   text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
   text2:
     "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",

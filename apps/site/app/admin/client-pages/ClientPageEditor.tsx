@@ -296,7 +296,7 @@ export default function ClientPageEditor({ slug }: Props) {
             onChange={(e) => setName(e.target.value)}
           />
           <p className="muted type-small" style={{ marginTop: 6 }}>
-            This is the internal title shown in the client pages list.
+            This is the internal title shown in the Case Study Collections list.
           </p>
         </div>
 

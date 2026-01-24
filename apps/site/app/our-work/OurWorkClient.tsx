@@ -44,7 +44,7 @@ export function OurWorkClient({
   }, [cases]);
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    featured[0]?.slug ?? null,
+    featured[0]?.slug ?? null
   );
 
   const selected =
@@ -56,7 +56,10 @@ export function OurWorkClient({
     const el = stripRef.current;
     if (!el) return;
     const CARD_STEP = 280;
-    el.scrollBy({ left: direction === "left" ? -CARD_STEP : CARD_STEP, behavior: "smooth" });
+    el.scrollBy({
+      left: direction === "left" ? -CARD_STEP : CARD_STEP,
+      behavior: "smooth",
+    });
   };
 
   if (!selected) {
@@ -94,32 +97,65 @@ export function OurWorkClient({
 
           {spotlight && (
             <div className="work-mobile">
-              <section className="work-spotlight" aria-label="Featured case study">
+              <section
+                className="work-spotlight"
+                aria-label="Featured case study"
+              >
                 <div className="work-spotlight__text">
                   <p className="type-small work-spotlight__label">Spotlight</p>
-                  <h2 className="type-h2 work-spotlight__title">{spotlight.client}</h2>
-                  <p className="type-body work-spotlight__summary">{spotlight.summary}</p>
-                  <a href={detailHref} className="c-button c-button--alt2 work-spotlight__link">
+                  <h2 className="type-h2 work-spotlight__title">
+                    {spotlight.client}
+                  </h2>
+                  <p className="type-body work-spotlight__summary">
+                    {spotlight.summary}
+                  </p>
+                  {/*                   <a
+                    href={detailHref}
+                    className="c-button c-button--alt2 work-spotlight__link"
+                  >
                     View full case study
+                  </a> */}
+                  <a
+                    href={detailHref}
+                    className="c-button c-button--alt2 work-spotlight__link"
+                  >
+                    <span className="work-linkText work-linkText--desktop">
+                      View full case study
+                    </span>
+                    <span className="work-linkText work-linkText--mobile">
+                      Read more
+                    </span>
                   </a>
                 </div>
                 {spotlight.imageUrl && (
                   <div className="work-spotlight__media">
-                    <img src={spotlight.imageUrl} alt={spotlight.client} loading="lazy" />
+                    <img
+                      src={spotlight.imageUrl}
+                      alt={spotlight.client}
+                      loading="lazy"
+                    />
                   </div>
                 )}
               </section>
               <div className="work-mobile-grid" aria-label="Case study grid">
                 {featured.map((cs) => (
-                  <a key={cs.slug} href={`${basePath}/${cs.slug}${demo ? "?demo=1" : ""}`} className="work-mobile-card">
+                  <a
+                    key={cs.slug}
+                    href={`${basePath}/${cs.slug}${demo ? "?demo=1" : ""}`}
+                    className="work-mobile-card"
+                  >
                     {cs.imageUrl && (
                       <div className="work-mobile-card__media">
                         <img src={cs.imageUrl} alt={cs.client} loading="lazy" />
                       </div>
                     )}
                     <div className="work-mobile-card__body">
-                      <h3 className="type-h3 work-mobile-card__title">{cs.client}</h3>
-                      <p className="type-small work-mobile-card__summary">{cs.summary}</p>
+                      <h3 className="type-h3 work-mobile-card__title">
+                        {cs.client}
+                      </h3>
+                      <p className="type-small work-mobile-card__summary">
+                        {cs.summary}
+                      </p>
                     </div>
                   </a>
                 ))}
@@ -137,19 +173,29 @@ export function OurWorkClient({
               ‹
             </button>
 
-            <section aria-label="Featured case studies" className="work-grid" ref={stripRef}>
+            <section
+              aria-label="Featured case studies"
+              className="work-grid"
+              ref={stripRef}
+            >
               {featured.map((cs) => {
                 const isActive = cs.slug === selected.slug;
                 return (
                   <button
                     key={cs.slug}
                     type="button"
-                    className={"work-card" + (isActive ? " work-card--active" : "")}
+                    className={
+                      "work-card" + (isActive ? " work-card--active" : "")
+                    }
                     onClick={() => setSelectedSlug(cs.slug)}
                   >
                     {cs.imageUrl && (
                       <div className="work-card__media">
-                        <img src={cs.imageUrl} alt={`${cs.client} case study`} loading="lazy" />
+                        <img
+                          src={cs.imageUrl}
+                          alt={`${cs.client} case study`}
+                          loading="lazy"
+                        />
                       </div>
                     )}
                     {/* <h5 className="type-h5 work-card__sector">{cs.sector}</h5> */}
@@ -169,22 +215,43 @@ export function OurWorkClient({
             </button>
           </div>
 
-          <section className="work-detail" aria-label={`Case study detail: ${selected.client}`}>
+          <section
+            className="work-detail"
+            aria-label={`Case study detail: ${selected.client}`}
+          >
             <p className="type-small work-detail__label">Currently viewing</p>
 
             <div className="work-detail__top">
               <div className="work-detail__text">
                 {/* <h5 className="type-h5 work-detail__sector">{selected.sector}</h5> */}
-                <h2 className="type-h2 work-detail__title">{selected.client}</h2>
+                <h2 className="type-h2 work-detail__title">
+                  {selected.client}
+                </h2>
 
-                <p className="type-body work-detail__summary">{selected.summary}</p>
+                <p className="type-body work-detail__summary">
+                  {selected.summary}
+                </p>
 
-                <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
+                {/*                 <a
+                  href={detailHref}
+                  className="c-button c-button--alt2 work-detail__link"
+                >
                   View full case study
+                </a> */}
+                <a
+                  href={detailHref}
+                  className="c-button c-button--alt2 work-detail__link"
+                >
+                  <span className="work-linkText work-linkText--desktop">
+                    View full case study
+                  </span>
+                  <span className="work-linkText work-linkText--mobile">
+                    Read more
+                  </span>
                 </a>
 
-{/* hiding this for now to simplify creation -> publishing flow for client */}
-{/*                 {selected.outcomes?.length ? (
+                {/* hiding this for now to simplify creation -> publishing flow for client */}
+                {/*                 {selected.outcomes?.length ? (
                   <div className="work-detail__outcomes">
                     <h3 className="type-h3">What we helped our client achieve</h3>
                     <ul>
@@ -201,12 +268,16 @@ export function OurWorkClient({
 
               {selected.imageUrl && (
                 <div className="work-detail__media">
-                  <img src={selected.imageUrl} alt={selected.client} loading="lazy" />
+                  <img
+                    src={selected.imageUrl}
+                    alt={selected.client}
+                    loading="lazy"
+                  />
                 </div>
               )}
             </div>
 
-{/*             <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
+            {/*             <a href={detailHref} className="c-button c-button--alt2 work-detail__link">
               View full case study
             </a> */}
           </section>

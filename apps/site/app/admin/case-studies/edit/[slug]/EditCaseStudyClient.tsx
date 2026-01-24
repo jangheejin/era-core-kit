@@ -733,7 +733,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               <p className="admin-hint">
                 {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client pages. */}
                 OPTIONAL: Assign categories so this case study can be used in
-                custom client pages.
+                custom Case Study Collections.
               </p>
             </div>
             <span className="admin-collapse__chevron" aria-hidden="true">

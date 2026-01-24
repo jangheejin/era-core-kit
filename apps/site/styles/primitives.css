@@ -5,6 +5,19 @@
 /* ----------------------------------------------------- */
 /* LAYOUT & COMPONENTS */
 /* ----------------------------------------------------- */
+
+/* Global sizing baseline (prevents width:100% + padding/border overflow) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .pad-2 {
   padding: var(--space-2);
 }

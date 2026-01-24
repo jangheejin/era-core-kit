@@ -28,6 +28,12 @@ the user fills out)
   ); */
 }
 
+/* Containment guardrails: prevent common overflow on small viewports */
+.c-admin img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* .c-section {
   padding-block: var(
     --space-2
@@ -396,10 +402,6 @@ the user fills out)
   gap: 1rem 2rem;
   font-size: 0.9rem;
   color: var(--gray-text, #555);
-}
-
-.case-metadata > div {
-  min-width: 160px;
 }
 
 .metadata-grid {
@@ -3218,6 +3220,38 @@ fieldset.form-group > legend.form-label{
   min-width: 160px;
 }
 
+/* ClientPageEditor: keep the bottom action cluster centered when it stacks */
+.clientPageEditorActions {
+  justify-content: space-between;
+}
+
+.clientPageEditorActions__cluster {
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 720px) {
+  .clientPageEditorActions {
+    justify-content: center;
+  }
+
+  .clientPageEditorActions__cluster {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .clientPageEditorActions__cluster .team-editor-actionColumn {
+    min-width: min(100%, 320px);
+  }
+
+  .clientPageEditorActions__cluster .team-editor-actionColumn .btn,
+  .clientPageEditorActions__cluster .team-editor-actionColumn .btnPrimary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .team-editor-action {
   min-width: 160px;
   justify-content: center;
@@ -3652,6 +3686,7 @@ fieldset.form-group > legend.form-label{
 
 .heroPreview {
   margin-top: 0.75rem;
+  width: 100%;
   max-width: 360px; /* adjust down to make smaller */
 }
 
@@ -3664,7 +3699,9 @@ fieldset.form-group > legend.form-label{
 .heroImagePreview {
   display: block;
 /*   width: 360px; */
+  height: auto;
   max-height: 200px;
+
   object-fit: cover;
   border-radius: 8;
 }
