@@ -49,3 +49,8 @@ apps/site/app/**/*.d.ts
 apps/site/app/**/*.d.ts.map
 apps/site/src/**/*.d.ts
 apps/site/src/**/*.d.ts.map
+
+AGENTS.md
+AGENTS.override.md
+**/AGENTS.md
+**/AGENTS.override.md
