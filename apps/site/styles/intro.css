@@ -67,7 +67,7 @@
 
   .c-section--intro .intro-image {
     float: none;
-    width: min(100%, 420px);
+    width: 100%;
     margin: 0 0 1rem 0;
   }
 }
