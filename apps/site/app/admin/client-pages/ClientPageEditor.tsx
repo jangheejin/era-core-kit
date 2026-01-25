@@ -210,14 +210,14 @@ export default function ClientPageEditor({ slug }: Props) {
       }
       if (nextStatus === "Draft") {
         window.alert(
-          "Draft saved. This saves your work but does not publish the page. Clients can only see published pages."
+          "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections."
         );
       }
       return;
     }
 
     const created = createPage({
-      name: name.trim() || "Client page",
+      name: name.trim() || "Case Study Collection",
       desiredSlug: desiredSlug || name,
       status: nextStatus,
       filters: {
@@ -231,7 +231,7 @@ export default function ClientPageEditor({ slug }: Props) {
     router.replace(`/admin/client-pages/edit/${created.slug}`);
     if (nextStatus === "Draft") {
       window.alert(
-        "Draft saved. This saves your work but does not publish the page. Clients can only see published pages."
+        "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections."
       );
     }
   }
@@ -240,7 +240,9 @@ export default function ClientPageEditor({ slug }: Props) {
     return (
       <main className="c-admin">
         <div className="admin-page-header">
-          <h1 className="type-h2 admin-page-title">Client page not found</h1>
+          <h1 className="type-h2 admin-page-title">
+            Case Study Collection not found
+          </h1>
           <div className="admin-page-actions">
             <Link className="btn" href="/admin/client-pages">
               Back to list
@@ -249,7 +251,7 @@ export default function ClientPageEditor({ slug }: Props) {
         </div>
         <div className="card mt">
           <p className="muted">
-            The client page you requested doesn&apos;t exist in this
+            The collection you requested doesn&apos;t exist in this
             browser&apos;s demo store.
           </p>
         </div>
@@ -261,7 +263,7 @@ export default function ClientPageEditor({ slug }: Props) {
     <main className="c-admin">
       <div className="admin-page-header">
         <h1 className="type-h2 admin-page-title">
-          {selected ? "Edit client page" : "Create client page"}
+          {selected ? "Edit collection" : "Create collection"}
         </h1>
         <div className="admin-page-actions">
           <Link className="btn" href="/admin/client-pages">
@@ -283,13 +285,13 @@ export default function ClientPageEditor({ slug }: Props) {
         <p className="muted" style={{ marginTop: 0 }}>
           Build a focused, client-facing page by choosing categories and tags to
           create a filtered collection of case studies. You can optionally add
-          an introduction. These pages are saved, editable, and shareable.
+          an introduction. These collections are saved, editable, and shareable.
           {/* Client pages combine categories and tags into a tailored, shareable
           page. Add a clear name, an optional intro to orient readers, and set
           the publishing status before saving. */}
         </p>
         <div className="form-group">
-          <label className="form-label">Page name</label>
+          <label className="form-label">Collection name</label>
           <input
             className="input"
             value={name}
@@ -307,7 +309,7 @@ export default function ClientPageEditor({ slug }: Props) {
               className="input"
               value={desiredSlug}
               onChange={(e) => setDesiredSlug(e.target.value)}
-              placeholder="client-page-slug"
+              placeholder="collection-slug"
             />
             <p className="muted type-small" style={{ marginTop: 6 }}>
               Used in the URL. Keep it short and readable.
@@ -453,7 +455,7 @@ export default function ClientPageEditor({ slug }: Props) {
             rows={6}
             value={bodyMDX}
             onChange={(e) => setBodyMDX(e.target.value)}
-            placeholder="Optional intro or context for this client page..."
+            placeholder="Optional intro or context for this collection..."
             style={{ marginTop: 6 }}
           />
           <p className="muted type-small" style={{ marginTop: 6 }}>
@@ -498,7 +500,7 @@ export default function ClientPageEditor({ slug }: Props) {
                 className="btnPrimary"
                 type="button"
                 onClick={() => handleSave("Published")}
-                title="Publish this page so clients can view it."
+                title="Publish this collection so clients can view it."
               >
                 Publish
               </button>
@@ -519,7 +521,7 @@ export default function ClientPageEditor({ slug }: Props) {
                     removePage(selected.slug);
                     router.push("/admin/client-pages");
                   }}
-                  title="Permanently delete this client page."
+                  title="Permanently delete this collection."
                 >
                   Delete
                 </button>

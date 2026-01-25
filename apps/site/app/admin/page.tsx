@@ -118,7 +118,7 @@ export default function AdminPage() {
                 Manage Case Study Collections
               </Link>
               <Link className="btn" href="/admin/client-pages/new">
-                New client page
+                New collection
               </Link>
             </div>
           </article>

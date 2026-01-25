@@ -296,8 +296,8 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
           ? crypto.randomUUID()
           : String(now);
 
-      const name = input.name.trim() || "Untitled client page";
-      const desired = (input.desiredSlug?.trim() || name) ?? "client-page";
+      const name = input.name.trim() || "Untitled collection";
+      const desired = (input.desiredSlug?.trim() || name) ?? "collection";
       const slug = ensureUniqueSlug(desired);
 
       const filters: ClientPageFilters = {

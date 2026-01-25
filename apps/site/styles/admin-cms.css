@@ -20,18 +20,25 @@ the user fills out)
 
 .c-admin {
   /* max-width: 72rem; */
-  max-width: var(--container-max);
+  width: min(100%, var(--container-max));
   margin: 0 auto;
-  padding: 1.25rem;
+  padding-block: clamp(1rem, 3vw, 2rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  min-width: 0;
   /* padding-block: var(
     --space-2
   ); */
 }
 
 /* Containment guardrails: prevent common overflow on small viewports */
-.c-admin img {
+.c-admin :where(img, picture, video, canvas, svg) {
   max-width: 100%;
   height: auto;
+}
+
+.c-admin :where(.card, .form-row, .form-field, .dbItem, .admin-dashboard__card) {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* .c-section {
@@ -70,6 +77,8 @@ the user fills out)
   border: 1px solid rgba(0,0,0,.18);
   margin-left:0;
   margin-right: 0;
+  max-width: 100%;
+  min-width: 0;
 }
 .c-admin .search {
   margin-bottom: 1rem;
@@ -94,6 +103,7 @@ the user fills out)
   font-family: var(--font-heading);
   text-transform: uppercase;
   font-size: var(--fs-h4);
+  line-height: 1.1;
 }
 .c-admin .btnPrimary, .btnSave {
   padding: .6rem .9rem;
@@ -106,6 +116,7 @@ the user fills out)
   text-transform: uppercase;
   font-size: var(--fs-h4);
   text-align: center;
+  line-height: 1.1;
 }
 .btnSave {
   background: var(--brand-lighter-2);
@@ -265,9 +276,16 @@ the user fills out)
 }
 
 .admin-dashboard__card-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.5rem;
+  align-items: stretch;
+}
+
+.admin-dashboard__card-actions .btn,
+.admin-dashboard__card-actions .btnPrimary {
+  width: 100%;
+  justify-content: center;
 }
 
 .cms-console {
@@ -846,6 +864,20 @@ the user fills out)
   margin-top: 0.5rem;
   max-width: 100%; /* prevent overflow */
   align-items:center;
+}
+
+.admin-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.admin-checkbox input[type="checkbox"] {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin: 0;
 }
 
 /*buttons*/
@@ -3686,24 +3718,26 @@ fieldset.form-group > legend.form-label{
 
 .heroPreview {
   margin-top: 0.75rem;
-  width: 100%;
-  max-width: 360px; /* adjust down to make smaller */
+  width: min(100%, 360px);
+  max-width: 100%;
+  display: grid;
+  gap: 0.35rem;
 }
 
-/* .heroPreview__img {
-  display: block;
+.heroPreview__frame {
+  position: relative;
   width: 100%;
-  height: auto;
-  border-radius: 8px;
-} */
-.heroImagePreview {
-  display: block;
-/*   width: 360px; */
-  height: auto;
-  max-height: 200px;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #eef2f7;
+  border: 1px solid rgba(0,0,0,0.08);
+}
 
+.heroPreview__img {
   object-fit: cover;
-  border-radius: 8;
+  width: 100%;
+  height: 100%;
 }
 
 /* Only affects the edit case study page action bar */

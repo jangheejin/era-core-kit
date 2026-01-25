@@ -8,15 +8,15 @@ import { sectorLabel, normalizeTagList } from "@kit/schema";
 import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
 export default function AdminClientPages() {
-  const { pages, removePage, resetPages } = useAdminClientPages();
+  const { pages, removePage } = useAdminClientPages();
 
   return (
     <main className="c-admin">
       <div className="admin-page-header">
-        <h1 className="type-h2 admin-page-title">Client Page Library</h1>
+        <h1 className="type-h2 admin-page-title">Case Study Collections</h1>
         <div className="admin-page-actions">
           <Link className="btnPrimary" href="/admin/client-pages/new">
-            New client page
+            New collection
           </Link>
         </div>
       </div>
@@ -85,8 +85,8 @@ export default function AdminClientPages() {
         <div className="dbResultsHeader">
           <div className="dbResultsHeader__sort">
             <span className="muted type-small">
-              <b>Library View</b>: This list contains your saved client pages.
-              Choose one to edit or start a new page.
+              <b>Library View</b>: This list contains your saved collections.
+              Choose one to edit or start a new collection.
             </span>
           </div>
           <p className="muted dbResultsHeader__count">
@@ -94,8 +94,8 @@ export default function AdminClientPages() {
           </p>
         </div>
         {/* <p className="muted type-small" style={{ marginTop: ".5rem" }}>
-          This list contains your saved client pages. Choose one to edit or start a
-          new page.
+          This list contains your saved collections. Choose one to edit or start a
+          new collection.
         </p> */}
         <div className="dbListGrid">
           {pages.length ? (
@@ -228,16 +228,8 @@ export default function AdminClientPages() {
               );
             })
           ) : (
-            <p className="muted">No client pages yet.</p>
+            <p className="muted">No collections yet.</p>
           )}
-        </div>
-        <div
-          className="row"
-          style={{ justifyContent: "flex-end", marginTop: "1rem" }}
-        >
-          <button className="btn-3" type="button" onClick={resetPages}>
-            Reset demo data
-          </button>
         </div>
       </div>
     </main>

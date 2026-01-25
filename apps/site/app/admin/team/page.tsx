@@ -88,7 +88,7 @@ function serializeMember(member: TeamMember) {
 }
 
 export default function AdminTeamPage() {
-  const { items, upsertTeamMember, resetToBaseline } = useAdminTeamMembers();
+  const { items, upsertTeamMember } = useAdminTeamMembers();
   const sorted = useMemo(() => items, [items]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<TeamMember | null>(null);
@@ -363,17 +363,6 @@ export default function AdminTeamPage() {
           </div>
         </div>
       )}
-      {!editingId && (
-        <div
-          className="row"
-          style={{ justifyContent: "flex-end", marginTop: "1rem" }}
-        >
-          <button className="btn-3" type="button" onClick={resetToBaseline}>
-            Reset demo data
-          </button>
-        </div>
-      )}
-
       {editingId && draft && (
         <>
           <button className="btnLink" type="button" onClick={cancelEditing}>
