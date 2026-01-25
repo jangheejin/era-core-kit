@@ -16,6 +16,10 @@
   max-width: 47rem;
 }
 
+.c-section--intro.has-intro-image .intro-copy {
+  max-width: none;
+}
+
 /* Heading spacing under intro */
 .c-section--intro .intro-copy .type-h2 {
   margin-block-start: 0;
@@ -36,7 +40,6 @@
   float: right;
   width: clamp(180px, 30vw, 300px);
   margin: 0 0 1rem var(--intro-gap);
-  border-radius: var(--radius);
   overflow: hidden;
   background: #e5e7eb;
 }
