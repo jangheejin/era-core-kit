@@ -31,7 +31,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
 
   const items = useMemo(() => {
     const publicItems = adminItems.filter(
-      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published"
     );
 
     if (itemsSource !== "featured") {
@@ -55,7 +55,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     <section className="c-section">
       <div className="c-container c-stack">
         <WorkText heading={heading} text={text} text2={text2} />
-        <h2 className="type-h2 case-grid-section">Selected Case Studies</h2>
+        {/* <h2 className="type-h2 case-grid-section">Selected Case Studies</h2> */}
         {/* <h3 className="type-h3 case-grid-section">Selected Case Studies</h3> */}
         <CaseGrid layout={layout} items={items} />
       </div>

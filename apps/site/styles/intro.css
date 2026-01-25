@@ -46,7 +46,7 @@
 .c-section--intro .intro-image {
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: var(--radius);
+/*   border-radius: var(--radius); */
   overflow: hidden;
   background: #e5e7eb;
   align-self: flex-start;
