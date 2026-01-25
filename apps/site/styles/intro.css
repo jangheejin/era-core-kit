@@ -4,22 +4,11 @@
 
 .c-section--intro {
   --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
-  --intro-figure-min: 220px;
-  --intro-figure-max: 360px;
 }
 
 .c-section--intro .intro-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--intro-gap);
-  align-items: center;
+  display: flow-root;
   min-width: 0;
-}
-
-.c-section--intro.has-intro-image .intro-grid {
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, clamp(var(--intro-figure-min), 32vw, var(--intro-figure-max)));
 }
 
 .c-section--intro .intro-copy {
@@ -44,26 +33,23 @@
 }
 
 .c-section--intro .intro-image {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-/*   border-radius: var(--radius); */
+  float: right;
+  width: clamp(180px, 30vw, 300px);
+  margin: 0 0 1rem var(--intro-gap);
+  border-radius: var(--radius);
   overflow: hidden;
   background: #e5e7eb;
-  align-self: flex-start;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
 }
 
 @media (max-width: 900px) {
-  .c-section--intro {
-    --intro-figure-min: 200px;
-    --intro-figure-max: 320px;
+  .c-section--intro .intro-image {
+    width: clamp(160px, 35vw, 260px);
   }
 }
 
@@ -72,16 +58,13 @@
 /* ========================= */
 
 @media (max-width: 720px) {
-  .c-section--intro .intro-grid {
-    grid-template-columns: 1fr;
-  }
-
   .c-section--intro .intro-copy {
     max-width: none;
   }
 
   .c-section--intro .intro-image {
-    max-width: 420px;
-    justify-self: flex-start;
+    float: none;
+    width: min(100%, 420px);
+    margin: 0 0 1rem 0;
   }
 }

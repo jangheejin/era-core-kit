@@ -7,9 +7,18 @@ import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
+type NonEmptyArray<T> = [T, ...T[]];
+
+function toNonEmptyArray<T>(items: T[] | undefined): NonEmptyArray<T> | undefined {
+  if (!Array.isArray(items) || items.length === 0) return undefined;
+  const first = items[0];
+  if (first == null) return undefined;
+  return [first, ...items.slice(1)];
+}
 
 function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
   const primary: SectorValue | undefined = cs.primarySector ?? cs.sectors?.[0];
+  const sectors = toNonEmptyArray(cs.sectors);
 
   return {
     slug: cs.slug,
@@ -18,9 +27,9 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
     summary: cs.summaryShort ?? undefined,
     primarySector: primary,
     primarySectorReadable: primary ? sectorLabel(primary) : undefined,
-    sectors: (cs.sectors ?? []) as any,
-    sectorsReadable: Array.isArray(cs.sectors)
-      ? cs.sectors.map((s) => sectorLabel(s)).join(" · ")
+    sectors,
+    sectorsReadable: sectors
+      ? sectors.map((s) => sectorLabel(s)).join(" · ")
       : undefined,
   };
 }
