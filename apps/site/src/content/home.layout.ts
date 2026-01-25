@@ -17,33 +17,30 @@ export const homeLayout: LayoutBlock[] = [
     },
   },
   {
+    type: "MissionText",
+    groupId: "home-intro",
+    props: {
+      heading: "Our Mission",
+      text: "Our mission is to develop and maintain a close relationship with our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
+      text2:
+        "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
+    },
+  },
+  {
     type: "IntroWithImage",
     groupId: "home-intro",
     props: {
       heading: "Your voice in Washington",
       text: "We are a federal advocacy and business consultant team with expertise in federal policy on Capitol Hill as well as robust experience working with industry, the federal government and its programmatic efforts across myriad departments and agencies.",
-      //      text2: "Our mission is to develop and maintain a close relationship our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
-      imageUrl: "/img/capitol-building.jpg", // Move here
-    },
-  },
-  {
-    type: "MissionText",
-    groupId: "home-intro",
-    props: {
-      heading: "Our Mission",
-      text: "ERA Government Affairs is a federal advocacy and business consulting team with expertise in federal policy on Capitol Hill and extensive experience working with industry, the federal government, and relevant programmatic efforts across various departments and agencies.",
       text2:
-        "Our mission is to develop and maintain a close relationship with our clients, which means understanding their mission needs and objectives, and to jointly develop a targeted and pragmatic strategy to achieve them.",
+        "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
+      imageUrl: "/img/capitol-building.jpg",
     },
   },
   {
     type: "WorkWithCaseGrid",
     props: {
       heading: "Our Work",
-      text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
-      text2:
-        "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
-      gridHeading: "Selected Case Studies",
       layout: "3col",
 
       itemsSource: "featured",

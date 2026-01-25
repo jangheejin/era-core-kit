@@ -10,7 +10,14 @@
   display: grid;
   row-gap: var(--space-3);
   max-width: 980px;
+  width: 100%;
+  min-width: 0;
   margin-inline: auto;
+}
+
+.work-layout > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .work-header {
@@ -152,6 +159,8 @@
   gap: var(--space-2);
   overflow-x: auto;
   overflow-y:hidden;
+  width: 100%;
+  max-width: 100%;
   padding-block: 0.25rem 0.75rem;
 /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
@@ -289,6 +298,8 @@
   margin-top: 1.6rem;      /* space below the strip */
   justify-items: start;    /* children hug content, no full-width stretch */
   max-width: 980px;
+  width: 100%;
+  min-width: 0;
   margin-inline: auto;
 }
 
@@ -425,6 +436,8 @@ h5.work-detail__sector {
 /* Shell that holds strip + nav buttons */
 .work-grid-shell {
   position: relative;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Keep your existing .work-grid – just make sure overflow-y is hidden
@@ -439,6 +452,8 @@ h5.work-detail__sector {
   overflow-x: auto;
   overflow-y: hidden;
 
+  width: 100%;
+  max-width: 100%;
   padding-block: 0.25rem 1.75rem; /* room for arrow */
   padding-inline: var(--space-2);
   justify-content: flex-start;

@@ -2,32 +2,29 @@
 /* INTRO / IMAGE WITH TEXT   */
 /* ========================= */
 
-/* Never size the image column as `auto` in grid — it can shrink the text column. */
 .c-section--intro {
   --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
-  --intro-figure-min: 200px;
-  --intro-figure-max: 300px;
+  --intro-figure-min: 220px;
+  --intro-figure-max: 360px;
 }
 
-/* Desktop / tablet: text | image */
 .c-section--intro .intro-grid {
-  position: relative;
-  display: block;
-  column-gap: var(--intro-gap);
-  overflow: hidden;
-  container-type: inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--intro-gap);
+  align-items: center;
+  min-width: 0;
+}
+
+.c-section--intro.has-intro-image .intro-grid {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, clamp(var(--intro-figure-min), 32vw, var(--intro-figure-max)));
 }
 
 .c-section--intro .intro-copy {
   min-width: 0;
   max-width: 47rem;
-}
-
-.c-section--intro.has-intro-image .intro-copy {
-  padding-right: calc(
-    clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)) +
-      var(--intro-gap)
-  );
 }
 
 /* Heading spacing under intro */
@@ -46,13 +43,13 @@
   opacity: 0.9;
 }
 
-/* Image: desktop behavior */
-.c-section--intro.has-intro-image .intro-image {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: min(100%, clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)));
-  height: 100%;
+.c-section--intro .intro-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #e5e7eb;
+  align-self: flex-start;
 }
 
 .c-section--intro .intro-image img {
@@ -60,53 +57,31 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center -20px;
-  /* border-radius: var(--radius); */
-  max-height: none;
+  object-position: center;
 }
-
-.c-section--intro.has-intro-image .intro-image {
-  position: static;
-  margin-top: var(--space-3);
-  justify-self: center;
-}
-
-/* ========================= */
-/* MOBILE: < 580px → 1 col   */
-/* ========================= */
 
 @media (max-width: 900px) {
   .c-section--intro {
     --intro-figure-min: 200px;
-    --intro-figure-max: 280px;
+    --intro-figure-max: 320px;
   }
 }
 
+/* ========================= */
+/* MOBILE: < 720px → 1 col   */
+/* ========================= */
+
 @media (max-width: 720px) {
   .c-section--intro .intro-grid {
-    display: grid;
     grid-template-columns: 1fr;
-    row-gap: var(--space-3);
   }
 
-  .c-section--intro.has-intro-image .intro-copy {
-    padding-right: 0;
+  .c-section--intro .intro-copy {
     max-width: none;
   }
 
   .c-section--intro .intro-image {
-    position: static;
-    margin-top: var(--space-3);
-    justify-self: center;
-    max-width: 360px;
-    width: 100%;
-    height: auto;
-  }
-
-  .c-section--intro .intro-image img {
-    height: auto;
-    aspect-ratio: 4 / 3;
-    max-height: none;
-    object-position: center -20px;
+    max-width: 420px;
+    justify-self: flex-start;
   }
 }

@@ -50,8 +50,8 @@ export default function TeamPageClient() {
                       <Image
                         src={member.imageUrl}
                         alt={member.name}
-                        width={320}
-                        height={320}
+                        fill
+                        sizes="(max-width: 800px) 220px, 260px"
                         unoptimized
                       />
                     </div>
@@ -81,15 +81,15 @@ export default function TeamPageClient() {
                 {others.map((member) => (
                   <article key={member.id} className="team-card">
                     {member.imageUrl && (
-                      <div className="team-card__photo">
-                        <Image
-                          src={member.imageUrl}
-                          alt={member.name}
-                          width={320}
-                          height={320}
-                          unoptimized
-                        />
-                      </div>
+                    <div className="team-card__photo">
+                      <Image
+                        src={member.imageUrl}
+                        alt={member.name}
+                        fill
+                        sizes="(max-width: 800px) 220px, 160px"
+                        unoptimized
+                      />
+                    </div>
                     )}
 
                     <div className="team-card__body">
