@@ -61,37 +61,35 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <section className="card mt admin-dashboard__hero">
-        <div className="admin-dashboard__hero-body">
+      {/*<section className="card mt admin-dashboard__hero">
+                 <div className="admin-dashboard__hero-body">
           <p className="muted">
             This is a temporary demo CMS so you can click around and see how
             content editing might feel.{" "}
-            {/* Changes are stored only in this browser
-            (localStorage). */}
           </p>
-        </div>
-        <div className="admin-dashboard__stats">
+        </div> */}
+
+      {/* <div className="admin-dashboard__stats">
           <div className="admin-stat">
             <div className="admin-stat__label">Case studies</div>
             <div className="admin-stat__value">{items.length}</div>
-            <div className="admin-stat__meta">
-              {/* (6/8 featured on homepage) */}
-            </div>
+            <div className="admin-stat__meta"> */}
+      {/* (6/8 featured on homepage) */}
+      {/* </div>
           </div>
           <div className="admin-stat">
             <div className="admin-stat__label">Case Study Collections</div>
             <div className="admin-stat__value">{pages.length}</div>
-            {/* <div className="admin-stat__meta">Saved audiences</div> */}
           </div>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
 
       {isLoggedIn ? (
         <section className="admin-dashboard__grid mt">
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
               <h2 className="type-h3">Case studies</h2>
-              <span className="pill pill--muted">Library</span>
+              {/* <span className="pill pill--muted">Library</span> */}
             </div>
             <p className="muted">
               Review, filter, and edit every case study in the shared library.
@@ -108,7 +106,7 @@ export default function AdminPage() {
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
               <h2 className="type-h3">Case Study Collections</h2>
-              <span className="pill pill--muted">Curated</span>
+              {/* <span className="pill pill--muted">Curated</span> */}
             </div>
             <p className="muted">
               Build client-specific pages from saved filters and a short intro.
@@ -125,7 +123,7 @@ export default function AdminPage() {
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
               <h2 className="type-h3">Team bios</h2>
-              <span className="pill pill--muted">Public page</span>
+              {/* <span className="pill pill--muted">Public page</span> */}
             </div>
             <p className="muted">
               Update team member bios and photos that feed the public “Our Team”
@@ -134,6 +132,9 @@ export default function AdminPage() {
             <div className="admin-dashboard__card-actions">
               <Link className="btnPrimary" href="/admin/team">
                 Manage team
+              </Link>
+              <Link className="btn" href="/admin/team?new=1">
+                New team member
               </Link>
             </div>
           </article>

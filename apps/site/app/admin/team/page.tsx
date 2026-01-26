@@ -3,6 +3,7 @@
 import "@styles/admin-cms.css";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { MiniFormatBar } from "../components/MiniFormatBar";
 import { useAdminTeamMembers, type TeamMember } from "../AdminTeamStore";
 import { Markdown } from "@/components/Markdown";
@@ -89,6 +90,8 @@ function serializeMember(member: TeamMember) {
 
 export default function AdminTeamPage() {
   const { items, upsertTeamMember } = useAdminTeamMembers();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const sorted = useMemo(() => items, [items]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<TeamMember | null>(null);
@@ -101,6 +104,7 @@ export default function AdminTeamPage() {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const initialBioRef = useRef("");
   const visualEditorRef = useRef<HTMLDivElement | null>(null);
+  const didAutoStartRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -109,6 +113,14 @@ export default function AdminTeamPage() {
       JSON.stringify(uploadedLibrary)
     );
   }, [uploadedLibrary]);
+
+  useEffect(() => {
+    const wantsNew = searchParams?.get("new") === "1";
+    if (!wantsNew || editingId || didAutoStartRef.current) return;
+    didAutoStartRef.current = true;
+    startNewMember();
+    router.replace("/admin/team");
+  }, [searchParams, editingId]);
 
   const imageLibrary = useMemo(() => {
     const map = new Map<string, TeamImage>();
