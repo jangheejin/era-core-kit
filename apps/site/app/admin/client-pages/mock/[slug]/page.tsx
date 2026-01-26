@@ -66,9 +66,9 @@ export default function AdminClientPageMock({
   return (
     <main className="c-admin">
       <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
-        <h1 className="type-h2">Client page preview</h1>
+        <h1 className="type-h2">Case Study Collection preview</h1>
         <div className="row">
-          <Link href="/admin/client-pages">Back to client pages</Link>
+          <Link href="/admin/client-pages">Back to collections</Link>
           {page ? (
             <Link href={`/client-pages/${page.slug}`} target="_blank">
               Open public URL
@@ -80,7 +80,9 @@ export default function AdminClientPageMock({
       {!page ? (
         <div className="card" style={{ marginTop: "1rem" }}>
           <h2 className="type-h3">Not found</h2>
-          <p className="muted">No client page exists with slug: <code>{params.slug}</code></p>
+          <p className="muted">
+            No collection exists with slug: <code>{params.slug}</code>
+          </p>
         </div>
       ) : (
         <>

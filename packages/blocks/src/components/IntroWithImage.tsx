@@ -26,6 +26,11 @@ export function IntroWithImage({
         <div className="intro-copy">
           <h2 className="type-h2">{heading}</h2>
           <ClientAnimations />
+          {imageUrl && (
+            <div className="intro-image">
+              <img src={imageUrl} alt={heading} />
+            </div>
+          )}
           {text && <p className="type-body intro-lead">{text}</p>}
           {text2 && <p className="type-body intro-body">{text2}</p>}
         </div>
@@ -38,11 +43,6 @@ export function IntroWithImage({
           /> */}
         {/* <img src={imageUrl} alt={heading} className="intro-image"/>
         </div> */}
-        {imageUrl && (
-          <div className="intro-image">
-            <img src={imageUrl} alt={heading} />
-          </div>
-        )}
       </div>
     </section>
   );

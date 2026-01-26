@@ -431,16 +431,18 @@ export default function NewCaseStudyPage() {
             />
 
             {heroImageUrl && (
-              <div style={{ marginTop: "0.75rem" }}>
+              <div className="heroPreview">
                 <p className="muted type-small">Preview</p>
-                <Image
-                  src={heroImageUrl}
-                  alt="Hero preview"
-                  width={640}
-                  height={360}
-                  style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
-                  unoptimized
-                />
+                <div className="heroPreview__frame">
+                  <Image
+                    className="heroPreview__img"
+                    src={heroImageUrl}
+                    alt="Hero preview"
+                    fill
+                    sizes="(max-width: 640px) 100vw, 360px"
+                    unoptimized
+                  />
+                </div>
               </div>
             )}
           </div>

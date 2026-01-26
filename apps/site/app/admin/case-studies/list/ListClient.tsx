@@ -119,7 +119,6 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
 export default function ListClient() {
   const {
     items: storeItems,
-    resetToBaseline,
     upsertCaseStudy,
   } = useAdminCaseStudies();
   const items = useMemo(() => storeItems ?? [], [storeItems]);
@@ -436,9 +435,6 @@ export default function ListClient() {
           <Link className="btnPrimary" href="/admin/case-studies/new">
             New case study
           </Link>
-          <button className="btn-3" type="button" onClick={resetToBaseline}>
-            Reset demo data
-          </button>
         </div>
       </div>
       {/* FILTER BAR */}
@@ -550,8 +546,8 @@ export default function ListClient() {
                 : "Pick a category or a single tag above to enable the preview button."}
             </span>
             <span className="muted type-small">
-              For multi-tag or category + tag combinations, use Client Pages to
-              build a final page.
+              For multi-tag or category + tag combinations, use Case Study
+              Collections to build a final page.
             </span>
           </div>
         </div>

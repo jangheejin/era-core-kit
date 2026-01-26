@@ -7,9 +7,18 @@ import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
+type NonEmptyArray<T> = [T, ...T[]];
+
+function toNonEmptyArray<T>(items: T[] | undefined): NonEmptyArray<T> | undefined {
+  if (!Array.isArray(items) || items.length === 0) return undefined;
+  const first = items[0];
+  if (first == null) return undefined;
+  return [first, ...items.slice(1)];
+}
 
 function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
   const primary: SectorValue | undefined = cs.primarySector ?? cs.sectors?.[0];
+  const sectors = toNonEmptyArray(cs.sectors);
 
   return {
     slug: cs.slug,
@@ -18,9 +27,9 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
     summary: cs.summaryShort ?? undefined,
     primarySector: primary,
     primarySectorReadable: primary ? sectorLabel(primary) : undefined,
-    sectors: (cs.sectors ?? []) as any,
-    sectorsReadable: Array.isArray(cs.sectors)
-      ? cs.sectors.map((s) => sectorLabel(s)).join(" · ")
+    sectors,
+    sectorsReadable: sectors
+      ? sectors.map((s) => sectorLabel(s)).join(" · ")
       : undefined,
   };
 }
@@ -31,7 +40,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
 
   const items = useMemo(() => {
     const publicItems = adminItems.filter(
-      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published"
     );
 
     if (itemsSource !== "featured") {
@@ -55,7 +64,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     <section className="c-section">
       <div className="c-container c-stack">
         <WorkText heading={heading} text={text} text2={text2} />
-        <h2 className="type-h2 case-grid-section">Selected Case Studies</h2>
+        {/* <h2 className="type-h2 case-grid-section">Selected Case Studies</h2> */}
         {/* <h3 className="type-h3 case-grid-section">Selected Case Studies</h3> */}
         <CaseGrid layout={layout} items={items} />
       </div>

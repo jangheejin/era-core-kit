@@ -10,7 +10,14 @@
   display: grid;
   row-gap: var(--space-3);
   max-width: 980px;
+  width: 100%;
+  min-width: 0;
   margin-inline: auto;
+}
+
+.work-layout > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .work-header {
@@ -26,6 +33,16 @@
 .work-header__intro {
   margin-top: 0.75rem;
 }
+
+/* Swap CTA copy on small viewports */
+.work-linkText--mobile { display: none; }
+.work-linkText--desktop { display: inline; }
+
+@media (max-width: 720px) {
+  .work-linkText--desktop { display: none; }
+  .work-linkText--mobile { display: inline; }
+}
+
 /* .work-header__intro {
   margin-bottom:0;
 } */
@@ -142,6 +159,8 @@
   gap: var(--space-2);
   overflow-x: auto;
   overflow-y:hidden;
+  width: 100%;
+  max-width: 100%;
   padding-block: 0.25rem 0.75rem;
 /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
@@ -279,6 +298,8 @@
   margin-top: 1.6rem;      /* space below the strip */
   justify-items: start;    /* children hug content, no full-width stretch */
   max-width: 980px;
+  width: 100%;
+  min-width: 0;
   margin-inline: auto;
 }
 
@@ -415,6 +436,8 @@ h5.work-detail__sector {
 /* Shell that holds strip + nav buttons */
 .work-grid-shell {
   position: relative;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Keep your existing .work-grid – just make sure overflow-y is hidden
@@ -429,6 +452,8 @@ h5.work-detail__sector {
   overflow-x: auto;
   overflow-y: hidden;
 
+  width: 100%;
+  max-width: 100%;
   padding-block: 0.25rem 1.75rem; /* room for arrow */
   padding-inline: var(--space-2);
   justify-content: flex-start;
@@ -481,14 +506,20 @@ h5.work-detail__sector {
     background-color 120ms ease-out;
 }
 
-/* Slight nudge left/right – you can tweak these */
-.work-grid-nav--left {
-  left: -0.75rem;
-}
+/* Slight nudge left/right – can tweak these */
 
+.work-grid-nav--left {
+  left: 0.5rem;
+}
+.work-grid-nav--right {
+  right: 0.5rem;
+}
+/*.work-grid-nav--left {
+ left: -0.75rem; 
+}
 .work-grid-nav--right {
   right: -0.75rem;
-}
+}*/
 
 .work-grid-nav:hover {
   transform: translateY(-50%) translateY(-1px);

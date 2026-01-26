@@ -2,20 +2,13 @@
 /* INTRO / IMAGE WITH TEXT   */
 /* ========================= */
 
-/* Never size the image column as `auto` in grid — it can shrink the text column. */
 .c-section--intro {
   --intro-gap: clamp(1.25rem, 3vw, 3.25rem);
-  --intro-figure-min: 200px;
-  --intro-figure-max: 300px;
 }
 
-/* Desktop / tablet: text | image */
 .c-section--intro .intro-grid {
-  position: relative;
-  display: block;
-  column-gap: var(--intro-gap);
-  overflow: hidden;
-  container-type: inline-size;
+  display: flow-root;
+  min-width: 0;
 }
 
 .c-section--intro .intro-copy {
@@ -24,10 +17,7 @@
 }
 
 .c-section--intro.has-intro-image .intro-copy {
-  padding-right: calc(
-    clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)) +
-      var(--intro-gap)
-  );
+  max-width: none;
 }
 
 /* Heading spacing under intro */
@@ -46,58 +36,38 @@
   opacity: 0.9;
 }
 
-/* Image: desktop behavior */
-.c-section--intro.has-intro-image .intro-image {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: min(100%, clamp(var(--intro-figure-min), 30vw, var(--intro-figure-max)));
-  height: 100%;
+.c-section--intro .intro-image {
+  float: right;
+  width: clamp(180px, 30vw, 300px);
+  margin: 0 0 1rem var(--intro-gap);
+  overflow: hidden;
+  background: #e5e7eb;
 }
 
 .c-section--intro .intro-image img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  max-height: none;
+  height: auto;
 }
-
-/* ========================= */
-/* MOBILE: < 580px → 1 col   */
-/* ========================= */
 
 @media (max-width: 900px) {
-  .c-section--intro {
-    --intro-figure-min: 200px;
-    --intro-figure-max: 280px;
+  .c-section--intro .intro-image {
+    width: clamp(160px, 35vw, 260px);
   }
 }
 
-@media (max-width: 720px) {
-  .c-section--intro .intro-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    row-gap: var(--space-3);
-  }
+/* ========================= */
+/* MOBILE: < 720px → 1 col   */
+/* ========================= */
 
-  .c-section--intro.has-intro-image .intro-copy {
-    padding-right: 0;
+@media (max-width: 720px) {
+  .c-section--intro .intro-copy {
     max-width: none;
   }
 
   .c-section--intro .intro-image {
-    position: static;
-    margin-top: var(--space-3);
-    justify-self: center;
-    max-width: 360px;
+    float: none;
     width: 100%;
-    height: auto;
-  }
-
-  .c-section--intro .intro-image img {
-    height: auto;
-    aspect-ratio: 4 / 3;
-    max-height: none;
+    margin: 0 0 1rem 0;
   }
 }

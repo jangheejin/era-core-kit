@@ -50,7 +50,7 @@ const NAV: NavItem[] = [
 
   {
     href: "/admin/client-pages",
-    label: "Client Pages",
+    label: "Case Study Collections",
     match: (p) => p.startsWith("/admin/client-pages"),
   },
   {
@@ -91,7 +91,8 @@ function isActive(pathname: string, item: NavItem) {
 
 function getContextLabel(pathname: string) {
   if (pathname.startsWith("/admin/case-studies")) return "Case Studies CMS";
-  if (pathname.startsWith("/admin/client-pages")) return "Client Page CMS";
+  if (pathname.startsWith("/admin/client-pages"))
+    return "Case Study Collections CMS";
   if (pathname.startsWith("/admin/team")) return "Team Bios CMS";
   return "CMS Admin";
 }

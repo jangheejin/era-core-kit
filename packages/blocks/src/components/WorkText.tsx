@@ -12,8 +12,8 @@ export function WorkText({ heading, text, text2 }: WorkTextProps) {
       {/* <div className="c-container"> */}
       <h2 className="type-h2">{heading}</h2>
       <ClientAnimations />
-      <p className="type-body">{text}</p>
-      {text2 && <p className="type-body">{text2}</p>}
+      {text ? <p className="type-body">{text}</p> : null}
+      {text2 ? <p className="type-body">{text2}</p> : null}
       {/* </div> */}
     </section>
   );

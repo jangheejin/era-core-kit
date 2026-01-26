@@ -565,14 +565,16 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
             {showHeroPreview ? (
               <div className="mt heroPreview">
                 <p className="muted type-small">Image Preview</p>
-                <Image
-                  className="heroImagePreview"
-                  src={heroImageUrl}
-                  alt="Hero preview"
-                  width={272.81}
-                  height={153.455625}
-                  unoptimized
-                />
+                <div className="heroPreview__frame">
+                  <Image
+                    className="heroPreview__img"
+                    src={heroImageUrl}
+                    alt="Hero preview"
+                    fill
+                    sizes="(max-width: 640px) 100vw, 360px"
+                    unoptimized
+                  />
+                </div>
               </div>
             ) : null}
           </div>
@@ -632,10 +634,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                     </option>
                   ))}
                 </select>
-                <label
-                  className="row"
-                  style={{ gap: ".4rem", alignItems: "center" }}
-                >
+                <label className="admin-checkbox">
                   <input
                     type="checkbox"
                     checked={isFeaturedHome && isPublished}
@@ -733,7 +732,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
               <p className="admin-hint">
                 {/* OPTIONAL: Assign categories and tags so this case study can be used in custom client pages. */}
                 OPTIONAL: Assign categories so this case study can be used in
-                custom client pages.
+                custom Case Study Collections.
               </p>
             </div>
             <span className="admin-collapse__chevron" aria-hidden="true">

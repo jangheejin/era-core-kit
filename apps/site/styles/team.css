@@ -55,6 +55,7 @@
 
 /* Photo column (used even when empty) */
 .team-card__photo {
+  position: relative;
   flex: 0 0 160px; /* fixed-ish width */
   max-width: 160px;
   aspect-ratio: 3 / 3;

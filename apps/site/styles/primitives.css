@@ -5,6 +5,19 @@
 /* ----------------------------------------------------- */
 /* LAYOUT & COMPONENTS */
 /* ----------------------------------------------------- */
+
+/* Global sizing baseline (prevents width:100% + padding/border overflow) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .pad-2 {
   padding: var(--space-2);
 }
@@ -496,7 +509,7 @@ ol {
 }
 
 .c-section--mission .c-container {
-  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  padding-inline: var(--gutter);
 }
 
 .c-section--mission .type-body {
