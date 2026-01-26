@@ -31,7 +31,7 @@ type AdminHomeContextValue = {
     section: K,
     partial: Partial<HomeContent[K]>
   ) => void;
-  updateExtraSection: (id: string, partial: LayoutBlock["props"]) => void;
+  updateExtraSection: (id: string, partial: Partial<LayoutBlock["props"]>) => void;
   addExtraSection: () => void;
   removeExtraSection: (id: string) => void;
   updateSectionOrder: (order: string[]) => void;
@@ -209,7 +209,7 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
   );
 
   const updateExtraSection = useCallback(
-    (id: string, partial: LayoutBlock["props"]) => {
+    (id: string, partial: Partial<LayoutBlock["props"]>) => {
       setContent((prev) => ({
         ...prev,
         extraSections: prev.extraSections.map((block) =>
