@@ -5,10 +5,37 @@
 "use client";
 
 import Link from "next/link";
+import { useLayoutEffect, useRef } from "react";
 
 export function Header() {
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  useLayoutEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const setVar = () => {
+      const height = el.getBoundingClientRect().height;
+      document.documentElement.style.setProperty(
+        "--siteHeaderH",
+        `${height}px`,
+      );
+    };
+
+    setVar();
+
+    const ro = new ResizeObserver(() => setVar());
+    ro.observe(el);
+
+    window.addEventListener("resize", setVar);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", setVar);
+    };
+  }, []);
+
   return (
-    <header className="site-header">
+    <header ref={headerRef} className="site-header">
       <div className="c-container site-header__inner">
         {/* Brand: logo + wordmark */}
         <div className="site-header__brand">

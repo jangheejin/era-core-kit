@@ -1,9 +1,13 @@
 /* Sticky header */
+:root {
+  --siteHeaderH: 0px;
+}
+
 .site-header {
   position: sticky;
   top: 0;
   /*  z-index: 100;*/ /* above content, below modals if you add them */
-  z-index: 50;
+  z-index: 1100;
   background: var(--bg);
   border-bottom: 1px solid var(--gray-300);
 }
