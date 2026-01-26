@@ -110,7 +110,8 @@ export default function AdminPage() {
               {/* <span className="pill pill--muted">Curated</span> */}
             </div>
             <p className="muted">
-              Build client-specific pages from saved filters and a short intro.
+              Generate collections of relevant case studies.
+              {/* Build client-specific pages from saved filters and a short intro. */}
             </p>
             <div className="admin-dashboard__card-actions">
               <Link className="btnPrimary" href="/admin/client-pages">
