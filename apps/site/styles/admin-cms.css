@@ -3944,7 +3944,14 @@ flex-wrap: wrap;
 }
 
 button.adminTopNav__toggle {
-  display: flex; align-items: center;
+  display: none;
+  align-items: center;
+}
+
+@media (max-width: 800px) {
+  button.adminTopNav__toggle {
+    display: inline-flex;
+  }
 }
   
 hr.dot {
