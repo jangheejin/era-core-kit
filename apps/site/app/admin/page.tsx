@@ -113,7 +113,8 @@ export default function AdminPage() {
             </p>
             <div className="admin-dashboard__card-actions">
               <Link className="btnPrimary" href="/admin/client-pages">
-                Manage Case Study Collections
+                {/* Manage Case Study Collections */}
+                Manage Collections
               </Link>
               <Link className="btn" href="/admin/client-pages/new">
                 New collection

@@ -2,7 +2,7 @@
 
 import "@styles/admin-cms.css";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MiniFormatBar } from "../components/MiniFormatBar";
 import { useAdminTeamMembers, type TeamMember } from "../AdminTeamStore";
@@ -114,14 +114,6 @@ export default function AdminTeamPage() {
     );
   }, [uploadedLibrary]);
 
-  useEffect(() => {
-    const wantsNew = searchParams?.get("new") === "1";
-    if (!wantsNew || editingId || didAutoStartRef.current) return;
-    didAutoStartRef.current = true;
-    startNewMember();
-    router.replace("/admin/team");
-  }, [searchParams, editingId]);
-
   const imageLibrary = useMemo(() => {
     const map = new Map<string, TeamImage>();
     for (const entry of DEFAULT_TEAM_IMAGES) map.set(entry.url, entry);
@@ -157,7 +149,7 @@ export default function AdminTeamPage() {
     setShowMarkdownEditor(false);
   }
 
-  function startNewMember() {
+  const startNewMember = useCallback(() => {
     const id =
       typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now());
     const newMember: TeamMember = {
@@ -177,7 +169,15 @@ export default function AdminTeamPage() {
     initialBioRef.current = "";
     setSaveState("idle");
     setShowMarkdownEditor(false);
-  }
+  }, [items.length]);
+
+  useEffect(() => {
+    const wantsNew = searchParams?.get("new") === "1";
+    if (!wantsNew || editingId || didAutoStartRef.current) return;
+    didAutoStartRef.current = true;
+    startNewMember();
+    router.replace("/admin/team");
+  }, [searchParams, editingId, router, startNewMember]);
 
   function updateDraft(patch: Partial<TeamMember>) {
     setDraft((prev) => (prev ? { ...prev, ...patch } : prev));
