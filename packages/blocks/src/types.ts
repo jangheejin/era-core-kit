@@ -52,6 +52,13 @@ export type WorkTextProps = {
   text2?: string; // optional second paragraph
 };
 
+export type RichTextSectionProps = {
+  heading: string;
+  body: string;
+  subheads?: string[];
+  imageUrl?: string;
+};
+
 export type CaseGridItem = {
   title?: string;
 
@@ -122,8 +129,9 @@ export type WorkWithCaseGridProps = {
   layout: CaseGridProps["layout"];
   items: CaseGridProps["items"];
 
-  itemsSource?: "featured";
+  itemsSource?: "featured" | "manual";
   maxItems?: number;
+  caseStudySlugs?: string[];
 };
 /*export type ContactFormProps = {
   heading: string;
@@ -163,6 +171,7 @@ export type BlockComponentProps = {
   TeamStrip: TeamStripProps;
   IntroWithImage: IntroWithImageProps;
   WorkWithCaseGrid: WorkWithCaseGridProps;
+  RichTextSection: RichTextSectionProps;
   //  ContactForm: ContactFormProps;
   //  contactForm: ContactFormProps;
 };

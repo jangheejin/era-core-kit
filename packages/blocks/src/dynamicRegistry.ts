@@ -28,6 +28,7 @@ export const blockRegistry: Record<BlockType, string> = {
   TeamStrip: "TeamStrip",
   IntroWithImage: "IntroWithImage",
   WorkWithCaseGrid: "WorkWithCaseGrid",
+  RichTextSection: "RichTextSection",
   //  ContactForm: 'ContactForm',
   //  contactForm: 'ContactForm',
 };

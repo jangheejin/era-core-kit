@@ -1,10 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 //apps/site/src/components/CaseStudyFullRender.tsx
 // “full case study renderer” component 
 // (so that instead of having case study cards on the filter-by-tag or filter-by-category 
 // pages, you can have full case studies)
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { CaseStudyType } from "@kit/schema";
+import type { CaseStudyType, CaseStudyAttachment, CaseStudyLink, Outcome } from "@kit/schema";
 import { Markdown } from "./Markdown";
 
 export function CaseStudyFull({
@@ -75,10 +76,10 @@ export function CaseStudyFull({
         <section className="case-study-full__section">
           <h3 className="type-h3">Outcomes</h3>
           <ul>
-            {cs.outcomes.map((o, idx) => (
-              <li key={(o as any).label ?? idx}>
-                <strong>{(o as any).label}</strong>
-                {(o as any).description ? <> — {(o as any).description}</> : null}
+            {cs.outcomes.map((o: Outcome, idx) => (
+              <li key={o.label ?? idx}>
+                <strong>{o.label}</strong>
+                {o.description ? <> — {o.description}</> : null}
               </li>
             ))}
           </ul>
@@ -128,7 +129,7 @@ export function CaseStudyFull({
         <section className="case-study-full__section">
           <h3 className="type-h3">Attachments</h3>
           <ul>
-            {cs.attachments.map((a: any, idx: number) => (
+            {cs.attachments.map((a: CaseStudyAttachment, idx: number) => (
               <li key={a.url ?? idx}>
                 <a href={a.url}>{a.label}</a>
               </li>
@@ -141,7 +142,7 @@ export function CaseStudyFull({
         <section className="case-study-full__section">
           <h3 className="type-h3">Links</h3>
           <ul>
-            {cs.links.map((l: any, idx: number) => (
+            {cs.links.map((l: CaseStudyLink, idx: number) => (
               <li key={l.url ?? idx}>
                 <a href={l.url}>{l.label}</a>
               </li>

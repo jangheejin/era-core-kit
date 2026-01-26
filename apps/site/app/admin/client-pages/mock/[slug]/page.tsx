@@ -2,6 +2,7 @@
 
 // Admin preview route to view a client page's filtered case studies
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import "@styles/admin-cms.css";
 

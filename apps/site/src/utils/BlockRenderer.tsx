@@ -16,6 +16,7 @@ import {
   DocLink,
   OutcomeList,
   ImageFigure,
+  RichTextSection,
 //  WorkWithCaseGrid,
 } from "@kit/blocks";
 
@@ -38,6 +39,7 @@ const blockComponents: BlockComponentMap = {
   CaseGrid,
   TeamStrip,
   WorkWithCaseGrid,
+  RichTextSection,
 
   Callout,
   callout: Callout,

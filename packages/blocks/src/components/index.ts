@@ -11,5 +11,6 @@ export { WorkText } from "./WorkText";
 export { CaseGrid } from "./CaseGrid";
 export { TeamStrip } from "./TeamStrip";
 export { IntroWithImage } from "./IntroWithImage";
+export { RichTextSection } from "./RichTextSection";
 //export { ContactForm } from './ContactForm';
 export { WorkWithCaseGrid } from "./WorkWithCaseGrid";

@@ -1,5 +1,6 @@
 // apps/site/src/components/Footer.tsx
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 

@@ -1,6 +1,7 @@
 //apps/site/app/case-studies/[slug]/CaseStudyPublicClient.tsx
 
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useMemo } from "react";
 import Link from "next/link";

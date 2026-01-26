@@ -3,13 +3,12 @@
 //testing out an alternate single-view page for case studies
 
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import styles from "./CaseStudyView.module.css"
-
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
-import { sectorLabel, type SectorValue } from "@kit/schema";
+import { sectorLabel, type Outcome, type SectorValue, type CaseStudySection } from "@kit/schema";
 
 import { Markdown } from "@/components/Markdown"
 
@@ -89,10 +88,10 @@ export default function CaseStudyViewPage() {
 
   const secondaryTitle = hasSeparateTitle ? cs.title : null;
 
-  const sectors: SectorValue[] = Array.isArray((cs as any).sectors)
-    ? ((cs as any).sectors as SectorValue[])
-    : [];
-  const tags: string[] = Array.isArray((cs as any).tags) ? ((cs as any).tags as string[]) : [];
+  const sectors: SectorValue[] = Array.isArray(cs.sectors) ? cs.sectors : [];
+  const tags: string[] = Array.isArray(cs.tags) ? cs.tags : [];
+  const outcomes: Outcome[] = Array.isArray(cs.outcomes) ? cs.outcomes : [];
+  const sections: CaseStudySection[] = Array.isArray(cs.sections) ? cs.sections : [];
 
   const status = cs.status ?? "Draft";
   const visibility = cs.visibility ?? "Internal";
@@ -165,28 +164,28 @@ export default function CaseStudyViewPage() {
         </div>
       </header>
 
-      {Array.isArray(cs.outcomes) && cs.outcomes.length > 0 ? (
+      {outcomes.length > 0 ? (
         <section className="csViewSection">
           <h2 className="csViewH2">Outcomes</h2>
           <ul className="csViewList">
-            {cs.outcomes.map((o: any, i: number) => (
-              <li key={o?.label ?? i}>
-                <strong>{o?.label ?? "Outcome"}</strong>
-                {o?.description ? ` — ${o.description}` : ""}
+            {outcomes.map((o, i) => (
+              <li key={o.label ?? i}>
+                <strong>{o.label ?? "Outcome"}</strong>
+                {o.description ? ` — ${o.description}` : ""}
               </li>
             ))}
           </ul>
         </section>
       ) : null}
 
-      {Array.isArray(cs.sections) && cs.sections.length > 0 ? (
+      {sections.length > 0 ? (
         <section className="csViewSection">
           <h2 className="csViewH2">Details</h2>
 
-          {cs.sections.map((s: any) => (
-            <div key={s?.id ?? s?.title} className="csViewSection">
-              <h2 className="csViewH2">{s?.title ?? "Section"}</h2>
-              <div className="csViewMDX">{s?.bodyMDX ?? ""}</div>
+          {sections.map((s) => (
+            <div key={s.id ?? s.title} className="csViewSection">
+              <h2 className="csViewH2">{s.title ?? "Section"}</h2>
+              <div className="csViewMDX">{s.bodyMDX ?? ""}</div>
             </div>
           ))}
         </section>

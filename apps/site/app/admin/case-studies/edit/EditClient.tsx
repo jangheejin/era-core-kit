@@ -9,7 +9,7 @@ import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
 export default function EditClient({ slug }: { slug: string }) {
   const router = useRouter();
-  const { items, getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
+  const { getBySlug, upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   const existing = useMemo(() => getBySlug(slug), [getBySlug, slug]);
 

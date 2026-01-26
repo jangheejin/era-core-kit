@@ -13,7 +13,10 @@ export default function Eruda() {
     <Script
       src="https://cdn.jsdelivr.net/npm/eruda"
       strategy="afterInteractive"
-      onLoad={() => (window as any).eruda?.init()}
+      onLoad={() => {
+        const win = window as unknown as { eruda?: { init: () => void } };
+        win.eruda?.init();
+      }}
     />
   );
 }

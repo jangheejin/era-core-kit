@@ -2,6 +2,7 @@
 
 // update: now the client page is separated into a client component
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import "@styles/work.css";
 import { useMemo, useRef, useState } from "react";

@@ -2,6 +2,7 @@
 
 // Public route to show a client page's filtered case studies
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 import { useMemo } from "react";

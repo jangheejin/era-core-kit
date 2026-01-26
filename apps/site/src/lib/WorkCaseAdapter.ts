@@ -1,15 +1,7 @@
 //apps/site/src/lib/WorkCaseAdapter.ts
 
 //adapter that maps CaseStudyType (CMS version) → WorkCase (public site Our Work page version)
-import {
-  sectorLabel, 
-  type SectorValue
-} from "@kit/schema"
-
-function sectorLabelFromCaseStudy(cs: { primarySector?: SectorValue; sectors?: SectorValue[] }) {
-  const v = cs.primarySector ?? cs.sectors?.[0];
-  return v ? sectorLabel(v) : "Case Study";
-}
+type UnknownRecord = Record<string, unknown>;
 
 export type WorkCase = {
   slug: string;
@@ -56,7 +48,7 @@ function stripMarkdown(md: string): string {
     .trim();
 }
 
-function deriveSummary(cs: any): string {
+function deriveSummary(cs: UnknownRecord): string {
   // prefer the "short blurb" if present; else derive from body
   const short = typeof cs.summaryShort === "string" ? cs.summaryShort.trim() : "";
   if (short) return short;
@@ -65,29 +57,38 @@ function deriveSummary(cs: any): string {
   return stripMarkdown(body);
 }
 
-export function toWorkCases(caseStudies: any[]): WorkCase[] {
-  return (caseStudies ?? []).map((cs) => {
-    const outcomes =
-      Array.isArray(cs.outcomes) && cs.outcomes.length
-        ? cs.outcomes
-            .map((o: any) => {
-              // schema form: { label, description }
-              if (o && typeof o === "object") return String(o.description ?? "").trim();
-              // fallback if it’s already a string
-              return typeof o === "string" ? o.trim() : "";
-            })
-            .filter(Boolean)
-        : undefined;
+function isRecord(value: unknown): value is UnknownRecord {
+  return Boolean(value) && typeof value === "object";
+}
 
-    return {
-      slug: String(cs.slug),
-      sector: sectorLabelFromSectors(cs.sectors),
-      client: String(cs.client),
-      teaser: typeof cs.summaryShort === "string" ? cs.summaryShort : undefined,
-      featured: Boolean(cs.isFeaturedHome),
-      imageUrl: typeof cs.heroImageUrl === "string" ? cs.heroImageUrl : undefined,
-      summary: deriveSummary(cs),
-      outcomes,
-    };
-  });
+export function toWorkCases(caseStudies: unknown[]): WorkCase[] {
+  return (caseStudies ?? [])
+    .filter(isRecord)
+    .map((cs) => {
+      const outcomes =
+        Array.isArray(cs.outcomes) && cs.outcomes.length
+          ? cs.outcomes
+              .map((o) => {
+                if (o && typeof o === "object") {
+                  const rec = o as Record<string, unknown>;
+                  return typeof rec.description === "string"
+                    ? rec.description.trim()
+                    : "";
+                }
+                return typeof o === "string" ? o.trim() : "";
+              })
+              .filter(Boolean)
+          : undefined;
+
+      return {
+        slug: String(cs.slug),
+        sector: sectorLabelFromSectors(cs.sectors),
+        client: String(cs.client),
+        teaser: typeof cs.summaryShort === "string" ? cs.summaryShort : undefined,
+        featured: Boolean(cs.isFeaturedHome),
+        imageUrl: typeof cs.heroImageUrl === "string" ? cs.heroImageUrl : undefined,
+        summary: deriveSummary(cs),
+        outcomes,
+      };
+    });
 }

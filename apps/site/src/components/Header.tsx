@@ -3,6 +3,7 @@
 //Sticky top navbar
 
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 
