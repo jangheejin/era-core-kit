@@ -103,6 +103,7 @@ the user fills out)
   font-family: var(--font-heading);
   text-transform: uppercase;
   font-size: var(--fs-h4);
+  text-align: center;
   line-height: 1.1;
 }
 .c-admin .btnPrimary, .btnSave {
