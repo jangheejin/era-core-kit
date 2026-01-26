@@ -139,7 +139,7 @@ export function AdminTopNav() {
             Demo CMS
           </div> */}
 
-          <div className="adminTopNav__brand">CMS Admin</div>
+          {/* <div className="adminTopNav__brand">CMS Admin</div> */}
 
           <div className="adminTopNav__brand">
             {contextLabel ?? "CMS Admin"}
