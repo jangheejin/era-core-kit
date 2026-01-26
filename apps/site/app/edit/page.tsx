@@ -8,7 +8,7 @@ import BlockRenderer from "@/utils/BlockRenderer";
 // Define the component props interface
 interface InlineEditFormProps {
   block: LayoutBlock;
-  onUpdate: (newProps: any) => void;
+  onUpdate: (newProps: Partial<LayoutBlock["props"]>) => void;
 }
 
 const InlineEditForm = ({ block /*, onUpdate */ }: InlineEditFormProps) => {

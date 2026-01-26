@@ -11,8 +11,7 @@ type CaseGridItemFromProps = CaseGridProps["items"][number];
 
 export function HomeCaseGridFromCMS() {
   //const { caseStudies } = useMockCMS();
-  const { caseStudies, addCaseStudy } = useMockCMS();
-  const SECTOR_SEPARATOR = ", "; // or " · "
+  const { caseStudies } = useMockCMS();
 
   // If there are zero items, you can fall back to nothing or a gentle message
   //if (!items.length) return null;

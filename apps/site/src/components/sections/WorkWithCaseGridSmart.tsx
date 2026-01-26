@@ -35,13 +35,32 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
 }
 
 export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
-  const { layout, heading, text, text2, itemsSource, maxItems } = props;
+  const {
+    layout,
+    heading,
+    text,
+    text2,
+    itemsSource,
+    maxItems,
+    caseStudySlugs,
+  } = props;
   const { items: adminItems } = useAdminCaseStudies();
 
   const items = useMemo(() => {
     const publicItems = adminItems.filter(
       (cs) => Boolean(cs.isPublic) && cs.status === "Published"
     );
+
+    if (itemsSource === "manual") {
+      const order = Array.isArray(caseStudySlugs) ? caseStudySlugs : [];
+      if (order.length === 0) return [];
+      const bySlug = new Map(publicItems.map((cs) => [cs.slug, cs]));
+      const ordered = order
+        .map((slug) => bySlug.get(slug))
+        .filter((cs): cs is CaseStudyType => Boolean(cs));
+      const mapped = ordered.map(toCaseGridItem);
+      return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
+    }
 
     if (itemsSource !== "featured") {
       return publicItems.map(toCaseGridItem);
@@ -58,7 +77,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
 
     const mapped = ordered.map(toCaseGridItem);
     return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
-  }, [adminItems, itemsSource, maxItems]);
+  }, [adminItems, itemsSource, maxItems, caseStudySlugs]);
 
   return (
     <section className="c-section">

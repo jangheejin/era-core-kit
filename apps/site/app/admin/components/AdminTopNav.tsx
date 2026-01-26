@@ -41,6 +41,11 @@ const NAV: NavItem[] = [
     match: (p) => p.startsWith("/admin/case-studies"),
   },
   {
+    href: "/admin/home",
+    label: "Home Page",
+    match: (p) => p.startsWith("/admin/home"),
+  },
+  {
     href: "/admin/client-pages",
     label: "Case Study Collections",
     match: (p) => p.startsWith("/admin/client-pages"),
@@ -78,11 +83,14 @@ function isActive(pathname: string, item: NavItem) {
     );
   if (item.href === "/admin/team")
     return pathname === "/admin/team" || pathname.startsWith("/admin/team/");
+  if (item.href === "/admin/home")
+    return pathname === "/admin/home" || pathname.startsWith("/admin/home/");
   return pathname === item.href;
 }
 
 function getContextLabel(pathname: string) {
   if (pathname.startsWith("/admin/case-studies")) return "Case Studies CMS";
+  if (pathname.startsWith("/admin/home")) return "Home Page CMS";
   if (pathname.startsWith("/admin/client-pages"))
     return "Case Study Collections CMS";
   if (pathname.startsWith("/admin/team")) return "Team Bios CMS";

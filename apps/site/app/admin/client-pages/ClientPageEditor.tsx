@@ -5,7 +5,7 @@ import "@styles/admin-cms.css";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   SECTOR_GROUPS,
@@ -93,7 +93,7 @@ export default function ClientPageEditor({ slug }: Props) {
     setBodyMDX("");
   }
 
-  function loadFrom(pageSlug: string) {
+  const loadFrom = useCallback((pageSlug: string) => {
     const page = getBySlug(pageSlug);
     if (!page) return false;
     setName(page.name);
@@ -106,7 +106,7 @@ export default function ClientPageEditor({ slug }: Props) {
     setStatus(page.status);
     setBodyMDX(page.bodyMDX ?? "");
     return true;
-  }
+  }, [getBySlug]);
 
   useEffect(() => {
     if (!slug) {
@@ -122,7 +122,7 @@ export default function ClientPageEditor({ slug }: Props) {
     const ok = loadFrom(slug);
     loadedSlugRef.current = slug;
     setNotFound(!ok);
-  }, [getBySlug, slug]);
+  }, [loadFrom, slug]);
 
   const isDirty = useMemo(() => {
     const nextTags = normalizeTagList(

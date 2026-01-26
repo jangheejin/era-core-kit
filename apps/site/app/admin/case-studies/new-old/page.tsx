@@ -1,5 +1,6 @@
 // apps/site/app/admin/case-studies/new/page.tsx
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";

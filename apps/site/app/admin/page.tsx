@@ -17,8 +17,8 @@ const LOGIN_KEY = "era_admin_logged_in_v1";
 export default function AdminPage() {
   console.log("AdminPage mounted");
   //  const { items, addCaseStudy } = useAdminCaseStudies();
-  const { items } = useAdminCaseStudies();
-  const { pages } = useAdminClientPages();
+  useAdminCaseStudies();
+  useAdminClientPages();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -86,6 +86,23 @@ export default function AdminPage() {
 
       {isLoggedIn ? (
         <section className="admin-dashboard__grid mt">
+          <article className="card admin-dashboard__card">
+            <div className="admin-dashboard__card-header">
+              <h2 className="type-h3">Home Page</h2>
+            </div>
+            <p className="muted">
+              Edit the hero, intro, and featured case study grid on the public
+              landing page.
+            </p>
+            <div className="admin-dashboard__card-actions">
+              <Link className="btnPrimary" href="/admin/home">
+                Edit Home Page
+              </Link>
+              <Link className="btn" href="/admin/home#add-section">
+                Add section
+              </Link>
+            </div>
+          </article>
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
               <h2 className="type-h3">Case studies</h2>

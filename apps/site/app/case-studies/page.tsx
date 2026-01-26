@@ -1,6 +1,7 @@
 //apps/site/app/case-studies/page.tsx
 //integrating demo backend database with public-facing site
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 import { useMemo } from "react";

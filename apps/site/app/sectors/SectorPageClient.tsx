@@ -1,7 +1,6 @@
 // apps/site/app/sectors/SectorPageClient.tsx
 "use client";
 
-import Link from "next/link";
 import { useMemo } from "react";
 import { CaseGrid, type CaseGridProps } from "@kit/blocks";
 import {

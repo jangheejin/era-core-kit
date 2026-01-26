@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
 import { useMemo } from "react";
@@ -37,11 +38,6 @@ export default function OurWorkDetailClient({ slug }: { slug: string }) {
   );
 }
 
-function isDemoOn(v: unknown) {
-  if (typeof v === "string") return v === "1";
-  if (Array.isArray(v)) return v.includes("1");
-  return false;
-}
 /* 
 export default async function OurWorkDetailPage({
   params,

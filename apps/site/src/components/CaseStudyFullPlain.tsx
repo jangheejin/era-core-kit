@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 //apps/site/src/components/CaseStudyFullRender.tsx
 // “full case study renderer” component 
 // (so that instead of having case study cards on the filter-by-tag or filter-by-category 

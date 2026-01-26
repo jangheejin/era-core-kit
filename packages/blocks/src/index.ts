@@ -15,6 +15,7 @@ export type {
   IntroWithImageProps,
   MissionTextProps,
   WorkTextProps,
+  RichTextSectionProps,
   CaseGridProps,
   TeamStripProps,
   //    ContactFormProps,
@@ -43,6 +44,7 @@ export {
   DocLink,
   OutcomeList,
   ImageFigure,
+  RichTextSection,
 } from "./components";
 
 export { blockRegistry } from "./dynamicRegistry";

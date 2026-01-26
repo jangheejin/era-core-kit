@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // apps/site/app/our-work/[slug]/page.tsx
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
