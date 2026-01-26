@@ -88,23 +88,6 @@ export default function AdminPage() {
         <section className="admin-dashboard__grid mt">
           <article className="card admin-dashboard__card">
             <div className="admin-dashboard__card-header">
-              <h2 className="type-h3">Home Page</h2>
-            </div>
-            <p className="muted">
-              Edit the hero, intro, and featured case study grid on the public
-              landing page.
-            </p>
-            <div className="admin-dashboard__card-actions">
-              <Link className="btnPrimary" href="/admin/home">
-                Edit Home Page
-              </Link>
-              <Link className="btn" href="/admin/home#add-section">
-                Add section
-              </Link>
-            </div>
-          </article>
-          <article className="card admin-dashboard__card">
-            <div className="admin-dashboard__card-header">
               <h2 className="type-h3">Case studies</h2>
               {/* <span className="pill pill--muted">Library</span> */}
             </div>
@@ -136,6 +119,23 @@ export default function AdminPage() {
               </Link>
               <Link className="btn" href="/admin/client-pages/new">
                 New collection
+              </Link>
+            </div>
+          </article>
+          <article className="card admin-dashboard__card">
+            <div className="admin-dashboard__card-header">
+              <h2 className="type-h3">Home Page</h2>
+            </div>
+            <p className="muted">
+              Edit the hero, intro, and featured case study grid on the public
+              landing page.
+            </p>
+            <div className="admin-dashboard__card-actions">
+              <Link className="btnPrimary" href="/admin/home">
+                Edit Home Page
+              </Link>
+              <Link className="btn" href="/admin/home#add-section">
+                Add section
               </Link>
             </div>
           </article>

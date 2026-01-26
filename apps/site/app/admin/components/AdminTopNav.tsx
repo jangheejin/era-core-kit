@@ -41,14 +41,14 @@ const NAV: NavItem[] = [
     match: (p) => p.startsWith("/admin/case-studies"),
   },
   {
-    href: "/admin/home",
-    label: "Home Page",
-    match: (p) => p.startsWith("/admin/home"),
-  },
-  {
     href: "/admin/client-pages",
     label: "Case Study Collections",
     match: (p) => p.startsWith("/admin/client-pages"),
+  },
+  {
+    href: "/admin/home",
+    label: "Home Page",
+    match: (p) => p.startsWith("/admin/home"),
   },
   {
     href: "/admin/team",
