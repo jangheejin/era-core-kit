@@ -96,7 +96,8 @@ export default function AdminPage() {
             </p>
             <div className="admin-dashboard__card-actions">
               <Link className="btnPrimary" href="/admin/case-studies/list">
-                Open library
+                Manage Case Studies
+                {/* Open library */}
               </Link>
               <Link className="btn" href="/admin/case-studies/new">
                 New case study
