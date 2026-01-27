@@ -15,6 +15,7 @@ import type {
   HeroProps,
   IntroWithImageProps,
   MissionTextProps,
+  RichTextSectionProps,
 } from "@kit/blocks";
 import {
   DEFAULT_HOME_CONTENT,
@@ -31,7 +32,7 @@ type AdminHomeContextValue = {
     section: K,
     partial: Partial<HomeContent[K]>
   ) => void;
-  updateExtraSection: (id: string, partial: Partial<LayoutBlock["props"]>) => void;
+  updateExtraSection: (id: string, partial: Partial<RichTextSectionProps>) => void;
   addExtraSection: () => void;
   removeExtraSection: (id: string) => void;
   updateSectionOrder: (order: string[]) => void;
@@ -110,17 +111,25 @@ function normalizeWork(
         .map((slug) => slug.trim())
         .filter(Boolean)
     : fallback.caseStudySlugs;
+  const featuredCaseStudySlugs = Array.isArray(raw.featuredCaseStudySlugs)
+    ? raw.featuredCaseStudySlugs
+        .filter((slug): slug is string => typeof slug === "string")
+        .map((slug) => slug.trim())
+        .filter(Boolean)
+    : fallback.featuredCaseStudySlugs;
+  const fallbackLayout = fallback.layout ?? "3col";
 
   return {
     heading: coerceString(raw.heading, fallback.heading),
     text: coerceOptionalString(raw.text) ?? fallback.text,
     text2: coerceOptionalString(raw.text2) ?? fallback.text2,
     gridHeading: coerceOptionalString(raw.gridHeading) ?? fallback.gridHeading,
-    layout: coerceString(raw.layout, fallback.layout),
+    layout: coerceString(raw.layout, fallbackLayout),
     itemsSource,
     maxItems: coerceNumber(raw.maxItems, fallback.maxItems),
     items: [],
     caseStudySlugs,
+    featuredCaseStudySlugs,
   };
 }
 
@@ -131,10 +140,22 @@ function normalizeContent(raw: unknown): HomeContent {
   const extraSections = extrasRaw
     .filter((block) => isPlainObject(block))
     .filter((block) => block.type === "RichTextSection")
-    .map((block) => ({
-      ...block,
-      _key: typeof block._key === "string" ? block._key : "",
-    }))
+    .map((block) => {
+      const props = isPlainObject(block.props) ? block.props : {};
+      const normalizedProps = {
+        heading: coerceString(props.heading, "New section"),
+        body: coerceString(props.body, "Add supporting text for this section."),
+        subheads: Array.isArray(props.subheads)
+          ? props.subheads.filter((h): h is string => typeof h === "string")
+          : [],
+        imageUrl: coerceOptionalString(props.imageUrl) ?? "",
+      };
+      return {
+        type: "RichTextSection" as const,
+        _key: typeof block._key === "string" ? block._key : "",
+        props: normalizedProps,
+      };
+    })
     .filter((block) => Boolean(block._key));
 
   const baseIds = fallback.sectionOrder;
@@ -209,11 +230,13 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
   );
 
   const updateExtraSection = useCallback(
-    (id: string, partial: Partial<LayoutBlock["props"]>) => {
+    (id: string, partial: Partial<RichTextSectionProps>) => {
       setContent((prev) => ({
         ...prev,
         extraSections: prev.extraSections.map((block) =>
-          block._key === id ? { ...block, props: { ...block.props, ...partial } } : block
+          block._key === id && block.type === "RichTextSection"
+            ? { ...block, props: { ...block.props, ...partial } }
+            : block
         ),
       }));
     },

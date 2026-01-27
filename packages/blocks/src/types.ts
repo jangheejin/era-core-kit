@@ -132,6 +132,7 @@ export type WorkWithCaseGridProps = {
   itemsSource?: "featured" | "manual";
   maxItems?: number;
   caseStudySlugs?: string[];
+  featuredCaseStudySlugs?: string[];
 };
 /*export type ContactFormProps = {
   heading: string;

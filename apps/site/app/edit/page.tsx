@@ -8,10 +8,9 @@ import BlockRenderer from "@/utils/BlockRenderer";
 // Define the component props interface
 interface InlineEditFormProps {
   block: LayoutBlock;
-  onUpdate: (newProps: Partial<LayoutBlock["props"]>) => void;
 }
 
-const InlineEditForm = ({ block /*, onUpdate */ }: InlineEditFormProps) => {
+const InlineEditForm = ({ block }: InlineEditFormProps) => {
   // In a real application, this component would render inputs based on block.type
   return (
     <div className="block-edit-form">
@@ -65,18 +64,7 @@ export default function EditPage() {
             </div>
 
             {/* Inline “editor” stub */}
-            <InlineEditForm
-              block={block}
-              onUpdate={(newProps) => {
-                setBlocks((prev) =>
-                  prev.map((b, i) =>
-                    i === index
-                      ? { ...b, props: { ...b.props, ...newProps } }
-                      : b,
-                  ),
-                );
-              }}
-            />
+            <InlineEditForm block={block} />
           </div>
         ))}
       </div>

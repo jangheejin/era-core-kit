@@ -10,6 +10,7 @@ import type {
 export type HomeWorkContent = WorkWithCaseGridProps & {
   itemsSource?: "featured" | "manual";
   caseStudySlugs: string[];
+  featuredCaseStudySlugs: string[];
 };
 
 export type HomeContent = {
@@ -46,12 +47,13 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     imageUrl: "/img/capitol-building.jpg",
   },
   work: {
-    heading: "Our Work",
+    heading: "FEATURED CASE STUDIES",
     layout: "3col",
     itemsSource: "featured",
-    maxItems: 6,
+    maxItems: 3,
     items: [],
     caseStudySlugs: [],
+    featuredCaseStudySlugs: [],
   },
   sectionOrder: ["hero", "mission", "intro", "work"],
   extraSections: [],
