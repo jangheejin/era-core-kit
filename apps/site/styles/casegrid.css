@@ -22,6 +22,22 @@ It caps column width so 1-2 items don't scale up to be huge*/
   padding-bottom: var(--space-2);
 }
 
+.case-grid__more {
+  margin-top: var(--space-2);
+  color: var(--color-heading);
+  font-size: clamp(0.85rem, 0.8rem + 0.4vw, 1.05rem);
+  letter-spacing: 0.08em;
+}
+
+.case-grid__more-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.case-grid__more-link:hover {
+  text-decoration: none;
+}
+
 .case-study-card__link {
   display: block;
   text-decoration: none;

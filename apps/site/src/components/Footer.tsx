@@ -53,6 +53,12 @@ export function Footer() {
 
         <p className="site-footer__legal type-small">
           © {year} ERA Government Affairs, LLC. All rights reserved.
+          <span className="site-footer__divider" aria-hidden="true">
+            •
+          </span>
+          <a className="site-footer__archive-link" href="/our-work/archive">
+            Our Work Archive
+          </a>
         </p>
       </div>
     </footer>
