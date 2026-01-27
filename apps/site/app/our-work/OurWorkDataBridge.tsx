@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { deriveSummaryFromWriteUp, type CaseStudyType } from "@kit/schema";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 import { OurWorkClient, type WorkCase } from "./OurWorkClient";
+import { getOrderedCaseStudies } from "@/lib/caseStudyOrdering";
 
 function toWorkCase(cs: CaseStudyType): WorkCase {
   const sector = Array.isArray(cs?.sectors) ? cs.sectors.join(", ") : "";
@@ -34,10 +35,11 @@ export function OurWorkDataBridge({
   const { items } = useAdminCaseStudies();
 
   const cases = useMemo(() => {
-    const publicItems = items.filter(
-      (cs) => cs.isPublic && cs.status === "Published",
-    );
-    return publicItems.map(toWorkCase);
+    return getOrderedCaseStudies({
+      items,
+      itemsSource: "featured",
+      maxItems: 6,
+    }).map(toWorkCase);
   }, [items]);
 
   return <OurWorkClient cases={cases} basePath={basePath} demo={false} />;

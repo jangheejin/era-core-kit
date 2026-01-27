@@ -36,6 +36,9 @@ export function Footer() {
           <a href="/our-work" className="site-footer__link">
             Our Work
           </a>
+          <a href="/our-work/archive" className="site-footer__link">
+            Our Work Archive
+          </a>
 {/*           <Link href="/#mission" className="site-footer__link">
             Our Mission
           </Link> */}

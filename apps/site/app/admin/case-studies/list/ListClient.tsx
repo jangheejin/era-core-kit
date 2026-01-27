@@ -179,6 +179,7 @@ export default function ListClient() {
     [items]
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = 3;
 
   // --- Filtered Page Preview (opens a category or single-tag page) ---
   const clientPagePreviewHref = useMemo(() => {
@@ -1024,8 +1025,10 @@ export default function ListClient() {
                         appear on the public homepage and archive views.
                       </p>
                       <p className="muted type-small" style={{ marginTop: 8 }}>
-                        Only the first {maxFeatured} featured case studies
-                        appear on the homepage.
+                        You can feature up to {maxFeatured}. The homepage
+                        highlights the first {homepageFeaturedCount} featured
+                        items, and the Our Work page shows all featured items
+                        in that same order.
                       </p>
                     </div>
 

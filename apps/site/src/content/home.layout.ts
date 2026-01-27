@@ -47,7 +47,7 @@ export const homeLayout: LayoutBlock[] = [
       layout: "3col",
 
       itemsSource: "featured",
-      maxItems: 6,
+      maxItems: 3,
       items: [],
     },
   },
