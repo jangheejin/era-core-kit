@@ -43,6 +43,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     itemsSource,
     maxItems,
     caseStudySlugs,
+    featuredCaseStudySlugs,
   } = props;
   const { items: adminItems } = useAdminCaseStudies();
 
@@ -69,15 +70,29 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
     let ordered = featured;
 
-    if (typeof maxItems === "number" && featured.length < maxItems) {
-      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
-      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
-      ordered = [...featured, ...filler];
+    if (Array.isArray(featuredCaseStudySlugs) && featuredCaseStudySlugs.length) {
+      const bySlug = new Map(featured.map((cs) => [cs.slug, cs]));
+      const orderedFeatured = featuredCaseStudySlugs
+        .map((slug) => bySlug.get(slug))
+        .filter((cs): cs is CaseStudyType => Boolean(cs));
+      ordered = orderedFeatured.length ? orderedFeatured : featured;
+    }
+
+    if (typeof maxItems === "number" && ordered.length < maxItems) {
+      const orderedSlugs = new Set(ordered.map((cs) => cs.slug));
+      const filler = publicItems.filter((cs) => !orderedSlugs.has(cs.slug));
+      ordered = [...ordered, ...filler];
     }
 
     const mapped = ordered.map(toCaseGridItem);
     return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
-  }, [adminItems, itemsSource, maxItems, caseStudySlugs]);
+  }, [
+    adminItems,
+    itemsSource,
+    maxItems,
+    caseStudySlugs,
+    featuredCaseStudySlugs,
+  ]);
 
   return (
     <section className="c-section">
