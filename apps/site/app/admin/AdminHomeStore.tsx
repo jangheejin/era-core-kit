@@ -15,6 +15,7 @@ import type {
   HeroProps,
   IntroWithImageProps,
   MissionTextProps,
+  RichTextSectionProps,
 } from "@kit/blocks";
 import {
   DEFAULT_HOME_CONTENT,
@@ -31,7 +32,7 @@ type AdminHomeContextValue = {
     section: K,
     partial: Partial<HomeContent[K]>
   ) => void;
-  updateExtraSection: (id: string, partial: Partial<LayoutBlock["props"]>) => void;
+  updateExtraSection: (id: string, partial: Partial<RichTextSectionProps>) => void;
   addExtraSection: () => void;
   removeExtraSection: (id: string) => void;
   updateSectionOrder: (order: string[]) => void;
@@ -229,11 +230,13 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
   );
 
   const updateExtraSection = useCallback(
-    (id: string, partial: Partial<LayoutBlock["props"]>) => {
+    (id: string, partial: Partial<RichTextSectionProps>) => {
       setContent((prev) => ({
         ...prev,
         extraSections: prev.extraSections.map((block) =>
-          block._key === id ? { ...block, props: { ...block.props, ...partial } } : block
+          block._key === id && block.type === "RichTextSection"
+            ? { ...block, props: { ...block.props, ...partial } }
+            : block
         ),
       }));
     },
