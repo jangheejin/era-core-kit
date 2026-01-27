@@ -139,10 +139,22 @@ function normalizeContent(raw: unknown): HomeContent {
   const extraSections = extrasRaw
     .filter((block) => isPlainObject(block))
     .filter((block) => block.type === "RichTextSection")
-    .map((block) => ({
-      ...block,
-      _key: typeof block._key === "string" ? block._key : "",
-    }))
+    .map((block) => {
+      const props = isPlainObject(block.props) ? block.props : {};
+      const normalizedProps = {
+        heading: coerceString(props.heading, "New section"),
+        body: coerceString(props.body, "Add supporting text for this section."),
+        subheads: Array.isArray(props.subheads)
+          ? props.subheads.filter((h): h is string => typeof h === "string")
+          : [],
+        imageUrl: coerceOptionalString(props.imageUrl) ?? "",
+      };
+      return {
+        type: "RichTextSection" as const,
+        _key: typeof block._key === "string" ? block._key : "",
+        props: normalizedProps,
+      };
+    })
     .filter((block) => Boolean(block._key));
 
   const baseIds = fallback.sectionOrder;
