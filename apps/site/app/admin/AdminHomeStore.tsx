@@ -110,17 +110,25 @@ function normalizeWork(
         .map((slug) => slug.trim())
         .filter(Boolean)
     : fallback.caseStudySlugs;
+  const featuredCaseStudySlugs = Array.isArray(raw.featuredCaseStudySlugs)
+    ? raw.featuredCaseStudySlugs
+        .filter((slug): slug is string => typeof slug === "string")
+        .map((slug) => slug.trim())
+        .filter(Boolean)
+    : fallback.featuredCaseStudySlugs;
+  const fallbackLayout = fallback.layout ?? "3col";
 
   return {
     heading: coerceString(raw.heading, fallback.heading),
     text: coerceOptionalString(raw.text) ?? fallback.text,
     text2: coerceOptionalString(raw.text2) ?? fallback.text2,
     gridHeading: coerceOptionalString(raw.gridHeading) ?? fallback.gridHeading,
-    layout: coerceString(raw.layout, fallback.layout),
+    layout: coerceString(raw.layout, fallbackLayout),
     itemsSource,
     maxItems: coerceNumber(raw.maxItems, fallback.maxItems),
     items: [],
     caseStudySlugs,
+    featuredCaseStudySlugs,
   };
 }
 

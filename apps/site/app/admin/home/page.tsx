@@ -25,6 +25,7 @@ export default function HomePageEditor() {
   } = useAdminHomeContent();
   const { items: caseStudies } = useAdminCaseStudies();
   const [addSlug, setAddSlug] = useState("");
+  const [addFeaturedSlug, setAddFeaturedSlug] = useState("");
 
   const caseStudyMap = useMemo(
     () => new Map(caseStudies.map((cs) => [cs.slug, cs])),
@@ -36,6 +37,16 @@ export default function HomePageEditor() {
     return caseStudies.filter((cs) => !selected.has(cs.slug));
   }, [caseStudies, content.work.caseStudySlugs]);
 
+  const featuredCandidates = useMemo(
+    () => caseStudies.filter((cs) => Boolean(cs.isFeaturedHome)),
+    [caseStudies]
+  );
+
+  const availableFeaturedCaseStudies = useMemo(() => {
+    const selected = new Set(content.work.featuredCaseStudySlugs);
+    return featuredCandidates.filter((cs) => !selected.has(cs.slug));
+  }, [featuredCandidates, content.work.featuredCaseStudySlugs]);
+
   const selectedItems = useMemo(
     () =>
       content.work.caseStudySlugs.map((slug) => ({
@@ -43,6 +54,15 @@ export default function HomePageEditor() {
         item: caseStudyMap.get(slug),
       })),
     [content.work.caseStudySlugs, caseStudyMap]
+  );
+
+  const selectedFeaturedItems = useMemo(
+    () =>
+      content.work.featuredCaseStudySlugs.map((slug) => ({
+        slug,
+        item: caseStudyMap.get(slug),
+      })),
+    [content.work.featuredCaseStudySlugs, caseStudyMap]
   );
 
   const sectionLabels = useMemo(() => {
@@ -108,9 +128,24 @@ export default function HomePageEditor() {
     updateWork("itemsSource", "manual");
   }
 
+  function moveFeaturedCaseStudy(index: number, direction: number) {
+    const next = [...content.work.featuredCaseStudySlugs];
+    const target = index + direction;
+    if (target < 0 || target >= next.length) return;
+    const [removed] = next.splice(index, 1);
+    next.splice(target, 0, removed);
+    updateWork("featuredCaseStudySlugs", next);
+    updateWork("itemsSource", "featured");
+  }
+
   function removeCaseStudy(slug: string) {
     const next = content.work.caseStudySlugs.filter((s) => s !== slug);
     updateWork("caseStudySlugs", next);
+  }
+
+  function removeFeaturedCaseStudy(slug: string) {
+    const next = content.work.featuredCaseStudySlugs.filter((s) => s !== slug);
+    updateWork("featuredCaseStudySlugs", next);
   }
 
   function addCaseStudy() {
@@ -120,6 +155,19 @@ export default function HomePageEditor() {
     updateWork("caseStudySlugs", [...content.work.caseStudySlugs, trimmed]);
     updateWork("itemsSource", "manual");
     setAddSlug("");
+  }
+
+  function addFeaturedCaseStudy() {
+    const trimmed = addFeaturedSlug.trim();
+    if (!trimmed) return;
+    if (content.work.featuredCaseStudySlugs.includes(trimmed)) return;
+    if (content.work.featuredCaseStudySlugs.length >= 3) return;
+    updateWork("featuredCaseStudySlugs", [
+      ...content.work.featuredCaseStudySlugs,
+      trimmed,
+    ]);
+    updateWork("itemsSource", "featured");
+    setAddFeaturedSlug("");
   }
 
   return (
@@ -499,6 +547,91 @@ export default function HomePageEditor() {
                           className="btnSmall"
                           type="button"
                           onClick={() => removeCaseStudy(slug)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="admin-field">
+            <label className="admin-label" htmlFor="workAddFeaturedCaseStudy">
+              Homepage featured case studies (pick 3)
+            </label>
+            <div className="row">
+              <select
+                id="workAddFeaturedCaseStudy"
+                className="admin-select"
+                value={addFeaturedSlug}
+                onChange={(e) => setAddFeaturedSlug(e.target.value)}
+              >
+                <option value="">Select a featured case study</option>
+                {availableFeaturedCaseStudies.map((cs) => (
+                  <option key={cs.slug} value={cs.slug}>
+                    {cs.client || cs.title || cs.slug}
+                  </option>
+                ))}
+              </select>
+              <button
+                className="btnPrimary"
+                type="button"
+                onClick={addFeaturedCaseStudy}
+              >
+                Add to homepage
+              </button>
+            </div>
+            <p className="admin-hint">
+              These are the specific featured case studies shown on the
+              homepage. Select from items already marked as featured.
+            </p>
+          </div>
+
+          <div className="admin-field">
+            <div className="admin-label-row">
+              <span className="admin-label">Homepage featured (order)</span>
+              <span className="admin-label-optional">
+                {selectedFeaturedItems.length} selected
+              </span>
+            </div>
+            <div className="dbListGrid">
+              {selectedFeaturedItems.length === 0 ? (
+                <p className="muted">
+                  No homepage featured items yet. Add up to three from the
+                  featured list.
+                </p>
+              ) : (
+                selectedFeaturedItems.map(({ slug, item }, index) => (
+                  <div key={slug} className="card dbItem">
+                    <div className="dbItemHeader">
+                      <div className="dbItemMain">
+                        <div className="dbItemClient">
+                          {item?.client || item?.title || slug}
+                        </div>
+                        <div className="dbItemTitle">{slug}</div>
+                      </div>
+                      <div className="dbActions">
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => moveFeaturedCaseStudy(index, -1)}
+                        >
+                          Move up
+                        </button>
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => moveFeaturedCaseStudy(index, 1)}
+                        >
+                          Move down
+                        </button>
+                        <button
+                          className="btnSmall"
+                          type="button"
+                          onClick={() => removeFeaturedCaseStudy(slug)}
                         >
                           Remove
                         </button>
