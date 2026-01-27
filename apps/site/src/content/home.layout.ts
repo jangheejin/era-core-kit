@@ -39,15 +39,15 @@ export const homeLayout: LayoutBlock[] = [
   {
     type: "WorkWithCaseGrid",
     props: {
-      heading: "Our Work",
+      heading: "Featured Case Studies",
       text: "As former Senior Advisors to Members of the United States Senate, we have experience working on Congressional issues that include, but are not limited to, geospatial, natural resources, emergency management, and natural disaster response, agriculture, transportation, appropriations, and programmatic grant funding. As legislative leads in these areas, we worked closely with federal departments and agencies on related programs and efforts, as well as outside companies, foundations, non-profits, county, state, and tribal governments, among others.",
       text2:
         "Since leaving government service, we have collectively represented, as lobbyists and advisors, a large geospatial industry association, non-geospatial-related industry associations, non-profit and charitable organizations, tribal governments, and individual companies, to name a few.",
-      gridHeading: "Selected Case Studies",
+      gridHeading: "Featured Case Studies",
       layout: "3col",
 
       itemsSource: "featured",
-      maxItems: 6,
+      maxItems: 3,
       items: [],
     },
   },

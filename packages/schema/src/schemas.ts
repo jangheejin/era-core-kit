@@ -164,6 +164,7 @@ const CaseStudyCanonicalSchema = z.object({
   status: CaseStudyStatusSchema.default("Draft"),
   visibility: CaseStudyVisibilitySchema.default("Internal"),
   isFeaturedHome: z.boolean().default(false),
+  isFeaturedHomepage: z.boolean().default(false),
   isPublic: z.boolean().default(true),
 /*   }).superRefine((val, ctx) => {
     if (!val.sectors.includes(val.primarySector)) {

@@ -74,6 +74,7 @@ export const CaseStudySeedSchema = z
     // visibility: accepts either/both (temporarily while we transition from demo to full):
     featured: z.boolean().optional(),
     isFeaturedHome: z.boolean().optional(),
+    isFeaturedHomepage: z.boolean().optional(),
     isPublic: z.boolean().default(true),
   })
   .superRefine((v, ctx) => {

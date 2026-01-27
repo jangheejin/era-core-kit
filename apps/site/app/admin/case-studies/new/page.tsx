@@ -99,6 +99,18 @@ export default function NewCaseStudyPage() {
     [adminItems],
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = useMemo(
+    () =>
+      adminItems.filter(
+        (cs) =>
+          cs.status === "Published" &&
+          cs.isPublic &&
+          cs.visibility === "Public" &&
+          cs.isFeaturedHomepage,
+      ).length,
+    [adminItems],
+  );
+  const maxHomepageFeatured = 3;
 
   const [id] = useState(() =>
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
@@ -200,13 +212,20 @@ const selectedCategories = useMemo(() => {
   type PublishStatus = "Draft" | "Published";
   const [status, setStatus] = useState<PublishStatus>("Draft");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const [isFeaturedHomepage, setIsFeaturedHomepage] = useState(false);
   const isPublished = status === "Published";
 
   useEffect(() => {
     if (!isPublished && isFeaturedHome) {
       setIsFeaturedHome(false);
     }
-  }, [isPublished, isFeaturedHome]);
+    if (!isPublished && isFeaturedHomepage) {
+      setIsFeaturedHomepage(false);
+    }
+    if (!isFeaturedHome && isFeaturedHomepage) {
+      setIsFeaturedHomepage(false);
+    }
+  }, [isPublished, isFeaturedHome, isFeaturedHomepage]);
 
   const [availabilityPreset, setAvailabilityPreset] = useState<
     "internal" | "clients" | "website" | "custom"
@@ -304,6 +323,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       status,
       visibility: isPublished ? "Public" : "Internal",
       isFeaturedHome: isPublished ? isFeaturedHome : false,
+      isFeaturedHomepage: isPublished ? isFeaturedHomepage : false,
       isPublic: isPublished,
     };
   }, [
@@ -319,6 +339,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
       heroImageUrl,
       status,
       isFeaturedHome,
+      isFeaturedHomepage,
       isPublished,
     ]);
 
@@ -845,7 +866,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                   </select>
                 </div>
                 <div className="form-field">
-                  <label className="form-label">Homepage feature</label>
+                  <label className="form-label">Our Work feature</label>
                   <label className="toggleRow">
                     <input
                       type="checkbox"
@@ -854,11 +875,31 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                       disabled={!isPublished}
                     />
                     <span>
+                      <strong>Feature on Our Work page</strong>
+                    </span>
+                  </label>
+                  <p className="muted type-small" style={{ marginTop: 6 }}>
+                    Featured now: {featuredCount}/{maxFeatured}. Only the first {maxFeatured} appear on the Our Work page.
+                  </p>
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Homepage feature</label>
+                  <label className="toggleRow">
+                    <input
+                      type="checkbox"
+                      checked={isFeaturedHomepage && isPublished}
+                      onChange={(e) => setIsFeaturedHomepage(e.target.checked)}
+                      disabled={
+                        !isPublished ||
+                        (homepageFeaturedCount >= maxHomepageFeatured && !isFeaturedHomepage)
+                      }
+                    />
+                    <span>
                       <strong>Feature on homepage</strong>
                     </span>
                   </label>
                   <p className="muted type-small" style={{ marginTop: 6 }}>
-                    Featured now: {featuredCount}/{maxFeatured}. Only the first {maxFeatured} appear on the homepage.
+                    Homepage highlights: {homepageFeaturedCount}/{maxHomepageFeatured}.
                   </p>
                 </div>
               </div>

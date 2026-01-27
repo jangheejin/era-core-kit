@@ -131,6 +131,11 @@ export default function ListClient() {
   const featuredSaveTimersRef = useRef<
     Record<string, ReturnType<typeof setTimeout> | null>
   >({});
+  const [homepageFeaturedSaveStateById, setHomepageFeaturedSaveStateById] =
+    useState<Record<string, "idle" | "saving" | "saved" | "error">>({});
+  const homepageFeaturedSaveTimersRef = useRef<
+    Record<string, ReturnType<typeof setTimeout> | null>
+  >({});
 
   const searchParams = useSearchParams();
   const savedId = searchParams.get("saved");
@@ -179,6 +184,18 @@ export default function ListClient() {
     [items]
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = useMemo(
+    () =>
+      items.filter(
+        (cs) =>
+          cs.status === "Published" &&
+          cs.isPublic &&
+          cs.visibility === "Public" &&
+          cs.isFeaturedHomepage
+      ).length,
+    [items]
+  );
+  const maxHomepageFeatured = 3;
 
   // --- Filtered Page Preview (opens a category or single-tag page) ---
   const clientPagePreviewHref = useMemo(() => {
@@ -209,8 +226,12 @@ export default function ListClient() {
 
   useEffect(() => {
     const timers = featuredSaveTimersRef.current;
+    const homepageTimers = homepageFeaturedSaveTimersRef.current;
     return () => {
       Object.values(timers).forEach((timer) => {
+        if (timer) clearTimeout(timer);
+      });
+      Object.values(homepageTimers).forEach((timer) => {
         if (timer) clearTimeout(timer);
       });
     };
@@ -246,11 +267,32 @@ export default function ListClient() {
     setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
   }
 
+  function clearHomepageFeaturedSaveTimer(id: string) {
+    const existing = homepageFeaturedSaveTimersRef.current[id];
+    if (existing) clearTimeout(existing);
+    homepageFeaturedSaveTimersRef.current[id] = null;
+  }
+
+  function scheduleHomepageFeaturedSaveReset(id: string) {
+    clearHomepageFeaturedSaveTimer(id);
+    homepageFeaturedSaveTimersRef.current[id] = setTimeout(() => {
+      setHomepageFeaturedSaveStateById((prev) => ({ ...prev, [id]: "idle" }));
+    }, 2000);
+  }
+
+  function setHomepageFeaturedSaveState(
+    id: string,
+    state: "idle" | "saving" | "saved" | "error"
+  ) {
+    setHomepageFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
+  }
+
   function applyFeaturedQuickSave(cs: CaseStudyType, next: boolean) {
     setFeaturedSaveState(cs.id, "saving");
     clearFeaturedSaveTimer(cs.id);
     const updated = updateMeta(cs.id, {
       isFeaturedHome: next,
+      isFeaturedHomepage: next ? cs.isFeaturedHomepage : false,
       status: "Published",
       visibility: "Public",
       isPublic: true,
@@ -264,6 +306,7 @@ export default function ListClient() {
 
     updateMeta(cs.id, {
       isFeaturedHome: cs.isFeaturedHome,
+      isFeaturedHomepage: cs.isFeaturedHomepage,
       status: cs.status,
       visibility: cs.visibility,
       isPublic: cs.isPublic,
@@ -271,6 +314,35 @@ export default function ListClient() {
     setFeaturedSaveState(cs.id, "error");
     scheduleFeaturedSaveReset(cs.id);
     window.alert("Could not update featured status. Please try again.");
+  }
+
+  function applyHomepageFeaturedQuickSave(cs: CaseStudyType, next: boolean) {
+    setHomepageFeaturedSaveState(cs.id, "saving");
+    clearHomepageFeaturedSaveTimer(cs.id);
+    const updated = updateMeta(cs.id, {
+      isFeaturedHomepage: next,
+      isFeaturedHome: next ? true : cs.isFeaturedHome,
+      status: "Published",
+      visibility: "Public",
+      isPublic: true,
+    });
+
+    if (updated) {
+      setHomepageFeaturedSaveState(cs.id, "saved");
+      scheduleHomepageFeaturedSaveReset(cs.id);
+      return;
+    }
+
+    updateMeta(cs.id, {
+      isFeaturedHomepage: cs.isFeaturedHomepage,
+      isFeaturedHome: cs.isFeaturedHome,
+      status: cs.status,
+      visibility: cs.visibility,
+      isPublic: cs.isPublic,
+    });
+    setHomepageFeaturedSaveState(cs.id, "error");
+    scheduleHomepageFeaturedSaveReset(cs.id);
+    window.alert("Could not update homepage feature status. Please try again.");
   }
 
   // Normalize + Zod-validate before saving
@@ -602,7 +674,10 @@ export default function ListClient() {
 
             const isPublished = cs.status === "Published";
             const isFeatured = Boolean(cs.isFeaturedHome);
+            const isHomepageFeatured = Boolean(cs.isFeaturedHomepage);
             const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
+            const homepageFeaturedSaveState =
+              homepageFeaturedSaveStateById[cs.id] ?? "idle";
             const { visible: visibleTags, hidden: hiddenTags } =
               splitCategoryTags(
                 normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags")))
@@ -978,6 +1053,10 @@ export default function ListClient() {
                                 nextStatus === "Published"
                                   ? cs.isFeaturedHome
                                   : false,
+                              isFeaturedHomepage:
+                                nextStatus === "Published"
+                                  ? cs.isFeaturedHomepage
+                                  : false,
                             });
                           }}
                         >
@@ -1000,7 +1079,8 @@ export default function ListClient() {
                             }
                           />
                           <span className="type-small">
-                            Feature on homepage ({featuredCount}/{maxFeatured})
+                            Feature on Our Work page (
+                            {featuredCount}/{maxFeatured})
                             {featuredSaveState === "saving" && (
                               <span className="muted" style={{ marginLeft: 8 }}>
                                 Saving…
@@ -1018,14 +1098,54 @@ export default function ListClient() {
                             )}
                           </span>
                         </label>
+                        <label
+                          className="row"
+                          style={{ gap: ".4rem", alignItems: "center" }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isHomepageFeatured && isPublished}
+                            disabled={
+                              !isPublished ||
+                              (homepageFeaturedCount >= maxHomepageFeatured &&
+                                !isHomepageFeatured)
+                            }
+                            onChange={(e) =>
+                              applyHomepageFeaturedQuickSave(
+                                cs,
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <span className="type-small">
+                            Feature on homepage (
+                            {homepageFeaturedCount}/{maxHomepageFeatured})
+                            {homepageFeaturedSaveState === "saving" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saving…
+                              </span>
+                            )}
+                            {homepageFeaturedSaveState === "saved" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Saved
+                              </span>
+                            )}
+                            {homepageFeaturedSaveState === "error" && (
+                              <span className="muted" style={{ marginLeft: 8 }}>
+                                Save failed
+                              </span>
+                            )}
+                          </span>
+                        </label>
                       </div>
                       <p className="muted type-small mt">
                         Publish and mark a case study as featured to see it
-                        appear on the public homepage and archive views.
+                        appear on the public Our Work page.
                       </p>
                       <p className="muted type-small" style={{ marginTop: 8 }}>
                         Only the first {maxFeatured} featured case studies
-                        appear on the homepage.
+                        appear on the Our Work page. The homepage highlights up
+                        to {maxHomepageFeatured} of those.
                       </p>
                     </div>
 
