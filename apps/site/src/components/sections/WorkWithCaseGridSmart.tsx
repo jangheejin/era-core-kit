@@ -5,6 +5,7 @@ import type { WorkWithCaseGridProps } from "@kit/blocks";
 import { WorkText, CaseGrid } from "@kit/blocks";
 import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
+import { getOrderedCaseStudies } from "@/lib/caseStudyOrdering";
 
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
 
@@ -30,25 +31,11 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
   const { items: adminItems } = useAdminCaseStudies();
 
   const items = useMemo(() => {
-    const publicItems = adminItems.filter(
-      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
-    );
-
-    if (itemsSource !== "featured") {
-      return publicItems.map(toCaseGridItem);
-    }
-
-    const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
-    let ordered = featured;
-
-    if (typeof maxItems === "number" && featured.length < maxItems) {
-      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
-      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
-      ordered = [...featured, ...filler];
-    }
-
-    const mapped = ordered.map(toCaseGridItem);
-    return typeof maxItems === "number" ? mapped.slice(0, maxItems) : mapped;
+    return getOrderedCaseStudies({
+      items: adminItems,
+      itemsSource,
+      maxItems,
+    }).map(toCaseGridItem);
   }, [adminItems, itemsSource, maxItems]);
 
   return (

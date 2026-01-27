@@ -99,6 +99,7 @@ export default function NewCaseStudyPage() {
     [adminItems],
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = 3;
 
   const [id] = useState(() =>
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
@@ -858,7 +859,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
                     </span>
                   </label>
                   <p className="muted type-small" style={{ marginTop: 6 }}>
-                    Featured now: {featuredCount}/{maxFeatured}. Only the first {maxFeatured} appear on the homepage.
+                    Featured now: {featuredCount}/{maxFeatured}. The homepage highlights the first {homepageFeaturedCount} featured items, and the Our Work page shows all featured items in that same order.
                   </p>
                 </div>
               </div>

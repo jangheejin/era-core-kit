@@ -133,6 +133,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     [adminItems],
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = 3;
 
   // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
@@ -618,7 +619,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                 </label>
               </div>
               <p className="muted type-small" style={{ marginTop: 6 }}>
-                Only the first {maxFeatured} featured case studies appear on the homepage.
+                You can feature up to {maxFeatured} case studies. The homepage highlights the
+                first {homepageFeaturedCount} featured items, and the Our Work page shows all
+                featured items in that same order.
               </p>
             </div>
 
