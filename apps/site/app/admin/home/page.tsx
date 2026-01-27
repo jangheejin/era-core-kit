@@ -486,7 +486,7 @@ export default function HomePageEditor() {
 
           <div className="admin-field">
             <label className="admin-label" htmlFor="workAddCaseStudy">
-              Add case study to grid
+              Add case study to Featured 6 list
             </label>
             <div className="row">
               <select
@@ -510,7 +510,9 @@ export default function HomePageEditor() {
 
           <div className="admin-field">
             <div className="admin-label-row">
-              <span className="admin-label">Selected case studies (order)</span>
+              <span className="admin-label">
+                Featured case studies (order, up to 6)
+              </span>
               <span className="admin-label-optional">
                 {selectedItems.length} selected
               </span>
@@ -519,7 +521,7 @@ export default function HomePageEditor() {
               {selectedItems.length === 0 ? (
                 <p className="muted">
                   No case studies selected yet. Choose items to feature in the
-                  grid.
+                  Featured 6 list.
                 </p>
               ) : (
                 selectedItems.map(({ slug, item }, index) => (
@@ -563,7 +565,7 @@ export default function HomePageEditor() {
 
           <div className="admin-field">
             <label className="admin-label" htmlFor="workAddFeaturedCaseStudy">
-              Homepage featured case studies (pick 3)
+              Homepage featured case studies (pick 3 from Featured 6)
             </label>
             <div className="row">
               <select
@@ -589,7 +591,7 @@ export default function HomePageEditor() {
             </div>
             <p className="admin-hint">
               These are the specific featured case studies shown on the
-              homepage. Select from items already marked as featured.
+              homepage. Pick up to three from the Featured 6 list above.
             </p>
           </div>
 
@@ -604,7 +606,7 @@ export default function HomePageEditor() {
               {selectedFeaturedItems.length === 0 ? (
                 <p className="muted">
                   No homepage featured items yet. Add up to three from the
-                  featured list.
+                  Featured 6 list above.
                 </p>
               ) : (
                 selectedFeaturedItems.map(({ slug, item }, index) => (

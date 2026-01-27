@@ -3,7 +3,7 @@
   position: sticky;
   top: 0;
   /*  z-index: 100;*/ /* above content, below modals if you add them */
-  z-index: 50;
+  z-index: 1000;
   background: var(--bg);
   border-bottom: 1px solid var(--gray-300);
 }
@@ -296,6 +296,20 @@
 
 .site-footer__legal.type-small{
   font-size: 0.7rem;  
+}
+
+.site-footer__divider {
+  margin: 0 0.4rem;
+  color: #9ca3af;
+}
+
+.site-footer__archive-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.site-footer__archive-link:hover {
+  text-decoration: none;
 }
 
 body > footer > div > p {

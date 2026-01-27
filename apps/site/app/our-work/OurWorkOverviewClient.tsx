@@ -9,6 +9,7 @@ import {
   type SectorValue,
 } from "@kit/schema";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
+import { useAdminHomeContent } from "../admin/AdminHomeStore";
 
 type CaseGridItem = CaseGridProps["items"][number];
 type NonEmptyArray<T> = [T, ...T[]];
@@ -40,23 +41,49 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
 
 export function OurWorkOverviewClient() {
   const { items: adminItems } = useAdminCaseStudies();
+  const { content } = useAdminHomeContent();
 
   const items = useMemo(() => {
+    const maxItems = 6;
     const publicItems = adminItems.filter(
       (cs) => Boolean(cs.isPublic) && cs.status === "Published"
     );
+    const { itemsSource, caseStudySlugs, featuredCaseStudySlugs } = content.work;
+
+    if (itemsSource === "manual") {
+      const order = Array.isArray(caseStudySlugs) ? caseStudySlugs : [];
+      if (order.length === 0) return [];
+      const bySlug = new Map(publicItems.map((cs) => [cs.slug, cs]));
+      const ordered = order
+        .map((slug) => bySlug.get(slug))
+        .filter((cs): cs is CaseStudyType => Boolean(cs));
+      return ordered.slice(0, maxItems).map(toCaseGridItem);
+    }
+
+    if (itemsSource !== "featured") {
+      return publicItems.slice(0, maxItems).map(toCaseGridItem);
+    }
+
     const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
     if (featured.length === 0) return [];
 
     let ordered = featured;
-    if (featured.length < 6) {
-      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
-      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
-      ordered = [...featured, ...filler].slice(0, 6);
+    if (Array.isArray(featuredCaseStudySlugs) && featuredCaseStudySlugs.length) {
+      const bySlug = new Map(featured.map((cs) => [cs.slug, cs]));
+      const orderedFeatured = featuredCaseStudySlugs
+        .map((slug) => bySlug.get(slug))
+        .filter((cs): cs is CaseStudyType => Boolean(cs));
+      ordered = orderedFeatured.length ? orderedFeatured : featured;
     }
 
-    return ordered.slice(0, 6).map(toCaseGridItem);
-  }, [adminItems]);
+    if (ordered.length < maxItems) {
+      const featuredSlugs = new Set(ordered.map((cs) => cs.slug));
+      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
+      ordered = [...ordered, ...filler];
+    }
+
+    return ordered.slice(0, maxItems).map(toCaseGridItem);
+  }, [adminItems, content.work]);
 
   return (
     <main>
