@@ -17,7 +17,7 @@ import { OurWorkDataBridge } from "./OurWorkDataBridge";
 export default async function OurWorkPage() {
   return (
     <div data-cms-ssr="1">
-      <OurWorkDataBridge basePath="/our-work" />
+      <OurWorkDataBridge />
     </div>
   );
 }

@@ -111,11 +111,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   type PublishStatus = "Draft" | "Published";
   const [status, setStatus] = useState<PublishStatus>("Draft");
   const [isFeaturedHome, setIsFeaturedHome] = useState(false);
+  const [isFeaturedHomepage, setIsFeaturedHomepage] = useState(false);
   const isPublished = status === "Published";
   const [featuredSaveState, setFeaturedSaveState] = useState<"idle" | "saving" | "saved" | "error">(
     "idle",
   );
   const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [homepageFeaturedSaveState, setHomepageFeaturedSaveState] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
+  const homepageFeaturedSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   //part of protecting against slug collisions. slugDraft needs a state
   const [slugDraft, setSlugDraft] = useState("");
@@ -133,6 +140,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     [adminItems],
   );
   const maxFeatured = 6;
+  const homepageFeaturedCount = useMemo(
+    () =>
+      adminItems.filter(
+        (item) =>
+          item.status === "Published" &&
+          item.isPublic &&
+          item.visibility === "Public" &&
+          item.isFeaturedHomepage,
+      ).length,
+    [adminItems],
+  );
+  const maxHomepageFeatured = 3;
 
   // HYDRATION: hydrate local form state once we have cs
   useEffect(() => {
@@ -160,6 +179,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     const nextStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
     setStatus(nextStatus);
     setIsFeaturedHome(nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false);
+    setIsFeaturedHomepage(
+      nextStatus === "Published" ? Boolean(cs.isFeaturedHomepage) : false,
+    );
 
     setReady(true);
   }, [cs, ready, DEFAULT_SECTOR]);
@@ -168,11 +190,18 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     if (!isPublished && isFeaturedHome) {
       setIsFeaturedHome(false);
     }
-  }, [isPublished, isFeaturedHome]);
+    if (!isPublished && isFeaturedHomepage) {
+      setIsFeaturedHomepage(false);
+    }
+    if (!isFeaturedHome && isFeaturedHomepage) {
+      setIsFeaturedHomepage(false);
+    }
+  }, [isPublished, isFeaturedHome, isFeaturedHomepage]);
 
   useEffect(() => {
     return () => {
       clearFeaturedSaveTimer();
+      clearHomepageFeaturedSaveTimer();
     };
   }, []);
 
@@ -190,9 +219,27 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     }, 2000);
   }
 
+  function clearHomepageFeaturedSaveTimer() {
+    if (homepageFeaturedSaveTimerRef.current) {
+      clearTimeout(homepageFeaturedSaveTimerRef.current);
+      homepageFeaturedSaveTimerRef.current = null;
+    }
+  }
+
+  function scheduleHomepageFeaturedSaveReset() {
+    clearHomepageFeaturedSaveTimer();
+    homepageFeaturedSaveTimerRef.current = setTimeout(() => {
+      setHomepageFeaturedSaveState("idle");
+    }, 2000);
+  }
+
   function applyFeaturedQuickSave(next: boolean) {
     const previous = isFeaturedHome;
+    const previousHomepage = isFeaturedHomepage;
     setIsFeaturedHome(next);
+    if (!next) {
+      setIsFeaturedHomepage(false);
+    }
     clearFeaturedSaveTimer();
     setFeaturedSaveState("saving");
 
@@ -201,7 +248,11 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
         throw new Error("Missing case study");
       }
 
-      const candidate = { ...cs, isFeaturedHome: next };
+      const candidate = {
+        ...cs,
+        isFeaturedHome: next,
+        isFeaturedHomepage: next ? isFeaturedHomepage : false,
+      };
       const parsed = CaseStudySchema.safeParse(candidate);
       if (!parsed.success) {
         throw new Error("Invalid case study payload");
@@ -212,9 +263,42 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       scheduleFeaturedSaveReset();
     } catch {
       setIsFeaturedHome(previous);
+      setIsFeaturedHomepage(previousHomepage);
       setFeaturedSaveState("error");
       scheduleFeaturedSaveReset();
       window.alert("Could not update featured status. Please try again.");
+    }
+  }
+
+  function applyHomepageFeaturedQuickSave(next: boolean) {
+    const previous = isFeaturedHomepage;
+    setIsFeaturedHomepage(next);
+    clearHomepageFeaturedSaveTimer();
+    setHomepageFeaturedSaveState("saving");
+
+    try {
+      if (!cs) {
+        throw new Error("Missing case study");
+      }
+
+      const candidate = {
+        ...cs,
+        isFeaturedHomepage: next,
+        isFeaturedHome: next ? true : cs.isFeaturedHome,
+      };
+      const parsed = CaseStudySchema.safeParse(candidate);
+      if (!parsed.success) {
+        throw new Error("Invalid case study payload");
+      }
+
+      upsertCaseStudy(parsed.data);
+      setHomepageFeaturedSaveState("saved");
+      scheduleHomepageFeaturedSaveReset();
+    } catch {
+      setIsFeaturedHomepage(previous);
+      setHomepageFeaturedSaveState("error");
+      scheduleHomepageFeaturedSaveReset();
+      window.alert("Could not update homepage feature status. Please try again.");
     }
   }
 
@@ -283,12 +367,14 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           status: "Published" as const,
           isPublic: true,
           isFeaturedHome: isFeaturedHome,
+          isFeaturedHomepage: isFeaturedHomepage,
         }
       : {
           visibility: "Internal" as const,
           status: "Draft" as const,
           isPublic: false,
           isFeaturedHome: false,
+          isFeaturedHomepage: false,
         };
 
     return {
@@ -330,6 +416,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     //isFeaturedHome,
     isPublished,
     isFeaturedHome,
+    isFeaturedHomepage,
     effectiveSlug,
     DEFAULT_SECTOR,
   ]);
@@ -355,6 +442,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
 
     const baseStatus: PublishStatus = cs.status === "Published" ? "Published" : "Draft";
     const baseFeatured = Boolean(cs.isFeaturedHome);
+    const baseHomepageFeatured = Boolean(cs.isFeaturedHomepage);
 
     const baseHeroNorm = emptyToUndefined(cs.heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
     const heroNorm = emptyToUndefined(heroImageUrl) ?? DEFAULT_HERO_IMAGE_URL;
@@ -369,7 +457,8 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       heroNorm !== baseHeroNorm ||
       
       status !== baseStatus ||
-      (isPublished ? isFeaturedHome !== baseFeatured : false)
+      (isPublished ? isFeaturedHome !== baseFeatured : false) ||
+      (isPublished ? isFeaturedHomepage !== baseHomepageFeatured : false)
 //      isPublic !== basePublic ||
 //      isFeaturedHome !== baseFeatured
     );
@@ -379,6 +468,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     status,
     isPublished,
     isFeaturedHome,
+    isFeaturedHomepage,
     DEFAULT_SECTOR
   ]);
 
@@ -598,7 +688,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                     disabled={!isPublished}
                   />
                   <span className="type-small">
-                    Feature on homepage ({featuredCount}/{maxFeatured})
+                    Feature on Our Work page ({featuredCount}/{maxFeatured})
                     {featuredSaveState === "saving" && (
                       <span className="muted" style={{ marginLeft: 8 }}>
                         Saving…
@@ -616,9 +706,38 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
                     )}
                   </span>
                 </label>
+                <label className="row" style={{ gap: ".4rem", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={isFeaturedHomepage && isPublished}
+                    onChange={(e) => applyHomepageFeaturedQuickSave(e.target.checked)}
+                    disabled={
+                      !isPublished ||
+                      (homepageFeaturedCount >= maxHomepageFeatured && !isFeaturedHomepage)
+                    }
+                  />
+                  <span className="type-small">
+                    Feature on homepage ({homepageFeaturedCount}/{maxHomepageFeatured})
+                    {homepageFeaturedSaveState === "saving" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saving…
+                      </span>
+                    )}
+                    {homepageFeaturedSaveState === "saved" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Saved
+                      </span>
+                    )}
+                    {homepageFeaturedSaveState === "error" && (
+                      <span className="muted" style={{ marginLeft: 8 }}>
+                        Save failed
+                      </span>
+                    )}
+                  </span>
+                </label>
               </div>
               <p className="muted type-small" style={{ marginTop: 6 }}>
-                Only the first {maxFeatured} featured case studies appear on the homepage.
+                Only the first {maxFeatured} featured case studies appear on the Our Work page. The homepage highlights up to {maxHomepageFeatured} of those.
               </p>
             </div>
 

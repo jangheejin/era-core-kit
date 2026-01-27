@@ -26,7 +26,8 @@ function toCaseGridItem(cs: CaseStudyType): CaseGridItem {
 }
 
 export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
-  const { layout, heading, text, text2, itemsSource, maxItems } = props;
+  const { layout, heading, text, text2, itemsSource, maxItems, gridHeading } =
+    props;
   const { items: adminItems } = useAdminCaseStudies();
 
   const items = useMemo(() => {
@@ -39,12 +40,23 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     }
 
     const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
-    let ordered = featured;
+    const homepageFeatured = featured.filter((cs) =>
+      Boolean(cs.isFeaturedHomepage),
+    );
+    let ordered = homepageFeatured.length ? homepageFeatured : featured;
 
-    if (typeof maxItems === "number" && featured.length < maxItems) {
-      const featuredSlugs = new Set(featured.map((cs) => cs.slug));
-      const filler = publicItems.filter((cs) => !featuredSlugs.has(cs.slug));
-      ordered = [...featured, ...filler];
+    if (typeof maxItems === "number" && ordered.length < maxItems) {
+      const orderedSlugs = new Set(ordered.map((cs) => cs.slug));
+      const filler = featured.filter((cs) => !orderedSlugs.has(cs.slug));
+      ordered = [...ordered, ...filler];
+
+      if (ordered.length < maxItems) {
+        const featuredSlugs = new Set(ordered.map((cs) => cs.slug));
+        const publicFiller = publicItems.filter(
+          (cs) => !featuredSlugs.has(cs.slug),
+        );
+        ordered = [...ordered, ...publicFiller];
+      }
     }
 
     const mapped = ordered.map(toCaseGridItem);
@@ -55,7 +67,9 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     <section className="c-section">
       <div className="c-container c-stack">
         <WorkText heading={heading} text={text} text2={text2} />
-        <h2 className="type-h2 case-grid-section">Selected Case Studies</h2>
+        <h2 className="type-h2 case-grid-section">
+          {gridHeading ?? "Selected Case Studies"}
+        </h2>
         {/* <h3 className="type-h3 case-grid-section">Selected Case Studies</h3> */}
         <CaseGrid layout={layout} items={items} />
       </div>

@@ -26,11 +26,7 @@ function toWorkCase(cs: CaseStudyType): WorkCase {
   };
 }
 
-export function OurWorkDataBridge({
-  basePath = "/our-work",
-}: {
-  basePath?: string;
-}) {
+export function OurWorkDataBridge() {
   const { items } = useAdminCaseStudies();
 
   const cases = useMemo(() => {
@@ -40,5 +36,5 @@ export function OurWorkDataBridge({
     return publicItems.map(toWorkCase);
   }, [items]);
 
-  return <OurWorkClient cases={cases} basePath={basePath} demo={false} />;
+  return <OurWorkClient cases={cases} />;
 }

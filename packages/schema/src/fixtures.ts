@@ -783,6 +783,7 @@ function normalize(seedInput: CaseStudySeedInput): CaseStudyType {
     links: [],
 
     isFeaturedHome: seed.isFeaturedHome ?? seed.featured ?? false,
+    isFeaturedHomepage: seed.isFeaturedHomepage ?? false,
     isPublic: seed.isPublic ?? false,
 
     // status/visibility intentionally omitted: defaults apply at parse-time
@@ -828,6 +829,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "Resilience",
     ],
     year: 2024,
+    isFeaturedHomepage: true,
     isFeaturedHome: true,
     isPublic: true,
   },
@@ -859,6 +861,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "Resilience",
     ],
     year: 2024,
+    isFeaturedHomepage: true,
     isFeaturedHome: true,
     isPublic: true,
   },
@@ -889,6 +892,7 @@ const SEEDS: CaseStudySeedInput[] = [
       "S1",
     ],
     year: 2024,
+    isFeaturedHomepage: true,
     isFeaturedHome: true,
     isPublic: true,
   },
