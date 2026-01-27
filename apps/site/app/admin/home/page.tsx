@@ -135,6 +135,7 @@ export default function HomePageEditor() {
     const target = index + direction;
     if (target < 0 || target >= next.length) return;
     const [removed] = next.splice(index, 1);
+    if (!removed) return;
     next.splice(target, 0, removed);
     updateWork("featuredCaseStudySlugs", next);
     updateWork("itemsSource", "featured");
