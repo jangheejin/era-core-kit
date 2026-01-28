@@ -134,3 +134,17 @@ formerly NewCaseStudies.module.css */
 .cms-button--alt3:hover {
   background: #115e59;
 }
+
+
+@media (max-width: 480px) {
+  .btnPrimary,
+  .btnSecondary,
+  .btnSmall {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.95rem;
+  }
+
+  .row {
+    flex-wrap: wrap;
+  }
+}

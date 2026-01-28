@@ -970,20 +970,6 @@ the user fills out)
   flex-wrap: wrap;
 }
 
-.form-actions__buttons {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.client-status {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 280px;
-}
-
 .error {
   background: #ffe0e0;
   color: #b00020;
@@ -1798,23 +1784,6 @@ code {
   resize: vertical;
 
   box-sizing: border-box;
-}
-
-.editor-preview {
-  margin-top: 0.75rem;
-  padding: 0.85rem;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,.12);
-  background: rgba(0,0,0,.02);
-}
-
-.editor-preview__header {
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  opacity: 0.7;
 }
 
 
@@ -3140,7 +3109,6 @@ fieldset.form-group > legend.form-label{
 
 .dbProps { margin-top: .75rem; display:grid; gap:.6rem; }
 .dbPropLabel { font-size: .82rem; opacity: .7; margin-bottom: .25rem; }
-.dbPropValue { font-size: 0.95rem; }
 
 .dbProps--inline {
   grid-template-columns: repeat(2, max-content);
@@ -3269,7 +3237,7 @@ fieldset.form-group > legend.form-label{
 
 .team-editor-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 0.75rem;
@@ -3421,16 +3389,6 @@ fieldset.form-group > legend.form-label{
   margin-bottom: 1rem;
 }
 
-.team-photo-controls__row {
-  gap: 0.75rem;
-  margin-bottom: 0;
-}
-
-.team-photo-preview--inline {
-  margin-bottom: 0;
-  align-items: flex-start;
-}
-
 .team-photo-preview {
   display: flex;
   gap: .75rem;
@@ -3448,8 +3406,8 @@ fieldset.form-group > legend.form-label{
 
 .team-form__wide textarea {
   width: 100%;
+/*   min-height: 220px; */
 }
-
 .team-form__wide {
   width: 100%;
 }

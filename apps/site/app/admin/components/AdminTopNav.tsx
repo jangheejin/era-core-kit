@@ -32,6 +32,13 @@ type NavItem = {
    { href: "/admin/client-pages", label: "Client Pages" },
 ]; */
 
+/* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
+/*   {
+    href: "/admin/case-studies/list",
+    label: "Case Study Library",
+    match: (p) => p.startsWith("/admin/case-studies"),
+  }, */
+
 const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
   /* { href: "/admin/case-studies/list", label: "Case Study Database", match: (p) => p.startsWith("/admin/case-studies") }, */
@@ -40,6 +47,7 @@ const NAV: NavItem[] = [
     label: "Case Studies",
     match: (p) => p.startsWith("/admin/case-studies"),
   },
+
   {
     href: "/admin/client-pages",
     label: "Case Study Collections",
@@ -138,7 +146,13 @@ export function AdminTopNav() {
           {/*           <div className="adminTopNav__brand">
             Demo CMS
           </div> */}
-          <div className="adminTopNav__brand">{contextLabel}</div>
+
+          {/* <div className="adminTopNav__brand">CMS Admin</div> */}
+
+          <div className="adminTopNav__brand">
+            {contextLabel ?? "CMS Admin"}
+          </div>
+
           {/* </Link> */}
           {/*           <Link href="/admin" className="adminTopNav__brandLink">
             Demo CMS
@@ -194,11 +208,17 @@ export function AdminTopNav() {
               + Create
             </summary>
             <div className="adminTopNav__createMenu">
-              <Link className="adminTopNav__createLink" href="/admin/case-studies/new">
+              <Link
+                className="adminTopNav__createLink"
+                href="/admin/case-studies/new"
+              >
                 New case study
               </Link>
-              <Link className="adminTopNav__createLink" href="/admin/client-pages/new">
-                New collection
+              <Link
+                className="adminTopNav__createLink"
+                href="/admin/client-pages/new"
+              >
+                New client page
               </Link>
             </div>
           </details>

@@ -1,6 +1,5 @@
 // apps/site/src/components/sections/ContactForm.tsx
 // REACT COMPONENT FOR CONTACTFORM
-//not the one we are using righ tnow
 "use client";
 import { ImageFigure } from "./ImageFigure";
 
@@ -20,7 +19,6 @@ export function ContactForm({
   return (
     <section className="c-section" id="contact">
       <div className="c-container c-stack">
-        <hr />
         <h2 className="type-h2">{heading}</h2>
         {description && <p className="type-body">{description}</p>}
 

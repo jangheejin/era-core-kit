@@ -3,10 +3,10 @@
 
 import { useMockCMS } from "@/cms/mockCmsStore";
 import { CaseGrid, WorkText, type CaseGridProps } from "@kit/blocks";
-//import type { CaseGridItem } from "@kit/blocks"; 
-import { type SectorValue, DEFAULT_HERO_IMAGE_URL, } from "@kit/schema";
+//import type { CaseGridItem } from "@kit/blocks";
+import { type SectorValue, DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
-//implementing single-item type 
+//implementing single-item type
 type CaseGridItemFromProps = CaseGridProps["items"][number];
 
 export function HomeCaseGridFromCMS() {
@@ -29,7 +29,7 @@ export function HomeCaseGridFromCMS() {
       cs.primarySector,
       ...cs.sectors.filter((s) => s !== cs.primarySector),
     ];
-  
+
     return {
       //title: cs.title,
       title: (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled",
@@ -42,8 +42,8 @@ export function HomeCaseGridFromCMS() {
       sectors: sectorsForGrid,
     };
   });
-  
-/*   const items: CaseGridProps["items"] = caseStudies.map((cs) => ({
+
+  /*   const items: CaseGridProps["items"] = caseStudies.map((cs) => ({
   //const items = caseStudies.map((cs) => ({
     title: cs.title,
     summary: cs.summaryShort ?? "", 
@@ -65,7 +65,7 @@ export function HomeCaseGridFromCMS() {
           heading="Our Work"
           text="This grid is pulling directly from the CMS demo. Any case study you add in the admin UI (this session) shows up here."
         />
-        <CaseGrid layout="4col" items={items} />
+        <CaseGrid layout="3col" items={items} />
       </div>
     </section>
   );
