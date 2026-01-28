@@ -8,6 +8,10 @@
   border-bottom: 1px solid var(--gray-300);
 }
 
+main {
+  padding-top: var(--space-4);
+}
+
 /* Inner layout: brand + nav on one row by default */
 .site-header__inner {
   max-width: var(--container-max);
