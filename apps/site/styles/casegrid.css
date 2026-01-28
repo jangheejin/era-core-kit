@@ -23,9 +23,12 @@ It caps column width so 1-2 items don't scale up to be huge*/
 }
 
 .case-grid__more {
-  margin-top: var(--space-2);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-5);
   color: var(--color-heading);
   font-size: clamp(0.85rem, 0.8rem + 0.4vw, 1.05rem);
+  font-family: var(--font-heading);
+  font-weight: 400;
   letter-spacing: 0.08em;
 }
 
