@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Link from "next/link";
 import type { WorkWithCaseGridProps } from "@kit/blocks";
 import { WorkText, CaseGrid } from "@kit/blocks";
 import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
@@ -101,6 +102,12 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
         {/* <h2 className="type-h2 case-grid-section">Selected Case Studies</h2> */}
         {/* <h3 className="type-h3 case-grid-section">Selected Case Studies</h3> */}
         <CaseGrid layout={layout} items={items} />
+        <p className="type-h4 case-grid__more">
+          SEE MORE OF OUR{" "}
+          <Link href="/our-work" className="case-grid__more-link">
+            OUR WORK
+          </Link>
+        </p>
       </div>
     </section>
   );

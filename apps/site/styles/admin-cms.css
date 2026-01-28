@@ -309,7 +309,7 @@ the user fills out)
 
 .admin-dashboard__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -352,6 +352,12 @@ the user fills out)
 @media (min-width: 1200px) {
   .admin-dashboard__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-dashboard__grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2779,11 +2785,11 @@ fieldset.form-group > legend.form-label{
   /* font-size: 0.9rem; */
   font-size: clamp(0.95rem, 1.1vw + 0.6rem, 1.35rem);
   line-height: 1.1;
-  opacity: 0.85;
+  opacity: 1;
   white-space: nowrap;
   margin-right: 0.25rem;
   /* color: #111827; */
-  color: #e7ecf5!important;
+  color: #ffffff !important;
 }
 /* .adminTopNav__left {
   display: flex;

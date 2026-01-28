@@ -59,10 +59,11 @@ export default function AdminClientPages() {
                       sideOffset={8}
                       className="tooltipContent"
                     >
-                      Case Study Collections are curated collections of case
-                      studies for a specific audience, with optional intro text
-                      and a shareable URL. Use them when you want a tailored
-                      view beyond the main case study library.
+                      Case Study Collections are custom, shareable websites for
+                      clients to view. To generate one, you can use tags and
+                      categories to filter the database of existing case
+                      studies. You can also add an optional intro to orient
+                      readers.
                       <Tooltip.Arrow className="tooltipArrow" />
                     </Tooltip.Content>
                   </Tooltip.Portal>
@@ -70,9 +71,10 @@ export default function AdminClientPages() {
               </Tooltip.Provider>
             </div>
             <p className="muted">
-              Case Study Collections combine categories and tags into a
-              tailored, shareable page. Add a clear name, an optional intro to
-              orient readers, and set the publishing status before saving.
+              Case Study Collections are custom, shareable websites for clients
+              to view. To generate one, you can use tags and categories to
+              filter the database of existing case studies. You can also add an
+              optional intro to orient readers.
               {/* Build a focused, client-facing page by choosing categories and
               tags, adding a short intro, and setting a publishing status. These
               pages are saved, editable, and shareable. */}

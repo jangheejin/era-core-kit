@@ -227,6 +227,17 @@
   /* column-gap: clamp(9.5rem, 5vw, 4rem); */
   margin-block-start: var(--space-3);
 }
+
+@media (max-width: 960px) {
+  .team-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-4);
+  }
+
+  .team-grid-section .team-card {
+    gap: var(--space-3);
+  }
+}
 /* grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);  */ /* photo | text */
 /* grid-template-columns: auto minmax(0, 1fr); */
 /* column-gap: var(--space-3); */
