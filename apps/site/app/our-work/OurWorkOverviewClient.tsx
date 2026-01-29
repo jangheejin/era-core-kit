@@ -10,6 +10,7 @@ import {
 } from "@kit/schema";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 import { useAdminHomeContent } from "../admin/AdminHomeStore";
+import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
 
 type CaseGridItem = CaseGridProps["items"][number];
 type NonEmptyArray<T> = [T, ...T[]];
@@ -96,7 +97,10 @@ export function OurWorkOverviewClient() {
               clients move policy forward in Washington.
             </p>
           </header>
-          <CaseGrid layout="3col" items={items} />
+          <CaseGrid
+            layout={resolveCaseGridLayout(items.length, "3col")}
+            items={items}
+          />
         </div>
       </section>
     </main>

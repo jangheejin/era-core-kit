@@ -327,4 +327,10 @@ It caps column width so 1-2 items don't scale up to be huge*/
   .casegrid.\33 col {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .casegrid.casegrid--count-3 {
+    --case-grid-max: 24rem;
+    grid-template-columns: minmax(0, min(100%, var(--case-grid-max)));
+    justify-content: center;
+  }
 }
