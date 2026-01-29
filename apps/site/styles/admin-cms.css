@@ -1484,6 +1484,43 @@ html:not([data-cms-demo="1"]) [data-cms-demo-only="1"] { display: none !importan
   margin: 0;
 }
 
+.admin-pill-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.admin-pill-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.03);
+  font-size: 0.9rem;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-pill-toggle:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.admin-pill-toggle:focus-visible {
+  outline: 2px solid rgba(11, 95, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.admin-pill-toggle.is-active {
+  background: rgba(11, 95, 255, 0.12);
+  border-color: rgba(11, 95, 255, 0.45);
+  color: #0b5fff;
+  font-weight: 600;
+}
+
 /* Collapsible admin sections (Option B) */
 .admin-collapse {
   border-top: 1px solid rgba(0,0,0,0.06);

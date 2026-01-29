@@ -13,6 +13,24 @@ const LAYOUT_OPTIONS = [
   { value: "2x2", label: "2 x 2" },
 ];
 
+const FEATURED_COUNT_OPTIONS = [
+  {
+    value: 3,
+    label: "3",
+    description: "Compact 3-column desktop layout",
+  },
+  {
+    value: 4,
+    label: "4",
+    description: "Even 2-column mid-size layout",
+  },
+  {
+    value: 6,
+    label: "6",
+    description: "Full featured grid",
+  },
+];
+
 export default function HomePageEditor() {
   const {
     content,
@@ -64,6 +82,16 @@ export default function HomePageEditor() {
       })),
     [content.work.featuredCaseStudySlugs, caseStudyMap]
   );
+
+  const featuredCount = useMemo(() => {
+    const allowed = new Set(FEATURED_COUNT_OPTIONS.map((opt) => opt.value));
+    const candidate = content.work.maxItems;
+    if (typeof candidate === "number" && allowed.has(candidate)) return candidate;
+    return 3;
+  }, [content.work.maxItems]);
+
+  const featuredLimitReached =
+    content.work.featuredCaseStudySlugs.length >= featuredCount;
 
   const sectionLabels = useMemo(() => {
     const base = new Map<string, string>([
@@ -164,13 +192,23 @@ export default function HomePageEditor() {
     const trimmed = addFeaturedSlug.trim();
     if (!trimmed) return;
     if (content.work.featuredCaseStudySlugs.includes(trimmed)) return;
-    if (content.work.featuredCaseStudySlugs.length >= 3) return;
+    if (content.work.featuredCaseStudySlugs.length >= featuredCount) return;
     updateWork("featuredCaseStudySlugs", [
       ...content.work.featuredCaseStudySlugs,
       trimmed,
     ]);
     updateWork("itemsSource", "featured");
     setAddFeaturedSlug("");
+  }
+
+  function setFeaturedCount(value: number) {
+    updateWork("maxItems", value);
+    if (content.work.featuredCaseStudySlugs.length > value) {
+      updateWork(
+        "featuredCaseStudySlugs",
+        content.work.featuredCaseStudySlugs.slice(0, value)
+      );
+    }
   }
 
   return (
@@ -440,23 +478,43 @@ export default function HomePageEditor() {
               </select>
             </div>
             <div className="admin-field">
-              <label className="admin-label" htmlFor="workMaxItems">
-                Max items shown
-              </label>
-              <input
-                id="workMaxItems"
-                className="admin-input"
-                type="number"
-                min={0}
-                value={content.work.maxItems ?? ""}
-                onChange={(e) => {
-                  const next =
-                    e.target.value === "" ? undefined : Number(e.target.value);
-                  updateWork("maxItems", Number.isFinite(next) ? next : undefined);
-                }}
-              />
+              <div className="admin-label-row">
+                <span
+                  className="admin-label"
+                  title="Sets the number of featured case studies shown on the homepage."
+                >
+                  Homepage featured count
+                </span>
+                <span
+                  className="admin-label-optional"
+                  title="Used to size the homepage case study grid."
+                >
+                  Controls grid sizing
+                </span>
+              </div>
+              <div
+                className="admin-pill-toggle-group"
+                role="group"
+                aria-label="Homepage featured count"
+              >
+                {FEATURED_COUNT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`admin-pill-toggle ${
+                      featuredCount === opt.value ? "is-active" : ""
+                    }`}
+                    aria-pressed={featuredCount === opt.value}
+                    title={opt.description}
+                    onClick={() => setFeaturedCount(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
               <p className="admin-hint">
-                Leave empty to show all items in the list.
+                Choose how many featured case studies appear on the homepage. Even
+                counts (4 or 6) use a 2-column layout on mid-size screens.
               </p>
             </div>
           </div>
@@ -565,7 +623,7 @@ export default function HomePageEditor() {
 
           <div className="admin-field">
             <label className="admin-label" htmlFor="workAddFeaturedCaseStudy">
-              Homepage featured case studies (pick 3 from Featured 6)
+              Homepage featured case studies (pick {featuredCount})
             </label>
             <div className="row">
               <select
@@ -585,13 +643,19 @@ export default function HomePageEditor() {
                 className="btnPrimary"
                 type="button"
                 onClick={addFeaturedCaseStudy}
+                disabled={featuredLimitReached}
+                title={
+                  featuredLimitReached
+                    ? "Remove a featured case study to add another."
+                    : "Add to homepage"
+                }
               >
                 Add to homepage
               </button>
             </div>
             <p className="admin-hint">
               These are the specific featured case studies shown on the
-              homepage. Pick up to three from the Featured 6 list above.
+              homepage. Pick up to {featuredCount} from the Featured list above.
             </p>
           </div>
 
@@ -605,8 +669,8 @@ export default function HomePageEditor() {
             <div className="dbListGrid">
               {selectedFeaturedItems.length === 0 ? (
                 <p className="muted">
-                  No homepage featured items yet. Add up to three from the
-                  Featured 6 list above.
+                  No homepage featured items yet. Add up to {featuredCount} from
+                  the Featured list above.
                 </p>
               ) : (
                 selectedFeaturedItems.map(({ slug, item }, index) => (
