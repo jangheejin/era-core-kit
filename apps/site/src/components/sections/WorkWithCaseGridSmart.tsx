@@ -6,6 +6,7 @@ import type { WorkWithCaseGridProps } from "@kit/blocks";
 import { WorkText, CaseGrid } from "@kit/blocks";
 import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
+import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
 
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
 type NonEmptyArray<T> = [T, ...T[]];
@@ -101,7 +102,10 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
         <WorkText heading={heading} text={text} text2={text2} />
         {/* <h2 className="type-h2 case-grid-section">Selected Case Studies</h2> */}
         {/* <h3 className="type-h3 case-grid-section">Selected Case Studies</h3> */}
-        <CaseGrid layout={layout} items={items} />
+        <CaseGrid
+          layout={resolveCaseGridLayout(items.length, layout ?? "3col")}
+          items={items}
+        />
         <p className="type-h4 case-grid__more">
           SEE MORE OF OUR{" "}
           <Link href="/our-work" className="case-grid__more-link">

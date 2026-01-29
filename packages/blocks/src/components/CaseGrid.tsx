@@ -40,13 +40,19 @@ function pickSingleSector(item: CaseGridItem) {
 
 export function CaseGrid({ items, layout }: CaseGridProps) {
   const layoutClass = normalizeLayout(layout);
+  const count = items.length;
+  const countClass = count > 0 ? `casegrid--count-${count}` : "casegrid--empty";
+  const parityClass = count % 2 === 0 ? "casegrid--even" : "casegrid--odd";
   const SECTOR_SEPARATOR = ", "; // or " · "
   return (
     <section id="case-studies">
       {/* <section className="c-section" id="case-studies"> */}
       {/* <div className="c-container"> */}
       {/* <h2 className="type-h2">Our Work</h2> */}
-      <div className={`casegrid ${layoutClass}`} id="case-studies">
+      <div
+        className={`casegrid ${layoutClass} ${countClass} ${parityClass}`}
+        id="case-studies"
+      >
       {/* <div className={`casegrid ${layout ?? "layout-2x2"}`} id="case-studies"> */}
       {/* <div className="casegrid layout-2x2" id="case-studies"> */}
         {items.map((item) => (
