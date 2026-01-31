@@ -93,14 +93,14 @@ export default function NewCaseStudyPage() {
           cs.status === "Published" &&
           cs.isPublic &&
           cs.visibility === "Public" &&
-          cs.isFeaturedHome,
+          cs.isFeaturedHome
       ).length,
-    [adminItems],
+    [adminItems]
   );
   const maxFeatured = 6;
 
   const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
 
   const [title] = useState("");
@@ -129,7 +129,7 @@ export default function NewCaseStudyPage() {
   /* const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]); */
   /* TODO: CHANGE THIS BACK LATER. for now though we're assigning a default sector auatomatically*/
   const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>(
-    [DEFAULT_SECTOR],
+    [DEFAULT_SECTOR]
   );
 
   function addCategoryDraft() {
@@ -209,7 +209,7 @@ export default function NewCaseStudyPage() {
     "internal" | "clients" | "website" | "custom"
   >("internal");
   const applyAvailabilityPreset = (
-    preset: "internal" | "clients" | "website" | "custom",
+    preset: "internal" | "clients" | "website" | "custom"
   ) => {
     setAvailabilityPreset(preset);
   };
@@ -330,7 +330,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
   const validation = useMemo(
     () => CaseStudySchema.safeParse(candidateInput),
-    [candidateInput],
+    [candidateInput]
   );
 
   /* separate SAVE from PREVIEW */
@@ -380,17 +380,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
   } */
 
   const canSave = validation.success; //reusable save button state
-  /*   const SaveButton = (
-    <button
-      className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
-      type="button"
-      onClick={save}
-      disabled={!canSave}
-      title={!canSave ? "Fix validation errors first" : "Save"}
-    >
-      Save + Preview
-    </button>
-  ); */
 
   function SaveBar({ className }: { className: string }) {
     return (
@@ -1034,35 +1023,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
           </div>
         </div>
         {/* </fieldset> */}
-
-        {/* OLD CLUNKY STATUS & VISIBILITY DROPDOWN MENUs */}
-        {/*           <div className="form-row form-group">
-            <div className="form-field">
-              <label className="form-label">Status</label>
-              <select
-                className="input"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as PublishStatus)}
-              >
-                {PUBLISH_STATUS_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
-              </select>
-            </div>
-
-            <div className="form-field">
-              <label className="form-label">Visibility</label>
-              <select
-                className="input"
-                value={visibility}
-                onChange={(e) =>
-                  setVisibility(
-                    e.target.value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
-                  )
-                }
-              >
-                {CASE_STUDY_VISIBILITY_VALUES.map((v) => <option key={v} value={v}>{v}</option>)}
-              </select>
-            </div>
-          </div> */}
 
         {/* <SaveBar className="form-actions--bottom" /> */}
         <SaveBar className="form-actions" />
