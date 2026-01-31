@@ -21,9 +21,9 @@
 }
 
 .work-header {
-/*   max-width: 44rem; */
+  /*   max-width: 44rem; */
   margin-inline: auto;
-/*   margin-bottom: var(--space-1); */
+  /*   margin-bottom: var(--space-1); */
 }
 
 .work-header h1 {
@@ -35,28 +35,35 @@
 }
 
 /* Swap CTA copy on small viewports */
-.work-linkText--mobile { display: none; }
-.work-linkText--desktop { display: inline; }
+.work-linkText--mobile {
+  display: none;
+}
+.work-linkText--desktop {
+  display: inline;
+}
 
 @media (max-width: 720px) {
-  .work-linkText--desktop { display: none; }
-  .work-linkText--mobile { display: inline; }
+  .work-linkText--desktop {
+    display: none;
+  }
+  .work-linkText--mobile {
+    display: inline;
+  }
 }
 
 /* .work-header__intro {
   margin-bottom:0;
 } */
 
-
 /* Label above the preview strip */
 .work-grid__label {
-/*   margin-bottom: 0.75rem; */
+  /*   margin-bottom: 0.75rem; */
   opacity: 0.8;
-  text-transform:uppercase;
+  text-transform: uppercase;
   font-family: var(--font-heading);
   font-size: var(--fs-h2b);
-  margin-block:0;
-/*   margin-bottom:0.75rem; */
+  margin-block: 0;
+  /*   margin-bottom:0.75rem; */
 }
 
 /* Mobile spotlight + grid (hidden on desktop) */
@@ -150,19 +157,20 @@
 /* ========================= */
 /* Preview strip of cards    */
 /* ========================= */
-.work-grid {/*stacking*/
-  position: relative; 
-  z-index: 10; 
+.work-grid {
+  /*stacking*/
+  position: relative;
+  z-index: 10;
 
   display: flex;
   flex-wrap: nowrap;
   gap: var(--space-2);
   overflow-x: auto;
-  overflow-y:hidden;
+  overflow-y: hidden;
   width: 100%;
   max-width: 100%;
   padding-block: 0.25rem 0.75rem;
-/*   margin-bottom: var(--space-3); */
+  /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
 
   /* Firefox scrollbar */
@@ -202,10 +210,10 @@
   text-align: left;
   /* display: flex; 
   flex-direction: column;
-  align-items: flex-start;*/  
-  display:grid;
+  align-items: flex-start;*/
+  display: grid;
   gap: 0.5rem;
- /*  padding: var(--space-2); */
+  /*  padding: var(--space-2); */
   /* display: grid; */
   row-gap: 0.5rem;
 
@@ -240,10 +248,10 @@
   opacity: 0.75;
 }*/
 .work-card__sector {
-  text-transform:uppercase;
+  text-transform: uppercase;
   letter-spacing: 0.06em;
   opacity: 0.75;
-  font-weight:300;
+  font-weight: 300;
 }
 .work-card__client {
   margin: 0;
@@ -264,7 +272,7 @@
 }
 
 .work-card--active::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   /* bottom: -1.1rem; */
@@ -274,7 +282,7 @@
   height: 0;
   border-left: 11px solid transparent;
   border-right: 11px solid transparent;
-  border-top: 11px solid var(--brand); 
+  border-top: 11px solid var(--brand);
   z-index: 3; /* sit above the card’s own content */
 }
 
@@ -284,7 +292,7 @@
 
 .work-detail {
   position: relative; /*STACKING*/
-  z-index: 1;   /* BELOW the .work-grid */
+  z-index: 1; /* BELOW the .work-grid */
 
   border-radius: 16px;
   border: 1px solid rgba(15, 23, 42, 0.08);
@@ -295,8 +303,8 @@
   display: grid;
   row-gap: var(--space-3);
   /* margin-top: 0.75rem;  */
-  margin-top: 1.6rem;      /* space below the strip */
-  justify-items: start;    /* children hug content, no full-width stretch */
+  margin-top: 1.6rem; /* space below the strip */
+  justify-items: start; /* children hug content, no full-width stretch */
   max-width: 980px;
   width: 100%;
   min-width: 0;
@@ -305,7 +313,7 @@
 
 /* ARROW: always visible, anchored to the detail panel */
 .work-detail::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -11px;
   left: 50%;
@@ -371,7 +379,7 @@ h5.work-detail__sector {
   font-weight: 400;
   opacity: 0.6;
   /* margin-bottom: 0.25rem; */
-/*   margin-bottom: 0.5rem; */
+  /*   margin-bottom: 0.5rem; */
 }
 
 .work-detail__title {
@@ -430,7 +438,6 @@ h5.work-detail__sector {
   justify-self: flex-start; /* grid item hugs its content */
 }
 
-
 /*CSS FOR NEW STYLE PREVIEW STRIP (improvement on scrollbar style old one) */
 
 /* Shell that holds strip + nav buttons */
@@ -457,7 +464,7 @@ h5.work-detail__sector {
   padding-block: 0.25rem 1.75rem; /* room for arrow */
   padding-inline: var(--space-2);
   justify-content: flex-start;
-/*   margin-bottom: var(--space-3); */
+  /*   margin-bottom: var(--space-3); */
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--space-2);
 

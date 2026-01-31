@@ -49,7 +49,11 @@ export default async function OurWorkDetailPage({
               </h1>
 
               {cs.heroImageUrl ? (
-                <img className="case-study__hero" src={cs.heroImageUrl} alt="" />
+                <img
+                  className="case-study__hero"
+                  src={cs.heroImageUrl}
+                  alt=""
+                />
               ) : null}
 
               {cs.brief ? <p className="muted">{cs.brief}</p> : null}

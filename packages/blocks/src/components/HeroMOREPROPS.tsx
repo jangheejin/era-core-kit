@@ -37,7 +37,8 @@ export function Hero(props: HeroProps) {
           </div>
           <div className="hero-logo">
             <div className="hero-image-container">
-              <img src={imageUrl}
+              <img
+                src={imageUrl}
                 alt="ERA Government Affairs logo"
                 className="heroimage"
               />

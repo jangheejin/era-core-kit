@@ -24,11 +24,11 @@ export function plainTextToMdxPreservingLineBreaks(input: string): string {
     const nextIsBlank = next.trim() === "";
 
     if (isBlank) {
-      out += "\n";          // keep blank line
+      out += "\n"; // keep blank line
     } else if (nextIsBlank) {
-      out += "\n";          // paragraph break
+      out += "\n"; // paragraph break
     } else {
-      out += "  \n";        // hard line break
+      out += "  \n"; // hard line break
     }
   }
 

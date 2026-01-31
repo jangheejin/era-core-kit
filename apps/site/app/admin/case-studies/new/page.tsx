@@ -93,14 +93,14 @@ export default function NewCaseStudyPage() {
           cs.status === "Published" &&
           cs.isPublic &&
           cs.visibility === "Public" &&
-          cs.isFeaturedHome
+          cs.isFeaturedHome,
       ).length,
-    [adminItems]
+    [adminItems],
   );
   const maxFeatured = 6;
 
   const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
   );
 
   const [title] = useState("");
@@ -129,7 +129,7 @@ export default function NewCaseStudyPage() {
   /* const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>([""]); */
   /* TODO: CHANGE THIS BACK LATER. for now though we're assigning a default sector auatomatically*/
   const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>(
-    [DEFAULT_SECTOR]
+    [DEFAULT_SECTOR],
   );
 
   function addCategoryDraft() {
@@ -209,7 +209,7 @@ export default function NewCaseStudyPage() {
     "internal" | "clients" | "website" | "custom"
   >("internal");
   const applyAvailabilityPreset = (
-    preset: "internal" | "clients" | "website" | "custom"
+    preset: "internal" | "clients" | "website" | "custom",
   ) => {
     setAvailabilityPreset(preset);
   };
@@ -330,7 +330,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
   const validation = useMemo(
     () => CaseStudySchema.safeParse(candidateInput),
-    [candidateInput]
+    [candidateInput],
   );
 
   /* separate SAVE from PREVIEW */

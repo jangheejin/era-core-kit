@@ -3,7 +3,7 @@
 /* Targets: .radioList .radioRow   */
 /* ------------------------------- */
 
-:root{
+:root {
   --ui-surface: #ffffff;
   --ui-surface-2: #f8fafc;
   --ui-border: #d0d5dd;
@@ -13,40 +13,47 @@
   --ui-muted: #667085;
 
   --ui-accent: #2563eb;
-  --ui-accent-soft: rgba(37, 99, 235, 0.10);
+  --ui-accent-soft: rgba(37, 99, 235, 0.1);
 
-  --ui-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 1px rgba(16, 24, 40, 0.04);
+  --ui-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 1px rgba(16, 24, 40, 0.04);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root{
+  :root {
     --ui-surface: #0b1220;
     --ui-surface-2: #0f1a2e;
-    --ui-border: rgba(255,255,255,0.12);
-    --ui-border-strong: rgba(255,255,255,0.28);
+    --ui-border: rgba(255, 255, 255, 0.12);
+    --ui-border-strong: rgba(255, 255, 255, 0.28);
 
-    --ui-text: rgba(255,255,255,0.92);
-    --ui-muted: rgba(255,255,255,0.68);
+    --ui-text: rgba(255, 255, 255, 0.92);
+    --ui-muted: rgba(255, 255, 255, 0.68);
 
     --ui-accent: #60a5fa;
     --ui-accent-soft: rgba(96, 165, 250, 0.16);
 
-    --ui-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    --ui-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 }
 
 /* Responsive fallback */
-@media (max-width: 640px){
-  .radioList{ grid-template-columns: 1fr; }
+@media (max-width: 640px) {
+  .radioList {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .radioRow{ transition: none; }
-  .radioRow:active{ transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .radioRow {
+    transition: none;
+  }
+  .radioRow:active {
+    transform: none;
+  }
 }
 /* 3 side-by-side “button radios” */
-.radioList{
+.radioList {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
@@ -54,7 +61,7 @@
 }
 
 /* Each label is a button */
-.radioRow{
+.radioRow {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -72,11 +79,15 @@
   cursor: pointer;
   user-select: none;
 
-  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 60ms ease;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 60ms ease;
 }
 
 /* Hide native input WITHOUT leaving a weird focus box behind */
-.radioRow input[type="radio"]{
+.radioRow input[type="radio"] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -91,7 +102,7 @@
 }
 
 /* Indicator: centered “radio” above the text */
-.radioRow::before{
+.radioRow::before {
   content: "";
   width: 14px;
   height: 14px;
@@ -103,19 +114,19 @@
 }
 
 /* Text layout */
-.radioRow .radioText{
+.radioRow .radioText {
   text-align: center;
   min-width: 0;
 }
 
-.radioRow .radioTitle{
+.radioRow .radioTitle {
   color: var(--ui-text);
   font-weight: 650;
   font-size: 0.92rem;
   line-height: 1.15;
 }
 
-.radioRow .radioDesc{
+.radioRow .radioDesc {
   margin-top: 0.15rem;
   color: var(--ui-muted);
   font-size: 0.78rem;
@@ -127,50 +138,55 @@
   overflow: hidden;
 }
 
-.radioRow:hover{
+.radioRow:hover {
   background: var(--ui-surface-2);
   border-color: var(--ui-border-strong);
 }
 
-.radioRow:active{
+.radioRow:active {
   transform: scale(0.99);
 }
 
 /* Focus ring on the button (not on the hidden input) */
-.radioRow:focus-within{
+.radioRow:focus-within {
   border-color: var(--ui-accent);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22);
 }
-@media (prefers-color-scheme: dark){
-  .radioRow:focus-within{
+@media (prefers-color-scheme: dark) {
+  .radioRow:focus-within {
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.22);
   }
 }
 
 /* Selected: high-contrast with var(--brand) + very clear ring */
-.radioRow.isSelected{
+.radioRow.isSelected {
   background: var(--brand);
-  border-color: rgba(255,255,255,0.85);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.92);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92);
 }
 
-.radioRow.isSelected .radioTitle{ color: #fff; }
-.radioRow.isSelected .radioDesc{ color: rgba(255,255,255,0.86); }
+.radioRow.isSelected .radioTitle {
+  color: #fff;
+}
+.radioRow.isSelected .radioDesc {
+  color: rgba(255, 255, 255, 0.86);
+}
 
 /* Selected indicator: filled radio dot */
-.radioRow.isSelected::before{
-  border-color: rgba(255,255,255,0.92);
+.radioRow.isSelected::before {
+  border-color: rgba(255, 255, 255, 0.92);
   background: radial-gradient(circle at 50% 50%, #fff 0 4px, transparent 5px);
 }
 
 /* Mobile */
-@media (max-width: 640px){
-  .radioList{ grid-template-columns: 1fr; }
+@media (max-width: 640px) {
+  .radioList {
+    grid-template-columns: 1fr;
+  }
 }
 
-
 /*fixes*/
-.toggleRow{
+.toggleRow {
   margin-top: 0.75rem;
   display: flex;
   align-items: center;
@@ -182,7 +198,7 @@
   background: var(--ui-surface);
 }
 
-.toggleRow input[type="checkbox"]{
+.toggleRow input[type="checkbox"] {
   position: static !important;
   inset: auto !important;
 
@@ -195,13 +211,13 @@
 }
 
 /*checkmark*/
-.radioRow.isSelected::before{
+.radioRow.isSelected::before {
   content: "✓";
   display: grid;
   place-items: center;
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  border-color: rgba(255,255,255,0.92);
-  background: rgba(255,255,255,0.18);
+  border-color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.18);
 }

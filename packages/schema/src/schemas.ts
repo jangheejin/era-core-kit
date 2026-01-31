@@ -40,7 +40,9 @@ const PathOrUrl = z.string().refine((s) => {
     return false;
   }
 }, "Must be an absolute URL or a root-relative path like /img/file.webp");
-const SlugSchema = z.string().regex(/^[a-z0-9-]+$/, "Slug must be lowercase a-z, 0-9, hyphen");
+const SlugSchema = z
+  .string()
+  .regex(/^[a-z0-9-]+$/, "Slug must be lowercase a-z, 0-9, hyphen");
 
 const TagSchema = z.string().trim().min(1).max(32);
 const TagsSchema = z.array(TagSchema).max(10).default([]);
@@ -58,7 +60,7 @@ const TagsInputSchema = z.preprocess((v) => {
       .map((s) => s.trim())
       .filter(Boolean);
   return v;
-//}, z.array(z.string()).max(10).default([]));
+  //}, z.array(z.string()).max(10).default([]));
 }, z.array(z.string()).default([]));
 // --------------------
 // Core object schemas (nested objects)
@@ -119,53 +121,54 @@ function migrateSectorToSectors(raw: unknown) {
 // ------------------
 // main CaseStudy schema
 // ------------------
-const CaseStudyCanonicalSchema = z.object({
-  id: z.string(),
-  title: z.string().trim().min(1).max(120),
-  slug: SlugSchema,
+const CaseStudyCanonicalSchema = z
+  .object({
+    id: z.string(),
+    title: z.string().trim().min(1).max(120),
+    slug: SlugSchema,
 
-  // canonical multi-sector field.
-//  sectors: SectorsSchema,
-  sectors: NonEmptySectorsSchema,
+    // canonical multi-sector field.
+    //  sectors: SectorsSchema,
+    sectors: NonEmptySectorsSchema,
 
-  //new: user can select one sector to show on cards/teasers (defaults to sectors[0])
-  //primarySector: SectorSchema.optional(),
-  primarySector: SectorSchema,
+    //new: user can select one sector to show on cards/teasers (defaults to sectors[0])
+    //primarySector: SectorSchema.optional(),
+    primarySector: SectorSchema,
 
-  client: z.string().trim().max(100).optional(),
-  year: z.number().int().min(1990).max(2100).optional(),
+    client: z.string().trim().max(100).optional(),
+    year: z.number().int().min(1990).max(2100).optional(),
 
-//  tags: TagSchema,
-  tags: TagsInputSchema,
-  //summaryShort: z.string(),
-  summaryShort: z.string(),//should this be optional?
-  brief: z.string().optional(),
-  //heroImageUrl: PathOrUrl.optional(),
-  heroImageUrl: PathOrUrl.default(DEFAULT_HERO_IMAGE_URL),
-  //heroImageUrl: z.string().optional(),
+    //  tags: TagSchema,
+    tags: TagsInputSchema,
+    //summaryShort: z.string(),
+    summaryShort: z.string(), //should this be optional?
+    brief: z.string().optional(),
+    //heroImageUrl: PathOrUrl.optional(),
+    heroImageUrl: PathOrUrl.default(DEFAULT_HERO_IMAGE_URL),
+    //heroImageUrl: z.string().optional(),
 
-//  mechanisms: z.array(z.any()).default([]),
-  mechanisms: z.array(MechanismSchema).default([]),
-  //jurisdictions: z.array(z.string()).default([]),
-  jurisdictions: z.array(JurisdictionSchema).default([]),
-  //outcomes: z.array(z.any()).default([]),
-  outcomes: z.array(Outcome).default([]),
-  evidence: z.array(EvidenceItem).default([]),
+    //  mechanisms: z.array(z.any()).default([]),
+    mechanisms: z.array(MechanismSchema).default([]),
+    //jurisdictions: z.array(z.string()).default([]),
+    jurisdictions: z.array(JurisdictionSchema).default([]),
+    //outcomes: z.array(z.any()).default([]),
+    outcomes: z.array(Outcome).default([]),
+    evidence: z.array(EvidenceItem).default([]),
 
-  //bodyMDX: z.string().optional(),
-  bodyMDX: z.string().default(""),
-  sections: z.array(CaseStudySection).default([]),
+    //bodyMDX: z.string().optional(),
+    bodyMDX: z.string().default(""),
+    sections: z.array(CaseStudySection).default([]),
 
-  //attachments: z.array(z.any()).default([]),
-  attachments: z.array(CaseStudyAttachment).default([]),
-  //links: z.array(z.any()).default([]),
-  links: z.array(CaseStudyLink).default([]),
+    //attachments: z.array(z.any()).default([]),
+    attachments: z.array(CaseStudyAttachment).default([]),
+    //links: z.array(z.any()).default([]),
+    links: z.array(CaseStudyLink).default([]),
 
-  status: CaseStudyStatusSchema.default("Draft"),
-  visibility: CaseStudyVisibilitySchema.default("Internal"),
-  isFeaturedHome: z.boolean().default(false),
-  isPublic: z.boolean().default(true),
-/*   }).superRefine((val, ctx) => {
+    status: CaseStudyStatusSchema.default("Draft"),
+    visibility: CaseStudyVisibilitySchema.default("Internal"),
+    isFeaturedHome: z.boolean().default(false),
+    isPublic: z.boolean().default(true),
+    /*   }).superRefine((val, ctx) => {
     if (!val.sectors.includes(val.primarySector)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -174,15 +177,16 @@ const CaseStudyCanonicalSchema = z.object({
       });
     }
   }); */
-  
+
     /* alternate version: can use code: custom */
-  }).superRefine((val, ctx) => {
+  })
+  .superRefine((val, ctx) => {
     if (val.primarySector && Array.isArray(val.sectors) && val.sectors.length) {
       if (!val.sectors.includes(val.primarySector)) {
-        ctx.addIssue({ 
+        ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ["primarySector"], 
-          message: "..." 
+          path: ["primarySector"],
+          message: "...",
         });
       }
     }
@@ -200,7 +204,6 @@ const CaseStudyCanonicalSchema = z.object({
 }); */
 
 //enforcing primarySector. if it exists, it must e inside sectors
-
 
 // 2) Authoring/back-compat input: allow sector OR sectors
 const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
@@ -227,28 +230,34 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["sectors"],
-        message: "Provide either `sectors` (array) or legacy `sector` (single).",
+        message:
+          "Provide either `sectors` (array) or legacy `sector` (single).",
       });
     }
     //require some content
     const hasBrief = typeof val.brief === "string" && val.brief.trim() !== "";
-    const hasBody = typeof val.bodyMDX === "string" && val.bodyMDX.trim() !== "";
-    const hasSummary = typeof val.summaryShort === "string" && val.summaryShort.trim() !== "";
+    const hasBody =
+      typeof val.bodyMDX === "string" && val.bodyMDX.trim() !== "";
+    const hasSummary =
+      typeof val.summaryShort === "string" && val.summaryShort.trim() !== "";
 
     if (!hasBrief && !hasBody && !hasSummary) {
-      ctx.addIssue ({
+      ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["brief"],
-        message: "Provide either `brief` (preview blurb) or `bodyMDX` (full write-up)",
+        message:
+          "Provide either `brief` (preview blurb) or `bodyMDX` (full write-up)",
       });
     }
   })
 
   .transform((val) => {
     const sectors =
-      (val.sectors && val.sectors.length ? val.sectors : 
-        val.sector ? [val.sector] : 
-        []);
+      val.sectors && val.sectors.length
+        ? val.sectors
+        : val.sector
+          ? [val.sector]
+          : [];
 
     if (!sectors.length) {
       // should be impossible due to your superRefine, but keeps TS/runtime sane
@@ -257,9 +266,9 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
 
     const first = sectors[0];
     if (first == null) {
-      throw new Error ("CaseStudy must ahve at least one sector");
+      throw new Error("CaseStudy must ahve at least one sector");
     }
-/*     const sectors = (val.sectors?.length
+    /*     const sectors = (val.sectors?.length
       ? val.sectors
       : val.sector
         ? [val.sector]
@@ -270,54 +279,48 @@ const CaseStudyAuthorSchema = CaseStudyCanonicalSchema
     //auto-select primary sector
     // if user explicitly sets one AND it's in sectors, keep that.
     // otherwise default to first sector
-     const wantedPrimary =
-      typeof val.primarySector === "string" ? val.primarySector : undefined; 
-    
-    const primarySector = 
-      wantedPrimary && sectors.includes(wantedPrimary)
-        ? wantedPrimary
-        : first;
+    const wantedPrimary =
+      typeof val.primarySector === "string" ? val.primarySector : undefined;
 
+    const primarySector =
+      wantedPrimary && sectors.includes(wantedPrimary) ? wantedPrimary : first;
 
-/*     const primarySector =
+    /*     const primarySector =
       wantedPrimary && sectors.includes(wantedPrimary) 
         ? wantedPrimary 
         : sectors[0]; */
-/*     const primarySector =
+    /*     const primarySector =
       val.primarySector && sectors.includes(val.primarySector)
         ? val.primarySector
         : sectors[0]; */
-    
 
-    
-//    const sectors = (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []);
-/*       val.sectors?.length ? val.sectors :
+    //    const sectors = (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []);
+    /*       val.sectors?.length ? val.sectors :
       val.sector ? [val.sector] :
       []; */
-      //(val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
+    //(val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as unknown;
 
     // remove legacy `sector` from the canonical output
 
     //derive summaryShort (author never needs to fill it in)
-    const summaryShort = 
+    const summaryShort =
       val.summaryShort?.trim() ||
       val.brief?.trim() ||
       deriveSummaryFromWriteUp(val.bodyMDX ?? "", 180);
 
-/*     const wantedPrimary = 
+    /*     const wantedPrimary = 
       typeof (val as any).primarySector === "string" ? ((val as any).primarySector as any) : undefined;
     const primarySector = 
       (wantedPrimary && sectors.includes(wantedPrimary) ? wantedPrimary: sectors[0]) ?? undefined;
      */
 
-    //drop the legacy single sector field    
+    //drop the legacy single sector field
     //const { sector, ...rest } = val as any;
     const { sector: _sector, ...rest } = val as any;
-    //const { sector, ...rest } = val as any;;    
+    //const { sector, ...rest } = val as any;;
     return { ...rest, sectors, primarySector, summaryShort };
   })
   .pipe(CaseStudyCanonicalSchema);
-
 
 //export const CaseStudy = z.object({
 /* export const CaseStudy = z.preprocess(
@@ -392,33 +395,33 @@ export const CaseStudy = CaseStudyAuthorSchema;
 
 type _CaseStudySchema = typeof CaseStudy;
 //CaseStudyInput is a TypeScript type, representing raw input (before parsing). Use when you want to manually create data (write an object by hand rather than getting it from a user form, API response, database, or a Zod parse result)
-export type CaseStudyInput = z.input<_CaseStudySchema>;//what the user provides (some fields optional/defaulted)
+export type CaseStudyInput = z.input<_CaseStudySchema>; //what the user provides (some fields optional/defaulted)
 export type CaseStudyOutput = z.output<_CaseStudySchema>;
 
 // CaseStudyType is a TypeScript type, inferred from the schema
-export type CaseStudyType = CaseStudyOutput;//fully parsed and validated version (all defaults applied)
+export type CaseStudyType = CaseStudyOutput; //fully parsed and validated version (all defaults applied)
 
-// CaseStudy is the Zod schema object itself 
+// CaseStudy is the Zod schema object itself
 //  - (used for .parse() and validation)
 
 // CaseStudyInput is a TypeScript type for raw input (before parsing)
-//  - use when you want to manually create data (write an object by hand rather than 
+//  - use when you want to manually create data (write an object by hand rather than
 //  - getting it from a user form, API response, database, or a Zod parse result)
 //  - it's the raw data shape you're allowed to pass into CaseStudy.parse(...)
 
-// CaseStudyType (aka CaseStudyOutput) is a TS type for final output 
+// CaseStudyType (aka CaseStudyOutput) is a TS type for final output
 //  - the final result AFTER validation
 //  - ready for use in the app after being validated + shaped
 //  - (it's what you use in props (args), etc)...it's safe for use in UI components, database, etc
 //  - default values have been applied, all required fields are present
 
 // If you want to validate and get the full object, you use the schema + output type:
-//  
+//
 // import { CaseStudy } from "@kit/schema"; // Zod schema (value)
-// import type { CaseStudyType } from "@kit/schema"; 
+// import type { CaseStudyType } from "@kit/schema";
 // const final: CaseStudyType = CaseStudy.parse(raw); // <- now validated + defaulted
 
-// Real-world analogy: 
+// Real-world analogy:
 // CaseStudyInput is what you get from a user filling in a form (some fields optional, some missing)
 // CaseStudyOutput or CaseStudyType is what happens after you validate that form input and fill in defaults
 // Now, it's safe to show that data in the app

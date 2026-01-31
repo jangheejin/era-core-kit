@@ -1,8 +1,8 @@
 //apps/site/src/lib/caseStudies.ts
-// this is the “build mock CMS into full version” bridge: 
+// this is the “build mock CMS into full version” bridge:
 // every page imports from here. later swap only the internals
-import { 
-  CASE_STUDIES_FIXTURE_FULL, 
+import {
+  CASE_STUDIES_FIXTURE_FULL,
   type CaseStudyType,
   type SectorValue,
   sectorFromRouteSlug,
@@ -23,7 +23,9 @@ export async function getPublicCaseStudies(): Promise<CaseStudyType[]> {
   return all.filter((cs) => cs.isPublic && cs.status === "Published");
 }
 
-export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyType | null> {
+export async function getCaseStudyBySlug(
+  slug: string,
+): Promise<CaseStudyType | null> {
   const all = await getCaseStudies();
   return all.find((cs) => cs.slug === slug) ?? null;
 }
@@ -65,7 +67,10 @@ export async function getCaseStudiesByTagRouteSlug(tagRouteSlug: string) {
 
 export async function getTagFacets() {
   const all = await getPublicCaseStudies();
-  const counts = new Map<string, { label: string; slug: string; count: number }>();
+  const counts = new Map<
+    string,
+    { label: string; slug: string; count: number }
+  >();
 
   for (const cs of all) {
     const tags = normalizeTagList(cs.tags ?? []);
@@ -77,5 +82,7 @@ export async function getTagFacets() {
     }
   }
 
-  return Array.from(counts.values()).sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  return Array.from(counts.values()).sort(
+    (a, b) => b.count - a.count || a.label.localeCompare(b.label),
+  );
 }

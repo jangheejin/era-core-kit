@@ -22,15 +22,13 @@ export function CaseStudyMetadata({ caseStudy }: Props) {
         <div className="metadata-item">
           <dt>Tags:</dt>
           <dd className="metadata-tags">
-            {visibleTags.length ? (
-              visibleTags.map((tag) => (
-                <span className="tag-pill" key={tag}>
-                  {tag}
-                </span>
-              ))
-            ) : (
-              "—"
-            )}
+            {visibleTags.length
+              ? visibleTags.map((tag) => (
+                  <span className="tag-pill" key={tag}>
+                    {tag}
+                  </span>
+                ))
+              : "—"}
           </dd>
         </div>
         <div className="metadata-item">

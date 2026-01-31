@@ -8,7 +8,8 @@ import { OurWorkClient, type WorkCase } from "./OurWorkClient";
 
 function toWorkCase(cs: CaseStudyType): WorkCase {
   const sector = Array.isArray(cs?.sectors) ? cs.sectors.join(", ") : "";
-  const client = (cs?.client ?? "").trim() || (cs?.title ?? "").trim() || cs.slug;
+  const client =
+    (cs?.client ?? "").trim() || (cs?.title ?? "").trim() || cs.slug;
   const summary =
     (cs?.brief ?? "").trim() ||
     (cs?.summaryShort ?? "").trim() ||

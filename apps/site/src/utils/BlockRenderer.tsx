@@ -17,7 +17,7 @@ import {
   OutcomeList,
   ImageFigure,
   RichTextSection,
-//  WorkWithCaseGrid,
+  //  WorkWithCaseGrid,
 } from "@kit/blocks";
 
 import { WorkWithCaseGridSmart as WorkWithCaseGrid } from "../components/sections/WorkWithCaseGridSmart";

@@ -1,4 +1,9 @@
-import { SECTOR_VALUES, sectorLabel, sectorRouteSlug, tagSlug } from "@kit/schema";
+import {
+  SECTOR_VALUES,
+  sectorLabel,
+  sectorRouteSlug,
+  tagSlug,
+} from "@kit/schema";
 
 const CATEGORY_TAG_SLUGS = new Set(
   SECTOR_VALUES.flatMap((v) => {

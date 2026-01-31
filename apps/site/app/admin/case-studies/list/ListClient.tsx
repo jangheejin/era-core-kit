@@ -117,10 +117,7 @@ function normalizeSectorsStrict(list: string[]): SectorValue[] {
 }
 
 export default function ListClient() {
-  const {
-    items: storeItems,
-    upsertCaseStudy,
-  } = useAdminCaseStudies();
+  const { items: storeItems, upsertCaseStudy } = useAdminCaseStudies();
   const items = useMemo(() => storeItems ?? [], [storeItems]);
 
   const didAutoFixRef = useRef(false);
@@ -148,15 +145,15 @@ export default function ListClient() {
         tagFilter
           .split(",")
           .map((t) => t.trim())
-          .filter(Boolean)
+          .filter(Boolean),
       ),
-    [tagFilter]
+    [tagFilter],
   );
   const availableTags = useMemo(() => {
     const bySlug = new Map<string, string>();
     for (const item of items) {
       const tags = normalizeTagsStrict(
-        toStringArray(getLegacyValue(item, "tags"))
+        toStringArray(getLegacyValue(item, "tags")),
       );
       for (const tag of tags) {
         const slug = tagSlug(tag);
@@ -173,9 +170,9 @@ export default function ListClient() {
           cs.status === "Published" &&
           cs.isPublic &&
           cs.visibility === "Public" &&
-          cs.isFeaturedHome
+          cs.isFeaturedHome,
       ).length,
-    [items]
+    [items],
   );
   const maxFeatured = 6;
 
@@ -220,7 +217,7 @@ export default function ListClient() {
     const current = items.find((item) => item.id === quickEditId);
     if (!current) return;
     const { visible } = splitCategoryTags(
-      normalizeTagsStrict(toStringArray(getLegacyValue(current, "tags")))
+      normalizeTagsStrict(toStringArray(getLegacyValue(current, "tags"))),
     );
     setTagDrafts((prev) => ({ ...prev, [current.id]: visible.join(", ") }));
   }, [items, quickEditId]);
@@ -240,7 +237,7 @@ export default function ListClient() {
 
   function setFeaturedSaveState(
     id: string,
-    state: "idle" | "saving" | "saved" | "error"
+    state: "idle" | "saving" | "saved" | "error",
   ) {
     setFeaturedSaveStateById((prev) => ({ ...prev, [id]: state }));
   }
@@ -325,7 +322,7 @@ export default function ListClient() {
     if (!res.success) {
       console.warn(
         "[admin] refusing to save invalid CaseStudy",
-        res.error.format()
+        res.error.format(),
       );
       return false;
     }
@@ -374,7 +371,7 @@ export default function ListClient() {
       ]);
 
       const tags = normalizeTagsStrict(
-        toStringArray(getLegacyValue(cs, "tags"))
+        toStringArray(getLegacyValue(cs, "tags")),
       );
       const tagSlugs = tags.map(tagSlug).filter(Boolean);
 
@@ -414,10 +411,10 @@ export default function ListClient() {
     if (sortMode === "Oldest") return arr.reverse();
     if (sortMode === "AtoZ")
       return arr.sort((a, b) =>
-        clientLabelForSort(a).localeCompare(clientLabelForSort(b))
+        clientLabelForSort(a).localeCompare(clientLabelForSort(b)),
       );
     return arr.sort((a, b) =>
-      clientLabelForSort(b).localeCompare(clientLabelForSort(a))
+      clientLabelForSort(b).localeCompare(clientLabelForSort(a)),
     );
   }, [filtered, sortMode]);
 
@@ -600,12 +597,12 @@ export default function ListClient() {
             const featuredSaveState = featuredSaveStateById[cs.id] ?? "idle";
             const { visible: visibleTags, hidden: hiddenTags } =
               splitCategoryTags(
-                normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags")))
+                normalizeTagsStrict(toStringArray(getLegacyValue(cs, "tags"))),
               );
             const tagDraft = tagDrafts[cs.id] ?? visibleTags.join(", ");
             const tagListId = `quick-edit-tag-options-${cs.id}`;
             const secondarySectors = sectors.filter(
-              (sector) => sector !== primary
+              (sector) => sector !== primary,
             );
 
             return (
@@ -666,7 +663,7 @@ export default function ListClient() {
                             data-tooltip="Edit categories & change status"
                             onClick={() =>
                               setQuickEditId((prev) =>
-                                prev === cs.id ? null : cs.id
+                                prev === cs.id ? null : cs.id,
                               )
                             }
                             aria-expanded={isQuickEditing}
@@ -950,7 +947,7 @@ export default function ListClient() {
                             e.target.value
                               .split(",")
                               .map((t) => t.trim())
-                              .filter(Boolean)
+                              .filter(Boolean),
                           );
                           const merged = normalizeTagsStrict([
                             ...hiddenTags,

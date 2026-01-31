@@ -5,7 +5,7 @@
 import type { CaseStudyType } from "@kit/schema";
 
 type Props = {
-//  items: CaseStudy[];
+  //  items: CaseStudy[];
   items: CaseStudyType[];
 };
 

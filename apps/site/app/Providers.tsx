@@ -5,7 +5,7 @@ import { AdminCaseStudyProvider } from "./admin/AdminCaseStudyStore";
 import { AdminClientPageProvider } from "./admin/AdminClientPageStore";
 import { AdminTeamProvider } from "./admin/AdminTeamStore";
 import { AdminHomeProvider } from "./admin/AdminHomeStore";
-import { MockCMSProvider } from '@/cms/mockCmsStore';
+import { MockCMSProvider } from "@/cms/mockCmsStore";
 
 /* export function Providers({ children }: { children: ReactNode }) {
   return (

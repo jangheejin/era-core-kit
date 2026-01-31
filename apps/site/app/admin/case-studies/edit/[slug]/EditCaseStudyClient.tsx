@@ -45,7 +45,7 @@ function emptyToUndefined(s: unknown): string | undefined {
 function applyWrap(
   textarea: HTMLTextAreaElement | null,
   before: string,
-  after: string
+  after: string,
 ) {
   if (!textarea) return;
   const start = textarea.selectionStart ?? 0;
@@ -69,7 +69,7 @@ function applyPrefix(textarea: HTMLTextAreaElement | null, prefix: string) {
   const selected = text.slice(start, end) || "item";
   const lines = selected.split("\n");
   const nextLines = lines.map((line) =>
-    line.startsWith(prefix) ? line : prefix + line
+    line.startsWith(prefix) ? line : prefix + line,
   );
   const next = text.slice(0, start) + nextLines.join("\n") + text.slice(end);
   textarea.value = next;
@@ -121,7 +121,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const featuredSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
 
   //part of protecting against slug collisions. slugDraft needs a state
@@ -136,9 +136,9 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
           item.status === "Published" &&
           item.isPublic &&
           item.visibility === "Public" &&
-          item.isFeaturedHome
+          item.isFeaturedHome,
       ).length,
-    [adminItems]
+    [adminItems],
   );
   const maxFeatured = 6;
 
@@ -169,7 +169,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       cs.status === "Published" ? "Published" : "Draft";
     setStatus(nextStatus);
     setIsFeaturedHome(
-      nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false
+      nextStatus === "Published" ? Boolean(cs.isFeaturedHome) : false,
     );
 
     setReady(true);
@@ -256,12 +256,12 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   //compute an "effective slug" to protect against slug collisions
   const autoSlug = useMemo(
     () => slugify(client || cs?.title || cs?.slug || ""),
-    [client, cs?.title, cs?.slug]
+    [client, cs?.title, cs?.slug],
   );
 
   const effectiveSlug = useMemo(
     () => slugify(slugDraft.trim() || autoSlug),
-    [slugDraft, autoSlug]
+    [slugDraft, autoSlug],
   );
 
   const writeUpRef = useRef<HTMLTextAreaElement | null>(null);
@@ -277,7 +277,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     );
 
     //sectors fallback
@@ -439,7 +439,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
     window.open(
       `/admin/case-studies/mock/${out.slug}`,
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   }
 

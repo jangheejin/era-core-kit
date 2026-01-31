@@ -104,8 +104,14 @@ function normalizeMember(raw: unknown): TeamMember | null {
       ? record.imageUrl.trim()
       : undefined;
   const isFounder = Boolean(record.isFounder);
-  const order = typeof record.order === "number" && Number.isFinite(record.order) ? record.order : 0;
-  const status = record.status === "Draft" || record.status === "Published" ? record.status : "Published";
+  const order =
+    typeof record.order === "number" && Number.isFinite(record.order)
+      ? record.order
+      : 0;
+  const status =
+    record.status === "Draft" || record.status === "Published"
+      ? record.status
+      : "Published";
 
   const bioRaw = Array.isArray(record.bio) ? record.bio : [];
   const bio = bioRaw
@@ -127,7 +133,8 @@ function normalizeMember(raw: unknown): TeamMember | null {
 
 function sortMembers(items: TeamMember[]) {
   return [...items].sort((a, b) => {
-    const founderRank = Number(Boolean(b.isFounder)) - Number(Boolean(a.isFounder));
+    const founderRank =
+      Number(Boolean(b.isFounder)) - Number(Boolean(a.isFounder));
     if (founderRank !== 0) return founderRank;
     if (a.order !== b.order) return a.order - b.order;
     return a.name.localeCompare(b.name);
@@ -135,7 +142,9 @@ function sortMembers(items: TeamMember[]) {
 }
 
 export function AdminTeamProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<TeamMember[]>(() => sortMembers(SEED_TEAM_MEMBERS));
+  const [items, setItems] = useState<TeamMember[]>(() =>
+    sortMembers(SEED_TEAM_MEMBERS),
+  );
 
   useEffect(() => {
     try {
@@ -143,7 +152,9 @@ export function AdminTeamProvider({ children }: { children: ReactNode }) {
       if (!raw) return;
       const parsed = JSON.parse(raw) as unknown;
       if (!Array.isArray(parsed)) return;
-      const normalized = parsed.map(normalizeMember).filter((v): v is TeamMember => Boolean(v));
+      const normalized = parsed
+        .map(normalizeMember)
+        .filter((v): v is TeamMember => Boolean(v));
       if (normalized.length) setItems(sortMembers(normalized));
     } catch {
       // ignore bad storage
@@ -183,13 +194,19 @@ export function AdminTeamProvider({ children }: { children: ReactNode }) {
     [items, upsertTeamMember, removeTeamMember, resetToBaseline],
   );
 
-  return <AdminTeamContext.Provider value={value}>{children}</AdminTeamContext.Provider>;
+  return (
+    <AdminTeamContext.Provider value={value}>
+      {children}
+    </AdminTeamContext.Provider>
+  );
 }
 
 export function useAdminTeamMembers() {
   const ctx = useContext(AdminTeamContext);
   if (!ctx) {
-    throw new Error("useAdminTeamMembers must be used within AdminTeamProvider");
+    throw new Error(
+      "useAdminTeamMembers must be used within AdminTeamProvider",
+    );
   }
   return ctx;
 }

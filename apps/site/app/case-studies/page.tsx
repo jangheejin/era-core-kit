@@ -8,18 +8,15 @@ import { useMemo } from "react";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 
 function displayTitle(cs: { client?: string; title?: string; slug: string }) {
-  return (cs.client && cs.client.trim())
-    || (cs.title && cs.title.trim())
-    || cs.slug;
+  return (
+    (cs.client && cs.client.trim()) || (cs.title && cs.title.trim()) || cs.slug
+  );
 }
 
 export default function CaseStudiesIndexPage() {
   const { items } = useAdminCaseStudies();
 
-  const publicItems = useMemo(
-    () => items.filter((cs) => cs.isPublic),
-    [items],
-  );
+  const publicItems = useMemo(() => items.filter((cs) => cs.isPublic), [items]);
 
   return (
     <main className="c-page">
@@ -32,7 +29,10 @@ export default function CaseStudiesIndexPage() {
         <div className="case-grid">
           {publicItems.map((cs) => (
             <article key={cs.slug} className="card case-study-card">
-              <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link">
+              <Link
+                href={`/case-studies/${cs.slug}`}
+                className="case-study-card__link"
+              >
                 {cs.heroImageUrl ? (
                   <img
                     className="case-study-card__img"
@@ -44,9 +44,7 @@ export default function CaseStudiesIndexPage() {
 
                 <h2 className="type-h3">{displayTitle(cs)}</h2>
                 <p className="muted">
-                  {cs.brief?.trim()
-                    || cs.summaryShort?.trim()
-                    || ""}
+                  {cs.brief?.trim() || cs.summaryShort?.trim() || ""}
                 </p>
               </Link>
             </article>

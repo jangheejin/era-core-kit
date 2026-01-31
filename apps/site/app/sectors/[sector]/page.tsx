@@ -1,7 +1,7 @@
 //apps/site/app/sectors/[sector]/page.tsx
 
-// use the component, SectorPageView, into which we extracted the actual page UI 
-// in the existing /sectors/[sector] route 
+// use the component, SectorPageView, into which we extracted the actual page UI
+// in the existing /sectors/[sector] route
 // this is the canonical sector archive route
 
 import { SECTOR_ROUTE_SLUG } from "@kit/schema";
@@ -82,7 +82,6 @@ export default async function SectorArchivePage({ params, }: { params: { sector:
     </main>
   );
 } */
-
 
 /*   return (
     <main className="c-page">

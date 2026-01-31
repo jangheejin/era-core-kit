@@ -148,7 +148,7 @@ function coerceFilters(raw: unknown): ClientPageFilters {
   const tagsRaw = record.tags;
   const tags = Array.isArray(tagsRaw)
     ? normalizeTagsStrict(
-        tagsRaw.filter((x): x is string => typeof x === "string")
+        tagsRaw.filter((x): x is string => typeof x === "string"),
       )
     : [];
 
@@ -189,7 +189,7 @@ function loadLocalValidated(): ClientPage[] {
         (item as Record<string, unknown>).status ??
           (isPlainObject(item.filters)
             ? (item.filters as Record<string, unknown>).audience
-            : undefined)
+            : undefined),
       );
 
       ok.push({
@@ -236,7 +236,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
 
   const getBySlug = useCallback(
     (slug: string) => pages.find((p) => p.slug === slug),
-    [pages]
+    [pages],
   );
 
   const ensureUniqueSlug = useCallback(
@@ -252,7 +252,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
 
       const conflicts = (slug: string) =>
         pages.some(
-          (p) => p.slug === slug && (currentId ? p.id !== currentId : true)
+          (p) => p.slug === slug && (currentId ? p.id !== currentId : true),
         );
 
       while (conflicts(candidate)) {
@@ -260,7 +260,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       }
       return candidate;
     },
-    [pages]
+    [pages],
   );
 
   const upsertPage = useCallback((page: ClientPage) => {
@@ -320,7 +320,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       upsertPage(page);
       return page;
     },
-    [ensureUniqueSlug, upsertPage]
+    [ensureUniqueSlug, upsertPage],
   );
 
   const value = useMemo<AdminClientPageContextValue>(
@@ -341,7 +341,7 @@ export function AdminClientPageProvider({ children }: { children: ReactNode }) {
       getBySlug,
       ensureUniqueSlug,
       resetPages,
-    ]
+    ],
   );
 
   return (
@@ -355,7 +355,7 @@ export function useAdminClientPages() {
   const ctx = useContext(AdminClientPageContext);
   if (!ctx) {
     throw new Error(
-      "useAdminClientPages must be used within <AdminClientPageProvider>"
+      "useAdminClientPages must be used within <AdminClientPageProvider>",
     );
   }
   return ctx;

@@ -19,7 +19,7 @@
       "@/*": ["apps/site/src/*"],
       "@app/*": ["apps/site/app/*"],
       "@app-components/*": ["apps/site/src/components/*"],
-      "@admin-components/*": ["apps/site/app/admin/components/*"],
+      "@admin-components/*": ["apps/site/app/admin/components/*"]
     },
     "target": "ES2020",
     "module": "ESNext",

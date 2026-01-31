@@ -1,6 +1,6 @@
 export function resolveCaseGridLayout(
   count: number,
-  fallback: string = "3col"
+  fallback: string = "3col",
 ): string {
   if (!Number.isFinite(count) || count <= 0) return fallback;
   if (count >= 4 && count % 2 === 0) return "4col";

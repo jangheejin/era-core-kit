@@ -3,11 +3,7 @@
 
 import { useMemo } from "react";
 import { CaseGrid, type CaseGridProps } from "@kit/blocks";
-import {
-  sectorLabel,
-  type CaseStudyType,
-  type SectorValue,
-} from "@kit/schema";
+import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
 import { useAdminCaseStudies } from "../admin/AdminCaseStudyStore";
 import { useAdminHomeContent } from "../admin/AdminHomeStore";
 import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
@@ -15,7 +11,9 @@ import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
 type CaseGridItem = CaseGridProps["items"][number];
 type NonEmptyArray<T> = [T, ...T[]];
 
-function toNonEmptyArray<T>(items: T[] | undefined): NonEmptyArray<T> | undefined {
+function toNonEmptyArray<T>(
+  items: T[] | undefined,
+): NonEmptyArray<T> | undefined {
   if (!Array.isArray(items) || items.length === 0) return undefined;
   const first = items[0];
   if (first == null) return undefined;
@@ -47,9 +45,10 @@ export function OurWorkOverviewClient() {
   const items = useMemo(() => {
     const maxItems = 6;
     const publicItems = adminItems.filter(
-      (cs) => Boolean(cs.isPublic) && cs.status === "Published"
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
     );
-    const { itemsSource, caseStudySlugs, featuredCaseStudySlugs } = content.work;
+    const { itemsSource, caseStudySlugs, featuredCaseStudySlugs } =
+      content.work;
 
     if (itemsSource === "manual") {
       const order = Array.isArray(caseStudySlugs) ? caseStudySlugs : [];
@@ -69,7 +68,10 @@ export function OurWorkOverviewClient() {
     if (featured.length === 0) return [];
 
     let ordered = featured;
-    if (Array.isArray(featuredCaseStudySlugs) && featuredCaseStudySlugs.length) {
+    if (
+      Array.isArray(featuredCaseStudySlugs) &&
+      featuredCaseStudySlugs.length
+    ) {
       const bySlug = new Map(featured.map((cs) => [cs.slug, cs]));
       const orderedFeatured = featuredCaseStudySlugs
         .map((slug) => bySlug.get(slug))

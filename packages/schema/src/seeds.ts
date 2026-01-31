@@ -2,25 +2,22 @@
 
 //Defining a minimal seed type (for fixtures + landing cards) (versus the full CaseStudy type with attachments, full details, etc)
 import { z } from "zod";
-//import { Sector } from "./index"; 
+//import { Sector } from "./index";
 import { SectorSchema } from "./enums";
-import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema"
+import { DEFAULT_HERO_IMAGE_URL } from "@kit/schema";
 
 type Sector = z.infer<typeof SectorSchema>;
 
-const PathOrUrlSchema = z.string().refine(
-  (s) => {
-    if (!s) return false;
-    if (s.startsWith("/")) return true;
-    try {
-      new URL(s);
-      return true;
-    } catch {
-      return false;
-    }
-  },
-  "Must be an absolute URL or a root-relative path like /img/file.webp",
-);
+const PathOrUrlSchema = z.string().refine((s) => {
+  if (!s) return false;
+  if (s.startsWith("/")) return true;
+  try {
+    new URL(s);
+    return true;
+  } catch {
+    return false;
+  }
+}, "Must be an absolute URL or a root-relative path like /img/file.webp");
 
 /* const PathOrUrl = z.string().refine((s) => {
   if (s.startsWith("/")) return true;        // "/img/..."
@@ -82,11 +79,12 @@ export const CaseStudySeedSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["summaryShort"],
-        message: "Provide either summaryShort or teaser (at least one is required).",
+        message:
+          "Provide either summaryShort or teaser (at least one is required).",
       });
     }
 
-/*     const hasImage = Boolean(v.heroImageUrl?.trim() || v.imageUrl?.trim());
+    /*     const hasImage = Boolean(v.heroImageUrl?.trim() || v.imageUrl?.trim());
     if (!hasImage) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -94,24 +92,26 @@ export const CaseStudySeedSchema = z
         message: "Provide either heroImageUrl or imageUrl (at least one is required).",
       });
     } */
-    
-/*     const hasSectors = Array.isArray(v.sectors) && v.sectors.length > 0;
+
+    /*     const hasSectors = Array.isArray(v.sectors) && v.sectors.length > 0;
     const hasSector = !!v.sector; */
 
-    const sectorsArr = Array.isArray(v.sectors) && v.sectors.length > 0 ? v.sectors : null;
+    const sectorsArr =
+      Array.isArray(v.sectors) && v.sectors.length > 0 ? v.sectors : null;
     const sectorOne = v.sector ?? null;
 
     if (!sectorsArr && !sectorOne) {
-    //if (hasSectors && hasSector) {
+      //if (hasSectors && hasSector) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["sectors"],
-        message: "Provide either `sectors` (array) or legacy `sector` (single), not both.",
+        message:
+          "Provide either `sectors` (array) or legacy `sector` (single), not both.",
       });
       return;
     }
 
-/*     if (!hasSectors && !hasSector) {
+    /*     if (!hasSectors && !hasSector) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["sectors"],  
@@ -120,7 +120,7 @@ export const CaseStudySeedSchema = z
     }
   }) */
 
-/*   .transform((val) => {
+    /*   .transform((val) => {
     const sectors =
       (val.sectors && val.sectors.length ? val.sectors : val.sector ? [val.sector] : []) as any;
 
@@ -137,15 +137,19 @@ export const CaseStudySeedSchema = z
     }
   })
   .transform((val) => {
-    const sectors: Sector[] =
-      val.sectors?.length ? val.sectors
-      : val.sector ? [val.sector]
-      : [];
+    const sectors: Sector[] = val.sectors?.length
+      ? val.sectors
+      : val.sector
+        ? [val.sector]
+        : [];
     //superRefine guarantees sectors.length >= 1
     const sector: Sector = val.sector ?? sectors[0]!;
 
-    const heroImageUrl = 
-      (val.heroImageUrl ?? val.imageUrl ?? DEFAULT_HERO_IMAGE_URL).trim();
+    const heroImageUrl = (
+      val.heroImageUrl ??
+      val.imageUrl ??
+      DEFAULT_HERO_IMAGE_URL
+    ).trim();
 
     return { ...val, sector, sectors, heroImageUrl };
   });
@@ -167,8 +171,8 @@ export const CaseStudySeedSchema = z
 
   }); */
 
-export type CaseStudySeedInput = z.input<typeof CaseStudySeedSchema>;// BEFORE parse (raw authoring)
-export type CaseStudySeed      = z.output<typeof CaseStudySeedSchema>;  // AFTER parse (post-transform)
+export type CaseStudySeedInput = z.input<typeof CaseStudySeedSchema>; // BEFORE parse (raw authoring)
+export type CaseStudySeed = z.output<typeof CaseStudySeedSchema>; // AFTER parse (post-transform)
 //export type CaseStudySeed = z.infer<typeof CaseStudySeedSchema>;
 
 /* 

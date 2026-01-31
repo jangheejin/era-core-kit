@@ -10,7 +10,11 @@ import { notFound } from "next/navigation";
 import { sectorFromRouteSlug } from "@kit/schema";
 import { SectorPageClient } from "./SectorPageClient";
 
-export default async function SectorPageView({ sectorSlug }: { sectorSlug: string }) {
+export default async function SectorPageView({
+  sectorSlug,
+}: {
+  sectorSlug: string;
+}) {
   const sector = sectorFromRouteSlug(sectorSlug);
   if (!sector) notFound();
 

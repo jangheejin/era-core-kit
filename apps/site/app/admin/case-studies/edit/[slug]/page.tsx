@@ -4,6 +4,10 @@
 
 import EditCaseStudyClient from "./EditCaseStudyClient";
 
-export default function EditCaseStudyPage({ params }: { params: { slug: string } }) {
+export default function EditCaseStudyPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   return <EditCaseStudyClient slug={params.slug} />;
 }

@@ -12,11 +12,13 @@ export default function OurWorkPage() {
         <OurWorkClient cases={items} basePath="/our-work" demo={false} />
       </div>
  */
-      {/* <DemoGate enabled={demo} /> */}
+{
+  /* <DemoGate enabled={demo} /> */
+}
 /*     </>
   ); 
 }*/
-  //const { items } = useAdminCaseStudies();
+//const { items } = useAdminCaseStudies();
 
 /*   const cases = useMemo(() => {
     const publicItems = items.filter((cs) => cs.isPublic);
@@ -160,8 +162,11 @@ export default function OurWorkPage() {
     <main>
       <section className="c-section work-section">
         <div className="c-container work-layout"> */
-          {/* Page header */}
-{/*           <header className="work-header">
+{
+  /* Page header */
+}
+{
+  /*           <header className="work-header">
             <h1 className="type-h1">Our Work</h1>
             <p className="type-body work-header__intro">
               We work with clients across geospatial, emergency management,
@@ -169,15 +174,23 @@ export default function OurWorkPage() {
               technical capabilities into real traction in Washington. Explore a
               sample of featured engagements below.
             </p>
-          </header> */}
+          </header> */
+}
 
-          {/* Small label above the strip */}
-{/*           <p className="type-body work-grid__label">
+{
+  /* Small label above the strip */
+}
+{
+  /*           <p className="type-body work-grid__label">
             Select a case study to view its story below
-          </p> */}
+          </p> */
+}
 
-          {/**NEW preview strip! shell: nav buttons + scrollable strip */}
-{/* 
+{
+  /**NEW preview strip! shell: nav buttons + scrollable strip */
+}
+{
+  /* 
           <div className="work-grid-shell">
             <button
               type="button"
@@ -229,10 +242,14 @@ export default function OurWorkPage() {
             >
               ›
             </button>
-          </div> */}
+          </div> */
+}
 
-          {/* OLD Preview strip – horizontal, scrolls when there are many cards */}
-{/*           <section aria-label="Featured case studies" className="work-grid">
+{
+  /* OLD Preview strip – horizontal, scrolls when there are many cards */
+}
+{
+  /*           <section aria-label="Featured case studies" className="work-grid">
             {FEATURED_CASES.map((cs) => {
               const isActive = cs.slug === selected.slug;
 
@@ -256,26 +273,40 @@ export default function OurWorkPage() {
                   )}
 
                   <h5 className="type-h5 work-card__sector">{cs.sector}</h5>
-                  <h2 className="type-h3 work-card__client">{cs.client}</h2> */}
-                  {/* If you want teaser back: */}
-                  {/* {cs.teaser && (
+                  <h2 className="type-h3 work-card__client">{cs.client}</h2> */
+}
+{
+  /* If you want teaser back: */
+}
+{
+  /* {cs.teaser && (
                     <p className="type-body work-card__teaser">{cs.teaser}</p>
-                  )} */}
-{/*                 </button>
+                  )} */
+}
+{
+  /*                 </button>
               );
             })}
-          </section> */}
+          </section> */
+}
 
-          {/* Detail panel below grid */}
-{/*           <section
+{
+  /* Detail panel below grid */
+}
+{
+  /*           <section
             className="work-detail"
             aria-label={`Case study detail: ${selected.client}`}
           >
             <p className="type-small work-detail__label">Currently viewing</p>
 
-            <div className="work-detail__top"> */}
-              {/* TEXT COLUMN: sector → title → summary → outcomes */}
-{/*               <div className="work-detail__text">
+            <div className="work-detail__top"> */
+}
+{
+  /* TEXT COLUMN: sector → title → summary → outcomes */
+}
+{
+  /*               <div className="work-detail__text">
                 <h5 className="type-h5 work-detail__sector">
                   {selected.sector}
                 </h5>
@@ -301,10 +332,14 @@ export default function OurWorkPage() {
                     </ul>
                   </div>
                 )}
-              </div> */}
+              </div> */
+}
 
-              {/* IMAGE COLUMN */}
-{/*               {selected.imageUrl && (
+{
+  /* IMAGE COLUMN */
+}
+{
+  /*               {selected.imageUrl && (
                 <div className="work-detail__media">
                   <img
                     src={selected.imageUrl}
@@ -314,9 +349,13 @@ export default function OurWorkPage() {
                 </div>
               )}
             </div>
- */}
-            {/* CTA */}
-{/*             <a
+ */
+}
+{
+  /* CTA */
+}
+{
+  /*             <a
               href={`/case-studies/${selected.slug}`}
               className="c-button c-button--alt2 work-detail__link"
             >
@@ -328,4 +367,5 @@ export default function OurWorkPage() {
     </main>
   );
 }
- */}
+ */
+}

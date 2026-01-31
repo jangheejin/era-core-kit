@@ -109,7 +109,7 @@ img {
   --min: 18rem;
   display: grid;
   gap: var(--space-3, 1.5rem);
-/*   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr)); */
+  /*   grid-template-columns: repeat(auto-fit, minmax(var(--min, 18rem), 1fr)); */
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min)), 1fr));
   container-type: inline-size;
 }
@@ -193,7 +193,7 @@ img {
   /* color: #111; */
   color: #fff;
   border-color: #111;
-  border-width:2px;
+  border-width: 2px;
 }
 
 .c-button--alt2:hover {
@@ -361,8 +361,8 @@ a:hover {
 }
 
 .type-h1-over {
-    font-size:1.7rem;
-    text-transform: uppercase;
+  font-size: 1.7rem;
+  text-transform: uppercase;
 }
 
 .type-gray {
@@ -517,31 +517,39 @@ ol {
 }
 
 /* Markdown: kill browser-default margins so c-stack controls spacing */
-.c-markdown :is(h1,h2,h3,h4,h5,h6,p,ul,ol,blockquote,pre) { margin: 0; }
-.c-markdown ul, .c-markdown ol { padding-left: 1.25rem; }
+.c-markdown :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre) {
+  margin: 0;
+}
+.c-markdown ul,
+.c-markdown ol {
+  padding-left: 1.25rem;
+}
 
 /* Optional: slightly tighter than global c-stack if you want */
-.c-markdown.c-stack > * + * { margin-top: var(--space-3, 1.5rem); }
+.c-markdown.c-stack > * + * {
+  margin-top: var(--space-3, 1.5rem);
+}
 
 .c-container.c-stack.gap5 {
   gap: 1.25rem;
 }
 
-
 .casegrid {
-/*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
+  /*   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); */
   margin-top: var(--space-4);
 }
 
 /* Base: safe single-column list. Modifiers add multi-column behavior. */
-.case-grid, .case-grid.mt,
-.casegrid, .casegrid.mt {
+.case-grid,
+.case-grid.mt,
+.casegrid,
+.casegrid.mt {
   display: grid;
   gap: var(--space-3);
-/*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  /*   grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
  */
   /* decides what happens to leftover space
-  justify-content: start;   *//* left align */
+  justify-content: start;   */ /* left align */
   /* or: justify-content: center; */ /* centered when few cards */
 
   /* Guardrail: when you don't hit a forced layout class,
@@ -559,7 +567,8 @@ ol {
   justify-content: center;
 }
 
-.case-grid.mt, .casegrid.mt {
+.case-grid.mt,
+.casegrid.mt {
   margin-top: 1rem;
 }
 

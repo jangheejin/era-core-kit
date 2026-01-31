@@ -45,7 +45,7 @@ export function OurWorkClient({
   }, [cases]);
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    featured[0]?.slug ?? null
+    featured[0]?.slug ?? null,
   );
 
   const selected =

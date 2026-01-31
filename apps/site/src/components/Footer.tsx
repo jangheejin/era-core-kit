@@ -37,7 +37,7 @@ export function Footer() {
           <a href="/our-work" className="site-footer__link">
             Our Work
           </a>
-{/*           <Link href="/#mission" className="site-footer__link">
+          {/*           <Link href="/#mission" className="site-footer__link">
             Our Mission
           </Link> */}
           <a href="/our-team" className="site-footer__link">

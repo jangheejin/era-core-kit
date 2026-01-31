@@ -98,4 +98,4 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <Footer />
   </body>
 </html>
-*/ 
+*/

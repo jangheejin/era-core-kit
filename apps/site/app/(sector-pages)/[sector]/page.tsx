@@ -11,7 +11,6 @@
 // - decides if that string is a valid sector slug
 // - renders the exact same sector archive page
 
-
 import { SECTOR_ROUTE_SLUG, sectorFromRouteSlug, tagSlug } from "@kit/schema";
 import SectorPageView from "@/sectors/SectorPageView";
 import { TagPageClient } from "@/tag/TagPageClient";
@@ -33,9 +32,7 @@ export default async function RootSectorPage({
 
   const wanted = tagSlug(params.sector);
   if (!wanted) return notFound();
-  return (
-    <TagPageClient tagSlugParam={params.sector} />
-  );
+  return <TagPageClient tagSlugParam={params.sector} />;
 }
 
 /* export default function RootSectorPage({ params }: { params: { sector: string } }) {
