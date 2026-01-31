@@ -42,7 +42,9 @@ const initialData: LayoutBlock[] = [
 ];
 
 export default function EditPage() {
-  const [blocks, setBlocks] = useState<LayoutBlock[]>(initialData);
+  //const [blocks, setBlocks] = useState<LayoutBlock[]>(initialData);
+
+  const [blocks, _setBlocks] = useState<LayoutBlock[]>(initialData);
 
   return (
     <main className="c-page c-page-admin">

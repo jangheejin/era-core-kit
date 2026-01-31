@@ -263,7 +263,8 @@ export function AdminTeamClient() {
     navigator.clipboard.writeText(payload);
   }
 
-  function insertSnippet(snippet: string) {
+  //TEMPORARILY DISABLED until we re-enable snippet insertion
+  /* function insertSnippet(snippet: string) { 
     if (!textareaRef.current) {
       setBioDraft((prev) => `${prev}\n\n${snippet}`.trim());
       return;
@@ -280,7 +281,7 @@ export function AdminTeamClient() {
       const cursor = start + snippet.length;
       textarea.setSelectionRange(cursor, cursor);
     });
-  }
+  }*/
 
   return (
     <main className="c-admin admin-dashboard">
@@ -306,7 +307,9 @@ export function AdminTeamClient() {
                   ) : null}
                 </div>
                 <div className="team-card__meta">
-                  <span className="pill">{formatStatusLabel(member.status)}</span>
+                  <span className="pill">
+                    {formatStatusLabel(member.status)}
+                  </span>
                   <button
                     className="btnSmall"
                     type="button"
@@ -326,10 +329,18 @@ export function AdminTeamClient() {
               <div className="editor-header">
                 <h2 className="type-h3">Edit team member</h2>
                 <div className="editor-actions">
-                  <button className="btnSmall" type="button" onClick={handleCopy}>
+                  <button
+                    className="btnSmall"
+                    type="button"
+                    onClick={handleCopy}
+                  >
                     Copy JSON
                   </button>
-                  <button className="btnSmall" type="button" onClick={cancelEdit}>
+                  <button
+                    className="btnSmall"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
                     Cancel
                   </button>
                 </div>
@@ -463,7 +474,11 @@ export function AdminTeamClient() {
               </div>
 
               <div className="editor-actions">
-                <button className="btnPrimary" type="button" onClick={saveMember}>
+                <button
+                  className="btnPrimary"
+                  type="button"
+                  onClick={saveMember}
+                >
                   Save
                 </button>
                 {saveState === "saved" ? (

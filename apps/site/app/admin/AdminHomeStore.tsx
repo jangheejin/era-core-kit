@@ -23,7 +23,7 @@ import {
   type HomeContent,
   type HomeWorkContent,
 } from "@/content/homeContent";
-import type { LayoutBlock } from "@kit/blocks";
+//import type { LayoutBlock } from "@kit/blocks";
 
 type AdminHomeContextValue = {
   content: HomeContent;
@@ -32,7 +32,10 @@ type AdminHomeContextValue = {
     section: K,
     partial: Partial<HomeContent[K]>
   ) => void;
-  updateExtraSection: (id: string, partial: Partial<RichTextSectionProps>) => void;
+  updateExtraSection: (
+    id: string,
+    partial: Partial<RichTextSectionProps>
+  ) => void;
   addExtraSection: () => void;
   removeExtraSection: (id: string) => void;
   updateSectionOrder: (order: string[]) => void;
@@ -104,7 +107,7 @@ function normalizeWork(
   const itemsSource =
     raw.itemsSource === "manual" || raw.itemsSource === "featured"
       ? raw.itemsSource
-      : fallback.itemsSource ?? "featured";
+      : (fallback.itemsSource ?? "featured");
   const caseStudySlugs = Array.isArray(raw.caseStudySlugs)
     ? raw.caseStudySlugs
         .filter((slug): slug is string => typeof slug === "string")
@@ -220,7 +223,10 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateSection = useCallback(
-    <K extends keyof HomeContent>(section: K, partial: Partial<HomeContent[K]>) => {
+    <K extends keyof HomeContent>(
+      section: K,
+      partial: Partial<HomeContent[K]>
+    ) => {
       setContent((prev) => ({
         ...prev,
         [section]: { ...prev[section], ...partial },
@@ -311,13 +317,19 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
     ]
   );
 
-  return <AdminHomeContext.Provider value={value}>{children}</AdminHomeContext.Provider>;
+  return (
+    <AdminHomeContext.Provider value={value}>
+      {children}
+    </AdminHomeContext.Provider>
+  );
 }
 
 export function useAdminHomeContent() {
   const ctx = useContext(AdminHomeContext);
   if (!ctx) {
-    throw new Error("useAdminHomeContent must be used within AdminHomeProvider");
+    throw new Error(
+      "useAdminHomeContent must be used within AdminHomeProvider"
+    );
   }
   return ctx;
 }
