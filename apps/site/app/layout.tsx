@@ -31,16 +31,10 @@ import "@styles/markdown.css";
 import "@styles/casegrid.css";
 import "@styles/contact.css";
 
-//import { Inter, Oswald } from 'next/font/google';
-//import { Inter, Oswald } from 'next/font/google/index';
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/oswald/300.css";
-import "@fontsource/oswald/400.css";
-import "@fontsource/oswald/500.css";
-import "@fontsource/oswald/600.css";
+import clsx from "clsx";
+import { inter, oswald } from "./fonts";
+
+/* import { fontClass } from "./fontClass"; */
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -48,8 +42,6 @@ import { type Metadata } from "next";
 import { Suspense } from "react";
 import { Providers } from "./Providers";
 import Eruda from "@/components/dev/Eruda";
-//const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', adjustFontFallback: false})
-//const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald', display: 'swap', adjustFontFallback: false})
 
 const site = {
   name: "ERA Government Affairs",
@@ -105,7 +97,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="font-setup">
+    <html
+      lang="en"
+      className={clsx("font-setup", inter.variable, oswald.variable)}
+    >
       <body>
         <Suspense fallback={null}>
           <Eruda />
@@ -118,4 +113,7 @@ export default function RootLayout({
       </body>
     </html>
   );
+}
+{
+  /* <html lang="en" className={fontClass}> */
 }

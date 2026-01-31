@@ -286,12 +286,8 @@ textarea.input {
 /* TYPOGRAPHY (Base & Utility Classes) */
 /* ----------------------------------------------------- */
 .font-setup {
-  /* 1. Define the CSS variables */
-  --font-inter: "Inter", var(--fallback-sans, sans-serif);
-  --font-oswald: "Oswald", "Arial Narrow", var(--fallback-sans, sans-serif);
-
-  /* 2. Apply the default font to the body/app root */
-  font-family: var(--font-inter);
+  /* Apply the default font to the body/app root */
+  font-family: var(--font-body);
 }
 
 /* Base Typography for all elements */
