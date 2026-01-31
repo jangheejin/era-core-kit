@@ -380,17 +380,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
   } */
 
   const canSave = validation.success; //reusable save button state
-  /*   const SaveButton = (
-    <button
-      className={`btnSave ${validation.success ? "btnSave--ready" : "btnSave--notReady"}`}
-      type="button"
-      onClick={save}
-      disabled={!canSave}
-      title={!canSave ? "Fix validation errors first" : "Save"}
-    >
-      Save + Preview
-    </button>
-  ); */
 
   function SaveBar({ className }: { className: string }) {
     return (
@@ -804,30 +793,6 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
             </div>
 
             {/* ---------------------------------------------------------------- */}
-            {/* OLD SECTOR DROPDOWN MENU */}
-            {/*                 <select
-                  id="sector"
-                  className="input"
-                  value={sector}
-                  onChange={(e) => setSector(e.target.value as SectorValue)}
-                > */}
-            {/*                   <option value="">Select a client type (sector)</option>
-                    {SECTOR_VALUES.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))} */}
-            {/*                 <option value="">Select a category</option>
-                {SECTOR_VALUES.map((v) => (
-                  <option key={v} value={v}>
-                    {sectorLabel(v)}
-                  </option>
-                ))}
-                </select> */}
-
-            {/*                 <p className="muted type-small">
-                  For now, pick one sector; in the final version, you'll be able to pick multiple.
-                </p> */}
           </div>
         </div>
 
