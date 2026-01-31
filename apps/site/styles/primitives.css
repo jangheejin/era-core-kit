@@ -287,8 +287,8 @@ textarea.input {
 /* ----------------------------------------------------- */
 .font-setup {
   /* 1. Define the CSS variables */
-  --font-inter: "Inter", sans-serif;
-  --font-oswald: "Oswald", sans-serif;
+  --font-inter: "Inter", var(--fallback-sans, sans-serif);
+  --font-oswald: "Oswald", "Arial Narrow", var(--fallback-sans, sans-serif);
 
   /* 2. Apply the default font to the body/app root */
   font-family: var(--font-inter);
@@ -468,7 +468,7 @@ ol {
 .type-hero {
   font-size: var(--fs-hero);
   line-height: 1.1;
-  font-family: "Oswald", sans-serif;
+  font-family: var(--font-heading, sans-serif);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
