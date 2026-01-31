@@ -818,19 +818,19 @@ the user fills out)
 }
 
 .cms-logo {
-  font-family: "Oswald";
+  font-family: var(--font-heading, sans-serif);
 }
 
 /* TYPOGRAPHY */
 .cms-h1 {
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-hero);
   line-height: 1.1;
   /*  text-transform: uppercase;*/
 }
 
 .cms-h2 {
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-h2);
   line-height: 1.2;
   /*  text-transform: uppercase;*/
@@ -838,7 +838,7 @@ the user fills out)
 
 .cms-h2b {
   /*slightly smaller*/
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-h2b);
   line-height: 1.2;
   /*  text-transform: uppercase;*/
@@ -846,14 +846,14 @@ the user fills out)
 
 .cms-h2c {
   /*slightly smaller*/
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-h2b);
   line-height: 1.2;
   text-transform: uppercase;
 }
 
 .cms-h3 {
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-h3);
   line-height: 1.25;
   margin: 0;
@@ -861,7 +861,7 @@ the user fills out)
 }
 
 .cms-h4 {
-  font-family: "Inter";
+  font-family: var(--font-body, sans-serif);
   font-size: var(--fs-h4);
   line-height: 1;
   margin: 0;
@@ -1791,7 +1791,7 @@ code {
   font-weight:400;
 }
 .editor__btn {
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-body, sans-serif);
   font-size: 12px;
   font-weight: 600;
 
@@ -1840,7 +1840,7 @@ code {
 
 /* Toolbar buttons */
 .mdToolbar button {
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-body, sans-serif);
   font-size: 12px;
   font-weight: 600;
 
