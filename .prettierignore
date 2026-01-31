@@ -1,0 +1,18 @@
+# deps
+node_modules
+**/node_modules
+
+# next / build outputs
+**/.next
+**/out
+**/dist
+**/build
+
+# tooling
+**/.turbo
+**/.vercel
+**/coverage
+
+# misc
+**/*.min.*
+pnpm-lock.yaml
