@@ -18,7 +18,13 @@ type Props = {
   };
 };
 
-const DEFAULT_SHOW = { bold: true, italic: true, link: true, bullets: true, h2: false };
+const DEFAULT_SHOW = {
+  bold: true,
+  italic: true,
+  link: true,
+  bullets: true,
+  h2: false,
+};
 
 export function MiniFormatBar({
   textareaRef,
@@ -124,7 +130,9 @@ export function MiniFormatBar({
       const block = value.slice(lineStart, lineEnd);
       const lines = block.split("\n");
 
-      const allBulleted = lines.every((ln) => ln.trim() === "" || ln.trimStart().startsWith("- "));
+      const allBulleted = lines.every(
+        (ln) => ln.trim() === "" || ln.trimStart().startsWith("- "),
+      );
       const nextLines = lines.map((ln) => {
         if (ln.trim() === "") return ln;
         if (allBulleted) {
@@ -134,7 +142,7 @@ export function MiniFormatBar({
           //return m ? ln.slice(m[0].length - m[1].length) : ln;
         }
         // add "- " after leading whitespace
-        const indent = (ln.match(/^(\s*)/)?.[0]) ?? "";
+        const indent = ln.match(/^(\s*)/)?.[0] ?? "";
         return indent + "- " + ln.slice(indent.length);
       });
 
@@ -170,22 +178,38 @@ export function MiniFormatBar({
   return (
     <div className="mini-formatbar" role="toolbar" aria-label="Formatting">
       {flags.bold && (
-        <button type="button" className="mini-formatbar__btn" onClick={() => wrap("**")}>
+        <button
+          type="button"
+          className="mini-formatbar__btn"
+          onClick={() => wrap("**")}
+        >
           Bold
         </button>
       )}
       {flags.italic && (
-        <button type="button" className="mini-formatbar__btn" onClick={() => wrap("_")}>
+        <button
+          type="button"
+          className="mini-formatbar__btn"
+          onClick={() => wrap("_")}
+        >
           Italic
         </button>
       )}
       {flags.link && (
-        <button type="button" className="mini-formatbar__btn" onClick={insertLink}>
+        <button
+          type="button"
+          className="mini-formatbar__btn"
+          onClick={insertLink}
+        >
           Link
         </button>
       )}
       {flags.bullets && (
-        <button type="button" className="mini-formatbar__btn" onClick={toggleBullets}>
+        <button
+          type="button"
+          className="mini-formatbar__btn"
+          onClick={toggleBullets}
+        >
           Bullets
         </button>
       )}

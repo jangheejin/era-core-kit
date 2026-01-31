@@ -10,11 +10,7 @@ function matchesTag(cs: CaseStudyType, tagParamSlug: string) {
   return (cs.tags ?? []).some((t) => tagSlug(t) === tagParamSlug);
 }
 
-export function TagPageClient({
-  tagSlugParam,
-}: {
-  tagSlugParam: string;
-}) {
+export function TagPageClient({ tagSlugParam }: { tagSlugParam: string }) {
   const { items } = useAdminCaseStudies();
   const wanted = tagSlug(tagSlugParam);
 

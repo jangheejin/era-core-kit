@@ -2,22 +2,22 @@
 
 used by CaseStudyPublicClient*/
 
-.csPage{
+.csPage {
   display: block;
   padding-block: var(--space-4);
 }
 
-.csBack{
+.csBack {
   display: inline-block;
   margin-bottom: var(--space-3);
   text-decoration: none;
 }
 
-.csHeader{
+.csHeader {
   margin-bottom: var(--space-3);
 }
 
-.csKicker{
+.csKicker {
   font-family: var(--font-heading);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -26,11 +26,11 @@ used by CaseStudyPublicClient*/
   margin-bottom: 0.35rem;
 }
 
-.csTitle{
+.csTitle {
   margin: 0;
 }
 
-.csMeta{
+.csMeta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 0.75rem;
@@ -39,14 +39,14 @@ used by CaseStudyPublicClient*/
   font-size: var(--fs-small);
 }
 
-.csMetaItem{
+.csMetaItem {
   border: 1px solid var(--gray-300);
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
-  background: rgba(0,0,0,0.02);
+  background: rgba(0, 0, 0, 0.02);
 }
 
-.csLead{
+.csLead {
   margin-top: 0.75rem;
   font-size: 1.05rem;
   line-height: 1.6;
@@ -54,7 +54,7 @@ used by CaseStudyPublicClient*/
   max-width: 70ch;
 }
 
-.csHeroCard{
+.csHeroCard {
   border: 1px solid var(--gray-300);
   border-radius: 12px;
   overflow: hidden;
@@ -62,20 +62,20 @@ used by CaseStudyPublicClient*/
   margin-bottom: var(--space-3);
 }
 
-.csHero{
+.csHero {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.csToc{
+.csToc {
   border: 1px solid var(--gray-300);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   margin-bottom: var(--space-3);
 }
 
-.csTocTitle{
+.csTocTitle {
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -84,71 +84,71 @@ used by CaseStudyPublicClient*/
   margin-bottom: 0.35rem;
 }
 
-.csTocList{
+.csTocList {
   margin: 0;
   padding-left: 1.1rem;
 }
 
-.csGrid{
+.csGrid {
   display: grid;
   gap: var(--space-3);
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 960px){
-  .csGrid{
+@media (min-width: 960px) {
+  .csGrid {
     grid-template-columns: 2fr 1fr;
     align-items: start;
   }
-  .csSide{
+  .csSide {
     position: sticky;
     top: 90px; /* plays nice with your Header */
   }
 }
 
-.csProse{
+.csProse {
   max-width: 75ch;
 }
 
-.csProse :where(p){
+.csProse :where(p) {
   margin: 0.75rem 0;
   line-height: 1.7;
 }
 
-.csProse :where(h2,h3){
+.csProse :where(h2, h3) {
   margin-top: 1.25rem;
 }
 
-.csSection{
+.csSection {
   margin-top: var(--space-4);
 }
 
-.csCard{
+.csCard {
   border: 1px solid var(--gray-300);
   border-radius: 12px;
   padding: 0.9rem 1rem;
   margin-bottom: var(--space-3);
-  background: rgba(0,0,0,0.02);
+  background: rgba(0, 0, 0, 0.02);
 }
 
-.csCardTitle{
+.csCardTitle {
   margin: 0 0 0.6rem 0;
 }
 
-.csList{
+.csList {
   margin: 0;
   padding-left: 1.1rem;
 }
 
-.csListItemTitle{
+.csListItemTitle {
   font-weight: 600;
   margin-bottom: 0.15rem;
 }
 
-.csLink{
+.csLink {
   text-decoration: none;
 }
-.csLink:hover{
+.csLink:hover {
   text-decoration: underline;
 }
 

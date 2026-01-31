@@ -121,7 +121,7 @@ export default function NewCaseStudyPage() {
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
   );
 
   const [slug, setSlug] = useState("");
@@ -313,7 +313,7 @@ export default function NewCaseStudyPage() {
 
   const validation = useMemo(
     () => CaseStudySchema.safeParse(candidateInput),
-    [candidateInput]
+    [candidateInput],
   );
 
   function save() {
@@ -644,7 +644,7 @@ export default function NewCaseStudyPage() {
                 value={status}
                 onChange={(e) =>
                   setStatus(
-                    e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number]
+                    e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number],
                   )
                 }
               >
@@ -665,7 +665,7 @@ export default function NewCaseStudyPage() {
                 onChange={(e) =>
                   setVisibility(
                     e.target
-                      .value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
+                      .value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number],
                   )
                 }
               >

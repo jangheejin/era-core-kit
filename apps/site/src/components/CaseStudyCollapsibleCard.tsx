@@ -10,10 +10,8 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
   const firstSector = sectors[0];
   if (firstSector == null) return null;
 
-
-
-//  return sectors?.length ? (
-  return(
+  //  return sectors?.length ? (
+  return (
     <details className="cs-accordion">
       <summary className="cs-accordion__summary">
         <div className="cs-accordion__top">
@@ -21,8 +19,12 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
 
           <div className="cs-accordion__actions">
             <span className="cs-accordion__cta" aria-hidden="true">
-              <span className="cs-accordion__cta--closed"><strong>Expand</strong></span>
-              <span className="cs-accordion__cta--open"><strong>Collapse</strong></span>
+              <span className="cs-accordion__cta--closed">
+                <strong>Expand</strong>
+              </span>
+              <span className="cs-accordion__cta--open">
+                <strong>Collapse</strong>
+              </span>
             </span>
             <span className="cs-accordion__toggle" aria-hidden="true">
               ▸
@@ -37,12 +39,14 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
             <span>
               • {sectorLabel(firstSector)}
               {/* • {sectorLabel(sectors[0]!)} */}
-              {cs.sectors.length > 1 ? ` +${cs.sectors.length -1}` : ""}
+              {cs.sectors.length > 1 ? ` +${cs.sectors.length - 1}` : ""}
             </span>
           ) : null}
         </div>
 
-        {cs.summaryShort ? <p className="muted cs-accordion__summaryText">{cs.summaryShort}</p> : null}
+        {cs.summaryShort ? (
+          <p className="muted cs-accordion__summaryText">{cs.summaryShort}</p>
+        ) : null}
       </summary>
 
       <div className="cs-accordion__body">
@@ -51,5 +55,5 @@ export function CaseStudyCollapsibleCard({ cs }: { cs: CaseStudyType }) {
         </div>
       </div>
     </details>
-  )//;
+  ); //;
 }

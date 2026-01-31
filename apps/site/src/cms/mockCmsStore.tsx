@@ -32,34 +32,31 @@ const MockCMSContext = createContext<MockCMSState | null>(null);
 export function MockCMSProvider({ children }: { children: ReactNode }) {
   // Start with the fixture data as our “database”
   const [caseStudies, setCaseStudies] = useState<CaseStudyType[]>(
-/*   const [items, setItems] = useState<CaseStudyType[]>( */
+    /*   const [items, setItems] = useState<CaseStudyType[]>( */
     () => CASE_STUDIES_FIXTURE,
   );
 
-/*   const value = useMemo( */
+  /*   const value = useMemo( */
   const value: MockCMSState = useMemo(
     () => ({
-//      items,
+      //      items,
       caseStudies,
-//      add: (cs: CaseStudyType) => {
+      //      add: (cs: CaseStudyType) => {
       addCaseStudy: (cs: CaseStudyType) => {
         //setItems((prev) => {
         setCaseStudies((prev) => {
-
           // overwrite if slug already exists, otherwise append
           const without = prev.filter((existing) => existing.slug !== cs.slug);
           return [...without, cs];
         });
       },
     }),
-//    [items],
+    //    [items],
     [caseStudies],
   );
 
   return (
-    <MockCMSContext.Provider value={value}>
-      {children}
-    </MockCMSContext.Provider>
+    <MockCMSContext.Provider value={value}>{children}</MockCMSContext.Provider>
   );
 }
 

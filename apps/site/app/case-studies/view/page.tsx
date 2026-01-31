@@ -8,9 +8,14 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
-import { sectorLabel, type Outcome, type SectorValue, type CaseStudySection } from "@kit/schema";
+import {
+  sectorLabel,
+  type Outcome,
+  type SectorValue,
+  type CaseStudySection,
+} from "@kit/schema";
 
-import { Markdown } from "@/components/Markdown"
+import { Markdown } from "@/components/Markdown";
 
 function readParams(): { slug: string | null; preview: boolean } {
   if (typeof window === "undefined") return { slug: null, preview: false };
@@ -67,7 +72,8 @@ export default function CaseStudyViewPage() {
           <div>
             <div className="csViewBannerTitle">Not found</div>
             <div className="csViewBannerMeta">
-              No case study for <code>{slug}</code> in this browser’s draft store.
+              No case study for <code>{slug}</code> in this browser’s draft
+              store.
             </div>
           </div>
           <div className="csViewTopActions">
@@ -80,7 +86,8 @@ export default function CaseStudyViewPage() {
     );
   }
 
-  const clientLabel = (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
+  const clientLabel =
+    (cs.client ?? cs.title ?? "Untitled").trim() || "Untitled";
   const hasSeparateTitle =
     (cs.client ?? "").trim().length > 0 &&
     (cs.title ?? "").trim().length > 0 &&
@@ -91,7 +98,9 @@ export default function CaseStudyViewPage() {
   const sectors: SectorValue[] = Array.isArray(cs.sectors) ? cs.sectors : [];
   const tags: string[] = Array.isArray(cs.tags) ? cs.tags : [];
   const outcomes: Outcome[] = Array.isArray(cs.outcomes) ? cs.outcomes : [];
-  const sections: CaseStudySection[] = Array.isArray(cs.sections) ? cs.sections : [];
+  const sections: CaseStudySection[] = Array.isArray(cs.sections)
+    ? cs.sections
+    : [];
 
   const status = cs.status ?? "Draft";
   const visibility = cs.visibility ?? "Internal";
@@ -101,8 +110,12 @@ export default function CaseStudyViewPage() {
     <main className="csViewPage">
       <div className="csViewBanner">
         <div>
-          <div className="csViewBannerTitle">{preview ? "Preview mode" : "Viewing draft"}</div>
-          <div className="csViewBannerMeta">This is rendered from this browser’s local draft store.</div>
+          <div className="csViewBannerTitle">
+            {preview ? "Preview mode" : "Viewing draft"}
+          </div>
+          <div className="csViewBannerMeta">
+            This is rendered from this browser’s local draft store.
+          </div>
         </div>
 
         <div className="csViewTopActions">
@@ -123,7 +136,9 @@ export default function CaseStudyViewPage() {
 
       <header>
         <h1 className="csViewH1">{clientLabel}</h1>
-        {secondaryTitle ? <div className="csViewSubTitle">{secondaryTitle}</div> : null}
+        {secondaryTitle ? (
+          <div className="csViewSubTitle">{secondaryTitle}</div>
+        ) : null}
 
         <div className="csViewMetaRow">
           <span className="csViewPill">{status}</span>
@@ -142,7 +157,9 @@ export default function CaseStudyViewPage() {
           ))}
         </div>
 
-        {cs.summaryShort ? <div className="csViewSummary">{cs.summaryShort}</div> : null}
+        {cs.summaryShort ? (
+          <div className="csViewSummary">{cs.summaryShort}</div>
+        ) : null}
 
         <div className="csViewKV">
           <div>Slug</div>
@@ -201,7 +218,6 @@ export default function CaseStudyViewPage() {
     </main>
   );
 }
-
 
 //THE MODULE VERSION
 /* function readParams(): { slug: string | null; preview: boolean } {

@@ -81,7 +81,7 @@ export default function NewCaseStudyPage() {
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
   );
 
   const [slug, setSlug] = useState("");
@@ -201,7 +201,7 @@ export default function NewCaseStudyPage() {
 
   const validation = useMemo(
     () => CaseStudySchema.safeParse(candidateInput),
-    [candidateInput]
+    [candidateInput],
   );
 
   type StatusValue = (typeof CASE_STUDY_STATUS_VALUES)[number];

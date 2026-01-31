@@ -26,7 +26,8 @@ function pickSingleSector(item: CaseGridItem) {
   if (item.primarySectorReadable) return item.primarySectorReadable;
   if (item.primarySector) return String(item.primarySector);
 
-  if (Array.isArray(item.sectors) && item.sectors.length) return String(item.sectors[0]);
+  if (Array.isArray(item.sectors) && item.sectors.length)
+    return String(item.sectors[0]);
 
   // Last resort: if someone only provided a readable string, take the first chunk
   if (typeof item.sectorsReadable === "string" && item.sectorsReadable.trim()) {
@@ -53,8 +54,8 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
         className={`casegrid ${layoutClass} ${countClass} ${parityClass}`}
         id="case-studies"
       >
-      {/* <div className={`casegrid ${layout ?? "layout-2x2"}`} id="case-studies"> */}
-      {/* <div className="casegrid layout-2x2" id="case-studies"> */}
+        {/* <div className={`casegrid ${layout ?? "layout-2x2"}`} id="case-studies"> */}
+        {/* <div className="casegrid layout-2x2" id="case-studies"> */}
         {items.map((item) => (
           <a
             key={item.slug}
@@ -62,7 +63,11 @@ export function CaseGrid({ items, layout }: CaseGridProps) {
             className="case-card"
           >
             <div className="case-card__image">
-              <ImageFigure src={item.imageUrl} alt={item.title ?? ""} aspect="4/3" />
+              <ImageFigure
+                src={item.imageUrl}
+                alt={item.title ?? ""}
+                aspect="4/3"
+              />
               {/* <ImageFigure src={item.imageUrl} alt={item.client ?? ""} aspect="4/3" /> */}
               {/* <ImageFigure src={item.imageUrl} alt={item.client} aspect="4/3" /> */}
             </div>

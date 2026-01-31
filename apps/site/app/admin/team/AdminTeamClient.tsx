@@ -67,7 +67,7 @@ function loadImageLibrary(): TeamImage[] {
 }
 
 function normalizeStatus(
-  status: TeamMember["status"] | undefined
+  status: TeamMember["status"] | undefined,
 ): TeamMember["status"] {
   return status ?? "Draft";
 }
@@ -100,7 +100,7 @@ export function AdminTeamClient() {
   const [bioDraft, setBioDraft] = useState("");
   const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
   const [uploadedLibrary, setUploadedLibrary] = useState<TeamImage[]>(() =>
-    loadImageLibrary()
+    loadImageLibrary(),
   );
   const [showMarkdownEditor, setShowMarkdownEditor] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -112,7 +112,7 @@ export function AdminTeamClient() {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(
       IMAGE_LIBRARY_KEY,
-      JSON.stringify(uploadedLibrary)
+      JSON.stringify(uploadedLibrary),
     );
   }, [uploadedLibrary]);
 
@@ -129,7 +129,7 @@ export function AdminTeamClient() {
       }
     }
     return Array.from(map.values()).sort((a, b) =>
-      a.label.localeCompare(b.label)
+      a.label.localeCompare(b.label),
     );
   }, [uploadedLibrary, items]);
 

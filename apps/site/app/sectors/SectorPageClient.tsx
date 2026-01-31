@@ -31,11 +31,7 @@ function toGridItem(cs: CaseStudyType): CaseGridItemFromProps {
   };
 }
 
-export function SectorPageClient({
-  sector,
-}: {
-  sector: SectorValue;
-}) {
+export function SectorPageClient({ sector }: { sector: SectorValue }) {
   const { items } = useAdminCaseStudies();
 
   const filtered = useMemo(() => {
@@ -67,7 +63,6 @@ export function SectorPageClient({
               category.
             </p>
           </div>
-
         </header>
 
         {gridItems.length === 0 ? (

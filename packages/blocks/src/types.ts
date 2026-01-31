@@ -63,16 +63,16 @@ export type CaseGridItem = {
   title?: string;
 
   //show only one sector/category on preview cards. optional.
-//  primarySector?: string;
-//  primarySectorReadable?: string;
+  //  primarySector?: string;
+  //  primarySectorReadable?: string;
   primarySector?: SectorValue;
   primarySectorReadable?: string;
-//  sector?: string;
-//  sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
+  //  sector?: string;
+  //  sectors?: string[]; //array of sector strings, e.g. ["Health", "Defense"] (canonical structure)
   // if present, must have at least one sector
   sectors?: NonEmptyArray<SectorValue>;
-  sectorsReadable?: string;//human-readable display label, e.g. "Health · Defense"
-  
+  sectorsReadable?: string; //human-readable display label, e.g. "Health · Defense"
+
   client?: string;
   summary?: string;
   brief?: string;

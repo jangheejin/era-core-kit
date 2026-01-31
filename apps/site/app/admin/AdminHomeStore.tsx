@@ -30,11 +30,11 @@ type AdminHomeContextValue = {
   updateContent: (partial: Partial<HomeContent>) => void;
   updateSection: <K extends keyof HomeContent>(
     section: K,
-    partial: Partial<HomeContent[K]>
+    partial: Partial<HomeContent[K]>,
   ) => void;
   updateExtraSection: (
     id: string,
-    partial: Partial<RichTextSectionProps>
+    partial: Partial<RichTextSectionProps>,
   ) => void;
   addExtraSection: () => void;
   removeExtraSection: (id: string) => void;
@@ -75,7 +75,7 @@ function normalizeHero(raw: unknown, fallback: HeroProps): HeroProps {
 
 function normalizeMission(
   raw: unknown,
-  fallback: MissionTextProps
+  fallback: MissionTextProps,
 ): MissionTextProps {
   if (!isPlainObject(raw)) return fallback;
   return {
@@ -88,7 +88,7 @@ function normalizeMission(
 
 function normalizeIntro(
   raw: unknown,
-  fallback: IntroWithImageProps
+  fallback: IntroWithImageProps,
 ): IntroWithImageProps {
   if (!isPlainObject(raw)) return fallback;
   return {
@@ -101,7 +101,7 @@ function normalizeIntro(
 
 function normalizeWork(
   raw: unknown,
-  fallback: HomeWorkContent
+  fallback: HomeWorkContent,
 ): HomeWorkContent {
   if (!isPlainObject(raw)) return fallback;
   const itemsSource =
@@ -225,14 +225,14 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
   const updateSection = useCallback(
     <K extends keyof HomeContent>(
       section: K,
-      partial: Partial<HomeContent[K]>
+      partial: Partial<HomeContent[K]>,
     ) => {
       setContent((prev) => ({
         ...prev,
         [section]: { ...prev[section], ...partial },
       }));
     },
-    []
+    [],
   );
 
   const updateExtraSection = useCallback(
@@ -242,11 +242,11 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
         extraSections: prev.extraSections.map((block) =>
           block._key === id && block.type === "RichTextSection"
             ? { ...block, props: { ...block.props, ...partial } }
-            : block
+            : block,
         ),
       }));
     },
-    []
+    [],
   );
 
   const addExtraSection = useCallback(() => {
@@ -314,7 +314,7 @@ export function AdminHomeProvider({ children }: { children: ReactNode }) {
       removeExtraSection,
       updateSectionOrder,
       resetToBaseline,
-    ]
+    ],
   );
 
   return (
@@ -328,7 +328,7 @@ export function useAdminHomeContent() {
   const ctx = useContext(AdminHomeContext);
   if (!ctx) {
     throw new Error(
-      "useAdminHomeContent must be used within AdminHomeProvider"
+      "useAdminHomeContent must be used within AdminHomeProvider",
     );
   }
   return ctx;

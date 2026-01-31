@@ -34,7 +34,10 @@ export default function MockCaseStudyPage() {
         This preview matches the public case study view.
       </ContextBanner>
       <div className="c-admin" style={{ paddingInline: "1rem" }}>
-        <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", marginTop: "1rem" }}
+        >
           <h1 className="type-h3">Case study preview</h1>
           <div className="row">
             <Link href="/admin/case-studies/list">List</Link>

@@ -7,7 +7,5 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
   const wanted = tagSlug(params.tag);
   if (!wanted) return notFound();
 
-  return (
-    <TagPageClient tagSlugParam={params.tag} />
-  );
+  return <TagPageClient tagSlugParam={params.tag} />;
 }

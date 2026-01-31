@@ -35,7 +35,7 @@ export default function ClientPageEditor({ slug }: Props) {
   const [name, setName] = useState("");
   const [desiredSlug, setDesiredSlug] = useState("");
   const [categoryDrafts, setCategoryDrafts] = useState<Array<SectorValue | "">>(
-    [""]
+    [""],
   );
   const [tags, setTags] = useState("");
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
@@ -46,7 +46,7 @@ export default function ClientPageEditor({ slug }: Props) {
 
   const selected = useMemo(
     () => (slug ? (getBySlug(slug) ?? null) : null),
-    [getBySlug, slug]
+    [getBySlug, slug],
   );
 
   const tagChips = useMemo(
@@ -55,9 +55,9 @@ export default function ClientPageEditor({ slug }: Props) {
         tags
           .split(",")
           .map((t) => t.trim())
-          .filter(Boolean)
+          .filter(Boolean),
       ),
-    [tags]
+    [tags],
   );
   const selectedCategories = useMemo(() => {
     const out: SectorValue[] = [];
@@ -93,20 +93,23 @@ export default function ClientPageEditor({ slug }: Props) {
     setBodyMDX("");
   }
 
-  const loadFrom = useCallback((pageSlug: string) => {
-    const page = getBySlug(pageSlug);
-    if (!page) return false;
-    setName(page.name);
-    setDesiredSlug(page.slug);
-    setCategoryDrafts(
-      page.filters.sectors.length ? [...page.filters.sectors] : [""]
-    );
-    setTags(page.filters.tags.join(", "));
-    setTagMode(page.filters.tagMode);
-    setStatus(page.status);
-    setBodyMDX(page.bodyMDX ?? "");
-    return true;
-  }, [getBySlug]);
+  const loadFrom = useCallback(
+    (pageSlug: string) => {
+      const page = getBySlug(pageSlug);
+      if (!page) return false;
+      setName(page.name);
+      setDesiredSlug(page.slug);
+      setCategoryDrafts(
+        page.filters.sectors.length ? [...page.filters.sectors] : [""],
+      );
+      setTags(page.filters.tags.join(", "));
+      setTagMode(page.filters.tagMode);
+      setStatus(page.status);
+      setBodyMDX(page.bodyMDX ?? "");
+      return true;
+    },
+    [getBySlug],
+  );
 
   useEffect(() => {
     if (!slug) {
@@ -129,7 +132,7 @@ export default function ClientPageEditor({ slug }: Props) {
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     );
     const current = JSON.stringify({
       name: name.trim(),
@@ -181,13 +184,13 @@ export default function ClientPageEditor({ slug }: Props) {
       tags
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     );
 
     if (selected) {
       const nextSlug = ensureUniqueSlug(
         desiredSlug || selected.slug,
-        selected.id
+        selected.id,
       );
       const nextPage = {
         ...selected,
@@ -210,7 +213,7 @@ export default function ClientPageEditor({ slug }: Props) {
       }
       if (nextStatus === "Draft") {
         window.alert(
-          "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections."
+          "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections.",
         );
       }
       return;
@@ -231,7 +234,7 @@ export default function ClientPageEditor({ slug }: Props) {
     router.replace(`/admin/client-pages/edit/${created.slug}`);
     if (nextStatus === "Draft") {
       window.alert(
-        "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections."
+        "Draft saved. This saves your work but does not publish the collection. Clients can only see published collections.",
       );
     }
   }

@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 //apps/site/src/components/CaseStudyFullRender.tsx
-// “full case study renderer” component 
-// (so that instead of having case study cards on the filter-by-tag or filter-by-category 
+// “full case study renderer” component
+// (so that instead of having case study cards on the filter-by-tag or filter-by-category
 // pages, you can have full case studies)
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { CaseStudyType, CaseStudyAttachment, CaseStudyLink, Outcome } from "@kit/schema";
+import type {
+  CaseStudyType,
+  CaseStudyAttachment,
+  CaseStudyLink,
+  Outcome,
+} from "@kit/schema";
 import { Markdown } from "./Markdown";
 
 export function CaseStudyFull({
@@ -19,7 +24,8 @@ export function CaseStudyFull({
     if (cs.outcomes?.length) {
       const title = (s.title ?? "").trim().toLowerCase();
       const id = (s.id ?? "").trim().toLowerCase();
-      if (title === "outcomes" || id === "impact" || id === "outcomes") return false;
+      if (title === "outcomes" || id === "impact" || id === "outcomes")
+        return false;
     }
     return true;
   });
@@ -64,10 +70,17 @@ export function CaseStudyFull({
           )}
 
           {cs.heroImageUrl ? (
-            <img className="case-study-full__hero" src={cs.heroImageUrl} alt="" loading="lazy" />
+            <img
+              className="case-study-full__hero"
+              src={cs.heroImageUrl}
+              alt=""
+              loading="lazy"
+            />
           ) : null}
 
-          {cs.summaryShort ? <p className="type-body">{cs.summaryShort}</p> : null}
+          {cs.summaryShort ? (
+            <p className="type-body">{cs.summaryShort}</p>
+          ) : null}
           {cs.brief ? <p className="muted">{cs.brief}</p> : null}
         </header>
       )}
@@ -88,7 +101,7 @@ export function CaseStudyFull({
 
       {cs.bodyMDX ? (
         <section className="case-study-full__section">
-{/*           <ReactMarkdown
+          {/*           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h1: (props) => <h2 className="type-h3" {...props} />,
@@ -96,25 +109,28 @@ export function CaseStudyFull({
               h3: (props) => <h4 className="type-h4" {...props} />,
             }}
           > */}
-          <Markdown>
-            {cs.bodyMDX}
-          </Markdown>
-{/*           </ReactMarkdown>
- */}        </section>
+          <Markdown>{cs.bodyMDX}</Markdown>
+          {/*           </ReactMarkdown>
+           */}{" "}
+        </section>
       ) : null}
 
       {!!cs.sections?.length && (
-
         <section className="case-study-full__section">
           {sections.map((s, idx) => (
-            <div key={s.id ?? s.title ?? idx} className="case-study-full__subsection">
+            <div
+              key={s.id ?? s.title ?? idx}
+              className="case-study-full__subsection"
+            >
               {s.title ? <h3 className="type-h3">{s.title}</h3> : null}
               {s.bodyMDX ? (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{s.bodyMDX}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {s.bodyMDX}
+                </ReactMarkdown>
               ) : null}
             </div>
           ))}
-{/*           {cs.sections.map((s: any) => (
+          {/*           {cs.sections.map((s: any) => (
             <div key={s.id} className="case-study-full__subsection">
               <h3 className="type-h3">{s.title}</h3>
               {s.bodyMDX ? (

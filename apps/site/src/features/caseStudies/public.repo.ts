@@ -2,7 +2,7 @@
 import type { CaseStudyType } from "@kit/schema";
 
 // CRUCIAL boundary
-// This is the only thing public pages call. 
+// This is the only thing public pages call.
 // (One single module that public pages call, no matter what)
 
 // In the demo version: data comes from localStorage store

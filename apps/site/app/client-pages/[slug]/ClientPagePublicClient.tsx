@@ -9,7 +9,10 @@ import { useMemo } from "react";
 
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
 import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
-import { useAdminClientPages, type ClientPage } from "../../admin/AdminClientPageStore";
+import {
+  useAdminClientPages,
+  type ClientPage,
+} from "../../admin/AdminClientPageStore";
 import { Markdown } from "@/components/Markdown";
 
 import { useSearchParams } from "next/navigation";
@@ -49,7 +52,9 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
   const backLabelParam = (searchParams.get("backLabel") ?? "").trim();
   const safeBack = backParam.startsWith("/") ? backParam : "";
   const carryBackLabel = backLabelParam || "Back to database";
-  const backLabel = carryBackLabel.startsWith("←") ? carryBackLabel : `← ${carryBackLabel}`;
+  const backLabel = carryBackLabel.startsWith("←")
+    ? carryBackLabel
+    : `← ${carryBackLabel}`;
   const carryQuery = safeBack
     ? `?back=${encodeURIComponent(safeBack)}&backLabel=${encodeURIComponent(carryBackLabel)}`
     : "";
@@ -97,7 +102,7 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
   return (
     <main className="c-page">
       <div className="c-container c-stack">
-        {safeBack ? ( 
+        {safeBack ? (
           <Link href={safeBack} className="muted">
             {backLabel}
           </Link>
@@ -114,21 +119,24 @@ export default function ClientPagePublicClient({ slug }: { slug: string }) {
         </p>
 
         {/* <div className="case-grid"> */}
-        <div className={
-          filtered.length <= 2
-            ? "case-grid case-grid--cards case-grid--center"
-            : "case-grid case-grid--cards"
+        <div
+          className={
+            filtered.length <= 2
+              ? "case-grid case-grid--cards case-grid--center"
+              : "case-grid case-grid--cards"
           }
         >
           {filtered.map((cs) => (
             <article key={cs.slug} className="card case-study-card">
               {/* <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link"> */}
-              <Link href={`/case-studies/${cs.slug}${carryQuery}`}
+              <Link
+                href={`/case-studies/${cs.slug}${carryQuery}`}
                 className="case-study-card__link"
-              >                  
-              {/* <img src={cs.heroImageUrl} alt="" loading="lazy" /> */}
+              >
+                {/* <img src={cs.heroImageUrl} alt="" loading="lazy" /> */}
                 {cs.heroImageUrl && (
-                  <img className="case-study-card__img"
+                  <img
+                    className="case-study-card__img"
                     src={cs.heroImageUrl}
                     alt=""
                     loading="lazy"

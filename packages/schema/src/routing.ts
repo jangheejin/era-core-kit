@@ -1,7 +1,7 @@
 //packages/schema/src/routing.ts
 import { SECTOR_VALUES, type SectorValue } from "./enums";
 
-//This is one centralized, shared "slugs and routing" module for use in 
+//This is one centralized, shared "slugs and routing" module for use in
 // in the "per-category" or "per-tag" pages (e.g. site.com/sector/nonprofit)
 
 /** Generic slugify for URLs: lowercase, dash-separated */
@@ -13,7 +13,6 @@ export function slugify(input: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-
 
 /**
  * TAGS:
@@ -109,7 +108,10 @@ for (const slug of Object.values(SECTOR_ROUTE_SLUG)) {
 }
 
 const ROUTE_SLUG_TO_SECTOR = new Map<string, SectorValue>(
-  Object.entries(SECTOR_ROUTE_SLUG).map(([sector, slug]) => [slug, sector as SectorValue]),
+  Object.entries(SECTOR_ROUTE_SLUG).map(([sector, slug]) => [
+    slug,
+    sector as SectorValue,
+  ]),
 );
 
 export function sectorRouteSlug(sector: SectorValue): string {
@@ -118,7 +120,7 @@ export function sectorRouteSlug(sector: SectorValue): string {
 
 export function sectorFromRouteSlug(routeSlug: string): SectorValue | null {
   /* const s = slugify(routeSlug); // normalize just in case */
-  const s = routeSlug.trim().toLowerCase();//Safer normalization for URL path segments
+  const s = routeSlug.trim().toLowerCase(); //Safer normalization for URL path segments
   return ROUTE_SLUG_TO_SECTOR.get(s) ?? null;
 }
 

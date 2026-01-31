@@ -1,9 +1,12 @@
 // packages/blocks/src/cms/CMSDashboard.tsx
 "use client";
 
-
 import { useState } from "react";
-import { CaseStudy as CaseStudySchema, type CaseStudyInput, type CaseStudyType } from "@kit/schema";
+import {
+  CaseStudy as CaseStudySchema,
+  type CaseStudyInput,
+  type CaseStudyType,
+} from "@kit/schema";
 
 export type CMSDashboardProps = {
   items?: CaseStudyType[];
@@ -23,7 +26,10 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
     setError(null);
 
     const input: CaseStudyInput = {
-      id: typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+      id:
+        typeof crypto !== "undefined"
+          ? crypto.randomUUID()
+          : String(Date.now()),
       title: title.trim(),
       slug: slug.trim(),
       client: undefined,
@@ -58,7 +64,7 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
       const path = issue?.path?.length ? issue.path.join(".") : "(root)";
       const msg = issue?.message ?? "Validation failed";
       setError(`${path}): ${msg}`);
-//      setError(`${path}: ${issue.message}`);
+      //      setError(`${path}: ${issue.message}`);
       return;
     }
 
@@ -67,7 +73,10 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
     if (onCreate) {
       onCreate(out);
     } else {
-      setLocalItems((prev) => [out, ...prev.filter((p) => p.slug !== out.slug)]);
+      setLocalItems((prev) => [
+        out,
+        ...prev.filter((p) => p.slug !== out.slug),
+      ]);
     }
 
     setTitle("");
@@ -79,13 +88,34 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
     <section className="c-stack">
       <h2 className="type-h2">CMS dashboard (mock)</h2>
 
-      {error && <p className="type-body" style={{ color: "var(--red-600)" }}>{error}</p>}
+      {error && (
+        <p className="type-body" style={{ color: "var(--red-600)" }}>
+          {error}
+        </p>
+      )}
 
       <div className="c-stack">
-        <input className="input" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <input className="input" placeholder="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
-        <textarea className="input" placeholder="Body (MDX)" value={body} onChange={(e) => setBody(e.target.value)} />
-        <button className="button" onClick={add}>Save (mock)</button>
+        <input
+          className="input"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          className="input"
+          placeholder="Slug"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+        />
+        <textarea
+          className="input"
+          placeholder="Body (MDX)"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <button className="button" onClick={add}>
+          Save (mock)
+        </button>
       </div>
 
       <hr />

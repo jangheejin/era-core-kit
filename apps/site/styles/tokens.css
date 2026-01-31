@@ -4,17 +4,18 @@
 /* ----------------------------------------------------- */
 
 :root {
-
   /*TYPOGRAPHY VARIABLES*/
-  --fallback-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+  --fallback-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
     "Noto Sans", "Liberation Sans", sans-serif;
 
-  --font-body: var(--font-inter), var(--fallback-sans, sans-serif); 
-  --font-heading: var(--font-oswald), "Arial Narrow", var(--fallback-sans, sans-serif);
-  
+  --font-body: var(--font-inter), var(--fallback-sans, sans-serif);
+  --font-heading:
+    var(--font-oswald), "Arial Narrow", var(--fallback-sans, sans-serif);
+
   --letter-spacing-heading: 0.01em; /* = 1/1000 em (your placeholder value) */
-  --letter-spacing-heading-sm: 0.003em; 
-  
+  --letter-spacing-heading-sm: 0.003em;
+
   /*FLUID TYPOGRAPHY VARIABLES*/
 
   /* BODY + SMALL TEXT (NEW, bigger but less than 16)
@@ -30,11 +31,11 @@
   --fs-small: clamp(0.84rem, 0.8rem + 0.2vw, 0.91rem); /* ~13.5px → ~14.5px */
   --fs-xsmall: clamp(0.8rem, 0.7rem + 0.2vw, 0.78rem);
 
-/* OLD, LARGER 
+  /* OLD, LARGER 
   --fs-body: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
   --fs-small: clamp(0.875rem, 0.8rem + 0.25vw, 0.95rem);*/
-  
-/* OLD, SMALLER
+
+  /* OLD, SMALLER
   --fs-h2: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
   --fs-hero: clamp(1.7rem, 1.2rem + 1.5vw, 2.4rem); */
 
@@ -101,4 +102,3 @@
     --fs-h2b: clamp(1.25rem, 1.15rem + 0.4vw, 1.55rem);
   }
 }
-

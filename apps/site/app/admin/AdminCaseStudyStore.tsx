@@ -98,7 +98,11 @@ function ensureNonEmptySectors(input: unknown) {
   const record = input as Record<string, unknown>;
   const sectors = normalizeSectors(record.sectors);
   const primary = normalizeSectors(record.primarySector);
-  const nextSectors = sectors.length ? sectors : primary.length ? primary : [DEFAULT_SECTOR];
+  const nextSectors = sectors.length
+    ? sectors
+    : primary.length
+      ? primary
+      : [DEFAULT_SECTOR];
   const nextPrimary = primary[0] ?? nextSectors[0] ?? DEFAULT_SECTOR;
   return { ...record, sectors: nextSectors, primarySector: nextPrimary };
 }
@@ -150,7 +154,7 @@ type AdminCaseStudyContextValue = {
 
   removeCaseStudy: (slug: string) => void;
   getBySlug: (slug: string) => CaseStudyType | undefined;
-//  findBySlug: (slug: string) => CaseStudyType | undefined;
+  //  findBySlug: (slug: string) => CaseStudyType | undefined;
 
   /** Collision-safe slug helper for create/edit flows. */
   ensureUniqueSlug: (desiredSlug: string, currentId?: string) => string;
@@ -159,8 +163,9 @@ type AdminCaseStudyContextValue = {
   resetToBaseline: () => void;
 };
 
-const AdminCaseStudyContext =
-  createContext<AdminCaseStudyContextValue | null>(null);
+const AdminCaseStudyContext = createContext<AdminCaseStudyContextValue | null>(
+  null,
+);
 
 const STORAGE_KEY = "era_admin_case_studies_v2";
 
@@ -245,15 +250,15 @@ function loadLocalValidated(): CaseStudyType[] {
         migrateHeroUrl(migratePrimarySector(migrateLegacySector(item))),
       );
 
-      //now make it possible to ignore anything that's a seed record by id prefix (rather than tag. 
+      //now make it possible to ignore anything that's a seed record by id prefix (rather than tag.
       // by tag will still work but will be phased out in the final cms)
       const res = CaseStudySchema.safeParse(migrated);
 
       /*add some debug stuff to figure out why case studies are being dropped*/
       if (res.success) {
         ok.push(res.data);
-      } 
-      
+      }
+
       //comment out this debug stuff later
       else {
         const itemId = typeof item?.id === "string" ? item.id : "unknown";
@@ -261,7 +266,7 @@ function loadLocalValidated(): CaseStudyType[] {
         console.warn(
           "[cms] Dropped invalid saved case study:",
           { id: itemId, slug: itemSlug },
-          res.error.flatten()
+          res.error.flatten(),
         );
       }
       /* if (res.success) ok.push(res.data); */
@@ -334,13 +339,13 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     const stored = loadLocalValidated();
 
     //guardrail against seeds
-/*     for (const item of stored) {
+    /*     for (const item of stored) {
       if (item.tags?.includes("seed")) {
         console.error("❌ Found seed tag in localStorage:", item);
       }
     } */
 
-/*     if (stored.length === 0) return;
+    /*     if (stored.length === 0) return;
     setItems(mergeBaselineWithStored(BASELINE, stored)); */
     //setItems(mergeFixtureWithStored(stored));
     /* console.log("!!!!Final loaded case studies:", items); */
@@ -369,7 +374,9 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       let n = 2;
 
       const conflicts = (slug: string) =>
-        items.some((x) => x.slug === slug && (currentId ? x.id !== currentId : true));
+        items.some(
+          (x) => x.slug === slug && (currentId ? x.id !== currentId : true),
+        );
 
       while (conflicts(candidate)) {
         candidate = `${base}-${n++}`;
@@ -388,34 +395,35 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       return [cs, ...filtered];
     });
   }, []);
-  
+
   const resetToBaseline = useCallback(() => {
     if (typeof window !== "undefined") {
-      try { window.localStorage.removeItem(STORAGE_KEY); } catch {}
+      try {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } catch {}
     }
     hasUserEditsRef.current = false; // important: don’t re-persist baseline
     setItems(BASELINE);
     saveLocal(BASELINE);
   }, []);
 
-/*   const addCaseStudy = (cs: CaseStudyType) => {
+  /*   const addCaseStudy = (cs: CaseStudyType) => {
     setItems((prev) => {
       const filtered = prev.filter((p) => p.slug !== cs.slug);
       return [cs, ...filtered];
     });
   }; */
-  
 
   const upsertCaseStudy = addCaseStudy;
 
   const removeCaseStudy = useCallback((slug: string) => {
-    hasUserEditsRef.current = true;//make deletions persist
+    hasUserEditsRef.current = true; //make deletions persist
     setItems((prev) => prev.filter((p) => p.slug !== slug));
   }, []);
 
-//  const findBySlug = (slug: string) => items.find(x => x.slug === slug);
+  //  const findBySlug = (slug: string) => items.find(x => x.slug === slug);
 
-/*   const resetToBaseline = useCallback(() => {
+  /*   const resetToBaseline = useCallback(() => {
     setItems(CASE_STUDIES_FIXTURE);
     if (typeof window !== "undefined") {
       try {
@@ -424,7 +432,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     }
   }, []); */
 
-/*   const resetToBaseline = () => {
+  /*   const resetToBaseline = () => {
     if (typeof window !== "undefined") {
       try { window.localStorage.removeItem(STORAGE_KEY);
       } catch {}
@@ -432,7 +440,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     setItems(CASE_STUDIES_FIXTURE);
   }; */
 
-/*   const resetToBaseline = useCallback(() => {
+  /*   const resetToBaseline = useCallback(() => {
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(STORAGE_KEY);
@@ -440,7 +448,6 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     }
     setItems(CASE_STUDIES_FIXTURE);
   }, []); */
-
 
   const value = useMemo<AdminCaseStudyContextValue>(
     () => ({
@@ -453,10 +460,13 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
       resetToBaseline,
     }),
     [
-      items, 
-      addCaseStudy, 
-      upsertCaseStudy, 
-      removeCaseStudy, getBySlug, ensureUniqueSlug, resetToBaseline
+      items,
+      addCaseStudy,
+      upsertCaseStudy,
+      removeCaseStudy,
+      getBySlug,
+      ensureUniqueSlug,
+      resetToBaseline,
     ],
   );
 
@@ -466,7 +476,7 @@ export function AdminCaseStudyProvider({ children }: { children: ReactNode }) {
     </AdminCaseStudyContext.Provider>
   );
 
-/*   return (
+  /*   return (
     <AdminCaseStudyContext.Provider value={{ items, addCaseStudy, getBySlug }}>
       {children}
     </AdminCaseStudyContext.Provider>
@@ -482,7 +492,6 @@ export function useAdminCaseStudies() {
   }
   return ctx;
 }
-
 
 /* const AdminCaseStudyContext =
   createContext<AdminCaseStudyContextValue | null>(null);

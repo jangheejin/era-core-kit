@@ -15,9 +15,9 @@
 }
  */
 .contact-form {
-  max-width:none;
-  width:100%;
-/*   background: var(--bg-2); */
+  max-width: none;
+  width: 100%;
+  /*   background: var(--bg-2); */
   background: #fff;
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
@@ -109,7 +109,7 @@
   }
 } */
 
-  /* override the global form rule in primitives.css */
+/* override the global form rule in primitives.css */
 /* .contact-form {
   max-width: none;
   gap: var(--space-2);
@@ -200,7 +200,6 @@ textarea {
 }
  */
 
-
 .contact-form .field--message {
   grid-column: 1 / -1;
 }
@@ -221,7 +220,6 @@ textarea {
   gap: 0.35rem;
 }
 
-
 .contact-form .field-label {
   font-weight: 600;
   line-height: 1.2;
@@ -237,7 +235,6 @@ textarea {
   background: #fff;
   color: var(--text);
   padding: 0.8rem 0.9rem;
-
 }
 
 .contact-form textarea {
@@ -304,7 +301,7 @@ textarea {
 
   align-items: flex-start;
 } */
-  /* align-items: start; */
+/* align-items: start; */
 /* textarea {
   width: 100%;
   height: 100%;

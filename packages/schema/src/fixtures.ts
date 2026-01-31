@@ -548,7 +548,7 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
       status: "Published",
       visibility: "Public",
       ...x,
-    })
+    }),
   );
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
@@ -1042,5 +1042,5 @@ export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map(
     evidence: [],
     attachments: [],
     links: [],
-  })
+  }),
 );

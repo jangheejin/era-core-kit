@@ -14,7 +14,9 @@ export function AlertBanner({
   variant?: AlertVariant;
   children: ReactNode;
 }) {
-  return <div className={clsx("alert-banner", `alert-${variant}`)}>{children}</div>;
+  return (
+    <div className={clsx("alert-banner", `alert-${variant}`)}>{children}</div>
+  );
 }
 
 /* type AlertBannerProps = {

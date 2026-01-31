@@ -10,14 +10,12 @@ export function WorkWithCaseGrid(props: WorkWithCaseGridProps) {
   return (
     <section className="c-section">
       <div className="c-container c-stack">
-
         {showWorkText ? (
           <WorkText heading={heading} text={text} text2={text2} />
         ) : null}
 
         {gridHeading ? <h3 className="type-h3">{gridHeading}</h3> : null}
         <CaseGrid layout={layout} items={items} />
-        
       </div>
     </section>
   );

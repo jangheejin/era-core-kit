@@ -31,11 +31,11 @@
 
 ## useful commmands
 
-pnpm --filter site dev 
+pnpm --filter site dev
 pnpm --filter @kit/schema build //schema always goes first
 pnpm --filter @kit/KITNAME build
 
-git checkout main 
+git checkout main
 git pull origin main
 git merge --ff-only BRANCHNAME
 git push

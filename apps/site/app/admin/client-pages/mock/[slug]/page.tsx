@@ -9,7 +9,12 @@ import "@styles/admin-cms.css";
 import Link from "next/link";
 import { useMemo } from "react";
 
-import { normalizeTagList, tagSlug, type CaseStudyType, type SectorValue } from "@kit/schema";
+import {
+  normalizeTagList,
+  tagSlug,
+  type CaseStudyType,
+  type SectorValue,
+} from "@kit/schema";
 import { Markdown } from "@/components/Markdown";
 
 import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
@@ -21,7 +26,10 @@ type ClientPageFilterPreview = {
   tagMode?: "any" | "all";
 };
 
-function matchesClientPage(cs: CaseStudyType, page: { filters: ClientPageFilterPreview }) {
+function matchesClientPage(
+  cs: CaseStudyType,
+  page: { filters: ClientPageFilterPreview },
+) {
   const { sectors, tags, tagMode } = page.filters;
 
   // public-only gating
@@ -66,7 +74,10 @@ export default function AdminClientPageMock({
 
   return (
     <main className="c-admin">
-      <div className="row" style={{ justifyContent: "space-between", marginTop: "1rem" }}>
+      <div
+        className="row"
+        style={{ justifyContent: "space-between", marginTop: "1rem" }}
+      >
         <h1 className="type-h2">Case Study Collection preview</h1>
         <div className="row">
           <Link href="/admin/client-pages">Back to collections</Link>
@@ -95,7 +106,8 @@ export default function AdminClientPageMock({
               </div>
             ) : null}
             <p className="muted">
-              Showing <strong>{filtered.length}</strong> case studies (Published + public).
+              Showing <strong>{filtered.length}</strong> case studies (Published
+              + public).
             </p>
           </div>
 
@@ -103,12 +115,24 @@ export default function AdminClientPageMock({
           <div className="case-grid mt">
             {filtered.map((cs) => (
               <article key={cs.slug} className="card case-study-card">
-                <Link href={`/case-studies/${cs.slug}`} className="case-study-card__link">
+                <Link
+                  href={`/case-studies/${cs.slug}`}
+                  className="case-study-card__link"
+                >
                   {cs.heroImageUrl ? (
-                    <img className="case-study-card__img" src={cs.heroImageUrl} alt="" loading="lazy" />
+                    <img
+                      className="case-study-card__img"
+                      src={cs.heroImageUrl}
+                      alt=""
+                      loading="lazy"
+                    />
                   ) : null}
-                  <h2 className="type-h3">{cs.client?.trim() || cs.title?.trim() || cs.slug}</h2>
-                  <p className="muted">{cs.brief?.trim() || cs.summaryShort?.trim() || ""}</p>
+                  <h2 className="type-h3">
+                    {cs.client?.trim() || cs.title?.trim() || cs.slug}
+                  </h2>
+                  <p className="muted">
+                    {cs.brief?.trim() || cs.summaryShort?.trim() || ""}
+                  </p>
                 </Link>
               </article>
             ))}

@@ -11,7 +11,9 @@ import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
 type NonEmptyArray<T> = [T, ...T[]];
 
-function toNonEmptyArray<T>(items: T[] | undefined): NonEmptyArray<T> | undefined {
+function toNonEmptyArray<T>(
+  items: T[] | undefined,
+): NonEmptyArray<T> | undefined {
   if (!Array.isArray(items) || items.length === 0) return undefined;
   const first = items[0];
   if (first == null) return undefined;
@@ -51,7 +53,7 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
 
   const items = useMemo(() => {
     const publicItems = adminItems.filter(
-      (cs) => Boolean(cs.isPublic) && cs.status === "Published"
+      (cs) => Boolean(cs.isPublic) && cs.status === "Published",
     );
 
     if (itemsSource === "manual") {
@@ -72,7 +74,10 @@ export function WorkWithCaseGridSmart(props: WorkWithCaseGridProps) {
     const featured = publicItems.filter((cs) => Boolean(cs.isFeaturedHome));
     let ordered = featured;
 
-    if (Array.isArray(featuredCaseStudySlugs) && featuredCaseStudySlugs.length) {
+    if (
+      Array.isArray(featuredCaseStudySlugs) &&
+      featuredCaseStudySlugs.length
+    ) {
       const bySlug = new Map(featured.map((cs) => [cs.slug, cs]));
       const orderedFeatured = featuredCaseStudySlugs
         .map((slug) => bySlug.get(slug))

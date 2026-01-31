@@ -3,8 +3,10 @@ function parseEnvFlag(raw: string | undefined, defaultValue: boolean) {
   const v = raw?.trim().toLowerCase();
   if (!v) return { ok: true as const, value: defaultValue };
 
-  if (["1", "true", "yes", "y", "on"].includes(v)) return { ok: true as const, value: true };
-  if (["0", "false", "no", "n", "off"].includes(v)) return { ok: true as const, value: false };
+  if (["1", "true", "yes", "y", "on"].includes(v))
+    return { ok: true as const, value: true };
+  if (["0", "false", "no", "n", "off"].includes(v))
+    return { ok: true as const, value: false };
 
   return { ok: false as const, value: defaultValue, raw };
 }

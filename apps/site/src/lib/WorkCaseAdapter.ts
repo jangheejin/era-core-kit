@@ -5,12 +5,12 @@ type UnknownRecord = Record<string, unknown>;
 
 export type WorkCase = {
   slug: string;
-  sector: string;      // display label
+  sector: string; // display label
   //sector: sectorLabelFromCaseStudy(cs),//ERRORS
   client: string;
-  teaser?: string;     // short blurb for cards/social
+  teaser?: string; // short blurb for cards/social
   featured: boolean;
-  summary: string;     // what your detail panel shows
+  summary: string; // what your detail panel shows
   outcomes?: string[];
   imageUrl?: string;
 };
@@ -50,7 +50,8 @@ function stripMarkdown(md: string): string {
 
 function deriveSummary(cs: UnknownRecord): string {
   // prefer the "short blurb" if present; else derive from body
-  const short = typeof cs.summaryShort === "string" ? cs.summaryShort.trim() : "";
+  const short =
+    typeof cs.summaryShort === "string" ? cs.summaryShort.trim() : "";
   if (short) return short;
 
   const body = typeof cs.bodyMDX === "string" ? cs.bodyMDX : "";
@@ -62,33 +63,32 @@ function isRecord(value: unknown): value is UnknownRecord {
 }
 
 export function toWorkCases(caseStudies: unknown[]): WorkCase[] {
-  return (caseStudies ?? [])
-    .filter(isRecord)
-    .map((cs) => {
-      const outcomes =
-        Array.isArray(cs.outcomes) && cs.outcomes.length
-          ? cs.outcomes
-              .map((o) => {
-                if (o && typeof o === "object") {
-                  const rec = o as Record<string, unknown>;
-                  return typeof rec.description === "string"
-                    ? rec.description.trim()
-                    : "";
-                }
-                return typeof o === "string" ? o.trim() : "";
-              })
-              .filter(Boolean)
-          : undefined;
+  return (caseStudies ?? []).filter(isRecord).map((cs) => {
+    const outcomes =
+      Array.isArray(cs.outcomes) && cs.outcomes.length
+        ? cs.outcomes
+            .map((o) => {
+              if (o && typeof o === "object") {
+                const rec = o as Record<string, unknown>;
+                return typeof rec.description === "string"
+                  ? rec.description.trim()
+                  : "";
+              }
+              return typeof o === "string" ? o.trim() : "";
+            })
+            .filter(Boolean)
+        : undefined;
 
-      return {
-        slug: String(cs.slug),
-        sector: sectorLabelFromSectors(cs.sectors),
-        client: String(cs.client),
-        teaser: typeof cs.summaryShort === "string" ? cs.summaryShort : undefined,
-        featured: Boolean(cs.isFeaturedHome),
-        imageUrl: typeof cs.heroImageUrl === "string" ? cs.heroImageUrl : undefined,
-        summary: deriveSummary(cs),
-        outcomes,
-      };
-    });
+    return {
+      slug: String(cs.slug),
+      sector: sectorLabelFromSectors(cs.sectors),
+      client: String(cs.client),
+      teaser: typeof cs.summaryShort === "string" ? cs.summaryShort : undefined,
+      featured: Boolean(cs.isFeaturedHome),
+      imageUrl:
+        typeof cs.heroImageUrl === "string" ? cs.heroImageUrl : undefined,
+      summary: deriveSummary(cs),
+      outcomes,
+    };
+  });
 }

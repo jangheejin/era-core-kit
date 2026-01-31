@@ -16,20 +16,16 @@ const mdComponents: Components = {
   h1: (props) => <h2 className="type-h3" {...props} />,
   h2: (props) => <h3 className="type-h3" {...props} />, // makes "## Summary" look like type-h3
   h3: (props) => <h4 className="type-h4" {...props} />,
-  p:  (props) => <p className="type-body" {...props} />,
+  p: (props) => <p className="type-body" {...props} />,
 };
 
 export function Markdown({ children, className }: Props) {
-//export function Markdown({ children }: { children: string }) {
+  //export function Markdown({ children }: { children: string }) {
   return (
     <div className={`c-markdown c-stack ${className ?? ""}`}>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={mdComponents}
-      >
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
         {children}
       </ReactMarkdown>
     </div>
   );
 }
-

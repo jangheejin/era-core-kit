@@ -26,7 +26,9 @@ const MockCMSContext = createContext<MockCMSState | undefined>(undefined);
 export function MockCMSProvider({ children }: { children: ReactNode }) {
   // Start with the fixture data so the “database” doesn’t look empty
   //const [items, setItems] = useState<CaseStudy[]>(() => CASE_STUDIES_FIXTURE);
-  const [items, setItems] = useState<CaseStudyType[]>(() => CASE_STUDIES_FIXTURE);
+  const [items, setItems] = useState<CaseStudyType[]>(
+    () => CASE_STUDIES_FIXTURE,
+  );
 
   //const addCaseStudy = (payload: CaseStudy) => {
   const addCaseStudy = (payload: CaseStudyType) => {

@@ -3,6 +3,10 @@
 
 import ClientPageEditor from "../../ClientPageEditor";
 
-export default function EditClientPage({ params }: { params: { slug: string } }) {
+export default function EditClientPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   return <ClientPageEditor slug={params.slug} />;
 }

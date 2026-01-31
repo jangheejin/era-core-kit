@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 //apps/site/src/components/CaseStudyFullRender.tsx
-// “full case study renderer” component 
-// (so that instead of having case study cards on the filter-by-tag or filter-by-category 
+// “full case study renderer” component
+// (so that instead of having case study cards on the filter-by-tag or filter-by-category
 // pages, you can have full case studies)
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -14,14 +14,24 @@ export function CaseStudyFull({ cs }: { cs: CaseStudyType }) {
         <h2 className="type-h2">{cs.title}</h2>
 
         <div className="muted case-study-full__meta">
-          {cs.client ? <span><strong>Client:</strong> {cs.client}</span> : null}
-          {typeof cs.year === "number" ? <span><strong>Year:</strong> {cs.year}</span> : null}
+          {cs.client ? (
+            <span>
+              <strong>Client:</strong> {cs.client}
+            </span>
+          ) : null}
+          {typeof cs.year === "number" ? (
+            <span>
+              <strong>Year:</strong> {cs.year}
+            </span>
+          ) : null}
         </div>
 
         {!!cs.sectors?.length && (
           <div className="case-study-full__chips">
             {cs.sectors.map((s) => (
-              <span key={s} className="chip">{s}</span>
+              <span key={s} className="chip">
+                {s}
+              </span>
             ))}
           </div>
         )}
@@ -29,7 +39,9 @@ export function CaseStudyFull({ cs }: { cs: CaseStudyType }) {
         {!!cs.tags?.length && (
           <div className="case-study-full__chips">
             {cs.tags.map((t) => (
-              <span key={t} className="chip chip--soft">{t}</span>
+              <span key={t} className="chip chip--soft">
+                {t}
+              </span>
             ))}
           </div>
         )}
@@ -43,7 +55,9 @@ export function CaseStudyFull({ cs }: { cs: CaseStudyType }) {
           />
         ) : null}
 
-        {cs.summaryShort ? <p className="type-body">{cs.summaryShort}</p> : null}
+        {cs.summaryShort ? (
+          <p className="type-body">{cs.summaryShort}</p>
+        ) : null}
         {cs.brief ? <p className="muted">{cs.brief}</p> : null}
       </header>
 
@@ -63,7 +77,9 @@ export function CaseStudyFull({ cs }: { cs: CaseStudyType }) {
 
       {cs.bodyMDX ? (
         <section className="case-study-full__section">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{cs.bodyMDX}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {cs.bodyMDX}
+          </ReactMarkdown>
         </section>
       ) : null}
 
@@ -73,7 +89,9 @@ export function CaseStudyFull({ cs }: { cs: CaseStudyType }) {
             <div key={s.id} className="case-study-full__subsection">
               <h3 className="type-h3">{s.title}</h3>
               {s.bodyMDX ? (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{s.bodyMDX}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {s.bodyMDX}
+                </ReactMarkdown>
               ) : null}
             </div>
           ))}
