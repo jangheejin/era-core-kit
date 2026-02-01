@@ -1,6 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@kit/schema": ["./src/index.ts"],
+      "@kit/schema/*": ["./src/*"]
+    },
     "jsx": "react-jsx",
     "composite": true,
     "declaration": true,
