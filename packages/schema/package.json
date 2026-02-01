@@ -11,7 +11,8 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./types": {
       "import": "./dist/types.js",
@@ -20,6 +21,12 @@
     "./registry": {
       "import": "./dist/registry.js",
       "types": "./dist/registry.d.ts"
+    },
+    "./constants": {
+      "import": "./dist/constants.js",
+      "types": "./dist/constants.d.ts",
+      "require": "./dist/constants.js",
+      "default": "./dist/constants.js"
     }
   },
   "dependencies": {
