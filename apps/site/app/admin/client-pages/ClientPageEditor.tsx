@@ -17,7 +17,7 @@ import {
   useAdminClientPages,
   type ClientPageStatus,
 } from "@admin/AdminClientPageStore";
-import { Markdown } from "@/components/Markdown";
+import { Markdown } from "@components/Markdown";
 import { MiniFormatBar } from "../components/MiniFormatBar";
 
 type Props = {

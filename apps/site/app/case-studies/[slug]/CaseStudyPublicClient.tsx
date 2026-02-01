@@ -5,8 +5,8 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { useAdminCaseStudies } from "../../admin/AdminCaseStudyStore";
-import { Markdown } from "@/components/Markdown";
+import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
+import { Markdown } from "@components/Markdown";
 
 export default function CaseStudyPublicClient({ slug }: { slug: string }) {
   const { getBySlug } = useAdminCaseStudies();
