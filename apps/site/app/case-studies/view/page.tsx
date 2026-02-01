@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
+import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
 import {
   sectorLabel,
   type Outcome,

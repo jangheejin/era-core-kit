@@ -23,13 +23,18 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@features/*": ["./src/features/*"],
-      "@styles/*": ["styles/*"],
-      "@app/*": ["./app/*"],//only needed if importing from app/ directory, maybe remove
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["src/lib/*", "app/lib/*"],
+      "@features/*": ["src/features/*"],
 
+      "@app/*": ["app/*"],//only needed if importing from app/ directory, maybe remove
+      "@admin/*": ["app/admin/*"],//TODO: will need to move later after later phase of refactor
+      "@sectors/*": ["app/sectors/*"],
+      "@tag/*": ["app/tag/*"],
+      "@case-studies/*": ["app/case-studies/*"],
+
+      "@styles/*": ["styles/*"],
       // path aliases need to point back to the monorepo root from this app folder.
       // mirror the workspace aliases but make them relative to apps/site.
       // - Explicit entries allow TypeScript to resolve both source and built output

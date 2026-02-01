@@ -17,8 +17,8 @@ import {
 } from "@kit/schema";
 import { Markdown } from "@/components/Markdown";
 
-import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
-import { useAdminClientPages } from "@/admin/AdminClientPageStore";
+import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
+import { useAdminClientPages } from "@admin/AdminClientPageStore";
 
 type ClientPageFilterPreview = {
   sectors?: SectorValue[];

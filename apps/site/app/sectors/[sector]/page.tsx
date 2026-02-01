@@ -31,7 +31,7 @@ import { getCaseStudies } from "@/lib/caseStudies"; //TO DO: UPDATE LATER
 import { CaseStudyCard } from "@/components/CaseStudyCard";
 import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
 import { SECTOR_ROUTE_SLUG } from "@kit/schema";
-import { ContextBanner } from "@/admin/components/ContextBanner";
+import { ContextBanner } from "@admin/components/ContextBanner";
 import Link from "next/link";
 import { CaseStudyFull } from "@/components/CaseStudyFullRender";
 import { CaseStudyCollapsibleCard } from "@/components/CaseStudyCollapsibleCard";

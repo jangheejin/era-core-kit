@@ -20,7 +20,7 @@ import {
 } from "@kit/schema";
 
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
-import { ContextBanner } from "@/admin/components/ContextBanner";
+import { ContextBanner } from "@admin/components/ContextBanner";
 import { splitCategoryTags, isCategoryTag } from "@/lib/adminTags";
 
 import * as Tooltip from "@radix-ui/react-tooltip";

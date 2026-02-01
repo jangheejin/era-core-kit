@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import BlockRenderer from "@/utils/BlockRenderer";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { buildHomeLayout } from "@/content/homeContent";
-import { useAdminHomeContent } from "@/admin/AdminHomeStore";
+import { useAdminHomeContent } from "@admin/AdminHomeStore";
 
 export default function HomeLayoutFromCMS() {
   const { content } = useAdminHomeContent();

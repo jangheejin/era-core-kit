@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { WorkWithCaseGridProps } from "@kit/blocks";
 import { WorkText, CaseGrid } from "@kit/blocks";
 import { sectorLabel, type CaseStudyType, type SectorValue } from "@kit/schema";
-import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
+import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
 import { resolveCaseGridLayout } from "@/lib/caseGridLayout";
 
 type CaseGridItem = WorkWithCaseGridProps["items"][number];
