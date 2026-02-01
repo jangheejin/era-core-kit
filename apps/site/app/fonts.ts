@@ -12,7 +12,7 @@ export const inter = localFont({
     {
       path: "./fonts/inter-latin-wght-italic.woff2",
       weight: "100 900",
-      style: "normal",
+      style: "italic",
     },
   ],
   display: "swap",
