@@ -30,6 +30,9 @@
 
       "@app/*": ["app/*"],//only needed if importing from app/ directory, maybe remove
       "@admin/*": ["app/admin/*"],//TODO: will need to move later after later phase of refactor
+      //NEW PATH ALIASES AFTER REFACTOR
+      //"@admin/*": ["./app/(admin)/admin/*"],
+      //"@admin-components/*": ["./app/(admin)/admin/components/*"] // optional
       "@sectors/*": ["app/sectors/*"],
       "@tag/*": ["app/tag/*"],
       "@case-studies/*": ["app/case-studies/*"],
