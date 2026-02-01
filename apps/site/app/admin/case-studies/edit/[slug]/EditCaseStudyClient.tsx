@@ -462,7 +462,7 @@ export default function EditCaseStudyClient({ slug }: { slug: string }) {
   return (
     <main className="c-admin">
       {/*       <ContextBanner view="preview"> */}
-      {/*         You’re editing a demo case study stored in your browser.
+      {/*         Whatever text for the context banner 
       </ContextBanner> */}
 
       <div className="form-header">

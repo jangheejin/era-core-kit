@@ -121,7 +121,7 @@ export default function NewCaseStudyPage() {
   const { upsertCaseStudy, ensureUniqueSlug } = useAdminCaseStudies();
 
   const [id] = useState(() =>
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()),
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
 
   const [slug, setSlug] = useState("");
@@ -313,7 +313,7 @@ export default function NewCaseStudyPage() {
 
   const validation = useMemo(
     () => CaseStudySchema.safeParse(candidateInput),
-    [candidateInput],
+    [candidateInput]
   );
 
   function save() {
@@ -367,7 +367,6 @@ export default function NewCaseStudyPage() {
       {/* CORE (REQUIRED) CONTENT */}
       {/* --------------------------------------------------------------------------------- */}
 
-      {/*       <div className="card card-new mt1"> */}
       <section className="card card-new mt1">
         {/* STEP 1 – BASIC DETAILS (always visible, minimum path) */}
         <div className="card card-new">
@@ -407,14 +406,6 @@ export default function NewCaseStudyPage() {
             />
           </div>
           <div className="form-group">
-            {/* OLD form for hero image. allowed URL input only. */}
-            {/* <label className="form-label">Hero image URL (required; default used if blank) (/img/... or https://...)</label>
-            <input
-              className="input"
-              placeholder={DEFAULT_HERO_IMAGE_URL}
-              value={heroImageUrl}
-              onChange={(e) => setHeroImageUrl(e.target.value)}
-            /> */}
             <label className="form-label" htmlFor="heroImage">
               Upload an image{" "}
               <span className="admin-label-optional">(optional)</span>
@@ -523,7 +514,7 @@ export default function NewCaseStudyPage() {
           {/* --------------------------------------------------------------------------------- */}
           {/* ADVANCED CONTENT */}
           {/*       <section className="card card-new mt1">  */}
-          {/* STEP 2 – CLIENT TYPE & TAGS (collapsible) */}
+          {/* CLIENT TYPE & TAGS (collapsible) */}
           {/*         <div className="card card-new"> */}
         </div>
         <div className="card card-new mt1">
@@ -569,7 +560,7 @@ export default function NewCaseStudyPage() {
                     </option>
                   ))}
                 </select>
-                {/*                 <p className="muted type-small">
+                {/* <p className="muted type-small">
                   For now, pick one sector; in the final version, you'll be able to pick multiple.
                 </p> */}
               </div>
@@ -608,6 +599,7 @@ export default function NewCaseStudyPage() {
           </fieldset>
 
           <div className="form-row form-group" id="sectors-checkboxes">
+            {/* do not delete: ALTERNATE SECTOR INPUT (checkboxes for multiple sectors) */}
             {/*             <div className="form-field">
               <label className="form-label">Sectors</label>
               <div className="admin-checkbox-row" style={{ marginTop: ".5rem" }}>
@@ -644,7 +636,7 @@ export default function NewCaseStudyPage() {
                 value={status}
                 onChange={(e) =>
                   setStatus(
-                    e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number],
+                    e.target.value as (typeof CASE_STUDY_STATUS_VALUES)[number]
                   )
                 }
               >
@@ -665,7 +657,7 @@ export default function NewCaseStudyPage() {
                 onChange={(e) =>
                   setVisibility(
                     e.target
-                      .value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number],
+                      .value as (typeof CASE_STUDY_VISIBILITY_VALUES)[number]
                   )
                 }
               >
@@ -687,7 +679,8 @@ export default function NewCaseStudyPage() {
               onChange={(e) => setTags(e.target.value)}
             />
           </div>
-
+          {/* START OF A SECTION THAT IS HIDDEN FOR NOW AND SHOULD NOT BE DELETED. 
+IT IS COMMENTED OUT TEMPORARILY UNTIL CMS IS FINISHED  */}
           {/* <div style={{ marginTop: "1rem" }}> */}
           {/*           <div className="form-group">
             <label className="form-label">Summary short (required)</label>
@@ -722,13 +715,12 @@ export default function NewCaseStudyPage() {
             </label>
           </div>
  */}
+          {/* END OF TEMPORARILY COMMENTED-OUT SECTION */}
           <div className="form-group">
             <label className="form-label">
               Unique identifier for URL path{" "}
               <em>(defaults to client name if not set by user)</em>
-            </label>
-            {/*             <input className="input" value={slug} onChange={(e) => setSlug(e.target.value)} />
-             */}{" "}
+            </label>{" "}
             <input
               className="input"
               value={slug}
@@ -763,239 +755,3 @@ export default function NewCaseStudyPage() {
     </main>
   );
 }
-
-/* export default function NewCaseStudyForm() {
-  //implementing the hook & router for the advanced builder
-  const router = useRouter();
-  const { addCaseStudy } = useAdminCaseStudies();
-
-  const [draft, setDraft] = useState<Draft>({
-    title: "",
-    slug: "",
-    client: "",
-    sector: "GovContracting",
-    summaryShort: "",
-    brief: "",
-    heroImageUrl: "",
-
-    status: "Draft",
-    visibility: "Internal",
-    isFeaturedHome: false,
-    isPublic: true,
-  });
-
-  const [tagsInput, setTagsInput] = useState("");
-  const [contextBody, setContextBody] = useState("");
-  const [approachBody, setApproachBody] = useState("");
-  const [impactBody, setImpactBody] = useState("");
-
-  const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<CaseStudyType | null>(null);
-  const [validatedCaseStudy, setValidatedCaseStudy] =
-    useState<CaseStudyType | null>(null);
-//  const [validatedCase, setValidatedCase] = useState<CaseStudyType | null>(null);
-  const isValidated = !!validatedCaseStudy;
-//  const [validated, setValidated] = useState<boolean>(false);
-//  const [validated, setValidated] = useState<CaseStudyType | null>(null);
-
-  function resetValidation() {
-    setError(null);
-    setPreview(null);
-//    setValidatedCase(null);
-//    setValidated(null);
-//    setValidated(false);
-    setValidatedCaseStudy(null);
-  }
-
-  function update<K extends keyof Draft>(field: K, value: Draft[K]) {
-    setDraft((d) => ({ ...d, [field]: value }));
-    //setError(null);
-    //setPreview(null);
-    resetValidation();
-  }
-
-  function toggleMechanism(mech: CaseStudyType["mechanisms"][number]) {
-    setDraft((d) => {
-      const current = d.mechanisms ?? [];
-      const exists = current.includes(mech);
-      const next = exists
-        ? current.filter((m) => m !== mech)
-        : [...current, mech];
-      return { ...d, mechanisms: next };
-    });
-    //setError(null);
-    //setPreview(null);
-    resetValidation();
-  }
-
-  function toggleJurisdiction(j: CaseStudyType["jurisdictions"][number]) {
-    setDraft((d) => {
-      const current = d.jurisdictions ?? [];
-//       const exists = current.includes(j);
-//      const next = exists ? current.filter((v) => v !== j) : [...current, j]; 
-      const next = current.includes(j)
-        ? current.filter((v) => v !== j)
-        : [...current, j];
-      return { ...d, jurisdictions: next };
-    });
-//     setError(null);
-//    setPreview(null); 
-    resetValidation();
-  }
-
-  function validate() {
-    // ... build candidate as CaseStudyInput, not CaseStudyType
-    const tags = tagsInput
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    const sections: CaseStudyInput["sections"] = [
-      contextBody.trim()
-        ? { id: "context", title: "Context", bodyMDX: contextBody }
-        : null,
-      approachBody.trim()
-        ? { id: "approach", title: "Approach", bodyMDX: approachBody }
-        : null,
-      impactBody.trim()
-        ? { id: "impact", title: "Impact", bodyMDX: impactBody }
-        : null,
-    ].filter(Boolean) as CaseStudyInput["sections"];
-
-    const finalTitle = (draft.title ?? "").trim();
-    const finalSlug = emptyToUndefined(draft.slug) ?? slugify(finalTitle);
-
-    const candidate: CaseStudyInput = {
-      id: draft.id ?? `draft-${Date.now()}`,
-      //title: draft.title ?? "",
-      title: finalTitle,
-      //slug: draft.slug ?? "",
-      slug: finalSlug,
-
-      //client: draft.client ?? undefined,
-      client: emptyToUndefined(draft.client),
-      //sector: draft.sector ?? "GovContracting",
-      sector: (draft.sector ?? "GovContracting") as CaseStudyType["sector"],
-      year: draft.year,
-  
-      tags,
-      summaryShort: (draft.summaryShort ?? "").trim(),
-      //brief: draft.brief ?? undefined,
-      brief: emptyToUndefined(draft.brief),
-
-      heroImageUrl: draft.heroImageUrl ?? "/img/temp.svg", // must be valid PathOrUrl
-  
-      mechanisms: draft.mechanisms ?? [],
-      jurisdictions: draft.jurisdictions ?? [],
-      outcomes: draft.outcomes ?? [],
-      evidence: draft.evidence ?? [],
-  
-      bodyMDX: draft.bodyMDX ?? "",
-      sections,
-  
-      attachments: draft.attachments ?? [],
-      links: draft.links ?? [],
-
-      status: (draft.status ?? "Draft") as CaseStudyType["status"],
-      visibility: (draft.visibility ?? "Internal") as CaseStudyType["visibility"],
-  
-      isFeaturedHome: draft.isFeaturedHome ?? false,
-      isPublic: draft.isPublic ?? true,
-      // status/visibility will default
-    };
-  
-    const result = CaseStudySchema.safeParse(candidate);
-
-    if (!result.success) {
-      const issue = result.error.issues[0];
-      const path = issue?.path?.length ? issue.path.join(".") : "(root)";
-      setError(
-        `${path}: ${
-          issue?.message ?? 
-          "Validation failed. Please validate the case study before saving."
-        }`
-      );
-      // ... setError
-      setPreview(null);
-      //setValidated(null);
-      //setValidated(false);
-      setValidatedCaseStudy(null);
-      return;
-    }
-
-    const parsed: CaseStudyType = result.data;
-  
-    setError(null);
-    //setPreview(result.data);
-    setPreview(parsed);
-    //setValidated(true);
-    setValidatedCaseStudy(parsed);
-    //setValidated(result.data);
-  } */
-
-/*   function validate() {
-    const tags = tagsInput
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    const sections: CaseStudyType["sections"] = [
-      contextBody.trim()
-        ? { id: "context", title: "Context", bodyMDX: contextBody }
-        : null,
-      approachBody.trim()
-        ? { id: "approach", title: "Approach", bodyMDX: approachBody }
-        : null,
-      impactBody.trim()
-        ? { id: "impact", title: "Impact", bodyMDX: impactBody }
-        : null,
-    ].filter(Boolean) as CaseStudyType["sections"];
-
-    const candidate: CaseStudyType = {
-      id: draft.id ?? `draft-${Date.now()}`,
-      title: draft.title ?? "",
-      slug: draft.slug ?? "",
-      client: draft.client ?? "",
-      sector: draft.sector ?? "GovContracting",
-      year: draft.year ?? undefined,
-
-      tags,
-      summaryShort: draft.summaryShort ?? "",
-      brief: draft.brief ?? undefined,
-      heroImageUrl: draft.heroImageUrl ?? "",
-
-      mechanisms: draft.mechanisms ?? [],
-      jurisdictions: draft.jurisdictions ?? [],
-      outcomes: draft.outcomes ?? [],
-      evidence: draft.evidence ?? [],
-
-      bodyMDX: draft.bodyMDX ?? "",
-      sections,
-
-      attachments: draft.attachments ?? [],
-      links: draft.links ?? [],
-
-      isFeaturedHome: draft.isFeaturedHome ?? false,
-      isPublic: draft.isPublic ?? true,
-    };
-
-    const result = CaseStudySchema.safeParse(candidate);
-
-    if (!result.success) {
-      const issue = result.error.issues[0];
-      const path = issue?.path?.length ? issue.path.join(".") : "(root)";
-      setError(`${path}: ${issue?.message ?? "Validation failed. Please validate the case study before saving."}`);
-      setPreview(null);
-      setValidated(null);
-      return;
-    }
-
-    //now we have result.data (it's only real after the result.success check)    
-    // however, some Zod typings make data possibly-undefined even on success:
-    const parsed = result.data ?? candidate;
-
-    setError(null);
-    setPreview(parsed);
-    setValidated(parsed);
-    // DO NOT ADD OR PUSH YET!
-  } */
