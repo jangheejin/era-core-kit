@@ -23,7 +23,7 @@ import {
 
 //import hook & router for advanced builder (where we can save a new case study and see it go into the memory store)
 import { useRouter } from "next/navigation";
-import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
+import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 
 import { ContextBanner } from "@/admin/components/ContextBanner";
 
