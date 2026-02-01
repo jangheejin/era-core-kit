@@ -26,6 +26,7 @@
     "nukeclean": "pnpm run deepclean && rimraf pnpm-lock.yaml"
   },
   "devDependencies": {
+    "@drumnation/ts-import-move": "^1.0.8",
     "@eslint/config-helpers": "^0.5.1",
     "@types/node": "^20.14.9",
     "@types/react": "^18.3.27",

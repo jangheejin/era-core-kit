@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
+//    "paths": {
       //      "@kit/schema": ["packages/schema/src", "packages/schema/dist"],
-      "@kit/schema": ["packages/schema/src"],
+//      "@kit/schema": ["packages/schema/src"],
       //      "@kit/blocks": ["packages/blocks/src", "packages/blocks/dist"],
-      "@kit/blocks": ["packages/blocks/src"],
+//      "@kit/blocks": ["packages/blocks/src"],
       //      "@kit/blocks/*": ["packages/blocks/src/*", "packages/blocks/dist/*"],
-      "@kit/blocks/*": ["packages/blocks/src/*"],
+//      "@kit/blocks/*": ["packages/blocks/src/*"],
       //      "@kit/cms-contract": ["packages/cms-contract/src", "packages/cms-contract/dist"],
-      "@kit/blocks/cms": ["packages/blocks/src/cms"],
-      "@kit/cms-contract": ["packages/cms-contract/src"],
+//      "@kit/blocks/cms": ["packages/blocks/src/cms"],
+//      "@kit/cms-contract": ["packages/cms-contract/src"],
       //      "@kit/adapters/*": ["packages/adapters/*/src", "packages/adapters/*/dist"],
-      "@kit/adapters/*": ["packages/adapters/*/src"],
+//      "@kit/adapters/*": ["packages/adapters/*/src"],
       //      "@kit/adapters-sanity": ["packages/adapters/sanity/src", "packages/adapters/sanity/dist"],
-      "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
-      "@kit/search": ["packages/search/src"]
-    },
+//      "@kit/adapters-sanity": ["packages/adapters/sanity/src"],
+//      "@kit/search": ["packages/search/src"]
+//    },
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
