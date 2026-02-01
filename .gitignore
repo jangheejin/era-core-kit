@@ -4,13 +4,17 @@ node_modules/
 
 # Ignore build outputs
 .next/
+**/.next/
 dist/
+**/dist/
 build/
 out/
+**/out/
 apps/*/.next/
 packages/*/dist/
-**/dist
 **/dist/**
+**/.turbo/
+**/coverage/
 
 # Ignore everything in dist except built files
 **/dist/*.tsbuildinfo
@@ -22,7 +26,9 @@ Thumbs.db
 
 # Ignore environment files
 .env
+.env.*
 .env.local
+.env.local*
 .env.*.local
 
 # Ignore logs
@@ -30,6 +36,10 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+buil*.log
+lint.log
+typecheck.log
 
 # Ignore IDE configs
 .vscode/
@@ -49,3 +59,10 @@ apps/site/app/**/*.d.ts
 apps/site/app/**/*.d.ts.map
 apps/site/src/**/*.d.ts
 apps/site/src/**/*.d.ts.map
+
+knip.*.json
+
+#Vercel
+.vercel/
+_vercel_backup/
+vercel-env-*.txt
