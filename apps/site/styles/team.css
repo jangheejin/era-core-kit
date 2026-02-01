@@ -118,7 +118,7 @@
 
 .c-section--team .type-h3 {
   margin: 0;
-  font-size: var(--fs-h2b); /* whatever you already use */
+  font-size: var(--fs-h2b);
   line-height: 1.2;
 }
 .c-section--team .team-card__title {
@@ -269,7 +269,7 @@
 /* give same indent as founders */
 /* .team-grid .team-card {
   padding-inline: var(--space-3);  */ /* left/right */
-/*   padding-block: var(--space-2); */ /* top/bottom can be slightly smaller if you want */
+/*   padding-block: var(--space-2); */ /* top/bottom can be slightly smaller */
 /* } */
 /* Non-founder cards: stack photo above text */
 /* .team-grid .team-card {

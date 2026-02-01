@@ -395,7 +395,6 @@ const CASE_STUDIES_FIXTURE_FULL_RAW: CaseStudyInput[] = [
     attachments: [],
     links: [],
 
-    // If you ONLY want 4 featured cards on home, set this one false.
     isFeaturedHome: true,
     isPublic: true,
   },
@@ -548,7 +547,7 @@ export const CASE_STUDIES_FIXTURE_FULL: CaseStudyType[] =
       status: "Published",
       visibility: "Public",
       ...x,
-    }),
+    })
   );
 
 /* export const CASE_STUDIES_FIXTURE: CaseStudy[] = [
@@ -1042,5 +1041,5 @@ export const CASE_STUDIES_FIXTURE_CARDS: CaseStudyType[] = orderedFull.map(
     evidence: [],
     attachments: [],
     links: [],
-  }),
+  })
 );

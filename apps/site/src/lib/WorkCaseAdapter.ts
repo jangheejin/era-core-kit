@@ -10,7 +10,7 @@ export type WorkCase = {
   client: string;
   teaser?: string; // short blurb for cards/social
   featured: boolean;
-  summary: string; // what your detail panel shows
+  summary: string; // what the detail panel shows
   outcomes?: string[];
   imageUrl?: string;
 };
@@ -32,7 +32,7 @@ function sectorLabelFromSectors(sectors: unknown): string {
     .map((s) => (typeof s === "string" ? (SECTOR_LABEL[s] ?? s) : ""))
     .filter(Boolean);
 
-  // choose one label (or join if you want)
+  // choose one label (or join multiple?)
   return labels[0] ?? "Case Study";
 }
 

@@ -2,7 +2,7 @@
 .site-header {
   position: sticky;
   top: 0;
-  /*  z-index: 100;*/ /* above content, below modals if you add them */
+  /*  z-index: 100;*/ /* above content, below modals these are added */
   z-index: 1000;
   background: var(--bg);
   border-bottom: 1px solid var(--gray-300);

@@ -293,7 +293,7 @@ It caps column width so 1-2 items don't scale up to be huge*/
   justify-content: stretch;
 }
 
-/* If you still use "2x2" or "layout-2x2", treat it as a 2-col forced grid */
+/* If still using "2x2" or "layout-2x2", treat it as a 2-col forced grid */
 .casegrid.layout-2x2,
 .casegrid.\32 x2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));

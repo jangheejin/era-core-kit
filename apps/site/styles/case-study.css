@@ -102,7 +102,7 @@ used by CaseStudyPublicClient*/
   }
   .csSide {
     position: sticky;
-    top: 90px; /* plays nice with your Header */
+    top: 90px; /* plays nice with Header */
   }
 }
 

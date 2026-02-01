@@ -415,7 +415,7 @@ export type CaseStudyType = CaseStudyOutput; //fully parsed and validated versio
 //  - (it's what you use in props (args), etc)...it's safe for use in UI components, database, etc
 //  - default values have been applied, all required fields are present
 
-// If you want to validate and get the full object, you use the schema + output type:
+// To validate and get the full object, use the schema + output type:
 //
 // import { CaseStudy } from "@kit/schema"; // Zod schema (value)
 // import type { CaseStudyType } from "@kit/schema";

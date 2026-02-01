@@ -13,7 +13,7 @@ export function HomeCaseGridFromCMS() {
   //const { caseStudies } = useMockCMS();
   const { caseStudies } = useMockCMS();
 
-  // If there are zero items, you can fall back to nothing or a gentle message
+  // If there are zero items, can fall back to nothing or a gentle message
   //if (!items.length) return null;
 
   if (!caseStudies || caseStudies.length === 0) {
@@ -47,7 +47,7 @@ export function HomeCaseGridFromCMS() {
   //const items = caseStudies.map((cs) => ({
     title: cs.title,
     summary: cs.summaryShort ?? "", 
-    imageUrl: cs.heroImageUrl ?? "/img/temp.svg", // fallback if you don’t have one
+    imageUrl: cs.heroImageUrl ?? "/img/temp.svg", // fallback if there isn't an image
     slug: cs.slug,
     client: cs.client ?? undefined,
     brief: cs.brief ?? undefined,

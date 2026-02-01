@@ -3,7 +3,7 @@
 
 import { MDXProvider } from "@mdx-js/react";
 //import { Callout, PullQuote, DocLink, OutcomeList, ImageFigure } from '@kit/blocks';
-//import { useMDXComponent } from 'next-contentlayer/hooks'; // or wherever your MDX source comes from
+//import { useMDXComponent } from 'next-contentlayer/hooks'; // or wherever the MDX source comes from
 //import { compile } from '@mdx-js/mdx';
 
 /*

@@ -55,7 +55,7 @@ export function CMSDashboard({ items, onCreate }: CMSDashboardProps) {
 
       isFeaturedHome: false,
       isPublic: true,
-      // status/visibility can be omitted if your schema defaults them
+      // status/visibility can be omitted if the schema defaults them
     };
 
     const res = CaseStudySchema.safeParse(input);

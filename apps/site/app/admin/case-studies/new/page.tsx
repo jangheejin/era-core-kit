@@ -264,7 +264,7 @@ function applySharingPreset(p: Exclude<SharingPreset, "custom">) {
 
   const effectiveTitle = title.trim() || client.trim();
   const slugBase = effectiveTitle;
-  /* const slugBase = (client || title).trim(); */ // or just title if you're unifying them
+  /* const slugBase = (client || title).trim(); */ // or just title if we're unifying them
   const autoSlug = useMemo(() => slugify(slugBase), [slugBase]);
   const candidateInput: CaseStudyInput = useMemo(() => {
     //NO HOOKS CAN GO HERE

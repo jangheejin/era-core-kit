@@ -27,8 +27,8 @@ const PathOrUrlSchema = z.string().refine((s) => {
 /* export const CaseStudySeedSchema = z.object({
   slug: z.string(),
   client: z.string(),
-  sectorLabel: z.string(),          // your human label (optional)
-  sector: Sector,               // your canonical enum
+  sectorLabel: z.string(),          // human label (optional)
+  sector: Sector,               // canonical enum
   teaser: z.string(),
   featured: z.boolean().default(false),
   imageUrl: assetRef.optional(),   // allow "/img/..." or https://...
@@ -40,7 +40,7 @@ export type CaseStudySeed = z.infer<typeof CaseStudySeedSchema>;
 /**
  * Seeds are intentionally "short form" and flexible:
  * - allow legacy names (teaser vs summaryShort, imageUrl vs heroImageUrl, featured vs isFeaturedHome)
- * - but require at least ONE summary field and ONE image field so you can't create broken cards
+ * - but require at least ONE summary field and ONE image field so it's impossible to create broken cards
  */
 
 export const CaseStudySeedSchema = z

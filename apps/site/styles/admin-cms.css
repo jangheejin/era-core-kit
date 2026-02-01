@@ -1442,7 +1442,7 @@ pre.error {
   text-underline-offset: 0.15em;
 }
 
-/* Section separators if you want them */
+/* Section separators (OPTIONAL) */
 .prose :where(hr) {
   margin: 1.25rem 0;
   border: none;
@@ -1464,8 +1464,8 @@ pre.error {
   margin: 1.25rem 0 0.5rem;
 }
 
-/* If you're rendering “full content” inside a card accordion,
-   you almost never want an h1 inside the body. Treat it like h2. */
+/* If rendering “full content” inside a card accordion,
+   will almost never want an h1 inside the body. Treat it like h2. */
 .prose :where(h1) {
   font-size: 1.6rem;
 }
@@ -1806,7 +1806,7 @@ code {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* toolbar buttons: smaller + less loud than your .btn */
+/* toolbar buttons: smaller + less loud than .btn */
 .editor {
   --editor-pad-x: 0.8rem; /* one source of truth */
 
@@ -2011,7 +2011,7 @@ button.chip:active {
 }
 
 /* =========================================================
-   TAG FILTER CLOUD (your existing tag filter UI)
+   TAG FILTER CLOUD (Existing tag filter UI)
    ========================================================= */
 
 .tag-filter {
@@ -2090,7 +2090,7 @@ button.chip:active {
   font-size: 0.8rem;
 }
 
-/* keep these subtle; you're not doing color system yet */
+/* keep these subtle until the real final color systems have been designed */
 .chip--draft {
   opacity: 0.85;
 }
@@ -2403,7 +2403,7 @@ button.chip:active {
   margin: 0;
 }
 
-/* Ensure your text block sits in col 2 even though we use ::before */
+/* Ensure the text block sits in col 2 even though we use ::before */
 .radioRow .radioText {
   grid-column: 2 / -1;
   min-width: 0;
@@ -2719,9 +2719,9 @@ fieldset.form-group > legend.form-label{
   font-size: 1.05rem;
   color: #000;
 }
-/* If your dark-mode token override is still enabled, keep radios light too */
+/* If the dark-mode token override is still enabled, keep radios light too */
 .publishingSection .radioRow {
-  background: #a8a8a8; /* your current “unselected” gray */
+  background: #a8a8a8; /* current “unselected” gray */
 }
 
 .publishingSection .radioRow:hover {

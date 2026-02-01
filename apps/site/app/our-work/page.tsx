@@ -86,7 +86,7 @@ export default function OurWorkPage() {
     client: 'MKR Fabricators',
     teaser:
       'Connecting real-world emergency response manufacturing needs with the federal ecosystem.',
-    featured: true, // also featured → gives you 4 cards
+    featured: true, // also featured →  4 cards
     imageUrl: '/img/temp.svg',
     summary:
       'ERA supported MKR Fabricators in aligning their emergency response manufacturing capabilities with evolving federal program and procurement needs, with a focus on practical deployment in emergency and disaster-response contexts.',
@@ -102,7 +102,7 @@ export default function OurWorkPage() {
     client: 'STEMheads',
     teaser:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-    featured: true, // also featured → gives you 4 cards
+    featured: true, // also featured → 4 cards
     imageUrl: '/img/temp2.svg',
     summary:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',

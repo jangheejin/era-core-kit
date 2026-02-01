@@ -477,7 +477,7 @@ ol {
 
 /* Default vertical rhythm between any two blocks */
 .richtext > * + * {
-  margin-top: 0.75em; /* or whatever fraction of line-height you like */
+  margin-top: 0.75em; /* or whatever fraction of line-height is best */
 }
 
 /* Make paragraph + list tighter, symmetrically */
@@ -525,7 +525,7 @@ ol {
   padding-left: 1.25rem;
 }
 
-/* Optional: slightly tighter than global c-stack if you want */
+/* Optional: Can be slightly tighter than global c-stack  */
 .c-markdown.c-stack > * + * {
   margin-top: var(--space-3, 1.5rem);
 }
@@ -552,7 +552,7 @@ ol {
   justify-content: start;   */ /* left align */
   /* or: justify-content: center; */ /* centered when few cards */
 
-  /* Guardrail: when you don't hit a forced layout class,
+  /* Guardrail: when no forced layout class is present,
     auto-fit cards never expand to full-page "mondo" width. */
   --card-min: 18rem;
   --card-max: 24rem;

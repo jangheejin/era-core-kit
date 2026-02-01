@@ -6,7 +6,7 @@ import { ClientAnimations } from "./ClientAnimations";
 /*
 Renders the string you pass in text (as mission text?)
 Hardcoded heading is "Our Mission" (could be made flexible if needed later)
-If you want to allow CMS control over the heading too, change props to { heading: string, text: string }
+TODO: To allow CMS control over the heading too, change props to { heading: string, text: string }
 */
 
 export function MissionText({ heading, text, text2 }: MissionTextProps) {

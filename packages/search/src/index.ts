@@ -28,12 +28,12 @@ export interface CaseStudySearchResult<T = CaseStudy> {
  * Placeholder search implementation.
  * For now, always returns an empty result.
  *
- * Later you can:
+ * Later we will:
  * - plug in a real search index (Algolia, Meilisearch, etc)
  * - or do in-memory filtering over a static list
  */
 export async function searchCaseStudies(
-  _filters: CaseStudySearchFilters,
+  _filters: CaseStudySearchFilters
 ): Promise<CaseStudySearchResult> {
   return {
     items: [],

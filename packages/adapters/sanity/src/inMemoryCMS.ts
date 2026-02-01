@@ -53,7 +53,7 @@ export class InMemoryCMS implements CMS {
   }: GetCaseStudiesArgs) {
     // FIX for 'cs' implicit any (TS7006)
     let items: CaseStudy[] = CASE_STUDIES_FIXTURE.filter((cs: CaseStudy) =>
-      filter ? matchesFilter(cs, filter) : true,
+      filter ? matchesFilter(cs, filter) : true
     ).filter((cs: CaseStudy) => cs.isPublic);
 
     // Sort logic (Fixes 'a' and 'b' implicit any (TS7006))
@@ -99,7 +99,7 @@ export class InMemoryCMS implements CMS {
   //async getCaseStudyBySlug(slug: CaseStudySlug) {
   async getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
     const caseStudy = CASE_STUDIES_FIXTURE.find(
-      (cs: CaseStudy) => cs.slug === slug && cs.isPublic,
+      (cs: CaseStudy) => cs.slug === slug && cs.isPublic
     );
 
     // Contract requires returning null if not found, not undefined.
@@ -110,7 +110,7 @@ export class InMemoryCMS implements CMS {
   /*
   async getPeople(): Promise<Person[]> {
     // Assume PEOPLE_FIXTURE is exported from the schema package's fixtures.
-    // If this fixture does not exist, you will need to replace this with an empty array: return [];
+    // If this fixture does not exist, this must be replaced this with an empty array: return [];
     return PEOPLE_FIXTURE;
   }*/
 
@@ -175,7 +175,7 @@ export class InMemoryCMS implements CMS {
 }
 
 export function createInMemoryCMS(): CMS {
-  const people: Person[] = []; // fill later if you want
+  const people: Person[] = []; // fill later if needed
 
   return {
     async getCaseStudies({ filter, limit = 20, cursor, sort = 'newest' }) {

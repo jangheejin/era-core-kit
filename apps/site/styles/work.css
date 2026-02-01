@@ -447,7 +447,7 @@ h5.work-detail__sector {
   min-width: 0;
 }
 
-/* Keep your existing .work-grid – just make sure overflow-y is hidden
+/* Keep existing .work-grid – just make sure overflow-y is hidden
    and padding-block leaves room for the small arrow triangle */
 .work-grid {
   position: relative;
@@ -582,7 +582,7 @@ h5.work-detail__sector {
   }
 }
 
-/* Keep your active-card arrow as-is, just ensure it's inside .work-grid
+/* Keep  active-card arrow as-is, just ensure it's inside .work-grid
 .work-card--active::after {
   content: '';
   position: absolute;

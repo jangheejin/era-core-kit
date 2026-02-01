@@ -4,7 +4,7 @@
 
 //"use client";
 
-//import "@styles/admin-cms.css"; // remove if you don't want admin styles here
+//import "@styles/admin-cms.css"; // remove if admin styles are not needed here
 
 import { notFound } from "next/navigation";
 import { sectorFromRouteSlug } from "@kit/schema";
@@ -27,7 +27,7 @@ export default async function SectorPageView({ sectorSlug }: { sectorSlug: strin
   const { sector, items } = await getCaseStudiesBySectorRouteSlug(sectorSlug);
   if (!sector) return notFound();
 
-  // kept because your existing page calls it (even if unused right now)
+  // kept because existing page calls it (even if unused right now)
   await getCaseStudies(); // TO DO: UPDATE later
 
   return (

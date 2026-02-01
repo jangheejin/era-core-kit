@@ -49,3 +49,7 @@ apps/site/app/**/*.d.ts
 apps/site/app/**/*.d.ts.map
 apps/site/src/**/*.d.ts
 apps/site/src/**/*.d.ts.map
+
+diff.txt
+
+apps/site/README.md

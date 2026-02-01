@@ -30,7 +30,7 @@ const zEnum = <T extends readonly [string, ...string[]]>(values: T) =>
 // --------------------
 /**
  * even though Sort is UI state and not stored in the CaseStudy object,
- * it’s still a finite set you want as runtime values for a dropdown.
+ * it’s still a finite set we want as runtime values for a dropdown.
  */
 export const CASE_STUDY_SORTS = [
   "Newest",
