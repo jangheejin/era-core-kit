@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2020",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@app/*": ["./app/*"],
+      "@styles/*": ["./styles/*"],
+
+      "@kit/schema": ["../../packages/schema/src", "../../packages/schema/dist"],
+      "@kit/blocks": ["../../packages/blocks/src", "../../packages/blocks/dist"],
+      "@kit/blocks/*": ["../../packages/blocks/src/*", "../../packages/blocks/dist/*"],
+      "@kit/cms-contract": ["../../packages/cms-contract/src", "../../packages/cms-contract/dist"],
+      "@kit/adapters/*": ["../../packages/adapters/*/src", "../../packages/adapters/*/dist"],
+      "@kit/adapters-sanity": ["../../packages/adapters/sanity/src", "../../packages/adapters/sanity/dist"]
+    }
+  },
+  "include": ["src", "app", "styles", "next-env.d.ts"]
+}
