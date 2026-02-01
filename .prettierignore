@@ -16,3 +16,5 @@ node_modules
 # misc
 **/*.min.*
 pnpm-lock.yaml
+
+apps/site/__archive__
