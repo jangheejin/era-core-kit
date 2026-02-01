@@ -53,3 +53,12 @@ apps/site/src/**/*.d.ts.map
 diff.txt
 
 apps/site/README.md
+
+.env.vercel.*
+.env.*.bak
+
+
+_vercel_backup/
+.env*
+.vercel
+
