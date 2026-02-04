@@ -1,4 +1,5 @@
-//apps/site/src/features/caseStudies/publicRepo.server.ts
+//apps/site/src/lib/publicCaseStudiesRepo.server.ts
+//formerly under ./features and named publicRepo instead of publicCaseStudiesRepo
 import { CASE_STUDIES_FIXTURE, type CaseStudyType } from "@kit/schema";
 
 export async function listPublicCaseStudies(): Promise<CaseStudyType[]> {

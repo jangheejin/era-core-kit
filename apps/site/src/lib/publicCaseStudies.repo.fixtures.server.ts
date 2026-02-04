@@ -1,9 +1,10 @@
-//apps/site/src/features/caseStudies/public.repo.fixtures.server.ts
-import type { PublicCaseStudiesRepo } from "./public.repo";
+//apps/site/src/lib/publicCaseStudies.repo.fixtures.server.ts
+//formerly under ./features and named public instead of publicCaseStudies
+import type { PublicCaseStudiesRepo } from "./publicCaseStudies.repo";
 import { CASE_STUDIES_FIXTURE, type CaseStudyType } from "@kit/schema";
 
 function isPublic(cs: CaseStudyType) {
-  // adjust to fit canonical rule
+  // TODO: adjust to fit canonical rule
   return !!cs.isPublic;
 }
 
