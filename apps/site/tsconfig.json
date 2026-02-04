@@ -26,7 +26,6 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@lib/*": ["src/lib/*", "app/lib/*"],
-      "@features/*": ["src/features/*"],
 
       "@app/*": ["app/*"],//only needed if importing from app/ directory, maybe remove
       "@admin/*": ["app/admin/*"],//TODO: will need to move later after later phase of refactor
