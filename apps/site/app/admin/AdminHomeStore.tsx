@@ -22,7 +22,7 @@ import {
   createExtraSection,
   type HomeContent,
   type HomeWorkContent,
-} from "@/content/homeContent";
+} from "@/lib/content/homeContent";
 //import type { LayoutBlock } from "@kit/blocks";
 
 type AdminHomeContextValue = {

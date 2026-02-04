@@ -2,9 +2,9 @@
 "use client";
 
 import { useMemo } from "react";
-import BlockRenderer from "@/utils/BlockRenderer";
+import BlockRenderer from "@/components/BlockRenderer";
 import { ContactForm } from "@components/sections/ContactForm";
-import { buildHomeLayout } from "@/content/homeContent";
+import { buildHomeLayout } from "@/lib/content/homeContent";
 import { useAdminHomeContent } from "@admin/AdminHomeStore";
 
 export default function HomeLayoutFromCMS() {

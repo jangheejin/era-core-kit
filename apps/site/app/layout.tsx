@@ -36,8 +36,8 @@ import { inter, oswald } from "./fonts";
 
 /* import { fontClass } from "./fontClass"; */
 
-import { Header } from "@components/Header";
-import { Footer } from "@components/Footer";
+import { Header } from "@components/chrome/Header";
+import { Footer } from "@components/chrome/Footer";
 import { type Metadata } from "next";
 import { Suspense } from "react";
 import { Providers } from "./Providers";
