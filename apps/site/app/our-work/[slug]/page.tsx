@@ -4,7 +4,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { getPublicCaseStudyBySlug } from "@/features/caseStudies/publicRepo.server";
+import { getPublicCaseStudyBySlug } from "@/lib/publicRepo.server";
 import DemoGate from "./DemoGate";
 
 function isDemoOn(v: unknown) {

@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import type { LayoutBlock } from "@kit/blocks";
-import BlockRenderer from "@/utils/BlockRenderer";
+import BlockRenderer from "@/components/BlockRenderer";
 
 // Define the component props interface
 interface InlineEditFormProps {
