@@ -8,12 +8,12 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { normalizeTagList, tagSlug, type CaseStudyType } from "@kit/schema";
-import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
+import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import {
   useAdminClientPages,
   type ClientPage,
-} from "@admin/AdminClientPageStore";
-import { Markdown } from "@components/Markdown";
+} from "@/admin/AdminClientPageStore";
+import { Markdown } from "@/components/Markdown";
 
 import { useSearchParams } from "next/navigation";
 

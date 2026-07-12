@@ -12,8 +12,8 @@
 // - renders the exact same sector archive page
 
 import { SECTOR_ROUTE_SLUG, sectorFromRouteSlug, tagSlug } from "@kit/schema";
-import SectorPageView from "@sectors/SectorPageView";
-import { TagPageClient } from "@tag/TagPageClient";
+import SectorPageView from "@/sectors/SectorPageView";
+import { TagPageClient } from "@/tag/TagPageClient";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {

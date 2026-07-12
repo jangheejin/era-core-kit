@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAdminCaseStudies } from "../../../AdminCaseStudyStore";
 import { ContextBanner } from "../../../components/ContextBanner";
-import CaseStudyPublicClient from "@case-studies/[slug]/CaseStudyPublicClient";
+import CaseStudyPublicClient from "@/case-studies/[slug]/CaseStudyPublicClient";
 
 export default function MockCaseStudyPage() {
   const params = useParams<{ slug: string }>();

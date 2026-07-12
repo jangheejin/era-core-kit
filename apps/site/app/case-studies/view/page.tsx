@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useAdminCaseStudies } from "@admin/AdminCaseStudyStore";
+import { useAdminCaseStudies } from "@/admin/AdminCaseStudyStore";
 import {
   sectorLabel,
   type Outcome,
@@ -15,7 +15,7 @@ import {
   type CaseStudySection,
 } from "@kit/schema";
 
-import { Markdown } from "@components/Markdown";
+import { Markdown } from "@/components/Markdown";
 
 function readParams(): { slug: string | null; preview: boolean } {
   if (typeof window === "undefined") return { slug: null, preview: false };

@@ -1,4 +1,4 @@
-// apps/site/src/content/homeContent.ts
+// apps/site/src/lib/content/homeContent.ts
 import type {
   HeroProps,
   IntroWithImageProps,

@@ -1,4 +1,4 @@
-// apps/site/src/utils/BlockRenderer.tsx
+// apps/site/src/components/BlockRenderer.tsx
 "use client";
 
 import React from "react";

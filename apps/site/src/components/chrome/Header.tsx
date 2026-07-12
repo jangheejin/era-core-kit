@@ -1,4 +1,4 @@
-// apps/site/src/components/Header.tsx
+// apps/site/src/components/chrome/Header.tsx
 
 //Sticky top navbar
 

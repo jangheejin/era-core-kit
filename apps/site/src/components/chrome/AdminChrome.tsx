@@ -1,4 +1,4 @@
-//apps/site/src/components/cms/AdminChrome.tsx
+//apps/site/src/components/chrome/AdminChrome.tsx
 
 //*******MAYBE DELETE!!!!!!!!! */
 

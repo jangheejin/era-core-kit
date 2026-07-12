@@ -23,19 +23,6 @@
       }
     ],
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@lib/*": ["src/lib/*", "app/lib/*"],
-
-      "@app/*": ["app/*"],//only needed if importing from app/ directory, maybe remove
-      "@admin/*": ["app/admin/*"],//TODO: will need to move later after later phase of refactor
-      //NEW PATH ALIASES AFTER REFACTOR
-      //"@admin/*": ["./app/(admin)/admin/*"],
-      //"@admin-components/*": ["./app/(admin)/admin/components/*"] // optional
-      "@sectors/*": ["app/sectors/*"],
-      "@tag/*": ["app/tag/*"],
-      "@case-studies/*": ["app/case-studies/*"],
-
       "@styles/*": ["styles/*"],
       // path aliases need to point back to the monorepo root from this app folder.
       // mirror the workspace aliases but make them relative to apps/site.
@@ -43,8 +30,8 @@
       //   for each package (src + dist) instead of only the package root.
       // - Packages like adapters have nested structure (adapters/*/src) that a
       //   single wildcard cannot describe accurately.
-
-      // Monorepo package aliases
+      // - The final "*" fallback still catches anything unforeseen, but specific
+      //   aliases keep editor/TS resolution reliable for known packages.
       "@kit/schema": [
         "../../packages/schema/src",
         "../../packages/schema/dist"
@@ -69,8 +56,8 @@
         "../../packages/adapters/sanity/src",
         "../../packages/adapters/sanity/dist"
       ],
-//      "@/*": ["src/*", "app/*"],
-//      "*": ["./*", "../../packages/*"]
+      "@/*": ["src/*", "app/*"],
+      "*": ["./*", "../../packages/*"]
       //      "@kit/*": ["../../packages/*"]
     },
     "types": ["react", "react-dom", "node"]
