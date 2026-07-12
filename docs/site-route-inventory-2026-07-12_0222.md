@@ -7,6 +7,8 @@
 
 > ⚠️ **Branch-base flag:** this branch's HEAD (`908e691`) does **not** contain the later pass-1 import-repoint commit (`d977d8f`), the ESLint flat-config migration, or the `/edit` page `setBlocks` fix (here `app/edit/page.tsx:47` still has `_setBlocks`, and old `@components/…`-style aliases are live). Route *structure* is identical, but the deletion branch should be cut from the tip that contains those fixes, not from here.
 
+> **Post-inventory correction and outcome:** Follow-up validation found the live edit link at `ListClient.tsx:638` and confirmed that the active `edit/[slug]` route is nested inside `admin/case-studies/edit`. Recursive deletion of that directory would therefore remove active admin infrastructure. All eight accidental deletions were restored first. Only the four independently dead route pages were deleted in `af803c0`; lint, typecheck, and production build passed.
+
 ## Data-source legend
 
 - **store** — `useAdminCaseStudies` / `useAdminClientPages` / `useAdminHomeContent` / `useAdminTeamMembers`: browser-localStorage demo stores. `AdminCaseStudyStore.tsx:2` says "only in memory for the current browser session" and seeds from `CASE_STUDIES_FIXTURE` (`:298`); `AdminClientPageStore.tsx:2` says "Demo-only client-side store (localStorage)".
@@ -46,7 +48,7 @@ Paths relative to `apps/site/app/`. "Linked from" = internal `href`/`router.push
 | 26 | `admin/case-studies/new-old/page.tsx` | `/admin/case-studies/new-old` | store; header `:1` is `new/page.tsx`'s path comment (fork) | **—** | #24 | legacy fork — **delete candidate** |
 | 27 | `admin/case-studies/newalt/page.tsx` | `/admin/case-studies/newalt` | store; header `:1` is `new/page.tsx`'s path comment (fork) | **—** | #24 | legacy fork — **delete candidate** |
 | 28 | `admin/case-studies/simple/page.tsx` | `/admin/case-studies/simple` | `CMSDashboard` from `@kit/blocks` (its **only** live consumer); self-describes as "Simple mock builder … the original simple creator", "Nothing is saved outside this browser tab" | **—** | #24 | mock/dev — **human decision (archive?)** |
-| 29 | `admin/case-studies/edit/page.tsx` (+ `EditClient.tsx`) | `/admin/case-studies/edit` | store — **broken by construction**: page passes `params.slug` but the segment is static, so `slug` is always `undefined` → `EditClient.tsx:56` always renders "Not found." | **—** (all `/admin/case-studies/edit/{slug}` links go to #30) | #30 | vestigial + non-functional — **delete candidate (strongest)** |
+| 29 | `admin/case-studies/edit/page.tsx` (+ `EditClient.tsx`) | `/admin/case-studies/edit` | bare route appears non-functional because the static segment does not provide `params.slug`; the same directory also contains the active nested `edit/[slug]` route | bare URL unlinked; `ListClient.tsx:638` links to nested route #30 | #30 handles active editing | retained in this branch; future cleanup must be file-scoped |
 | 30 | `admin/case-studies/edit/[slug]/page.tsx` | `/admin/case-studies/edit/{slug}` | store (`EditCaseStudyClient`) | `ListClient:638`, self `router.replace:430` | — | admin, active |
 | 31 | `admin/case-studies/mock/[slug]/page.tsx` | `/admin/case-studies/mock/{slug}` | store; wraps the **public** `CaseStudyPublicClient` with an admin `ContextBanner` — it is the standard admin preview | post-save `router.push` from new`:364,:379`, create`:330,:338`, new-old`:218`, newalt`:229`; `ListClient:627`; `EditCaseStudyClient:447,:476`; `EditClient:74` | — | admin, **active despite "mock" name — keep** |
 | 32 | `admin/client-pages/page.tsx` | `/admin/client-pages` | store (client pages) | AdminTopNav NAV, dashboard `:117`, editor back-links, public client page "Go to admin" `:77,:96` | — | admin, active |
@@ -83,7 +85,7 @@ Paths relative to `apps/site/app/`. "Linked from" = internal `href`/`router.push
 ## 6. Legacy/deprecated route candidates
 
 - `admin/case-studies/create`, `new-old`, `newalt` — three forks of `new` (headers literally carry `new/page.tsx`'s path comment; `create` self-describes as "alternate create page"); zero inbound links; every nav/list/preview flow points at `new`.
-- `admin/case-studies/edit/page.tsx` + `EditClient.tsx` — pre-`[slug]` editor, now unreachable *and* non-functional (static segment ⇒ `params.slug` undefined ⇒ unconditional "Not found.").
+- `admin/case-studies/edit/page.tsx` + `EditClient.tsx` — the bare `/admin/case-studies/edit` route appears unlinked and non-functional, but this cleanup candidate was withdrawn. Its parent directory also contains the active `edit/[slug]` editor, so the directory was preserved intact. Any future cleanup must assess and delete only the bare-route files, not the whole directory.
 - `case-studies/view` — self-described experiment, superseded by `/case-studies/[slug]` (public) and `mock/[slug]` (admin preview); its "replace once there is a full edit page route" comment is satisfied by `edit/[slug]`.
 
 ## 7. Routes safe to delete now — with evidence
@@ -92,13 +94,12 @@ Each of these satisfies **all** of: (a) zero inbound `href`/`push`/`window.open`
 
 | Delete | Files | Evidence summary |
 |---|---|---|
-| `/admin/case-studies/edit` (bare) | `admin/case-studies/edit/page.tsx`, `admin/case-studies/edit/EditClient.tsx` | Unreachable **and** always renders "Not found." (`params.slug` never populated on a static segment — `EditClient.tsx:56`); superseded by `edit/[slug]` which all links target (`ListClient:638`) |
 | `/admin/case-studies/create` | `admin/case-studies/create/page.tsx` | Header `:3` "alternate create page"; fork of `new`; zero inbound; `new` is linked from AdminTopNav/dashboard/list/mock |
 | `/admin/case-studies/new-old` | `admin/case-studies/new-old/page.tsx` | Fork of `new` (copied header `:1`); zero inbound |
 | `/admin/case-studies/newalt` | `admin/case-studies/newalt/page.tsx` | Fork of `new` (copied header `:1`); zero inbound |
 | `/case-studies/view` | `case-studies/view/page.tsx` | Header `:3` "testing out an alternate single-view page"; zero inbound; superseded by `/case-studies/[slug]` + admin `mock/[slug]` |
 
-Residual risk (applies to all five): external bookmarks or out-of-repo docs could reference the URLs; nothing in-repo does. All five write only to the same localStorage store their replacements use, so no data-path is lost.
+Residual risk (applies to all four): external bookmarks or out-of-repo docs could reference the URLs; nothing in-repo does. All four write only to the same localStorage store their replacements use, so no data-path is lost.
 
 ## 8. Routes needing a human decision — with the exact question
 
@@ -113,7 +114,7 @@ Residual risk (applies to all five): external bookmarks or out-of-repo docs coul
 
 **Base the branch on the tip that already contains `d977d8f` (import repoint), the ESLint flat config, and the `/edit` fix** — not on `908e691` (see flag at top).
 
-- **Commit 1 — remove clearly dead routes** (no decisions needed): delete `admin/case-studies/create/`, `admin/case-studies/new-old/`, `admin/case-studies/newalt/`, `admin/case-studies/edit/page.tsx` + `admin/case-studies/edit/EditClient.tsx` (keep `edit/[slug]/`!), `case-studies/view/`. Verify: `pnpm --filter site lint`, `pnpm exec tsc --noEmit -p tsconfig.json` (from `apps/site`), site build, and `grep -rE "case-studies/(view|create|new-old|newalt)" apps/site` → no live hits.
+- **Commit 1 — remove clearly dead routes** (completed in `af803c0`): deleted `admin/case-studies/create/`, `admin/case-studies/new-old/`, `admin/case-studies/newalt/`, and `case-studies/view/`. Preserved the complete `admin/case-studies/edit/` directory because it contains the active nested `edit/[slug]` editor. Verification passed with `pnpm --filter site lint`, `pnpm --filter site exec tsc --noEmit`, and `pnpm --filter site build`.
 - **Commit 2 — archive mock/dev routes per answers to §8 Q2–Q5**: move `/demo`, `/edit`, `/admin/case-studies/simple` (and `/tag` if unwanted) into `apps/site/__archive__/` (the new flat ESLint config already ignores `__archive__/**`) or delete them. Nothing else imports these page files, so moving them cannot break compilation, but confirm the tsconfig `include` doesn't sweep `__archive__` into typechecking.
 - **Commit 3 — routing/link updates per §8 Q1 & Q6**: resolve the sector URL scheme (delete or redirect the loser; update `ListClient.tsx:183`), optionally surface `/tag`, and unify the case-study detail link targets (`our-work` index vs archive inconsistency).
 
