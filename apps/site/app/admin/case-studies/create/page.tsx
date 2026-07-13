@@ -8,7 +8,7 @@
 import "@styles/admin-cms-buttons.css";
 import "@styles/admin-cms.css";
 
-import { showAdvanced } from "@lib/featureFlags";
+import { showAdvanced } from "@/lib/featureFlags";
 
 import { useMemo, useState, type ChangeEvent } from "react";
 
@@ -30,7 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAdminCaseStudies } from "../../AdminCaseStudyStore";
 
-import { ContextBanner } from "@admin/components/ContextBanner";
+import { ContextBanner } from "@/admin/components/ContextBanner";
 
 // env: "1", "true", "yes", "on" => true
 // env: "0", "false", "no", "off", undefined => false

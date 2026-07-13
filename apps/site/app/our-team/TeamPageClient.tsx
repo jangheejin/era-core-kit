@@ -3,7 +3,7 @@
 import "@styles/team.css";
 import Image from "next/image";
 import { useMemo } from "react";
-import { useAdminTeamMembers } from "@admin/AdminTeamStore";
+import { useAdminTeamMembers } from "@/admin/AdminTeamStore";
 
 export default function TeamPageClient() {
   const { items } = useAdminTeamMembers();

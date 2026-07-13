@@ -28,13 +28,13 @@ import { sectorFromRouteSlug } from "@kit/schema";
 import { SECTOR_VALUES, type SectorValue } from "@kit/schema";
 import { getCaseStudies } from "@/lib/caseStudies"; //TO DO: UPDATE LATER
 //import { CASE_STUDIES_FIXTURE, type CaseStudyType } from "@kit/schema";//for now, since we don't have the real CMS, we will use fixtures from the demo CMS
-import { CaseStudyCard } from "@components/CaseStudyCard";
+import { CaseStudyCard } from "@/components/CaseStudyCard";
 import { getCaseStudiesBySectorRouteSlug } from "@/lib/caseStudies";
 import { SECTOR_ROUTE_SLUG } from "@kit/schema";
-import { ContextBanner } from "@admin/components/ContextBanner";
+import { ContextBanner } from "@/admin/components/ContextBanner";
 import Link from "next/link";
-import { CaseStudyFull } from "@components/CaseStudyFullRender";
-import { CaseStudyCollapsibleCard } from "@components/CaseStudyCollapsibleCard";
+import { CaseStudyFull } from "@/components/CaseStudyFullRender";
+import { CaseStudyCollapsibleCard } from "@/components/CaseStudyCollapsibleCard";
 
 
 import "@styles/admin-cms-buttons.css";

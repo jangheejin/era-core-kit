@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MiniFormatBar } from "../components/MiniFormatBar";
 import { useAdminTeamMembers, type TeamMember } from "../AdminTeamStore";
-import { Markdown } from "@components/Markdown";
+import { Markdown } from "@/components/Markdown";
 
 type TeamImage = {
   url: string;

@@ -1,4 +1,4 @@
-// apps/site/src/components/Footer.tsx
+// apps/site/src/components/chrome/Footer.tsx
 "use client";
 /* eslint-disable @next/next/no-img-element */
 

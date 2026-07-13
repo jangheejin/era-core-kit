@@ -8,10 +8,53 @@ import BlockRenderer from "@/components/BlockRenderer";
 // Define the component props interface
 interface InlineEditFormProps {
   block: LayoutBlock;
+  onUpdate: (next: LayoutBlock) => void;
 }
 
-const InlineEditForm = ({ block }: InlineEditFormProps) => {
-  // In a real application, this component would render inputs based on block.type
+const InlineEditForm = ({ block, onUpdate }: InlineEditFormProps) => {
+  if (block.type === "Hero") {
+    return (
+      <div className="block-edit-form">
+        <strong>Inline Form:</strong>{" "}
+        <label>
+          Heading{" "}
+          <input
+            type="text"
+            value={block.props.heading}
+            onChange={(e) =>
+              onUpdate({
+                ...block,
+                props: { ...block.props, heading: e.target.value },
+              })
+            }
+          />
+        </label>
+      </div>
+    );
+  }
+
+  if (block.type === "Callout" || block.type === "callout") {
+    return (
+      <div className="block-edit-form">
+        <strong>Inline Form:</strong>{" "}
+        <label>
+          Content{" "}
+          <input
+            type="text"
+            value={block.props.content}
+            onChange={(e) =>
+              onUpdate({
+                ...block,
+                props: { ...block.props, content: e.target.value },
+              })
+            }
+          />
+        </label>
+      </div>
+    );
+  }
+
+  // No inline editor implemented for this block type yet.
   return (
     <div className="block-edit-form">
       <strong>Inline Form:</strong> Editing {block.type} props
@@ -42,9 +85,7 @@ const initialData: LayoutBlock[] = [
 ];
 
 export default function EditPage() {
-  //const [blocks, setBlocks] = useState<LayoutBlock[]>(initialData);
-
-  const [blocks, _setBlocks] = useState<LayoutBlock[]>(initialData);
+  const [blocks, setBlocks] = useState<LayoutBlock[]>(initialData);
 
   return (
     <main className="c-page c-page-admin">
@@ -65,8 +106,15 @@ export default function EditPage() {
               <BlockRenderer blocks={[block]} />
             </div>
 
-            {/* Inline “editor” stub */}
-            <InlineEditForm block={block} />
+            {/* Inline editor for known block types */}
+            <InlineEditForm
+              block={block}
+              onUpdate={(next) =>
+                setBlocks((prev) =>
+                  prev.map((b, i) => (i === index ? next : b)),
+                )
+              }
+            />
           </div>
         ))}
       </div>

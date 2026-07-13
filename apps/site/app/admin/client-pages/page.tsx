@@ -5,7 +5,7 @@ import "@styles/admin-cms.css";
 import Link from "next/link";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { sectorLabel, normalizeTagList } from "@kit/schema";
-import { useAdminClientPages } from "@admin/AdminClientPageStore";
+import { useAdminClientPages } from "@/admin/AdminClientPageStore";
 
 export default function AdminClientPages() {
   const { pages, removePage } = useAdminClientPages();
